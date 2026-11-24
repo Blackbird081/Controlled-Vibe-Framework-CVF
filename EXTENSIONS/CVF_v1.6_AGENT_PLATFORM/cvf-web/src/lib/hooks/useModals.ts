@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 export type ModalName = 'userContext' | 'settings' | 'aiUsage' | 'apiKeyWizard' | 'onboarding' | 'quickStart';
 
@@ -15,13 +15,6 @@ export function useModals(permissions?: {
     const [showApiKeyWizard, setShowApiKeyWizard] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [showQuickStart, setShowQuickStart] = useState(false);
-
-    // Defer localStorage check to client-side only to prevent hydration mismatch
-    useEffect(() => {
-        if (!localStorage.getItem('cvf_onboarding_complete')) {
-            queueMicrotask(() => setShowOnboarding(true));
-        }
-    }, []);
 
     const handleOnboardingComplete = useCallback((mode: 'dismiss' | 'starter' = 'dismiss') => {
         localStorage.setItem('cvf_onboarding_complete', 'true');

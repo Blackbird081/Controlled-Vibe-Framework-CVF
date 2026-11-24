@@ -1,7 +1,9 @@
 # CVF Skill Library - Governance Layer
 
+> Catalog status: `NOT_ACTIVE` for product skill discovery. These records are retained for legacy interpretation. See the [Web skill catalog](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../docs/reference/agent_system_skills/generated/skill-index.json).
+>
 > **Version:** 1.6.2  
-> **Status:** Active  
+> **Status:** Active for registry maintenance and validation
 > **Location:** `governance/skill-library/`  
 > **Last Updated:** Feb 18, 2026
 
@@ -9,10 +11,13 @@
 
 ## 📋 Overview
 
+Text Encoding Exception: Keep the existing Vietnamese reader guidance and
+file tree characters in this README.
+
 CVF Skill Governance là lớp kiểm soát hoàn chỉnh cho việc quản lý **Skill/Capability** trong hệ thống AI Agent. Module này:
 
-- **Kiểm soát User Skills** (v1.5.2 SKILL_LIBRARY - 124 skills)
-- **Kiểm soát Agent Skills** (v1.6 AGENT_PLATFORM - 34 tools)
+- **Kiểm tra bản ghi USR** của biểu mẫu dùng lại
+- **Kiểm tra bản ghi AGT cũ** của công cụ agent
 - **Đánh giá rủi ro** (Risk Assessment) cho mỗi skill
 - **Gán quyền hạn** (Authority Mapping) cho agent
 - **Kiểm soát vòng đời** (Lifecycle Management)
@@ -48,11 +53,11 @@ governance/skill-library/
 ├── registry/                              # Skill governance records
 │   ├── generate_user_skills.py            # 🔧 Script: generate .gov.md files
 │   ├── validate_registry.py               # 🔧 Script: CI/CD validation
-│   ├── import_skillsmp.py                 # 🔧 Script: import SkillsMP shortlist
-│   ├── convert_shortlist_to_cvf.py        # 🔧 Script: shortlist → CVF skills
+│   ├── import_skillsmp.py                 # Legacy shortlist generator
+│   ├── convert_shortlist_to_cvf.py        # Retired bulk conversion entry point
 │   ├── inject_autonomous_extension.py     # 🔧 Script: add governance block
 │   ├── generate_mapping_records.py        # 🔧 Script: mapping records
-│   ├── run_external_intake.py             # 🔧 Script: end-to-end intake
+│   ├── run_external_intake.py             # Retired bulk intake entry point
 │   ├── user-skills/                       # → v1.5.2 skills (124 .gov.md + INDEX)
 │   │   ├── INDEX.md
 │   │   ├── USR-001_*.gov.md
@@ -168,7 +173,7 @@ CVF v1.5.2 Skill Library (Content)
 ## 🚀 Status
 
 - [x] Structure setup completed
-- [x] User Skills registry (124 skills)
+- [x] User Skills registry and validation
 - [x] Agent Skills registry (34 tools)
 - [x] UAT templates integrated
 - [x] CI/CD auto-run registry validation
@@ -188,7 +193,7 @@ python registry/generate_user_skills.py
 
 Script tự động:
 
-- Scan v1.5.2 SKILL_LIBRARY (124 skills, 12 domains)
+- Scan the end-user form source tree
 - Generate `.gov.md` files với metadata chuẩn
 - Assign Risk Level mặc định theo domain
 - Tạo INDEX.md
@@ -197,59 +202,12 @@ Script tự động:
 
 ---
 
-### Import Skills from SkillsMP (External Intake)
+### External Skill Intake
 
-```bash
-cd governance/skill-library
-SKILLSMP_API_KEY="***" python registry/import_skillsmp.py --limit 50
-```
-
-Script tự động:
-
-- Pull skills từ SkillsMP theo ưu tiên **App Development**
-- Lọc theo các domain đã có trong CVF
-- Chọn shortlist 50 skills và map về CVF domain
-
-**Output:**
-
-- `registry/external-sources/skillsmp/skillsmp_shortlist.json`
-- `registry/external-sources/skillsmp/skillsmp_shortlist.csv`
-- `registry/external-sources/skillsmp/skillsmp_shortlist.md`
-
----
-
-### Run External Intake (End-to-End)
-
-```bash
-cd governance/skill-library
-SKILLSMP_API_KEY="***" python registry/run_external_intake.py --limit 50 --per-category 50
-```
-
-Script tự động:
-
-- Import shortlist → Convert → Inject Autonomous
-- Generate mapping records + UAT records
-- Validate skills + regenerate governance registry
-
----
-
-### Convert SkillsMP Shortlist → CVF Skills
-
-```bash
-cd governance/skill-library
-python registry/convert_shortlist_to_cvf.py --limit 50
-```
-
-Script tự động:
-
-- Dedupe theo repo (ưu tiên mô tả tốt hơn)
-- Tạo `.skill.md` chuẩn CVF theo domain
-- Ghi mapping tại `skillsmp_to_cvf_map.md`
-
-**Output:**
-
-- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/<domain>/*.skill.md`
-- `registry/external-sources/skillsmp/skillsmp_to_cvf_map.md`
+Dùng SkillsMP để tìm nguồn cho công việc cụ thể. Chỉ đưa từng ứng viên vào
+CVF sau khi người phụ trách kiểm nguồn gốc, quyền sử dụng, rủi ro và giá trị
+so với cách agent có thể tự làm. Hai lệnh nhập và chuyển đổi hàng loạt đã
+ngừng hoạt động. [Quy trình xét từng ứng viên](specs/EXTERNAL_SKILL_INTAKE.md#9-operational-pipeline-standardized)
 
 ---
 

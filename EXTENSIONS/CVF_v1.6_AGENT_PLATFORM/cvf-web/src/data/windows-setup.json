@@ -1,0 +1,353 @@
+{
+    "installCommand": "npm.cmd ci --prefix \".\\EXTENSIONS\\CVF_v1.6_AGENT_PLATFORM\\cvf-web\"",
+    "sqliteRepairCommand": "npm.cmd rebuild better-sqlite3 --prefix \".\\EXTENSIONS\\CVF_v1.6_AGENT_PLATFORM\\cvf-web\"",
+    "nodeMinimumMinor": {
+        "22": 12,
+        "24": 0
+    },
+    "nodePathCommand": "set \"PATH=C:\\Node24;%PATH%\"",
+    "links": {
+        "vscode": {
+            "url": "https://code.visualstudio.com/download",
+            "vi": "T\u1ea3i VS Code",
+            "en": "Download VS Code"
+        },
+        "claude": {
+            "url": "https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code",
+            "vi": "Trang ti\u1ec7n \u00edch Claude Code",
+            "en": "Claude Code extension"
+        },
+        "codex": {
+            "url": "https://marketplace.visualstudio.com/items?itemName=openai.chatgpt",
+            "vi": "Trang ti\u1ec7n \u00edch Codex",
+            "en": "Codex extension"
+        },
+        "git": {
+            "url": "https://git-scm.com/downloads/win",
+            "vi": "T\u1ea3i Git cho Windows",
+            "en": "Download Git for Windows"
+        },
+        "node": {
+            "url": "https://nodejs.org/dist/v24.22.3/node-v24.22.3-x64.msi",
+            "vi": "T\u1ea3i b\u1ed9 c\u00e0i Node.js 24 cho Windows x64",
+            "en": "Download the Node.js 24 installer for Windows x64"
+        },
+        "source": {
+            "url": "https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF",
+            "vi": "Kho m\u00e3 CVF",
+            "en": "CVF repository"
+        },
+        "npm": {
+            "url": "https://docs.npmjs.com/cli/v10/commands/npm-ci",
+            "vi": "T\u00e0i li\u1ec7u l\u1ec7nh chu\u1ea9n b\u1ecb th\u01b0 vi\u1ec7n",
+            "en": "Dependency command documentation"
+        },
+        "nodeArm": {
+            "url": "https://nodejs.org/dist/v24.22.3/node-v24.22.3-arm64.msi",
+            "vi": "T\u1ea3i b\u1ed9 c\u00e0i Node.js 24 cho Windows ARM64",
+            "en": "Download the Node.js 24 installer for Windows ARM64"
+        },
+        "nodePortable": {
+            "url": "https://nodejs.org/dist/v24.22.3/node-v24.22.3-win-x64.zip",
+            "vi": "T\u1ea3i Node.js 24 b\u1ea3n ZIP cho Windows x64",
+            "en": "Download the Node.js 24 ZIP for Windows x64"
+        },
+        "nodePortableArm": {
+            "url": "https://nodejs.org/dist/v24.22.3/node-v24.22.3-win-arm64.zip",
+            "vi": "T\u1ea3i Node.js 24 b\u1ea3n ZIP cho Windows ARM64",
+            "en": "Download the Node.js 24 ZIP for Windows ARM64"
+        }
+    },
+    "status": {
+        "vi": {
+            "title": "Ki\u1ec3m tra tr\u01b0\u1edbc khi m\u1edf CVF Web",
+            "log": "Nh\u1eadt k\u00fd:",
+            "signInSetup": "CVF c\u1ea7n t\u00e0i kho\u1ea3n GitHub ho\u1eb7c Google \u0111\u01b0\u1ee3c ng\u01b0\u1eddi qu\u1ea3n tr\u1ecb li\u00ean k\u1ebft \u0111\u1ec3 \u0111\u0103ng nh\u1eadp. H\u00e3y nh\u1edd ng\u01b0\u1eddi thi\u1ebft l\u1eadp CVF c\u1ea5u h\u00ecnh \u0111\u0103ng nh\u1eadp. \u0110\u1ec3 th\u1ef1c h\u00e0nh tr\u00ean m\u00e1y trong ch\u1ebf \u0111\u1ed9 ph\u00e1t tri\u1ec3n, ch\u1ea1y Start-CVF-Web.cmd -Dev.",
+            "buildInUse": "M\u1ed9t c\u1eeda s\u1ed5 CVF kh\u00e1c \u0111ang d\u00f9ng ho\u1eb7c \u0111ang chu\u1ea9n b\u1ecb b\u1ea3n Web c\u1ee7a th\u01b0 m\u1ee5c n\u00e0y. Ch\u1edd qu\u00e1 tr\u00ecnh chu\u1ea9n b\u1ecb ho\u00e0n t\u1ea5t. N\u1ebfu c\u1ea7n c\u1eadp nh\u1eadt, \u0111\u00f3ng c\u1eeda s\u1ed5 CVF \u0111ang ch\u1ea1y r\u1ed3i m\u1edf l\u1ea1i.",
+            "building": "CVF \u0111ang chu\u1ea9n b\u1ecb b\u1ea3n Web. L\u1ea7n \u0111\u1ea7u ho\u1eb7c sau khi c\u1eadp nh\u1eadt c\u00f3 th\u1ec3 m\u1ea5t v\u00e0i ph\u00fat. H\u00e3y gi\u1eef c\u1eeda s\u1ed5 n\u00e0y m\u1edf.",
+            "starting": "\u0110i\u1ec1u ki\u1ec7n \u0111\u00e3 \u0111\u1ee7. \u0110ang kh\u1edfi \u0111\u1ed9ng CVF Web, c\u00f3 th\u1ec3 m\u1ea5t v\u00e0i ph\u00fat.",
+            "ready": "CVF Web \u0111\u00e3 s\u1eb5n s\u00e0ng.",
+            "keepOpen": "Gi\u1eef c\u1eeda s\u1ed5 n\u00e0y m\u1edf khi d\u00f9ng CVF Web. Nh\u1ea5n Ctrl+C \u0111\u1ec3 d\u1eebng.",
+            "modeDemo": "C\u00e2u tr\u1ea3 l\u1eddi AI l\u00e0 c\u00e2u m\u1eabu.",
+            "advisory": "Web \u0111\u00e3 m\u1edf. \u0110\u00e2y l\u00e0 c\u00e1c c\u00f4ng c\u1ee5 b\u1ea1n c\u00f3 th\u1ec3 b\u1ed5 sung:"
+        },
+        "en": {
+            "title": "Check your computer before opening CVF Web",
+            "log": "Log:",
+            "signInSetup": "CVF needs a linked GitHub or Google account for sign-in. Ask the person who set up CVF to configure sign-in. For local development practice, run Start-CVF-Web-EN.cmd -Dev.",
+            "buildInUse": "Another CVF window is preparing or using this copy of the Web app. Wait for preparation to finish. To update this copy, close its running CVF window and open it again.",
+            "building": "CVF is preparing the Web app. The first launch and updates can take a few minutes. Keep this window open.",
+            "starting": "Your computer is ready. CVF Web can take a few minutes to start.",
+            "ready": "CVF Web is ready.",
+            "keepOpen": "Keep this window open while using CVF Web. Press Ctrl+C to stop.",
+            "modeDemo": "AI answers are samples.",
+            "advisory": "Web is open. Here are the tools you can add:"
+        }
+    },
+    "issues": {
+        "SOURCE_MISSING": {
+            "vi": {
+                "title": "Th\u01b0 m\u1ee5c CVF ch\u01b0a \u0111\u1ea7y \u0111\u1ee7",
+                "help": "L\u1ea5y l\u1ea1i to\u00e0n b\u1ed9 th\u01b0 m\u1ee5c CVF. M\u1edf Start-CVF-Web.cmd b\u00ean trong b\u1ea3n \u0111\u00f3 \u0111\u1ec3 c\u00f3 \u0111\u1ee7 t\u1ec7p v\u00e0 th\u01b0 vi\u1ec7n."
+            },
+            "en": {
+                "title": "The CVF folder is incomplete",
+                "help": "Get the whole CVF folder and open Start-CVF-Web-EN.cmd inside it so the app can find its files."
+            },
+            "links": [
+                "source"
+            ]
+        },
+        "NODE_MISSING": {
+            "vi": {
+                "title": "Ch\u01b0a t\u00ecm th\u1ea5y Node.js",
+                "help": "CVF Web c\u1ea7n Node.js \u0111\u1ec3 ch\u1ea1y. M\u1edf li\u00ean k\u1ebft t\u1ea3i b\u1ed9 c\u00e0i Node.js 24 ph\u00f9 h\u1ee3p v\u1edbi m\u00e1y Windows c\u1ee7a b\u1ea1n, c\u00e0i xong r\u1ed3i m\u1edf l\u1ea1i b\u1ed9 kh\u1edfi \u0111\u1ed9ng. N\u1ebfu m\u00e1y \u0111\u00e3 c\u00f3 Node.js 22 t\u1eeb 22.12 th\u00ec c\u00f3 th\u1ec3 d\u00f9ng ti\u1ebfp."
+            },
+            "en": {
+                "title": "Node.js is missing",
+                "help": "CVF Web needs Node.js. Use the Node.js 24 installer link for your Windows computer, then reopen the launcher. A copy of Node.js 22 from 22.12 onward also works."
+            },
+            "links": [
+                "node",
+                "nodeArm"
+            ]
+        },
+        "NODE_VERSION": {
+            "vi": {
+                "title": "Phi\u00ean b\u1ea3n Node.js ch\u01b0a ph\u00f9 h\u1ee3p",
+                "help": "D\u00f9ng Node.js 24 ho\u1eb7c Node.js 22 t\u1eeb 22.12. Th\u01b0 vi\u1ec7n l\u01b0u d\u1eef li\u1ec7u c\u1ee7a CVF ch\u01b0a c\u00e0i \u0111\u01b0\u1ee3c v\u1edbi Node.js 26. N\u1ebfu \u1ee9ng d\u1ee5ng kh\u00e1c c\u1ea7n b\u1ea3n Node hi\u1ec7n t\u1ea1i, t\u1ea3i b\u1ea3n ZIP c\u1ee7a Node.js 24 v\u00e0 gi\u1ea3i n\u00e9n ri\u00eang. M\u1edf th\u01b0 m\u1ee5c CVF trong File Explorer, g\u00f5 cmd v\u00e0o thanh \u0111\u1ecba ch\u1ec9 r\u1ed3i nh\u1ea5n Enter. Trong l\u1ec7nh b\u00ean d\u01b0\u1edbi, thay C:\\Node24 b\u1eb1ng th\u01b0 m\u1ee5c ch\u1ee9a node.exe v\u1eeba gi\u1ea3i n\u00e9n. D\u00e1n l\u1ec7nh r\u1ed3i g\u00f5 t\u00ean t\u1ec7p kh\u1edfi \u0111\u1ed9ng trong c\u00f9ng c\u1eeda s\u1ed5. C\u00e1c \u1ee9ng d\u1ee5ng kh\u00e1c gi\u1eef b\u1ea3n Node c\u1ee7a ch\u00fang."
+            },
+            "en": {
+                "title": "This version of Node.js is unsupported by the launcher",
+                "help": "Use Node.js 24 or Node.js 22 from 22.12 onward. The CVF database library cannot install on Node.js 26 yet. If another app needs your current Node version, download the Node.js 24 ZIP and extract it separately. Open the CVF folder in File Explorer, type cmd in its address bar, and press Enter. In the command below, replace C:\\Node24 with the folder containing the extracted node.exe. Paste the command, then type the launcher filename in the same window. Other apps keep their Node version."
+            },
+            "links": [
+                "nodePortable",
+                "nodePortableArm",
+                "node",
+                "nodeArm"
+            ]
+        },
+        "NPM_MISSING": {
+            "vi": {
+                "title": "Ch\u01b0a t\u00ecm th\u1ea5y c\u00f4ng c\u1ee5 chu\u1ea9n b\u1ecb th\u01b0 vi\u1ec7n c\u1ee7a Node.js",
+                "help": "C\u00f4ng c\u1ee5 n\u00e0y \u0111i k\u00e8m b\u1ed9 c\u00e0i Node.js. Ki\u1ec3m tra l\u1ea1i b\u1ed9 c\u00e0i v\u00e0 m\u1edf c\u1eeda s\u1ed5 m\u1edbi."
+            },
+            "en": {
+                "title": "The Node.js package installer is missing",
+                "help": "The Node.js installer includes npm. Check the installation and open a new window."
+            },
+            "links": [
+                "node",
+                "nodeArm"
+            ]
+        },
+        "GIT_MISSING": {
+            "vi": {
+                "title": "Ch\u01b0a t\u00ecm th\u1ea5y Git",
+                "help": "C\u00e0i Git cho Windows n\u1ebfu b\u1ea1n mu\u1ed1n l\u1ea5y ho\u1eb7c c\u1eadp nh\u1eadt th\u01b0 m\u1ee5c CVF t\u1eeb kho m\u00e3."
+            },
+            "en": {
+                "title": "Git is missing",
+                "help": "Install Git for Windows if you want to download or update CVF from its repository."
+            },
+            "links": [
+                "git"
+            ]
+        },
+        "VSCODE_MISSING": {
+            "vi": {
+                "title": "Ch\u01b0a t\u00ecm th\u1ea5y VS Code",
+                "help": "\u0110\u1ec3 giao b\u1ea3n \u0111\u1eb7c t\u1ea3 cho tr\u1ee3 l\u00fd, b\u1ea1n c\u1ea7n c\u00e0i VS Code b\u1ea3n d\u00e0nh cho m\u00e1y t\u00ednh. Sau \u0111\u00f3 c\u00e0i m\u1ed9t ti\u1ec7n \u00edch Claude Code ho\u1eb7c Codex."
+            },
+            "en": {
+                "title": "VS Code is missing",
+                "help": "To hand a specification to the agent, install the VS Code desktop app, then add Claude Code or Codex."
+            },
+            "links": [
+                "vscode"
+            ]
+        },
+        "AGENT_MISSING": {
+            "vi": {
+                "title": "Ch\u01b0a t\u00ecm th\u1ea5y ti\u1ec7n \u00edch Claude Code ho\u1eb7c Codex",
+                "help": "\u0110\u1ec3 giao b\u1ea3n \u0111\u1eb7c t\u1ea3 cho tr\u1ee3 l\u00fd, m\u1edf Ti\u1ec7n \u00edch trong VS Code, c\u00e0i ho\u1eb7c b\u1eadt m\u1ed9t trong hai ti\u1ec7n \u00edch Claude Code v\u00e0 Codex, r\u1ed3i \u0111\u0103ng nh\u1eadp."
+            },
+            "en": {
+                "title": "Claude Code or Codex could not be found",
+                "help": "To hand a specification to the agent, open Extensions in VS Code, install or enable Claude Code or Codex, and sign in."
+            },
+            "links": [
+                "claude",
+                "codex"
+            ]
+        },
+        "PACKAGES_MISSING": {
+            "vi": {
+                "title": "CVF Web ch\u01b0a c\u00f3 \u0111\u1ee7 th\u01b0 vi\u1ec7n",
+                "help": "M\u1edf th\u01b0 m\u1ee5c CVF trong File Explorer, g\u00f5 cmd v\u00e0o thanh \u0111\u1ecba ch\u1ec9 r\u1ed3i nh\u1ea5n Enter. N\u1ebfu b\u1ea1n \u0111\u1ed3ng \u00fd t\u1ea3i th\u01b0 vi\u1ec7n, d\u00e1n l\u1ec7nh d\u01b0\u1edbi \u0111\u00e2y, \u0111\u1ee3i ch\u1ea1y xong r\u1ed3i b\u1ea5m l\u1ea1i t\u1ec7p kh\u1edfi \u0111\u1ed9ng."
+            },
+            "en": {
+                "title": "CVF Web dependencies are missing",
+                "help": "Open the CVF folder in File Explorer, type cmd in its address bar, and press Enter. If you choose to download the dependencies, paste the command below, wait for it to finish, and run the launcher again."
+            },
+            "links": [
+                "npm"
+            ]
+        },
+        "SQLITE_BINDING_MISSING": {
+            "vi": {
+                "title": "Jev thi\u1ebfu ph\u1ea7n SQLite ch\u1ea1y tr\u00ean Windows",
+                "help": "CVF Web v\u1eabn m\u1edf v\u00e0 c\u00f3 th\u1ec3 ch\u1ecdn m\u1eabu b\u1eb1ng t\u1eeb kh\u00f3a ho\u1eb7c th\u1ee7 c\u00f4ng. Jev c\u1ea7n SQLite \u0111\u1ec3 l\u01b0u chi ph\u00ed v\u00e0 b\u1ed9 \u0111\u1ebfm t\u1ef1 t\u1eaft. N\u1ebfu b\u1ea1n \u0111\u1ed3ng \u00fd chu\u1ea9n b\u1ecb l\u1ea1i ph\u1ea7n SQLite, m\u1edf CMD \u1edf th\u01b0 m\u1ee5c CVF, ch\u1ea1y l\u1ec7nh d\u01b0\u1edbi \u0111\u00e2y r\u1ed3i m\u1edf l\u1ea1i CVF Web."
+            },
+            "en": {
+                "title": "The Windows SQLite component for Jev is missing",
+                "help": "CVF Web still opens. You can use keywords or choose a template manually. Jev needs SQLite to store usage costs and the automatic shutoff counter. If you choose to rebuild the component, open CMD in the CVF folder, run the command below, then reopen CVF Web."
+            },
+            "links": [
+                "npm"
+            ]
+        },
+        "PORT_BUSY": {
+            "vi": {
+                "title": "\u0110\u1ecba ch\u1ec9 xem th\u1eed \u0111ang \u0111\u01b0\u1ee3c d\u00f9ng",
+                "help": "N\u1ebfu \u0111\u00e3 m\u1edf m\u1ed9t c\u1eeda s\u1ed5 CVF Web, h\u00e3y d\u00f9ng c\u1eeda s\u1ed5 \u0111\u00f3 ho\u1eb7c nh\u1ea5n Ctrl+C b\u00ean trong c\u1eeda s\u1ed5 \u0111\u00f3 r\u1ed3i th\u1eed l\u1ea1i. N\u1ebfu \u1ee9ng d\u1ee5ng kh\u00e1c \u0111ang d\u00f9ng c\u1ed5ng, h\u00e3y nh\u1edd tr\u1ee3 l\u00fd ch\u1ecdn m\u1ed9t c\u1ed5ng c\u00f2n tr\u1ed1ng."
+            },
+            "en": {
+                "title": "The preview address is already in use",
+                "help": "If CVF Web is already open, use that window or press Ctrl+C in its launcher and try again. If a different app owns the port, ask the agent to pick an unused port."
+            },
+            "links": []
+        },
+        "CHECK_FAILED": {
+            "vi": {
+                "title": "Kh\u00f4ng ki\u1ec3m tra \u0111\u01b0\u1ee3c m\u1ed9t \u0111i\u1ec1u ki\u1ec7n",
+                "help": "M\u1edf nh\u1eadt k\u00fd theo \u0111\u01b0\u1eddng d\u1eabn \u0111\u00e3 in v\u00e0 g\u1eedi cho ng\u01b0\u1eddi h\u1ed7 tr\u1ee3. \u0110\u00f3ng r\u1ed3i m\u1edf l\u1ea1i c\u1eeda s\u1ed5 ki\u1ec3m tra tr\u01b0\u1edbc khi th\u1eed l\u1ea1i."
+            },
+            "en": {
+                "title": "A setup check could not finish",
+                "help": "Open the log at the displayed path and share it with your support contact. Reopen the checker before retrying."
+            },
+            "links": []
+        },
+        "WEB_FAILED": {
+            "vi": {
+                "title": "CVF Web ch\u01b0a m\u1edf \u0111\u01b0\u1ee3c",
+                "help": "M\u1edf nh\u1eadt k\u00fd v\u00e0 c\u00e1c t\u1ec7p \u0111\u1ea7u ra \u0111\u01b0\u1ee3c ghi trong \u0111\u00f3. G\u1eedi ch\u00fang cho ng\u01b0\u1eddi h\u1ed7 tr\u1ee3 n\u1ebfu c\u1ea7n t\u00ecm nguy\u00ean nh\u00e2n."
+            },
+            "en": {
+                "title": "CVF Web could not start",
+                "help": "Open the log and the output files named in it. Share them with your support contact if you need help finding the cause."
+            },
+            "links": []
+        },
+        "BROWSER_FAILED": {
+            "vi": {
+                "title": "CVF Web \u0111\u00e3 ch\u1ea1y nh\u01b0ng tr\u00ecnh duy\u1ec7t ch\u01b0a m\u1edf",
+                "help": "Sao ch\u00e9p \u0111\u1ecba ch\u1ec9 hi\u1ec3n th\u1ecb trong c\u1eeda s\u1ed5 kh\u1edfi \u0111\u1ed9ng r\u1ed3i d\u00e1n v\u00e0o tr\u00ecnh duy\u1ec7t."
+            },
+            "en": {
+                "title": "CVF Web is running and the browser could not open automatically",
+                "help": "Copy the address from the launcher and paste it into your browser."
+            },
+            "links": []
+        },
+        "LOG_UNAVAILABLE": {
+            "vi": {
+                "title": "Kh\u00f4ng t\u1ea1o \u0111\u01b0\u1ee3c nh\u1eadt k\u00fd",
+                "help": "Ki\u1ec3m tra dung l\u01b0\u1ee3ng tr\u1ed1ng v\u00e0 quy\u1ec1n ghi \u1edf \u0111\u01b0\u1eddng d\u1eabn hi\u1ec3n th\u1ecb, r\u1ed3i m\u1edf l\u1ea1i b\u1ed9 kh\u1edfi \u0111\u1ed9ng."
+            },
+            "en": {
+                "title": "Could not create the CVF setup log",
+                "help": "Check free space and write access at the displayed path, then reopen the launcher."
+            },
+            "links": []
+        },
+        "SAVED_KEY_UNAVAILABLE": {
+            "vi": {
+                "title": "CVF Web kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c kh\u00f3a \u0111\u00e3 l\u01b0u",
+                "help": "B\u1ea5m \u0111\u00fap Configure-CVF-Web-Keys.cmd v\u00e0 ch\u1ecdn nh\u00e0 cung c\u1ea5p v\u1eeba hi\u1ec7n. L\u01b0u l\u1ea1i ho\u1eb7c x\u00f3a kh\u00f3a r\u1ed3i m\u1edf l\u1ea1i CVF Web. Kh\u00f3a l\u01b0u tr\u00ean m\u00e1y ch\u1ec9 \u0111\u1ecdc \u0111\u01b0\u1ee3c b\u1eb1ng t\u00e0i kho\u1ea3n Windows \u0111\u00e3 l\u01b0u."
+            },
+            "en": {
+                "title": "CVF Web could not read a saved key",
+                "help": "Double-click Configure-CVF-Web-Keys.cmd and choose the provider shown above. Save or remove the key, then reopen CVF Web. Only the Windows account that saved it can read the key."
+            },
+            "links": []
+        }
+    },
+    "advisories": [
+        "SQLITE_BINDING_MISSING",
+        "GIT_MISSING",
+        "VSCODE_MISSING",
+        "AGENT_MISSING",
+        "SAVED_KEY_UNAVAILABLE"
+    ],
+    "serverKeys": {
+        "providers": [
+            {
+                "id": "openai",
+                "name": "OpenAI",
+                "env": "OPENAI_API_KEY"
+            },
+            {
+                "id": "claude",
+                "name": "Anthropic",
+                "env": "ANTHROPIC_API_KEY"
+            },
+            {
+                "id": "gemini",
+                "name": "Google Gemini",
+                "env": "GOOGLE_AI_API_KEY"
+            },
+            {
+                "id": "openrouter",
+                "name": "OpenRouter",
+                "env": "OPENROUTER_API_KEY"
+            },
+            {
+                "id": "alibaba",
+                "name": "Alibaba Cloud",
+                "env": "ALIBABA_API_KEY"
+            },
+            {
+                "id": "deepseek",
+                "name": "DeepSeek",
+                "env": "DEEPSEEK_API_KEY"
+            }
+        ],
+        "vi": {
+            "title": "Kh\u00f3a d\u00f9ng cho CVF Web",
+            "present": "\u0110\u00e3 l\u01b0u tr\u00ean m\u00e1y",
+            "absent": "Ch\u01b0a l\u01b0u tr\u00ean m\u00e1y",
+            "exit": "Tho\u00e1t",
+            "choose": "G\u00f5 m\u1ed9t ch\u1eef s\u1ed1 r\u1ed3i nh\u1ea5n Enter. Ch\u1ec9 d\u00e1n kh\u00f3a v\u00e0o \u00f4 nh\u1eadp c\u00f3 che.",
+            "invalid": "S\u1ed1 n\u00e0y ch\u01b0a c\u00f3 trong danh s\u00e1ch. H\u00e3y th\u1eed l\u1ea1i.",
+            "save": "Th\u00eam ho\u1eb7c thay kh\u00f3a",
+            "delete": "X\u00f3a kh\u00f3a \u0111\u00e3 l\u01b0u",
+            "back": "Quay l\u1ea1i",
+            "paste": "D\u00e1n kh\u00f3a truy c\u1eadp r\u1ed3i nh\u1ea5n Enter. C\u1eeda s\u1ed5 che n\u1ed9i dung khi b\u1ea1n d\u00e1n",
+            "empty": "B\u1ea1n ch\u01b0a nh\u1eadp kh\u00f3a. Kh\u00f3a \u0111\u00e3 l\u01b0u \u0111\u01b0\u1ee3c gi\u1eef l\u1ea1i.",
+            "saved": "\u0110\u00e3 l\u01b0u kh\u00f3a. M\u1edf l\u1ea1i CVF Web \u0111\u1ec3 d\u00f9ng kh\u00f3a n\u00e0y.",
+            "confirmDelete": "X\u00f3a kh\u00f3a {0} \u0111\u00e3 l\u01b0u tr\u00ean m\u00e1y? G\u00f5 1 \u0111\u1ec3 x\u00f3a ho\u1eb7c Enter \u0111\u1ec3 quay l\u1ea1i",
+            "deleted": "\u0110\u00e3 x\u00f3a kh\u00f3a tr\u00ean m\u00e1y. M\u1edf l\u1ea1i CVF Web. N\u1ebfu b\u1ea1n \u0111\u00e3 c\u1ea5u h\u00ecnh kh\u00f3a \u1edf n\u01a1i kh\u00e1c, c\u1ea5u h\u00ecnh \u0111\u00f3 v\u1eabn c\u00f3 th\u1ec3 \u0111\u01b0\u1ee3c d\u00f9ng.",
+            "failed": "Kh\u00f4ng l\u01b0u ho\u1eb7c x\u00f3a \u0111\u01b0\u1ee3c kh\u00f3a. H\u00e3y th\u1eed l\u1ea1i trong t\u00e0i kho\u1ea3n Windows c\u1ee7a b\u1ea1n."
+        },
+        "en": {
+            "title": "CVF Web provider keys",
+            "present": "Saved on this computer",
+            "absent": "Not saved on this computer",
+            "exit": "Exit",
+            "choose": "Enter one digit, then press Enter. Paste the key only at the masked key prompt.",
+            "invalid": "That number is not in the list. Try again.",
+            "save": "Add or replace a key",
+            "delete": "Delete the saved key",
+            "back": "Back",
+            "paste": "Paste your access key, then press Enter. The window hides what you paste",
+            "empty": "No key entered. Your saved key stays in place.",
+            "saved": "Key saved. Reopen CVF Web to use it.",
+            "confirmDelete": "Delete the saved {0} key? Enter 1 to delete or press Enter to go back",
+            "deleted": "The local key was deleted. Reopen CVF Web. A key you set up elsewhere can still be used.",
+            "failed": "The key could not be saved or removed. Try again in your Windows account."
+        }
+    }
+}

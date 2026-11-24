@@ -28,28 +28,28 @@ describe('GovernancePage SOT3 evidence discoverability link', () => {
     it('renders the English SOT3 Evidence link pointing at /governance/sot3-evidence', async () => {
         renderWithLanguage('en');
 
-        const link = await screen.findByRole('link', { name: 'SOT3 Evidence' });
+        const link = await screen.findByRole('link', { name: 'Platform verification records' });
         expect(link.getAttribute('href')).toBe('/governance/sot3-evidence');
     });
 
     it('renders the Vietnamese SOT3 Evidence label pointing at /governance/sot3-evidence', async () => {
         renderWithLanguage('vi');
 
-        const link = await screen.findByRole('link', { name: 'Bằng chứng SOT3' });
+        const link = await screen.findByRole('link', { name: 'Hồ sơ kiểm tra nền tảng' });
         expect(link.getAttribute('href')).toBe('/governance/sot3-evidence');
     });
 
-    it('renders the English MAO Durable Runs link pointing at /governance/mao-runs', async () => {
+    it('renders the English team run history link pointing at /governance/mao-runs', async () => {
         renderWithLanguage('en');
 
-        const link = await screen.findByRole('link', { name: 'MAO Durable Runs' });
+        const link = await screen.findByRole('link', { name: 'Team run history' });
         expect(link.getAttribute('href')).toBe('/governance/mao-runs');
     });
 
     it('renders the Vietnamese MAO Durable Runs label pointing at /governance/mao-runs', async () => {
         renderWithLanguage('vi');
 
-        const link = await screen.findByRole('link', { name: 'Lượt chạy MAO bền vững' });
+        const link = await screen.findByRole('link', { name: 'Lịch sử chạy nhiều trợ lý' });
         expect(link.getAttribute('href')).toBe('/governance/mao-runs');
     });
 });

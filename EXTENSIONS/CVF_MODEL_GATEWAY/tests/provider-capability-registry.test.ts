@@ -189,13 +189,13 @@ describe("provider capability registry", () => {
   it("keeps Alibaba free-quota metadata bounded to the governed ledger reference", () => {
     const alibaba = PROVIDER_CAPABILITY_REGISTRY.find((entry) => entry.providerId === "alibaba");
     const currentText = alibaba?.models.find(
-      (model): model is ProviderCapabilityModel => model.modelId === "qwen3.8-2.4t-a95b",
+      (model): model is ProviderCapabilityModel => model.modelId === "qwen-flash-character",
     );
     expect(currentText?.metadata).toMatchObject({
       freeQuotaLedgerRef: ALIBABA_FREE_QUOTA_LEDGER_REFERENCE,
-      expirationDate: "2026-11-11",
+      expirationDate: "2027-02-09",
       stopOnExhaustAtCapture: true,
-      defaultEndpointHost: "ws-remplsp27g5oicq1.ap-southeast-1.maas.aliyuncs.com",
+      defaultEndpointHost: "ws-pxgeef9hg5vwddtl.ap-southeast-1.maas.aliyuncs.com",
     });
     expect(currentText?.metadata?.claimBoundary).toContain("no provider parity");
   });
@@ -204,12 +204,12 @@ describe("provider capability registry", () => {
     expect(ALIBABA_T6_FREE_QUOTA_TARGET_MODEL).toBe("qwen3.7-flash");
     expect(ALIBABA_T6_FREE_QUOTA_TARGET_SNAPSHOT).toBe("qwen3.7-flash-2026-07-15");
     expect(getAlibabaFreeQuotaStatus(
-      "qwen3.8-2.4t-a95b",
-      new Date("2026-11-04T00:00:00Z"),
+      "qwen-flash-character",
+      new Date("2026-11-11T00:00:00Z"),
     )).toBe("usable");
     expect(getAlibabaFreeQuotaStatus(
-      "qwen3.8-2.4t-a95b",
-      new Date("2026-11-11T00:00:00Z"),
+      "qwen-flash-character",
+      new Date("2027-02-09T00:00:00Z"),
     )).toBe("expired");
     expect(getAlibabaFreeQuotaStatus(
       "unknown-model",

@@ -2,7 +2,7 @@
 
 > **Developed by Tien - Tan Thuan Port@2026**
 >
-> **Controlled vibe coding. Not faster, but safer and more governable.**
+> **Controlled vibe coding. Safe and governable, with speed and cost in mind.**
 
 🇬🇧 English | [🇻🇳 Tiếng Việt](docs/GET_STARTED.md)
 
@@ -120,7 +120,7 @@ The gate runs UI-only mock E2E plus live governance E2E, and it must fail if no 
 CVF is AI Governance Infrastructure: a governance layer for AI-assisted work that decides whether an AI call may run, which provider lane it uses, and what evidence is recorded.
 It complements agent runtimes and AI tools rather than replacing them.
 
-CVF starts with the work a person wants done and the evidence needed to accept its result. It reuses suitable execution capabilities, controls, version history, and provenance from existing tools; a custom adapter or control needs a demonstrated gap in a named workflow. CVF retains responsibility for the job contract, authority, evidence, and acceptance within its supported boundary. A provider response, governance receipt, or `ALLOW` decision does not by itself accept an artifact.
+CVF starts with the work a person wants done, the limits they set, and the result they can try and accept. Agents check the evidence within those limits. It reuses suitable execution capabilities, controls, version history, and provenance from existing tools; a custom adapter or control needs a demonstrated gap in a named workflow. CVF retains responsibility for the job contract, authority, evidence, and acceptance within its supported boundary. A provider response, governance receipt, or `ALLOW` decision does not by itself accept an artifact.
 
 When work changes, evidence must be checked against the input, output version, scope, and freshness required by the next decision. Historical results remain intact. Version-aware continuity across a workflow is a design requirement; claim it as working behavior only for a consumer and profile with corresponding proof.
 
@@ -202,7 +202,7 @@ Boundaries that still matter:
 - historical multi-provider evidence exists for Alibaba and DeepSeek; Alibaba now targets `qwen-flash` pending fresh live proof, while DeepSeek `deepseek-chat` remains certified
 - W149 proved the full trusted-form corpus on Alibaba direct API `40/40`, Alibaba browser UI `40/40`, and a DeepSeek confirmatory subset `12/12`
 - provider speed, strength, reliability, and cost remain provider-lane economics chosen by the user
-- the public `Skill Library` front door is now synced to a governed subset, but benchmark truth still comes only from the `GC-044` trusted subset
+- the `GC-044` trusted subset is the benchmark boundary for the earlier public skill corpus
 
 Canonical claim boundary:
 
@@ -408,14 +408,12 @@ Read this status as:
 
 ### Public Skill Library Truth Boundary
 
-The public web `Skill Library` is now a **governed front-door subset explorer**.
+CVF has two catalogs for different tasks:
 
-That means:
+- People can choose a result template on the Web Home page to prepare a specification. The [end-user form index](governance/skill-library/registry/user-skills/INDEX.md) lists reusable forms available in the Local workspace.
+- Agents use the [agent package index](docs/reference/agent_system_skills/generated/skill-index.json) to look up packages. Check each entry's certification, status and scope before relying on it.
 
-- front-door discovery only shows `TRUSTED_FOR_VALUE_PROOF` and `REVIEW_REQUIRED` surfaces
-- legacy/reject/unscreened surfaces are quarantined from front-door discovery
-- raw visible counts still must not be treated as proof that every visible skill is benchmark-trusted
-- benchmark truth and public-value proof remain bound to `TRUSTED_FOR_VALUE_PROOF`
+The Local Web library is a discovery surface. Benchmark and public-value evidence for the earlier corpus still depends on the `TRUSTED_FOR_VALUE_PROOF` subset.
 
 The governing authorities for public-value proof remain:
 

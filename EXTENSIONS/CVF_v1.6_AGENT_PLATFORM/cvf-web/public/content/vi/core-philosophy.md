@@ -1,5 +1,7 @@
 # Triết Lý Cốt Lõi
 
+> Các quyết định Local hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây không tự cấp quyền. [Vòng đời công việc](lifecycle.md).
+>
 > *"Vibe là cần thiết — nhưng phải được kiểm soát."*
 
 ---
@@ -91,7 +93,7 @@ Kỷ luật của CVF (phase, spec, checklist) tạo không gian cho sáng tạo
 
 | Nguyên tắc | Trong CVF | Ví dụ |
 |-----------|--------|---------|
-| Vibe + Kiểm soát | Phase A nắm bắt ý định; Phase B cấu trúc hóa | Viết ý tưởng ra → rồi thiết kế nó |
+| Vibe + Kiểm soát | INTAKE nắm bắt ý định; DESIGN cấu trúc hóa | Viết ý tưởng ra → rồi thiết kế nó |
 | Kết quả > Code | Tiêu chí chấp nhận định nghĩa thành công, không phải chất lượng code | "Người dùng đăng nhập được không?" chứ không phải "Module auth có sạch không?" |
 | Quyết định được ghi lại | Decision Log + Action Unit trace | `DEC-001: Dùng SQLite vì...` |
 | Cấu trúc, không vi mô | Cổng phase + checklist | Checklist: `[x] Đáp ứng spec` |
@@ -118,21 +120,23 @@ Kỷ luật của CVF (phase, spec, checklist) tạo không gian cho sáng tạo
 
 Nếu bạn chỉ lấy một thứ từ CVF, hãy lấy điều này:
 
-1. **Viết ra bạn muốn gì** (Phase A — 5 phút)
-2. **Kiểm tra kết quả** (Phase D — 5 phút)
+1. **Viết ra bạn muốn gì** (INTAKE — 5 phút)
+2. **Kiểm tra kết quả** (REVIEW — 5 phút)
 
 Đó là 10 phút chi phí bổ sung giúp ngăn chặn hàng giờ làm lại.
 
-Mọi thứ khác — Phase B, governance toolkit, skill library, web UI, risk model — là chiều sâu tùy chọn mà bạn thêm vào khi cần.
+Mọi thứ khác — DESIGN, governance toolkit, skill library, web UI, risk model — là chiều sâu tùy chọn mà bạn thêm vào khi cần.
 
 ---
 
 ## Đọc Thêm
 
-- Quy Trình 4 Phase — Cách các phase hoạt động
+- [Vòng đời công việc](lifecycle.md) — Cách các phase hoạt động
 - Mô Hình Governance — Vai trò, quyền hạn, rủi ro
 - Tuyên Ngôn CVF — Nền tảng triết học đầy đủ
 
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

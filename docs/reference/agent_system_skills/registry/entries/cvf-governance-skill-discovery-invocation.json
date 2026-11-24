@@ -24,7 +24,7 @@
   ],
   "internalAgentDisposition": "IMPLEMENTED",
   "legacyRows": [],
-  "license": "Apache-2.0 upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
+  "license": "MIT upstream; CVF_PRIVATE_GOVERNED adaptation metadata",
   "loaderBoundary": "loading this metadata or package body never grants authority; production execution requires ACTIVE source state, a skill usage receipt, activation policy receipt, package use-proof receipt, and production execution receipt",
   "name": "CVF Governance Skill Discovery And Invocation",
   "originLane": "AGSK-R2",

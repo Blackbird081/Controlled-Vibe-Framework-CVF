@@ -205,8 +205,6 @@ _MULTI_COMMIT_WITH_REASON = _HEADER + _telemetry_block(
     commitPlanDisposition="EXCEPTION_WITH_REASON: required split for protected guard repair",
 )
 
-_MULTI_COMMIT_WITHOUT_REASON = _HEADER + _telemetry_block(materialCommitCount="2")
-
 _NO_DECLARATION = (
     "# Historical Completion Review\n\n"
     "Status: REVIEWER_ACCEPTED_BOUNDED\n\n"
@@ -321,10 +319,27 @@ class SinglePassSopTests(unittest.TestCase):
         d = chk.diagnose("docs/reviews/x.md", _MULTI_COMMIT_WITH_REASON)
         self.assertTrue(d.is_clean)
 
-    def test_multi_commit_without_reason_is_rejected(self):
-        d = chk.diagnose("docs/reviews/x.md", _MULTI_COMMIT_WITHOUT_REASON)
+    def test_multiple_commits_are_accepted_as_telemetry(self):
+        for field, plan in (("materialCommitCount", "MATERIAL_ONLY"),
+                            ("continuityCommitCount", "CONTINUITY_ONLY")):
+            with self.subTest(field=field):
+                text = _HEADER + _telemetry_block(**{field: "2", "commitPlanDisposition": plan})
+                self.assertTrue(chk.diagnose("docs/reviews/x.md", text).is_clean)
+
+    def test_commit_counts_must_remain_non_negative_integers(self):
+        for field in ("materialCommitCount", "continuityCommitCount"):
+            for value in ("-1", "invalid", ""):
+                with self.subTest(field=field, value=value):
+                    text = _HEADER + _telemetry_block(**{field: value})
+                    d = chk.diagnose("docs/reviews/x.md", text)
+                    self.assertFalse(d.is_clean)
+                    self.assertTrue(any(field in issue for issue in d.issues))
+
+    def test_empty_commit_exception_reason_is_rejected(self):
+        text = _HEADER + _telemetry_block(commitPlanDisposition="EXCEPTION_WITH_REASON:")
+        d = chk.diagnose("docs/reviews/x.md", text)
         self.assertFalse(d.is_clean)
-        self.assertTrue(any("requires" in issue for issue in d.issues))
+        self.assertTrue(any("commitPlanDisposition" in issue for issue in d.issues))
 
     def test_invalid_audit_token_is_rejected(self):
         text = _HEADER + _telemetry_block(preRepairAuditDisposition="PARTIAL")

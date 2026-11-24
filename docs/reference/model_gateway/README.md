@@ -30,6 +30,15 @@ receipts, and closure reviews remain in their existing owner paths.
 
 ## Current References
 
+Alibaba workspace, key, eligible models, endpoint and quota must be resolved from
+this folder's current ledger. Dated reviews, old evidence and historical Git
+commits record prior environments and are not current configuration. In
+particular, the trusted-ingress completion review is a hash-pinned historical
+record; its older provider observations do not describe the active workspace.
+Legacy Alibaba smoke/readiness entry points fail closed because they pinned
+obsolete routes. Select a current eligible model using the planner before using
+the quota-aware provider canary.
+
 | Reference | Use |
 |---|---|
 | `CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.md` | Human-readable Alibaba free-quota model codes, expiration dates, and use-before-live-test rule. |

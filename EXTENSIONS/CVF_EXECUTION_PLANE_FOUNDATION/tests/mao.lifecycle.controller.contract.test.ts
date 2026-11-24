@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createDeterministicClock,
+  createRealClock,
   detectTimeout,
   recordHeartbeat,
   isHeartbeatStale,
@@ -522,4 +523,10 @@ describe("end-to-end lifecycle", () => {
     });
     expect(ctrl.classifyOrphan(nonRetryable, 5000)).toBe("ESCALATE");
   });
+});
+
+it('real clock emits UTC and measures elapsed with a monotonic clock', () => {
+  const clock=createRealClock(); const started=clock.now(); expect(new Date(started).toISOString()).toBe(started);
+  expect(clock.elapsedMs(started)).toBeGreaterThanOrEqual(0); expect(clock.elapsedMs('2000-01-01T00:00:00.000Z')).toBe(Infinity);
+  expect(() => clock.advance(1)).toThrow(); const controller=new MaoLifecycleController({clock}); expect(controller.clock).toBe(clock);
 });

@@ -1,13 +1,14 @@
 'use strict';
 // Text Encoding Exception: Vietnamese purpose headings and labels are required native parser literals.
 const PURPOSE_HEADING = /^#{1,4}[^\n]*Mục đích[^\n]*$/im;
+const WEB_PURPOSE_HEADING = /^#{1,4}[^\n]*(?:Mục đích|Purpose)[^\n]*$/im;
 const WHEN_LABEL = /^(?:Khi nào(?: nên)? dùng(?: skill này)?|When to use(?: this skill)?)$/i;
 const AVOID_LABEL = /^(?:Không phù hợp(?: khi)?|Not suitable(?: when)?)$/i;
 const LABEL_LINE = /^\*\*([^*\n]{1,60}?)\s*:\*\*\s*$/;
 
-function summarizeSkillContent(content) {
+function summarizeSkillContent(content, { includeEnglishPurpose = false } = {}) {
     const text = content.replace(/\r\n?/g, '\n');
-    const heading = PURPOSE_HEADING.exec(text);
+    const heading = (includeEnglishPurpose ? WEB_PURPOSE_HEADING : PURPOSE_HEADING).exec(text);
     if (!heading) return '';
     const section = text.slice(heading.index + heading[0].length).split(/\n(?:---|#{1,4} )/)[0];
     const lead = [], when = [], avoid = [];
@@ -27,8 +28,9 @@ function summarizeSkillContent(content) {
     }
     const clean = (value, max) => value.replace(/\s+/g, ' ').trim().slice(0, max);
     const leadText = clean(lead.join(' '), 160);
+    const whenLabel = includeEnglishPurpose && /\bPurpose\b/i.test(heading[0]) ? 'When to use' : 'Khi nào dùng';
     // Strip bold markers after native clipping so the declared delta cannot move its boundary.
-    return clean([leadText, when.length ? `Khi nào dùng: ${when.join('; ')}` : ''].filter(Boolean).join(' '), 280).replace(/\*\*/g, '');
+    return clean([leadText, when.length ? `${whenLabel}: ${when.join('; ')}` : ''].filter(Boolean).join(' '), 280).replace(/\*\*/g, '');
 }
 
 // Escape UTF-16 code units individually, preserving JSON values including surrogate pairs.

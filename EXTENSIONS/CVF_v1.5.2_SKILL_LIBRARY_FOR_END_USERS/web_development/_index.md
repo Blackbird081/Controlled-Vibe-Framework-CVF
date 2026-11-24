@@ -1,4 +1,7 @@
+<!-- Text Encoding Exception: preserve Vietnamese orientation and historical technical labels. -->
 # Web Development Domain
+
+Trang chủ CVF Web có các mẫu kết quả đang dùng. Phần dưới lưu hướng dẫn của v1.5.2 để tra cứu lịch sử.
 
 > **Source:** Vibecode Kit v4.0 + CVF Governance
 > **Skills:** 6 | **Level:** Beginner to Advanced
@@ -16,20 +19,7 @@ Domain này giúp End User làm việc với AI để tạo các sản phẩm we
 
 ---
 
-## 📚 Danh sách Skills
-
-| # | Skill | Mô tả | Level |
-|---|-------|-------|-------|
-| 1 | [Landing Page](./01_landing_page.skill.md) | Trang giới thiệu/bán hàng | ⭐ Easy |
-| 2 | [SaaS App](./02_saas_app.skill.md) | Ứng dụng web có đăng nhập | ⭐⭐ Medium |
-| 3 | [Dashboard](./03_dashboard.skill.md) | Bảng điều khiển/admin | ⭐⭐ Medium |
-| 4 | [Blog/Docs](./04_blog_docs.skill.md) | Blog hoặc documentation | ⭐ Easy |
-| 5 | [Data Visualization](./05_data_visualization.skill.md) | Charts, graphs, data viz | ⭐⭐ Medium |
-| 6 | [Accessibility Audit](./06_accessibility_audit.skill.md) | ARIA, keyboard, screen reader | ⭐⭐⭐ Advanced |
-
----
-
-## 🚀 Cách chọn Skill
+## 🚀 Cách chọn Skill (v1.5.2)
 
 ```
 Bạn muốn làm gì?

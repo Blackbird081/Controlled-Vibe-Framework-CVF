@@ -199,12 +199,13 @@ describe('ApiKeyWizard', () => {
         // Click Finish
         fireEvent.click(screen.getByText('Finish'));
 
-        expect(updateProvider).toHaveBeenCalledWith('gemini', expect.objectContaining({
+        // The governed route runs OpenAI by default, and an unsupported saved default (gemini here) is replaced by it.
+        expect(updateProvider).toHaveBeenCalledWith('openai', expect.objectContaining({
             apiKey: 'AIzaSy_valid_key_12345',
             enabled: true,
         }));
         expect(updatePreferences).toHaveBeenCalledWith(expect.objectContaining({
-            defaultProvider: 'gemini',
+            defaultProvider: 'openai',
         }));
         expect(onComplete).toHaveBeenCalledTimes(1);
     });

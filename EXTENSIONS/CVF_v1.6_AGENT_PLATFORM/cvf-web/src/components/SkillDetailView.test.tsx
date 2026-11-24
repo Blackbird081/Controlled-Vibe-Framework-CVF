@@ -2,6 +2,7 @@
  * @vitest-environment jsdom
  * Test: SkillDetailView i18n — all translated strings render via t() 
  */
+// Text Encoding Exception: assertions verify Vietnamese Skills reading copy.
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SkillDetailView } from './SkillDetailView';
@@ -112,9 +113,10 @@ describe('SkillDetailView i18n — EN mode', () => {
     });
 
     it('renders plain skill context in English', () => {
-        render(<SkillDetailView skill={fullSkill} />);
-        expect(screen.getByText(/Difficulty: Easy/)).toBeTruthy();
-        expect(screen.getByText('Test summary')).toBeTruthy();
+        render(<SkillDetailView categoryId="agent_system_skills" skill={runtimeProjectedSkill} />);
+        expect(screen.getByText(/Difficulty: Governed/)).toBeTruthy();
+        expect(screen.getByText('Define API endpoints, module interfaces, or data schemas.')).toBeTruthy();
+        expect(screen.queryByText(runtimeProjectedSkill.summary)).toBeNull();
         expect(screen.queryByText(/Risk:/)).toBeNull();
         expect(screen.queryByText(/Spec Gate:/)).toBeNull();
     });
@@ -131,7 +133,7 @@ describe('SkillDetailView i18n — VI mode', () => {
 
     it('renders plain skill context in Vietnamese', () => {
         render(<SkillDetailView skill={fullSkill} />);
-        expect(screen.getByText(/Độ khó: Easy/)).toBeTruthy();
+        expect(screen.getByText(/Độ khó: Dễ/)).toBeTruthy();
         expect(screen.queryByText(/Rủi ro:/)).toBeNull();
         expect(screen.queryByText(/Spec Gate:/)).toBeNull();
     });
@@ -216,6 +218,6 @@ describe('SkillDetailView — uncovered branches', () => {
         expect(screen.getByText('Runtime eligible: YES')).toBeTruthy();
         expect(screen.getByText('Activation: ACTIVATION_READY')).toBeTruthy();
         expect(screen.getByText('Domain: api-interface-design')).toBeTruthy();
-        expect(screen.getByText('Adapter: IMPLEMENTED')).toBeTruthy();
+        expect(screen.getByText('Adapter: IMPLEMENTED').closest('details')?.open).toBe(false);
     });
 });

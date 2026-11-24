@@ -1,7 +1,11 @@
 'use client';
 
+// Text Encoding Exception: Vietnamese governance guidance and established UI symbols.
+
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { getRiskOption, getRolePhaseAuthority } from '@/lib/governance-model';
+import { inferRiskLevelFromText } from '@/lib/risk-check';
 import {
     GovernanceState,
     PHASE_OPTIONS,
@@ -14,13 +18,12 @@ import {
     loadGovernanceState,
     isRiskAllowed,
     autoDetectGovernance,
-    PHASE_AUTHORITY_MATRIX,
     type AutoDetectResult,
 } from '@/lib/governance-context';
 import { getApprovalNotificationManager, type ApprovalNotification } from '@/lib/approval-notifications';
-import { evaluatePolicy, riskLevelToScore, type SafetyRiskLevel } from '@/lib/safety-status';
 
 interface GovernanceBarProps {
+    plainLabels?: boolean;
     onStateChange: (state: GovernanceState) => void;
     compact?: boolean;
     /** Optional: pass current chat message for auto-detection */
@@ -31,7 +34,7 @@ interface GovernanceBarProps {
 
 type DetectionMode = 'auto' | 'manual';
 
-export function GovernanceBar({ onStateChange, compact = false, lastMessage, onOpenApprovalPanel }: GovernanceBarProps) {
+export function GovernanceBar({ onStateChange, compact = false, plainLabels = false, lastMessage, onOpenApprovalPanel }: GovernanceBarProps) {
     const { language } = useLanguage();
     const [state, setState] = useState<GovernanceState>(() => loadGovernanceState());
     const [detectionMode, setDetectionMode] = useState<DetectionMode>('auto');
@@ -46,8 +49,12 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
 
     const autoResult = useMemo<AutoDetectResult | null>(() => {
         if (detectionMode !== 'auto' || !lastMessage || !state.toolkitEnabled) return null;
-        return autoDetectGovernance({ messageText: lastMessage });
-    }, [detectionMode, lastMessage, state.toolkitEnabled]);
+        const detected = autoDetectGovernance({ messageText: lastMessage });
+        return {
+            ...detected,
+            riskLevel: inferRiskLevelFromText(lastMessage, { floor: state.riskLevel }) ?? state.riskLevel,
+        };
+    }, [detectionMode, lastMessage, state.toolkitEnabled, state.riskLevel]);
 
     const effectiveState = useMemo<GovernanceState>(() => {
         if (detectionMode === 'auto' && autoResult) {
@@ -108,15 +115,11 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
         setDetectionMode('auto');
     }, []);
 
-    const riskValid = isRiskAllowed(effectiveState.riskLevel, effectiveState.phase);
+    const rolePhase = getRolePhaseAuthority(effectiveState.phase, effectiveState.role);
+    const riskValid = isRiskAllowed(effectiveState.riskLevel, effectiveState.phase, effectiveState.role);
     const isVi = language === 'vi';
-
-    // Policy engine evaluation — replaces simple if/else with proper ALLOW/ESCALATE/BLOCK
-    const policyDecision = useMemo(() => {
-        const safeRisk = (effectiveState.riskLevel === 'R4' ? 'R3' : effectiveState.riskLevel) as SafetyRiskLevel;
-        const score = riskLevelToScore(safeRisk);
-        return evaluatePolicy(score);
-    }, [effectiveState.riskLevel]);
+    const workRulesLabel = isVi ? 'Quy tắc làm việc' : 'Work rules';
+    const blockedRisk = effectiveState.riskLevel === 'R4' ? getRiskOption(effectiveState.riskLevel) : undefined;
 
     return (
         <div className={`
@@ -131,7 +134,7 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
             <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-medium">
-                        🛡️ CVF Toolkit
+                        <span aria-hidden="true">🛡️</span> {plainLabels ? workRulesLabel : 'CVF Toolkit'}
                     </span>
                     {state.toolkitEnabled && (
                         <span className="text-xs px-1.5 py-0.5 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 font-medium">
@@ -195,7 +198,8 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                             : 'bg-gray-300 dark:bg-gray-600'
                         }
                     `}
-                    aria-label="Toggle CVF Toolkit"
+                    aria-label={plainLabels ? workRulesLabel : 'Toggle CVF Toolkit'}
+                    aria-pressed={state.toolkitEnabled}
                 >
                     <span className={`
                         absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full
@@ -303,6 +307,11 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                                         }
                             `}
                                 >
+                                    {blockedRisk && (
+                                        <option value={blockedRisk.value} disabled>
+                                            {isVi ? blockedRisk.label : blockedRisk.labelEn} ({blockedRisk.value})
+                                        </option>
+                                    )}
                                     {RISK_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {isVi ? opt.label : opt.labelEn} ({opt.value})
@@ -311,48 +320,21 @@ export function GovernanceBar({ onStateChange, compact = false, lastMessage, onO
                                 </select>
                                 {!riskValid && (
                                     <p className="text-xs text-red-500 mt-0.5">
-                                        {isVi ? '⚠️ Risk vượt quá cho phép' : '⚠️ Risk exceeds phase limit'}
+                                        {blockedRisk
+                                            ? (isVi ? 'R4 bị chặn' : 'R4 is blocked')
+                                            : (isVi ? 'Rủi ro vượt giới hạn của vai trò và giai đoạn' : 'Risk exceeds the role and phase limit')}
                                     </p>
                                 )}
-                                {/* Policy Decision Badge */}
-                                <div className={`mt-1 text-xs px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-medium ${policyDecision.decision === 'ALLOW' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' :
-                                        policyDecision.decision === 'ESCALATE' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' :
-                                            'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
-                                    }`}>
-                                    <span>{policyDecision.decision === 'ALLOW' ? '✅' : policyDecision.decision === 'ESCALATE' ? '⚠️' : '🛑'}</span>
-                                    <span>{policyDecision.decision}</span>
-                                </div>
                             </div>
                         </div>
                     )}
 
-                    {/* Phase Authority Indicators */}
                     {advancedMode && (
-                        <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-500 dark:text-gray-400">
-                            {(() => {
-                                const authority = PHASE_AUTHORITY_MATRIX[effectiveState.phase];
-                                return (
-                                    <>
-                                        <span title={isVi
-                                            ? `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
-                                            : `Phase ${effectiveState.phase}: max risk ${authority.max_risk}`
-                                        }>
-                                            {authority.can_approve ? '🔑' : '🔒'}{' '}
-                                            {isVi ? (authority.can_approve ? 'Có thể duyệt' : 'Không thể duyệt') : (authority.can_approve ? 'Can approve' : 'Cannot approve')}
-                                        </span>
-                                        <span>|</span>
-                                        <span>
-                                            {authority.can_override ? '⚡' : '🚫'}{' '}
-                                            {isVi ? (authority.can_override ? 'Có thể ghi đè' : 'Không ghi đè') : (authority.can_override ? 'Can override' : 'No override')}
-                                        </span>
-                                        <span>|</span>
-                                        <span>
-                                            Max: {authority.max_risk}
-                                        </span>
-                                    </>
-                                );
-                            })()}
-                        </div>
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            {rolePhase
+                                ? (isVi ? `Giới hạn theo vai trò và giai đoạn (${rolePhase.maxRisk})` : `Role and phase limit (${rolePhase.maxRisk})`)
+                                : (isVi ? 'Vai trò này không được phép trong giai đoạn đã chọn' : 'This role cannot act in the selected phase')}
+                        </p>
                     )}
                 </>
             )}

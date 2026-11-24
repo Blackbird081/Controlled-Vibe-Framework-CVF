@@ -51,3 +51,9 @@ export function redactSecret(secret: string): string {
   }
   return `${secret.slice(0, 4)}...${secret.slice(-4)}`;
 }
+
+/** Native subscription availability is server-observed, never an API secret. */
+export interface NativeSubscriptionCredentialReference { source: 'native_subscription'; providerId: 'claude' }
+export type BridgeCredentialReference = CredentialReference | NativeSubscriptionCredentialReference;
+export type BridgeCredentialMetadata = CredentialMetadata | { source: 'native_subscription'; providerId: 'claude'; available: boolean; executionSurface: 'claude_cli_subscription' };
+export type NativeSubscriptionCredentialResolver = (reference: NativeSubscriptionCredentialReference, options: { signal?: AbortSignal; timeoutMs: number }) => Promise<BridgeCredentialMetadata>;

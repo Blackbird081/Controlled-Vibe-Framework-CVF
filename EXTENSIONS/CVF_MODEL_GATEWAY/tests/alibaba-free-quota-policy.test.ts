@@ -18,29 +18,23 @@ describe("operator free-only quota policy (pure local rules, no provider proof)"
       expect(entry.freeQuotaRemainingAtCapture).toBe(row.freeQuotaRemaining);
     }
   });
-  it("uses earliest expiry within the selected family and drops locked rows", () => {
+  it("selects only current workspace rows and locks at the new expiry", () => {
     expect(listAlibabaFreeQuotaTestCandidates("text", now).map(m => m.modelId))
-      .toEqual(["qwen3.8-2.4t-a95b", "deepseek-v4-pro-0813"]);
+      .toEqual(["qwen-flash-character", "qwen-plus-character"]);
     expect(listAlibabaFreeQuotaTestCandidates("embedding", now)[0].modelId).toBe("qwen3.7-text-embedding");
-    expect(listAlibabaFreeQuotaTestCandidates("vision", now).some(m => m.modelId === "wan3.0-video")).toBe(false);
-  });
-  it("locks at Vietnam midnight on the date-only expiry boundary", () => {
-    expect(getAlibabaFreeQuotaStatus("qwen3.7-text-embedding", new Date("2026-11-07T16:59:59Z"))).toBe("usable");
-    expect(getAlibabaFreeQuotaStatus("qwen3.7-text-embedding", new Date("2026-11-07T17:00:00Z"))).toBe("expired");
-    expect(getAlibabaFreeQuotaStatus("wan3.0-video", now)).toBe("expired");
+    expect(getAlibabaFreeQuotaStatus("qwen-flash-character", new Date("2027-02-08T16:59:59Z"))).toBe("usable");
+    expect(getAlibabaFreeQuotaStatus("qwen-flash-character", new Date("2027-02-08T17:00:00Z"))).toBe("expired");
+    expect(getAlibabaFreeQuotaStatus("unlisted-old-model", now)).toBe("unknown");
     expect(getAlibabaFreeQuotaStatus("qwen3.8-max", now)).toBe("expired");
     expect(getAlibabaFreeQuotaStatus("unknown-paid-model", now)).toBe("unknown");
-    expect(getAlibabaFreeQuotaStatus("qwen3.8-2.4t-a95b", new Date(NaN))).toBe("unknown");
+    expect(getAlibabaFreeQuotaStatus("qwen-flash-character", new Date(NaN))).toBe("unknown");
   });
-  it("refuses expiry without a paid-mode escape and requires exact quota-scope confirmation", () => {
-    expect(() => assertAlibabaFreeQuotaUse("wan3.0-video", {}, now)).toThrow("MODEL_LOCKED");
-    expect(() => assertAlibabaFreeQuotaUse(" WAN3.0-VIDEO ", {}, now)).toThrow("MODEL_LOCKED");
-    expect(() => assertAlibabaFreeQuotaUse("qwen3.8-2.4t-a95b", {}, new Date(NaN))).toThrow("MODEL_LOCKED");
-    expect(() => assertAlibabaFreeQuotaUse("qwen3.8-max", { CVF_ALIBABA_FREE_QUOTA_ONLY: "0" }, now)).toThrow("MODEL_LOCKED");
+  it("requires free-only quota and the workspace confirmation", () => {
+    expect(() => assertAlibabaFreeQuotaUse("qwen3.8-max", {}, now)).toThrow("MODEL_LOCKED");
     const free = { CVF_ALIBABA_FREE_QUOTA_ONLY: "1" };
-    expect(() => assertAlibabaFreeQuotaUse("qwen-flash", free, now)).toThrow("QUOTA_REFUSED");
-    expect(() => assertAlibabaFreeQuotaUse("qwen3.8-2.4t-a95b", free, now)).toThrow("SCOPE_UNCONFIRMED");
-    expect(() => assertAlibabaFreeQuotaUse("qwen3.8-2.4t-a95b", { ...free, CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED: "1" }, now)).not.toThrow();
+    expect(() => assertAlibabaFreeQuotaUse("unlisted-old-model", free, now)).toThrow("QUOTA_REFUSED");
+    expect(() => assertAlibabaFreeQuotaUse("qwen-flash-character", free, now)).toThrow("SCOPE_UNCONFIRMED");
+    expect(() => assertAlibabaFreeQuotaUse("qwen-flash-character", { ...free, CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED: "1" }, now)).not.toThrow();
   });
   it("binds the workspace host exactly, without trusting other MaaS hosts", () => {
     expect(resolveAlibabaDashScopeEndpoint({ ALIBABA_BASE_URL: ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT.replace("/chat/completions", "/") })).toBe(ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT);

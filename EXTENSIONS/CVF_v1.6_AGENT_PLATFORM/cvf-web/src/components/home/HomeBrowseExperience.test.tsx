@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { HomeBrowseExperience } from './HomeBrowseExperience';
 
 vi.mock('@/components', () => ({
@@ -10,7 +10,7 @@ vi.mock('@/components', () => ({
     OutcomeQuickActions: () => <div data-testid="outcome-quick-actions" />,
     IntentEntry: () => <div data-testid="intent-entry" />,
     CategoryTabs: () => <div data-testid="category-tabs" />,
-    TemplateCard: ({ template }: { template: { name: string } }) => <div data-testid="template-card">{template.name}</div>,
+    TemplateCard: ({ template, displayName }: { template: { name: string }, displayName?: string }) => <div data-testid="template-card">{displayName ?? template.name}</div>,
     SurfaceStatCard: ({ label }: { label: string }) => <div data-testid="stat-card">{label}</div>,
 }));
 
@@ -72,5 +72,25 @@ describe('HomeBrowseExperience', () => {
     it('renders intent entry if enabled', () => {
         render(<HomeBrowseExperience {...defaultProps} isIntentFirstEnabled={() => true} />);
         expect(screen.getByTestId('intent-entry')).toBeTruthy();
+    });
+    it('shows localized card titles and keeps setup specifics in a closed disclosure', async () => {
+        const { templates } = await import('@/lib/templates');
+        const template = templates.find(item => item.id === 'job_description')!;
+        render(<HomeBrowseExperience {...defaultProps} filteredTemplates={[template]} bannerDismissed={false}
+            setupConfidence={{ ...defaultProps.setupConfidence, description: 'Provider model secret-detail' }} />);
+        expect(screen.getByTestId('template-card').textContent).toBe('Job description');
+        const details = screen.getByText('Provider model secret-detail').closest('details');
+        expect(details).toBeTruthy();
+        expect(details!.open).toBe(false);
+        expect(screen.queryByText('READY')).toBeNull();
+        fireEvent.click(within(details!).getByText('Technical details'));
+        expect(details!.open).toBe(true);
+    });
+
+    it('offers a clear search recovery when no templates match', () => {
+        const setSearchQuery = vi.fn();
+        render(<HomeBrowseExperience {...defaultProps} searchQuery="no-match" setSearchQuery={setSearchQuery} />);
+        fireEvent.click(screen.getByRole('button', { name: 'Clear filters and show all templates' }));
+        expect(setSearchQuery).toHaveBeenCalledWith('');
     });
 });

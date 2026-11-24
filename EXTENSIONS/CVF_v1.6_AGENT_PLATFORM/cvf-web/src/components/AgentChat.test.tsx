@@ -1,11 +1,13 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: Vietnamese assistant copy assertions use UTF-8.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AgentChat, AgentChatButton } from './AgentChat';
 
 let apiKey = '';
+let uiLanguage: 'en' | 'vi' = 'en';
 const chatMock = vi.fn();
 const discoveryResponse = [
     'PHASE A - Discovery',
@@ -15,7 +17,7 @@ const discoveryResponse = [
 ].join('\n');
 
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: 'en', t: (key: string) => key }),
+    useLanguage: () => ({ language: uiLanguage, t: (key: string) => key }),
 }));
 
 vi.mock('./Settings', () => ({
@@ -65,6 +67,7 @@ vi.mock('@/lib/governance-context', async () => {
 describe('AgentChat', () => {
     beforeEach(() => {
         apiKey = '';
+        uiLanguage = 'en';
         chatMock.mockReset();
         vi.useRealTimers();
     });
@@ -202,14 +205,19 @@ describe('AgentChat', () => {
     describe('welcome screen', () => {
         it('shows welcome message when no messages', () => {
             render(<AgentChat />);
-            expect(screen.getByText('Welcome to CVF Agent!')).toBeTruthy();
+            expect(screen.getByRole('heading', { name: 'What can I help with?' })).toBeTruthy();
+            expect(screen.getByRole('heading', { name: 'AI assistant' })).toBeTruthy();
+            expect(screen.getByRole('button', { name: 'Work rules' })).toBeTruthy();
+            expect(screen.queryByText(/CVF Toolkit|CVF Agent/i)).toBeNull();
             expect(screen.getByText(/Ask me anything/)).toBeTruthy();
         });
 
         it('shows Vietnamese welcome when language is vi', () => {
-            // language mock always returns 'en' but we can verify English text exists
+            uiLanguage = 'vi';
             render(<AgentChat />);
-            expect(screen.getByText('Welcome to CVF Agent!')).toBeTruthy();
+            expect(screen.getByRole('heading', { name: 'Bạn cần giúp gì?' })).toBeTruthy();
+            expect(screen.getByRole('heading', { name: 'Trợ lý AI' })).toBeTruthy();
+            expect(screen.getByRole('button', { name: 'Quy tắc làm việc' })).toBeTruthy();
         });
 
         it('shows 6 suggestion buttons', () => {
@@ -265,7 +273,7 @@ describe('AgentChat', () => {
             expect(await screen.findByText(/Complete/i)).toBeTruthy();
         });
 
-        it('shows Governance button when messages exist', async () => {
+        it('shows a review checks button when messages exist', async () => {
             apiKey = 'test-key';
             chatMock.mockResolvedValueOnce({
                 text: 'Hello response',
@@ -279,10 +287,10 @@ describe('AgentChat', () => {
             fireEvent.click(screen.getByRole('button', { name: /Send/i }));
 
             await waitFor(() => expect(chatMock).toHaveBeenCalled());
-            expect(await screen.findByText(/Governance/i)).toBeTruthy();
+            expect(await screen.findByRole('button', { name: 'Review checks' })).toBeTruthy();
         });
 
-        it('clicking Governance button toggles governance panel', async () => {
+        it('clicking Review checks opens the detail panel', async () => {
             apiKey = 'test-key';
             chatMock.mockResolvedValueOnce({
                 text: 'Hello response',
@@ -298,9 +306,9 @@ describe('AgentChat', () => {
             await waitFor(() => expect(chatMock).toHaveBeenCalled());
             await screen.findByText('Hello response');
             await waitFor(() => {
-                expect(screen.getByText('🛡️ Governance')).toBeTruthy();
+                expect(screen.getByRole('button', { name: 'Review checks' })).toBeTruthy();
             });
-            fireEvent.click(screen.getByText('🛡️ Governance'));
+            fireEvent.click(screen.getByRole('button', { name: 'Review checks' }));
             await waitFor(() => {
                 expect(screen.queryByText(/Governance Panel/)).toBeTruthy();
             }, { timeout: 3000 });
@@ -331,14 +339,13 @@ describe('AgentChat', () => {
     describe('AgentChatButton', () => {
         it('renders the chat button', () => {
             render(<AgentChatButton onClick={vi.fn()} />);
-            expect(screen.getByText('AI Agent')).toBeTruthy();
-            expect(screen.getByText('Chat with CVF')).toBeTruthy();
+            expect(screen.getByRole('button', { name: 'AI assistant' })).toBeTruthy();
         });
 
         it('calls onClick when clicked', () => {
             const onClick = vi.fn();
             render(<AgentChatButton onClick={onClick} />);
-            fireEvent.click(screen.getByTitle('Open CVF Agent'));
+            fireEvent.click(screen.getByTitle('Open AI assistant'));
             expect(onClick).toHaveBeenCalledTimes(1);
         });
     });
@@ -378,4 +385,17 @@ describe('AgentChat', () => {
             window.removeEventListener('cvf-chat-maximize', listener);
         });
     });
+});
+it('links to setup when the current assistant model has no usable key', () => {
+ render(<AgentChat />);
+ expect(screen.getByRole('link',{name:'View setup instructions'}).getAttribute('href')).toBe('/help/setup');
+});
+it('uses the selected personal model key for its setup guidance', () => {
+ render(<AgentChat modelSelection={{ provider:'openai', model:'gpt-4o-mini' }} selectedModelKey="synthetic" canUseConfiguredKeys={false} />);
+ expect(screen.queryByRole('link',{name:'View setup instructions'})).toBeNull();
+});
+it('does not use a configured key when this account lacks access', () => {
+ apiKey='synthetic';
+ render(<AgentChat canUseConfiguredKeys={false} />);
+ expect(screen.getByRole('link',{name:'View setup instructions'}).getAttribute('href')).toBe('/help/setup');
 });

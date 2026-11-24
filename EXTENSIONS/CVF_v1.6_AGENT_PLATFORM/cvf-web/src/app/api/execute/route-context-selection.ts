@@ -30,7 +30,11 @@ export async function selectKnowledgeContext(isolatedPilot: boolean, params: Kno
     return isolatedPilot ? isolatedPilotKnowledgeContext() : resolveKnowledgeContext(params);
 }
 
-/** SOT3-ACT-A4: a rejected activation, or an explicitly requested collection with no governed context, never reaches the provider. */
+/**
+ * SOT3-ACT-A4: in ENFORCE a rejected activation, or an explicitly requested collection with no governed context, never reaches
+ * the provider. SHADOW is observe-only: the evaluation and its durable evidence are recorded but never gate the request, which
+ * continues with the ordinary retrieved context exactly as in OFF. Any mode other than SHADOW fails closed.
+ */
 export function sot3RejectionResponse(input: {
     knowledge: KnowledgeContextResult;
     envelope: WebGovernanceEnvelope;
@@ -42,7 +46,7 @@ export function sot3RejectionResponse(input: {
     const { knowledge, envelope, enforcement, guardResult, provider, routingResult } = input;
     const { sot3, requestedKnowledgeCollectionId } = knowledge;
     const explicitNoContext = sot3 !== null && sot3.terminalOutcome === 'NO_CONTEXT' && requestedKnowledgeCollectionId !== null;
-    if (sot3 === null || (sot3.terminalOutcome !== 'REJECTED' && !explicitNoContext)) return null;
+    if (sot3 === null || sot3.mode === 'SHADOW' || (sot3.terminalOutcome !== 'REJECTED' && !explicitNoContext)) return null;
     const governanceEvidenceReceipt = buildEvidenceReceipt({
         envelope,
         decision: 'DENY',

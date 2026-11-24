@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { spawn, type ChildProcess } from 'node:child_process';
+import { peerTypeScriptCache } from './jev-custody-peer.test-helper';
 import { JevSuggestionCustody,validateJevRun,jevDigest,jevPolicyDigest,JEV_RECIPE_REVISION,JEV_SOURCE_REVISION,type JevActionGrant,type JevAuthorizedPolicy,type JevRun,type JevStoredResult } from './jev-suggestion-custody';
 function fixture(){
   const directory=mkdtempSync(path.join(tmpdir(),'cvf-jev-custody-owned-'));let clock=Date.parse('2026-10-26T10:00:00.000Z');
@@ -86,8 +87,7 @@ describe('Jev immutable custody and atomic quota connection',()=>{
 const peerBootstrap=String.raw`
 const fs=require('node:fs'),path=require('node:path'),Module=require('node:module');
 const production=process.argv[1],policy=JSON.parse(process.argv[2]),grant=JSON.parse(process.argv[3]),singleAction=JSON.parse(process.argv[4]),mode=process.argv[5],release=process.argv[6],now=Number(process.argv[7]);
-const ts=require(path.join(path.dirname(production),'../../../node_modules/typescript'));
-require.extensions['.ts']=(mod,file)=>{mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);};
+${peerTypeScriptCache}
 const resolve=Module._resolveFilename;Module._resolveFilename=function(request,parent,...rest){if(request==='cvf-model-gateway')return path.resolve(path.dirname(production),'../../../../../CVF_MODEL_GATEWAY/src/quota-ledger.ts');if(request.startsWith('.')&&request.endsWith('.js')){const candidate=path.resolve(path.dirname(parent.filename),request.slice(0,-3)+'.ts');if(fs.existsSync(candidate))return candidate;}return resolve.call(this,request,parent,...rest);};
 const {JevSuggestionCustody}=require(production);
 const custody=new JevSuggestionCustody(policy,()=>now);
@@ -112,9 +112,11 @@ it('allows one stable action across actual production processes with a determini
   }
   try{
     f.custody.store.readAll();
-    const holder=peer('holder',f.grant);await holder.wait('READY');holder.child.stdin!.write('START');await holder.wait('ENTERED');
+    const holder=peer('holder',f.grant);await holder.wait('READY');
     const contender=peer('contender',{...f.grant,runId:randomUUID(),nonceHash:jevDigest('another nonce')});
-    await contender.wait('READY');contender.child.stdin!.write('START');await contender.wait('ATTEMPTING');
+    await contender.wait('READY');
+    holder.child.stdin!.write('START');await holder.wait('ENTERED');
+    contender.child.stdin!.write('START');await contender.wait('ATTEMPTING');
     expect(contender.events.some(e=>e.event==='ENTERED')).toBe(false);
     writeFileSync(release,'PARENT_RELEASE');
     const first=await holder.wait('COMPLETE');const entered=await contender.wait('ENTERED');const second=await contender.wait('COMPLETE');

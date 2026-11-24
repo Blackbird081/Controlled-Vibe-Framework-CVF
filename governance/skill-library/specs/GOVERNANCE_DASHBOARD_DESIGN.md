@@ -1,5 +1,7 @@
 # CVF Skill Governance Dashboard - Design Specification
 
+> Catalog status: `NOT_ACTIVE` for current discovery. Retained as a design illustration. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md).
+>
 > **Version:** 1.0.0  
 > **Status:** Design  
 > **Target:** v1.3 Implementation Toolkit

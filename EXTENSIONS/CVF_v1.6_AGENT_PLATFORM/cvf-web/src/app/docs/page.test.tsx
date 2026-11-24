@@ -1,5 +1,6 @@
 /**
  * @vitest-environment jsdom
+ * Text Encoding Exception: verifies Vietnamese documentation copy.
  */
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -32,13 +33,13 @@ describe('DocsPage external skills section', () => {
 
         expect(screen.getByText('Thư viện Skills Tham khảo')).toBeTruthy();
         expect(
-            screen.getByText(/Không tích hợp trực tiếp vào CVF/i)
+            screen.getByText(/CVF không tích hợp trực tiếp bộ tài liệu này/i)
         ).toBeTruthy();
         expect(screen.getByText('An toàn & Alignment')).toBeTruthy();
         expect(screen.getByText('Đánh giá')).toBeTruthy();
 
         const repoLink = screen.getByRole('link', {
-            name: /Xem toàn bộ 85 skills/i,
+            name: /Mở bộ tài liệu tham khảo/i,
         });
         expect(repoLink.getAttribute('href')).toBe(
             'https://github.com/Orchestra-Research/AI-Research-SKILLs'
@@ -58,10 +59,10 @@ describe('DocsPage external skills section', () => {
             screen.getByText('External Skills Reference Library')
         ).toBeTruthy();
         expect(
-            screen.getByText(/reference only for patterns & implementation/i)
+            screen.getByText(/External design and implementation references from Orchestra Research/i)
         ).toBeTruthy();
         expect(
-            screen.getByRole('link', { name: /View all 85 skills/i })
+            screen.getByRole('link', { name: /Open reference collection/i })
         ).toBeTruthy();
     });
 

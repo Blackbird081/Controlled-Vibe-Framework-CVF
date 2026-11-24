@@ -1,10 +1,12 @@
+import { createAlibabaExecutionAdapter } from "../src/providers/alibaba/execution-adapter";
+import { ProviderExecutionError } from "../src/unified-gateway-interface-contract";
 /**
  * Provider Execution Bridge - Deterministic Tests
  *
  * Tests all 14 required cases from the P4B-A work order.
  * No network calls, no real credentials, no concrete adapter imports.
  */
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import {
   ProviderExecutionBridge,
   PROVIDER_EXECUTION_BRIDGE_VERSION,
@@ -19,7 +21,7 @@ import type { GatewayExecuteRequest } from "../src/unified-gateway-interface-con
 import type { CredentialReference } from "../src/credential-boundary";
 import type { RoutingDecision } from "../src/routing-policy";
 import { RoutingPolicyEngine } from "../src/routing-policy";
-import { CredentialBoundary } from "../src/credential-boundary";
+import { CredentialBoundary, fingerprintSecret } from "../src/credential-boundary";
 import { ProviderHealthMonitor } from "../src/provider-health";
 import { QuotaLedger } from "../src/quota-ledger";
 import { ProviderRegistry } from "../src/provider-registry";
@@ -727,4 +729,140 @@ describe("ProviderExecutionBridge", () => {
       expect(bridgeSrc).not.toMatch(/DEEPSEEK_API_KEY/);
     });
   });
+});
+
+
+describe("typed provider terminal diagnostics (single attempt)", () => {
+  it.each([
+    ["request_cancelled", "provider_unavailable", false, 499],
+    ["provider_timeout", "provider_unavailable", false, undefined],
+    ["provider_http_error", "provider_unavailable", false, 401],
+    ["provider_http_error", "provider_unavailable", true, 429],
+    ["provider_http_error", "provider_unavailable", true, 503],
+    ["output_incomplete", "invalid_request", false, 200],
+    ["quota_locked", "policy_denied", false, undefined],
+    ["credential_unavailable", "credential_shielded", false, undefined],
+    ["destination_denied", "policy_denied", false, undefined],
+    ["invalid_identity", "invalid_request", false, undefined],
+    ["network_error", "provider_unavailable", false, undefined],
+    ["unknown_error", "internal_error", false, undefined],
+  ] as const)("preserves %s/%s without repeating invocation", async (code, errorClass, retryable, httpStatus) => {
+    const adapter = makeMockAdapter();
+    const failure = new ProviderExecutionError(code, { httpStatus, usage: { totalTokens: 8 } });
+    failure.message = TEST_SECRET; (failure as any).cause = TEST_SECRET;
+    adapter.execute.mockRejectedValueOnce(failure);
+    const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) });
+    const quotaUse = vi.spyOn(options.quota, "recordUse");
+    const result = await new ProviderExecutionBridge(options).execute(makeRequest({ canonicalExecutionId: "canonical-safe" }), {
+      beforeProviderInvoke: async () => ({ decision: "allow", attemptIndex: 1 }),
+    });
+    expect(adapter.execute).toHaveBeenCalledTimes(1);
+    expect(result.error).toMatchObject({ errorClass, retryable, credentialShielded: true, providerDiagnostic: { code, usage: { totalTokens: 8 } } });
+    expect(result.error?.providerDiagnostic?.httpStatus).toBe(httpStatus);
+    expect(result.attemptOutcome).toBe("invoked");
+    expect(result.receipt.canonicalExecutionId).toBe("canonical-safe");
+    expect(result.materialContextManifestDisposition).toBe("attached");
+    expect(quotaUse).not.toHaveBeenCalled();
+    expect(JSON.stringify(result)).not.toContain(TEST_SECRET);
+  });
+  it("retains the existing shielded legacy adapter-error behavior", async () => {
+    const adapter = makeMockAdapter(); adapter.execute.mockRejectedValueOnce(new Error(TEST_SECRET));
+    const result = await new ProviderExecutionBridge(makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) })).execute(makeRequest());
+    expect(result.error).toEqual({ errorClass: "internal_error", traceId: TEST_TRACE_ID, message: "Provider adapter execution failed", credentialShielded: true, retryable: true });
+    expect(adapter.execute).toHaveBeenCalledTimes(1); expect(result.attemptOutcome).toBeUndefined();
+  });
+  it("carries total-only actual usage without recording a fabricated token total", async () => {
+    const adapter = makeMockAdapter(); adapter.execute.mockResolvedValueOnce({ text: "answer", providerUsage: { totalTokens: 9, secret: TEST_SECRET } });
+    const options = makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) }); const quotaUse = vi.spyOn(options.quota, "recordUse");
+    const result = await new ProviderExecutionBridge(options).execute(makeRequest());
+    expect(result.response?.providerUsage).toEqual({ totalTokens: 9 }); expect(result.response?.usage).toBeUndefined();
+    expect(quotaUse).toHaveBeenCalledWith(expect.objectContaining({ actualTokens: undefined }));
+    expect(JSON.stringify(result.response)).not.toContain(TEST_SECRET);
+  });
+});
+
+
+describe("credential lineage across awaited attempt admission", () => {
+  beforeEach(() => { vi.useFakeTimers(); vi.setSystemTime(new Date("2026-11-12T07:00:00Z")); });
+  afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
+  const oldKey = "before-admission-fixture-key";
+  const newKey = "after-admission-fixture-key";
+  function fixture() {
+    const env = { ALIBABA_FIXTURE_KEY: oldKey, CVF_ALIBABA_FREE_QUOTA_ONLY: "1", CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED: "1" };
+    const credential = new CredentialBoundary(env);
+    const credentialRef = { providerId: "alibaba", keyId: "fixture", envNames: ["ALIBABA_FIXTURE_KEY"] };
+    const response = { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: "answer" }, finish_reason: "stop" }] }), text: async () => "" };
+    const fetchImpl = vi.fn(async (_url: string, _init: { headers: Record<string, string> }) => response);
+    const adapter = createAlibabaExecutionAdapter({ credential, credentialRef, env, fetchImpl });
+    const options = makeBridgeOptions();
+    const registry = new ProviderRegistry();
+    registry.register({ id: "alibaba", displayName: "Alibaba", status: "enabled", riskClass: "low", models: [{ id: "qwen-plus-character", riskClass: "low" }] });
+    const bridge = new ProviderExecutionBridge({ ...options, routing: new RoutingPolicyEngine(registry, options.health, options.quota), credential, credentialRefs: new Map([["alibaba", credentialRef]]), adapters: new Map([["alibaba", adapter]]) });
+    const request = makeRequest({ canonicalExecutionId: "canonical-rotating-key", policy: { traceId: TEST_TRACE_ID, policyResult: "allow", allowedProviderIds: ["alibaba"] }, routing: { traceId: TEST_TRACE_ID, preferredProviderId: "alibaba", requestedModelId: "qwen-plus-character" } });
+    return { env, response, fetchImpl, bridge, request };
+  }
+  it("binds success receipt to the key used by HTTP after awaited admission rotates it", async () => {
+    const f = fixture();
+    const result = await f.bridge.execute(f.request, { beforeProviderInvoke: async () => { await Promise.resolve(); f.env.ALIBABA_FIXTURE_KEY = newKey; return { decision: "allow", attemptIndex: 1 }; } });
+    expect(f.fetchImpl).toHaveBeenCalledTimes(1);
+    expect(f.fetchImpl.mock.calls[0][1].headers.Authorization).toBe(`Bearer ${newKey}`);
+    expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret(newKey));
+    expect(result.receipt.credentialFingerprint).not.toBe(fingerprintSecret(oldKey));
+    expect(result.response?.text).toBe("answer"); expect(result.attemptOutcome).toBe("invoked");
+    expect(JSON.stringify(result)).not.toContain(newKey);
+  });
+  it("binds typed HTTP failure to its actual key without stale preflight fingerprint", async () => {
+    const f = fixture(); f.response.ok = false; f.response.status = 401;
+    const result = await f.bridge.execute(f.request, { beforeProviderInvoke: async () => { await Promise.resolve(); f.env.ALIBABA_FIXTURE_KEY = newKey; return { decision: "allow", attemptIndex: 1 }; } });
+    expect(f.fetchImpl.mock.calls[0][1].headers.Authorization).toBe(`Bearer ${newKey}`);
+    expect(result.error?.providerDiagnostic).toEqual({ code: "provider_http_error", httpStatus: 401, credentialFingerprint: fingerprintSecret(newKey) });
+    expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret(newKey));
+    expect(result.receipt.credentialFingerprint).not.toBe(fingerprintSecret(oldKey));
+    expect(f.fetchImpl).toHaveBeenCalledTimes(1);
+  });
+  it("omits actual fingerprint when admission removes the key before invocation", async () => {
+    const f = fixture();
+    const result = await f.bridge.execute(f.request, { beforeProviderInvoke: async () => { await Promise.resolve(); f.env.ALIBABA_FIXTURE_KEY = ""; return { decision: "allow", attemptIndex: 1 }; } });
+    expect(f.fetchImpl).not.toHaveBeenCalled();
+    expect(result.error?.providerDiagnostic).toEqual({ code: "credential_unavailable" });
+    expect(result.receipt.credentialFingerprint).toBeUndefined();
+    expect(result.attemptOutcome).toBe("invoked"); // Adapter boundary crossed; HTTP was not contacted.
+  });
+  it("omits stale fingerprint on cancellation during awaited admission", async () => {
+    const f = fixture(); const controller = new AbortController();
+    const result = await f.bridge.execute(f.request, { signal: controller.signal, beforeProviderInvoke: async () => { await Promise.resolve(); controller.abort("private reason"); return { decision: "allow", attemptIndex: 1 }; } });
+    expect(f.fetchImpl).not.toHaveBeenCalled();
+    expect(result.error?.providerDiagnostic).toEqual({ code: "request_cancelled", httpStatus: 499 });
+    expect(result.receipt.credentialFingerprint).toBeUndefined(); expect(result.attemptOutcome).toBe("invoked");
+  });
+  it.each(["not-a-fingerprint", "012345ABCDEF", "012345abcdef0"]) ("strips malformed adapter success fingerprint %s without fallback", async credentialFingerprint => {
+    const adapter = makeMockAdapter(); adapter.execute.mockResolvedValueOnce({ text: "answer", credentialFingerprint });
+    const result = await new ProviderExecutionBridge(makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) })).execute(makeRequest());
+    expect(result.receipt.credentialFingerprint).toBeUndefined();
+  });
+  it("retains legacy preflight fingerprint when a legacy adapter omits the new field", async () => {
+    const result = await new ProviderExecutionBridge(makeBridgeOptions()).execute(makeRequest());
+    expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret(TEST_SECRET));
+  });
+  it("retains legacy untyped error fingerprint behavior", async () => {
+    const adapter = makeMockAdapter(); adapter.execute.mockRejectedValueOnce(new Error("legacy"));
+    const result = await new ProviderExecutionBridge(makeBridgeOptions({ adapters: new Map([[TEST_PROVIDER_ID, adapter]]) })).execute(makeRequest());
+    expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret(TEST_SECRET));
+  });
+});
+
+describe('native subscription bridge boundary',()=>{
+ function nativeOptions() {
+  const registry=new ProviderRegistry();registry.register({id:'claude',displayName:'Claude',status:'enabled',riskClass:'low',models:[{id:'sonnet',riskClass:'low'}]});
+  const health=new ProviderHealthMonitor(), quota=new QuotaLedger();const adapter={providerId:'claude',execute:vi.fn(async()=>({text:'actual',executionSurface:'claude_cli_subscription' as const,nativeProcessState:'started' as const,observedModelId:'actual-model',credentialFingerprint:'abcdef123456'}))};
+  const resolver=vi.fn(async()=>({source:'native_subscription' as const,providerId:'claude' as const,available:true,executionSurface:'claude_cli_subscription' as const}));
+  return {adapter,resolver,options:makeBridgeOptions({routing:new RoutingPolicyEngine(registry,health,quota),health,quota,credentialRefs:new Map([['claude',{source:'native_subscription' as const,providerId:'claude' as const}]]),adapters:new Map([['claude',adapter]]),nativeSubscriptionResolver:resolver})};
+ }
+ const request=()=>makeRequest({canonicalExecutionId:'native-1',traceId:'native-1',policy:{traceId:'native-1',policyResult:'allow',reason:'ok',allowedProviderIds:['claude']},routing:{traceId:'native-1',preferredProviderId:'claude',requestedModelId:'sonnet'}});
+ it('uses native availability before callback and emits no API key identity or fingerprint',async()=>{const {adapter,resolver,options}=nativeOptions();const callback=vi.fn(async()=>({decision:'allow' as const,attemptIndex:0}));const result=await new ProviderExecutionBridge(options).execute(request(),{beforeProviderInvoke:callback});expect(resolver).toHaveBeenCalledTimes(1);expect(callback).toHaveBeenCalledTimes(1);expect(adapter.execute).toHaveBeenCalledTimes(1);expect(result.response).toMatchObject({executionSurface:'claude_cli_subscription',nativeProcessState:'started',observedModelId:'actual-model'});expect(result.receipt.credentialKeyId).toBeUndefined();expect(result.receipt.credentialFingerprint).toBeUndefined();});
+ it('blocks missing/unavailable native resolver before callback and adapter',async()=>{for(const resolver of [undefined,async()=>({source:'native_subscription' as const,providerId:'claude' as const,available:false,executionSurface:'claude_cli_subscription' as const})]){const t=nativeOptions();const callback=vi.fn();const result=await new ProviderExecutionBridge({...t.options,nativeSubscriptionResolver:resolver}).execute(request(),{beforeProviderInvoke:callback});expect(result.error?.errorClass).toBe('credential_shielded');expect(callback).not.toHaveBeenCalled();expect(t.adapter.execute).not.toHaveBeenCalled();}});
+  it('callback denial and typed native failures never leak credential fingerprint',async()=>{const t=nativeOptions();const denied=await new ProviderExecutionBridge(t.options).execute(request(),{beforeProviderInvoke:async()=>({decision:'deny',attemptIndex:0,reason:'denied'})});expect(denied.receipt.credentialKeyId).toBeUndefined();expect(denied.receipt.credentialFingerprint).toBeUndefined();expect(t.adapter.execute).not.toHaveBeenCalled();const fail={providerId:'claude',execute:async()=>{throw new ProviderExecutionError('credential_unavailable',{credentialFingerprint:'abcdef123456',executionSurface:'claude_cli_subscription',nativeProcessState:'not_started'});}};const failed=await new ProviderExecutionBridge({...t.options,adapters:new Map([['claude',fail]])}).execute(request(),{beforeProviderInvoke:async()=>({decision:'allow',attemptIndex:0})});expect(failed.error?.providerDiagnostic).toMatchObject({code:'credential_unavailable',executionSurface:'claude_cli_subscription',nativeProcessState:'not_started'});expect(failed.error?.providerDiagnostic?.credentialFingerprint).toBeUndefined();expect(failed.receipt.credentialFingerprint).toBeUndefined();});
+
+ it('strips object and array enum impersonators from diagnostics and receipt metadata',async()=>{const state=['started'] as unknown as 'started';const model=['private-value'] as unknown as string;const e=new ProviderExecutionError('quota_locked',{executionSurface:'claude_cli_subscription',nativeProcessState:state});expect(e.diagnostic.nativeProcessState).toBeUndefined();expect(e.toGatewayEnvelope('trace').message).not.toContain('Alibaba');const t=nativeOptions();const adapter={providerId:'claude',execute:async()=>({text:'ok',executionSurface:'claude_cli_subscription' as const,nativeProcessState:state,observedModelId:model})};const result=await new ProviderExecutionBridge({...t.options,adapters:new Map([['claude',adapter]])}).execute(request());expect(result.response?.nativeProcessState).toBe('unknown');expect(result.response?.observedModelId).toBeUndefined();expect(JSON.stringify(result)).not.toContain('private-value');});
+
 });

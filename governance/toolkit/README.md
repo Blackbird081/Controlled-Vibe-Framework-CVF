@@ -21,7 +21,7 @@ Toolkit này chứa toàn bộ rules, policies, và protocols mà bất kỳ AI 
 ```
 CVF Cores (v1.0, v1.1)        ← Framework gốc (FROZEN)
   └── governance/
-        ├── skill-library/     ← 124+ skills (execute tools)
+        ├── skill-library/     ← legacy skill-library registry
         └── toolkit/           ← 👈 BẠN ĐANG Ở ĐÂY (governance rules)
   └── EXTENSIONS/              ← v1.5 UX + v1.6 Agent Platform
 ```
@@ -80,3 +80,5 @@ Toolkit này được tổng hợp và tối ưu hóa từ:
 - `HOW TO USE CVF FOR/` — Reference library đầy đủ (25 files)
 
 Đã được merge, loại bỏ trùng lặp, và tổ chức lại theo thứ tự thực thi.
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

@@ -1,6 +1,7 @@
 // Text Encoding Exception: Vietnamese fictional-content labels and existing localized text use UTF-8.
 import { describe, expect, it } from 'vitest';
 import { buildExecutionPrompt } from './execute-prompt-contract';
+import { generateIntent, getTemplateById } from '@/lib/templates';
 import type { ExecutionRequest } from '@/lib/ai';
 
 const baseRequest: ExecutionRequest = {
@@ -106,7 +107,7 @@ describe('buildExecutionPrompt', () => {
   it('uses an FAQ-first contract for FAQ outline tasks', () => {
     const prompt = buildExecutionPrompt({
       ...baseRequest,
-      templateId: 'documentation',
+      templateId: 'faq_outline',
       templateName: 'Documentation',
       intent: 'Create an FAQ outline for a small online course checkout flow.',
       inputs: {
@@ -130,7 +131,7 @@ describe('buildExecutionPrompt', () => {
   it('uses an acceptance-criteria contract for dashboard criteria tasks', () => {
     const prompt = buildExecutionPrompt({
       ...baseRequest,
-      templateId: 'documentation',
+      templateId: 'acceptance_criteria',
       templateName: 'Documentation',
       intent: 'Write acceptance criteria for a dashboard that shows weekly sales, conversion, and open tasks.',
       inputs: {
@@ -150,33 +151,98 @@ describe('buildExecutionPrompt', () => {
     expect(prompt).toContain('data source, refresh/state expectations, error/empty states, and pass/fail checks');
   });
 
-  it('uses a checklist-first contract for onboarding checklist tasks', () => {
+  it('uses the documentation contract for a useful default onboarding runbook', () => {
     const prompt = buildExecutionPrompt({
       ...baseRequest,
       templateId: 'documentation',
       templateName: 'Documentation',
-      intent: 'Create a practical onboarding checklist for a new support teammate joining a local-first SaaS product team.',
-      inputs: {
-        subject: 'Onboarding checklist',
-        currentNotes: 'New support teammate joining a local-first SaaS product team.',
-        readerGoal: 'Support lead can onboard the teammate without extra interpretation.',
-        audience: 'Non-technical operator',
-        mustPreserve: 'Local-first SaaS',
-      },
+      intent: 'Create a practical onboarding checklist for a new support teammate.',
+      inputs: { subject: 'Onboarding', currentNotes: 'Receive work and check progress.', readerGoal: 'Hand off work.' },
     });
 
-    expect(prompt).toContain('Checklist/documentation shape');
-    expect(prompt).toContain('Operator Checklist And Handoff Runbook');
-    expect(prompt).toContain('Required Inputs, Artifacts, And Fields');
-    expect(prompt).toContain('Step-By-Step Procedure');
-    expect(prompt).toContain('Decision Branches');
-    expect(prompt).toContain('QA Checks');
-    expect(prompt).toContain('Common Failure Modes And Recovery');
-    expect(prompt).toContain('Final Handoff Acceptance Checklist');
-    expect(prompt).toContain('escalation rules');
-    expect(prompt).toContain('keep the overview and assumptions short');
-    expect(prompt).toContain('spend most of the answer on executable tables/checks');
-    expect(prompt).not.toContain('Operational Documentation Packet');
+    expect(prompt).toContain('# SOP And Handoff Runbook');
+    expect(prompt).toContain('## 3. Step-By-Step Procedure');
+    expect(prompt).toContain('## 7. Final Handoff Acceptance Checklist');
+    expect(prompt).toContain('Use the supplied facts and a relevant handoff checklist');
+    expect(prompt).not.toContain('# Operator Checklist And Handoff Runbook');
+  });
+
+  it('restates a strict Vietnamese cap repeated in two fields as one hard limit (operator Web run 2026-11-16)', () => {
+    const inputs = { subject: 'Viết quy trình nhận hàng 3 bước, dưới 100 từ', currentNotes: 'Viết quy trình nhận hàng 3 bước, dưới 100 từ', readerGoal: 'Nhân viên kho' };
+    const prompt = buildExecutionPrompt({
+      ...baseRequest,
+      templateId: 'documentation',
+      templateName: 'Tài liệu Kỹ thuật',
+      inputs,
+      intent: generateIntent(getTemplateById('documentation')!, inputs),
+    });
+    expect(prompt.indexOf('### Hard Length Limit')).toBeGreaterThan(-1);
+    expect(prompt.indexOf('### Hard Length Limit')).toBeLessThan(prompt.indexOf('### User Intent'));
+    expect(prompt).toContain('The ENTIRE answer must be at most 99 words, counting every heading');
+  });
+
+  it('preserves the short Vietnamese brief in the actual execution prompt', () => {
+    const inputs = {
+      subject: 'Bàn giao ca làm việc',
+      currentNotes: 'Nhận công việc → kiểm tra tiến độ → bàn giao cho ca sau. Viết tiếng Việt, tối đa 150 từ, gồm 3 bước và checklist.',
+      readerGoal: 'Bàn giao công việc cho ca sau',
+    };
+    const prompt = buildExecutionPrompt({
+      ...baseRequest,
+      templateId: 'documentation',
+      templateName: 'Tài liệu Kỹ thuật',
+      inputs,
+      intent: generateIntent(getTemplateById('documentation')!, inputs),
+    });
+
+    expect(prompt).toContain(inputs.currentNotes);
+    expect(prompt).toContain('Use Vietnamese for the user-facing body');
+    // The explicit limit is restated as a number, first, and counts headings (demo 2026-11-15: 234 words vs 150).
+    expect(prompt.indexOf('### Hard Length Limit')).toBeLessThan(prompt.indexOf('### User Intent'));
+    expect(prompt).toContain('The ENTIRE answer must be at most 150 words, counting every heading');
+    expect(prompt).toContain('Aim for about 120 words');
+    expect(prompt).toContain('Provide the response in at most 150 words using only the listed headings.');
+    for (const heading of ['## What This Document Is For', '## Step-By-Step Procedure', '## Final Handoff Acceptance Checklist']) {
+      expect(prompt).toContain(heading);
+    }
+    // The seven-section outline, its sample block and the builder-handoff family items no longer compete with the limit.
+    for (const absent of [
+      '## 2. Required Inputs, Artifacts, And Fields', '# SOP And Handoff Runbook', 'Expected sections:',
+      'Keep the seven English headings', 'retain the seven English template headings', '### Family Output Contract',
+      'Files/modules likely to touch', 'implementation-ready', '## 8. Final Handoff Acceptance Checklist',
+      '# Operator Checklist And Handoff Runbook', 'minimum outline, not a compression target', 'Expand each major heading',
+      '700-1100 output tokens', 'Checklist/documentation shape:',
+    ]) expect(prompt).not.toContain(absent);
+  });
+
+  it('keeps the seven-section outline without a limit and never adds the builder family contract to documentation', () => {
+    const inputs = { subject: 'Bàn giao ca làm việc', currentNotes: 'Nhận công việc, kiểm tra tiến độ, bàn giao.', readerGoal: 'Bàn giao cho ca sau' };
+    const prompt = buildExecutionPrompt({
+      ...baseRequest, templateId: 'documentation', templateName: 'Tài liệu Kỹ thuật', inputs,
+      intent: generateIntent(getTemplateById('documentation')!, inputs), qbsFamily: 'builder_handoff_technical_planning',
+    });
+    expect(prompt).not.toContain('### Hard Length Limit');
+    expect(prompt).toContain('Keep the seven English headings');
+    expect(prompt).toContain('## 2. Required Inputs, Artifacts, And Fields');
+    expect(prompt).not.toContain('### Family Output Contract');
+  });
+
+  it('does not assert a limit when the brief is ambiguous about it', () => {
+    const inputs = { subject: 'SOP', currentNotes: 'Khoảng tối đa 150 từ, hoặc không quá 200 từ.', readerGoal: 'Làm theo' };
+    const prompt = buildExecutionPrompt({
+      ...baseRequest, templateId: 'documentation', templateName: 'Tài liệu', inputs,
+      intent: generateIntent(getTemplateById('documentation')!, inputs),
+    });
+    expect(prompt).not.toContain('### Hard Length Limit');
+  });
+
+  it('honors an explicit English body request in documentation inputs', () => {
+    const prompt = buildExecutionPrompt({
+      ...baseRequest, templateId: 'documentation', templateName: 'Tài liệu',
+      intent: 'Tôi muốn bàn giao ca làm việc',
+      inputs: { subject: 'Bàn giao ca', currentNotes: 'Write in English.', readerGoal: 'Bàn giao' },
+    });
+    expect(prompt).toContain('Use English for the user-facing body');
   });
 
   it('uses a scope-first contract for feature-prioritization backlog triage tasks', () => {
@@ -371,7 +437,7 @@ describe('buildExecutionPrompt', () => {
       },
     });
 
-    expect(prompt).toContain('Use Vietnamese for the final answer');
+    expect(prompt).toContain('Use Vietnamese for the user-facing body');
   });
 
   it('does not attach CVF Web Redesign DNA for unrelated templates', () => {

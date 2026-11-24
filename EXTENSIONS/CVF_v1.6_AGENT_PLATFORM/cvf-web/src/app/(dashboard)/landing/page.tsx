@@ -1,9 +1,13 @@
 'use client';
+// Text Encoding Exception: Vietnamese user-facing copy follows the published getting-started guide.
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpenCheck, ClipboardList, FileOutput, LayoutGrid, Rocket, Shield, Sparkles, SwitchCamera } from 'lucide-react';
 import { SurfaceTopBar } from '@/components';
 import { useLanguage, LanguageToggle } from '@/lib/i18n';
+import { fetchFrontDoorSkillRecords } from '@/lib/frontdoor-skills';
+import { templates } from '@/lib/template-loader';
 import HeroVisualizer from '@/app/landing/components/HeroVisualizer';
 import InsideVibCode from '@/app/landing/components/InsideVibCode';
 import SocialProof from '@/app/landing/components/SocialProof';
@@ -64,17 +68,34 @@ const FEATURE_COPY = {
 
 export default function LandingPage() {
     const { language, mounted } = useLanguage();
+    const [skillCount, setSkillCount] = useState<number | null>(null);
+    useEffect(() => {
+        let active = true;
+        fetchFrontDoorSkillRecords()
+            .then((skills) => {
+                if (active) setSkillCount(skills.length);
+            })
+            .catch(() => {
+                if (active) setSkillCount(null);
+            });
+        return () => { active = false; };
+    }, []);
+
     const safeLanguage = mounted ? language : 'vi';
     const steps = STEP_COPY[safeLanguage];
     const features = FEATURE_COPY[safeLanguage];
+    const stats = [{ value: templates.length, label: safeLanguage === 'vi' ? 'Mẫu có sẵn' : 'Templates' }];
+    if (skillCount !== null) {
+        stats.push({ value: skillCount, label: safeLanguage === 'vi' ? 'Kỹ năng AI' : 'AI skills' });
+    }
 
     return (
         <div className="pb-10">
             <SurfaceTopBar
                 title={safeLanguage === 'vi' ? 'Controlled Vibe Framework' : 'Controlled Vibe Framework'}
                 subtitle={safeLanguage === 'vi'
-                    ? 'Vibe coding có kiểm soát | Không ưu tiên tốc độ, ưu tiên sự an toàn và khả năng quản trị.'
-                    : 'Controlled vibe coding | Not faster, but safer and more governable.'}
+                    ? 'Vibe coding có kiểm soát. An toàn và có thể quản lý, đồng thời cân nhắc tốc độ và chi phí.'
+                    : 'Controlled vibe coding. Safe and governable, with speed and cost in mind.'}
                 actions={(
                     <>
                         <LanguageToggle />
@@ -141,23 +162,18 @@ export default function LandingPage() {
                                 </Link>
                             </div>
 
-                            <div className="mt-10 grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-4">
-                                {[
-                                    { value: '94', label: safeLanguage === 'vi' ? 'Templates' : 'Templates' },
-                                    { value: '12', label: safeLanguage === 'vi' ? 'AI Skills' : 'AI Skills' },
-                                    { value: '3', label: safeLanguage === 'vi' ? 'Models' : 'Models' },
-                                    { value: '10K+', label: safeLanguage === 'vi' ? 'Teams' : 'Teams' },
-                                ].map((stat) => (
+                            <dl className="mt-10 grid max-w-xl grid-cols-2 gap-4">
+                                {stats.map((stat) => (
                                     <div key={stat.label}>
-                                        <div className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
-                                            {stat.value}
-                                        </div>
-                                        <div className="mt-1 text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
+                                        <dt className="text-xs uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
                                             {stat.label}
-                                        </div>
+                                        </dt>
+                                        <dd className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                                            {stat.value}
+                                        </dd>
                                     </div>
                                 ))}
-                            </div>
+                            </dl>
                         </div>
 
                         <div className="space-y-5">

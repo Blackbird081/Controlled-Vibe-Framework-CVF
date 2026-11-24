@@ -478,6 +478,11 @@ describe('generateCompleteSpec', () => {
 
 // Inspect exported text only; these tests do not assert agent compliance.
 describe('generateSpec receiving-agent guidance (static output only)', () => {
+    it.each(['en', 'vi'] as const)('preserves regular %s exports without Home-specific sections', language => {
+        const spec = generateSpec(appBuilderCompleteTemplate, appBuilderValues, language, 'governance');
+        expect(spec).not.toMatch(/User-selected language|Recommended ASSF package for the receiving agent/);
+    });
+
     it.each([
         ['en', 'Receiving Agent Continuation', 'Read permitted sources before asking', 'Pause only the dependent action', 'Wait for user confirmation before Design.', "YOU make the technical decisions (don't ask user to choose)"],
         ['vi', 'Agent tiếp nhận và tiếp tục công việc', 'Đọc nguồn được phép trước khi hỏi', 'Chỉ dừng hành động phụ thuộc', 'Chờ user xác nhận trước khi sang Design.', 'BẠN đưa ra quyết định kỹ thuật (không hỏi user chọn)'],

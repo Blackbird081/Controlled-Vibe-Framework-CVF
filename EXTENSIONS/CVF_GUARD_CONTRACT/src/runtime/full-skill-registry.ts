@@ -22,7 +22,7 @@ const SKILL_CATEGORIES = {
   CROSS_PHASE: { phase: undefined, defaultRisk: 'R1' as const },
 };
 
-// ─── Full Skill Definitions (141 skills across 12 domains) ───────────
+// Guard Contract runtime registry. Its definitions are bundled independently of the Web catalog.
 
 const FULL_SKILLS: SkillDefinition[] = [
   // ── Domain 1: Research & Analysis (12 skills) ──

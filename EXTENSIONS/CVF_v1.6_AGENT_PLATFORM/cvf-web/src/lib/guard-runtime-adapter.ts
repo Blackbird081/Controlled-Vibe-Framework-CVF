@@ -63,7 +63,9 @@ export {
 } from 'cvf-guard-contract';
 
 import { GuardRuntimeEngine, createGuardEngine } from 'cvf-guard-contract';
-import type { GuardRuntimeConfig, GuardRequestContext, CVFPhase, CVFRiskLevel, CVFRole, BuildAuthorityEvidence, RiskApprovalEvidence } from 'cvf-guard-contract';
+import type { GuardRuntimeConfig, GuardRequestContext, CVFRole, BuildAuthorityEvidence, RiskApprovalEvidence } from 'cvf-guard-contract';
+import { normalizeWebPhaseInput } from '@/lib/governance-model';
+import { normalizeRunnableRiskLevel } from '@/lib/risk-check';
 
 // ─── Backward-compatible aliases ─────────────────────────────────────
 
@@ -115,15 +117,15 @@ export interface WebGuardInput {
  * Converts loose v1.6 web request fields into a typed GuardRequestContext.
  * Provides sensible defaults for non-coder usage:
  *   - Default phase: INTAKE (safe front-door for loosely specified requests)
- *   - Default risk: R0 (safe by default)
+ *   - Default risk: R3 when an authoritative risk is missing
  *   - Default role: HUMAN (non-coder = human user)
  *   - Channel: 'web' (hardcoded for Web UI context)
  */
 export function buildWebGuardContext(input: WebGuardInput): GuardRequestContext {
   return {
     requestId: input.requestId || `web-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    phase: normalizePhase(input.phase),
-    riskLevel: normalizeRiskLevel(input.riskLevel),
+    phase: normalizeWebPhaseInput(input.phase) ?? 'INTAKE',
+    riskLevel: normalizeRunnableRiskLevel(input.riskLevel),
     role: normalizeRole(input.role),
     agentId: input.agentId,
     action: input.action || input.intent || 'execute_template',
@@ -141,27 +143,6 @@ export function buildWebGuardContext(input: WebGuardInput): GuardRequestContext 
       ...(input.aiCommit ? { ai_commit: input.aiCommit } : {}),
     },
   };
-}
-
-function normalizePhase(raw?: string): CVFPhase {
-  if (!raw) return 'INTAKE';
-  const upper = raw.trim().toUpperCase();
-  if (upper === 'INTAKE' || upper === 'DISCOVERY' || upper === 'PHASE A' || upper === 'A') return 'INTAKE';
-  if (upper === 'DESIGN' || upper === 'PHASE B' || upper === 'B') return 'DESIGN';
-  if (upper === 'BUILD' || upper === 'PHASE C' || upper === 'C') return 'BUILD';
-  if (upper === 'REVIEW' || upper === 'PHASE D' || upper === 'D') return 'REVIEW';
-  if (upper === 'FREEZE' || upper === 'PHASE E' || upper === 'E') return 'FREEZE';
-  return 'INTAKE';
-}
-
-function normalizeRiskLevel(raw?: string): CVFRiskLevel {
-  if (!raw) return 'R0';
-  const upper = raw.trim().toUpperCase();
-  if (upper === 'R0' || upper === 'LOW' || upper === 'SAFE') return 'R0';
-  if (upper === 'R1' || upper === 'MEDIUM' || upper === 'ATTENTION') return 'R1';
-  if (upper === 'R2' || upper === 'HIGH' || upper === 'ELEVATED') return 'R2';
-  if (upper === 'R3' || upper === 'CRITICAL' || upper === 'DANGEROUS') return 'R3';
-  return 'R0';
 }
 
 function normalizeRole(raw?: string): CVFRole {

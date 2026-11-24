@@ -1,5 +1,6 @@
 import { CVFMode } from '@/lib/agent-chat';
-import { evaluateRiskGate, inferRiskLevelFromText, RiskGateResult } from '@/lib/risk-check';
+import { isBuildPhase } from '@/lib/governance-model';
+import { evaluateRiskGate, highestRisk, inferRiskLevelFromText, normalizeRiskLevel, RiskGateResult } from '@/lib/risk-check';
 import { evaluateSpecGate, SpecGateField, SpecGateResult } from '@/lib/spec-gate';
 import {
     governanceEvaluate,
@@ -35,6 +36,8 @@ export interface SkillPreflightStatus {
 export interface EnforcementInput {
     mode: CVFMode;
     content: string;
+    /** The original user input, when server-generated prompt text contains policy examples. */
+    riskText?: string;
     budgetOk: boolean;
     governanceState?: Partial<GovernanceState>;
     agentId?: string;
@@ -86,7 +89,6 @@ export interface EnforcementResult {
 }
 
 const SKILL_PREFLIGHT_MISSING_REASON = 'Skill Preflight declaration is required before Build/Execute actions.';
-const SKILL_PREFLIGHT_PATTERN = /\b(SKILL_PREFLIGHT_RECORD|SKILL PREFLIGHT PASS|PREFLIGHT PASS|SPF-[A-Z0-9_-]+)\b/i;
 const R2_APPROVAL_CONTENT_PATTERNS = [
     /\b(customer|account)\s+(records?|identifiers?|details?)\b/i,
     /\bsensitive\s+(indicators?|identifiers?|account)\b/i,
@@ -106,12 +108,6 @@ const R3_BLOCK_CONTENT_PATTERNS = [
     /\b(remove|delete|hide)\b.{0,80}\b(audit\s+traces?|logs?|evidence)\b/i,
 ];
 
-function isBuildPhase(phase?: string): boolean {
-    if (!phase) return false;
-    const normalized = phase.trim().toUpperCase();
-    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
-}
-
 function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
     const required = input.requiresSkillPreflight ?? isBuildPhase(input.cvfPhase);
     const recordRef = input.skillPreflight?.recordRef?.trim();
@@ -119,13 +115,10 @@ function evaluateSkillPreflight(input: EnforcementInput): SkillPreflightStatus {
     const declaration = input.skillPreflight?.declaration?.trim();
 
     const explicitDeclared = input.skillPreflight?.passed === true || Boolean(declaration) || Boolean(recordRef);
-    const contentDeclared = SKILL_PREFLIGHT_PATTERN.test(input.content);
-    const declared = explicitDeclared || contentDeclared;
-
     return {
         required,
-        declared,
-        source: explicitDeclared ? 'explicit' : (contentDeclared ? 'content' : 'none'),
+        declared: explicitDeclared,
+        source: explicitDeclared ? 'explicit' : 'none',
         recordRef: recordRef || undefined,
         skillIds: explicitSkillIds,
     };
@@ -184,9 +177,11 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         reasons.push(SKILL_PREFLIGHT_MISSING_REASON);
     }
 
-    const inferredRisk = inferRiskLevelFromText(input.content);
-    const effectiveRisk = input.cvfRiskLevel ?? inferredRisk;
-    if (status !== 'BLOCK' && requiresR3Block(input.content, effectiveRisk)) {
+    const riskText = input.riskText ?? input.content;
+    const inferredRisk = inferRiskLevelFromText(riskText);
+    const declaredRisk = input.cvfRiskLevel === undefined ? null : normalizeRiskLevel(input.cvfRiskLevel);
+    const effectiveRisk = highestRisk(declaredRisk, inferredRisk) ?? 'R3';
+    if (status !== 'BLOCK' && requiresR3Block(riskText, effectiveRisk)) {
         status = 'BLOCK';
         reasons.push('R3 prohibited secret, bypass, hidden-policy, approval-evasion, or audit-evasion request is blocked.');
     }
@@ -195,14 +190,14 @@ export function evaluateEnforcement(input: EnforcementInput): EnforcementResult 
         status = 'BLOCK';
         reasons.push(riskGate.reason);
     }
-    if (riskGate.status === 'NEEDS_APPROVAL' && status !== 'BLOCK') {
+    if (riskGate.status === 'NEEDS_APPROVAL' && status === 'ALLOW') {
         status = 'NEEDS_APPROVAL';
         reasons.push(riskGate.reason);
     }
     if (
         riskGate.status === 'ALLOW'
         && status !== 'BLOCK'
-        && requiresSensitiveR2Approval(input.content, riskGate.riskLevel)
+        && requiresSensitiveR2Approval(riskText, riskGate.riskLevel)
     ) {
         status = 'NEEDS_APPROVAL';
         reasons.push('R2 sensitive or access-boundary request requires explicit human approval.');

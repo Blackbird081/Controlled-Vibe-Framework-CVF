@@ -42,6 +42,21 @@ describe('CompactHeader', () => {
         expect(screen.getByText('version 1.6')).toBeTruthy();
     });
 
+    it('identifies sample AI answers in both headers only in demo mode', () => {
+        const { rerender } = render(<CompactHeader {...mockProps} />);
+        expect(screen.queryByText('AI answers are samples')).toBeNull();
+
+        rerender(<CompactHeader {...mockProps} mockAiEnabled />);
+        expect(screen.getAllByText('AI answers are samples')).toHaveLength(2);
+    });
+
+    it('uses the translated label for the menu opener', () => {
+        const onSidebarOpen = vi.fn();
+        render(<CompactHeader {...mockProps} onSidebarOpen={onSidebarOpen} />);
+        fireEvent.click(screen.getByRole('button', { name: 'sidebar.open' }));
+        expect(onSidebarOpen).toHaveBeenCalledOnce();
+    });
+
     it('toggles language', () => {
         render(<CompactHeader {...mockProps} />);
         fireEvent.click(screen.getAllByText('EN')[0]);

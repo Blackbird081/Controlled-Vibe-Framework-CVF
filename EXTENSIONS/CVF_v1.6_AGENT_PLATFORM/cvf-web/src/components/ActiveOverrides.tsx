@@ -1,6 +1,9 @@
 'use client';
 
+// Text Encoding Exception: Preserve the existing time symbol on the exceptions card.
+
 import { useState, useEffect } from 'react';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
 import { useLanguage } from '@/lib/i18n';
 
 export interface ActiveOverride {
@@ -20,23 +23,19 @@ interface ActiveOverridesProps {
 
 const LABELS = {
     vi: {
-        title: 'Ghi đè đang hoạt động',
         scope: 'Phạm vi',
         approvedBy: 'Duyệt bởi',
         expires: 'Hết hạn',
         expiring: 'Sắp hết hạn!',
         expired: 'Đã hết hạn',
-        noOverrides: 'Không có ghi đè nào',
         loading: 'Đang tải...',
     },
     en: {
-        title: 'Active Overrides',
         scope: 'Scope',
         approvedBy: 'Approved by',
         expires: 'Expires',
         expiring: 'Expiring soon!',
         expired: 'Expired',
-        noOverrides: 'No active overrides',
         loading: 'Loading...',
     },
 };
@@ -51,7 +50,7 @@ function getTimeRemaining(expiresAt: string, now: number): { text: string; urgen
 }
 
 export function ActiveOverrides({ overrides: propOverrides, compact = false }: ActiveOverridesProps) {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const l = LABELS[language];
     const [fetchedOverrides, setOverrides] = useState<ActiveOverride[]>([]);
     const overrides = propOverrides ?? fetchedOverrides;
@@ -100,11 +99,11 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
     return (
         <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-2">
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                ⏳ {l.title} ({activeOverrides.length})
+                ⏳ {t('governancePage.overrides')} ({activeOverrides.length})
             </h4>
 
             {activeOverrides.length === 0 ? (
-                <p className="text-xs text-gray-400">{l.noOverrides}</p>
+                <p className="text-xs text-gray-400">{t('governancePage.noOverrides')}</p>
             ) : (
                 <div className="space-y-2">
                     {activeOverrides.map(override => {
@@ -119,9 +118,6 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
                                 }`}
                             >
                                 <div className="flex items-center justify-between mb-1">
-                                    <span className="font-mono text-gray-600 dark:text-gray-400">
-                                        {override.requestId.slice(0, 12)}...
-                                    </span>
                                     <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
                                         time.urgent
                                             ? 'bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200'
@@ -131,9 +127,12 @@ export function ActiveOverrides({ overrides: propOverrides, compact = false }: A
                                     </span>
                                 </div>
                                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-gray-500">
-                                    <span>{l.scope}: {override.scope}</span>
+                                    <span>{l.scope}: {t(override.scope === 'request' ? 'governancePage.overrideRequest' : 'governancePage.overrideProject')}</span>
                                     <span className="truncate">{l.approvedBy}: {override.approvedBy}</span>
                                 </div>
+                                <TechnicalDetails className="mt-2" label={t('common.technicalDetails')}>
+                                    <p>{override.requestId}</p>
+                                </TechnicalDetails>
                                 {time.urgent && !time.expired && (
                                     <p className="text-amber-600 dark:text-amber-400 mt-1 font-medium">
                                         ⚠️ {l.expiring}

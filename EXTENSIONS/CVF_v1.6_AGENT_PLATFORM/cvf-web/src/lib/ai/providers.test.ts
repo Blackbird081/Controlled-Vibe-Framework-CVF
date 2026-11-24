@@ -25,6 +25,48 @@ describe('ai/providers', () => {
         expect(CVF_SYSTEM_PROMPT).not.toContain('Luôn trả lời bằng TIẾNG VIỆT');
     });
 
+    it('sends the existing execution prompt with factual and equipment safety guidance', async () => {
+        const output = 'Move to safety and contact a qualified electrician through an official contact route.';
+        fetchMock.mockResolvedValueOnce(Response.json({ choices: [{ message: { content: output } }] }));
+        const result = await executeAI('openai', 'fixture-key', 'There is smoke coming from my electrical panel.');
+
+        const request = JSON.parse(fetchMock.mock.calls[0][1].body);
+        expect(request.messages[0]).toEqual({ role: 'system', content: CVF_SYSTEM_PROMPT });
+        expect(request.messages[0].content).toContain('Never invent phone numbers, addresses, sources, citations, or links.');
+        expect(request.messages[0].content).toContain('electrical, gas, or water equipment');
+        expect(request.messages[0].content).toContain('the manufacturer\'s official support or a qualified technician');
+        expect(request.messages[0].content).toContain('Never suggest bypassing review');
+        expect(result).toMatchObject({ success: true, output });
+    });
+
+    // Text Encoding Exception: prompts and simulated replies cover user-authored Vietnamese.
+    it.each([
+        [
+            'nhắn giúp em cho chị Lan là lịch 9h sáng mai dời qua 2h chiều được không',
+            'Chị Lan ơi, chị có thể dời lịch 9h sáng mai sang 2h chiều được không ạ?',
+        ],
+        [
+            'reply to a bride who asked if I can add a second shooter for $400 more, say yes but only if she confirms by Friday',
+            'Hi [name], I can add a second shooter for $400 if you confirm by Friday.',
+        ],
+        [
+            'viết thông báo cho cư dân mai cúp nước từ 8h tới 12h, nhờ trữ nước trước',
+            'Ngày mai sẽ cúp nước từ 8h đến 12h. Nhờ cư dân trữ nước trước.',
+        ],
+    ])('passes instructions for faithful short writing to the execution provider: %s', async (prompt, output) => {
+        fetchMock.mockImplementationOnce(async (_url, init) => {
+            const request = JSON.parse(init.body);
+            expect(request.messages[1]).toEqual({ role: 'user', content: prompt });
+            expect(request.messages[0].content).toContain('Preserve whether the user wants to ask a question or give a notice');
+            expect(request.messages[0].content).toContain('Do not add reasons, names, numbers, or facts the user did not provide');
+            expect(request.messages[0].content).toContain('like [name] or [tên]');
+            return Response.json({ choices: [{ message: { content: output } }] });
+        });
+        const result = await executeAI('openai', 'fixture-key', prompt);
+
+        expect(result).toMatchObject({ success: true, output });
+    });
+
     describe('executeAI — OpenAI', () => {
         it('returns success with parsed response', async () => {
             fetchMock.mockResolvedValueOnce({

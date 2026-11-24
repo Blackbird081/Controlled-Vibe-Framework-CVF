@@ -156,14 +156,14 @@ v1.6  Agent Platform      ██████████████████
 **What it added:**
 
 - End-user orientation (v1.5.1): guides for non-developers
-- Skill Library for End Users (v1.5.2): 131 skills across 12 domains
+- Skill Library for End Users (v1.5.2): reusable forms for end users
 - User-facing documentation and tutorials
 
 **Key files:**
 
 - `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` — Platform specs
 - `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` — End-user guides
-- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Full skill library
+- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Source library for end-user forms
 
 **Ideal for:** Teams onboarding non-technical members to CVF workflows.
 
@@ -224,7 +224,7 @@ v1.6  Agent Platform      ██████████████████
 | Python SDK/CLI | — | — | — | ✅ | ✅ | ✅ |
 | CI/CD Integration | — | — | — | ✅ | ✅ | ✅ |
 | End-User Guides | — | — | — | — | ✅ | ✅ |
-| Skill Library (114) | — | — | — | — | ✅ | ✅ |
+| Skill Library | — | — | — | — | ✅ | ✅ |
 | Web UI | — | — | — | — | — | ✅ |
 | Multi-Agent Chat | — | — | — | — | — | ✅ |
 | Governance Modes | — | — | — | — | — | ✅ |
@@ -292,3 +292,5 @@ Frozen doesn't mean obsolete — it means stable and reliable. The v1.0 manifest
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

@@ -5,6 +5,7 @@ import { useLanguage } from '@/lib/i18n';
 import { useSettings } from './Settings';
 import { AIProvider } from '@/lib/ai-providers';
 import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
+import { GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 
 interface ProviderOption {
     id: AIProvider;
@@ -15,8 +16,8 @@ interface ProviderOption {
 }
 
 const PROVIDERS: ProviderOption[] = [
+    { id: 'openai', name: 'GPT-4o mini', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o-mini' },
     { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.5-flash' },
-    { id: 'openai', name: 'GPT-4o', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o' },
     { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
     { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-flash' },
     { id: 'openrouter', name: 'OpenRouter', icon: '🔀', color: 'from-violet-500 to-indigo-500', model: 'meta-llama/llama-4-maverick' },
@@ -99,6 +100,8 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
                                 <button
                                     key={provider.id}
                                     onClick={() => handleSelect(provider.id)}
+                                    disabled={!isGovernedRouteProvider(provider.id, true)}
+                                    title={isGovernedRouteProvider(provider.id, true) ? undefined : GOVERNED_ROUTE_UNSUPPORTED_NOTE}
                                     className={`w-full flex items-center gap-3 px-4 py-3 transition-colors
                                                ${isSelected
                                             ? 'bg-blue-50 dark:bg-blue-900/30'
@@ -150,6 +153,8 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
                         <button
                             key={provider.id}
                             onClick={() => handleSelect(provider.id)}
+                            disabled={!isGovernedRouteProvider(provider.id, true)}
+                            title={isGovernedRouteProvider(provider.id, true) ? undefined : GOVERNED_ROUTE_UNSUPPORTED_NOTE}
                             className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all
                                        ${isSelected
                                     ? `bg-gradient-to-br ${provider.color} text-white shadow-lg scale-105`

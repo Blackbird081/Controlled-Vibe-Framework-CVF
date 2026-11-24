@@ -5,6 +5,8 @@ import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Skill } from '@/types/skill';
 import { useLanguage } from '@/lib/i18n';
+import { skillCategoryName, skillContentInLanguage, skillDifficulty, skillPresentation } from '@/lib/skill-presentation';
+import { skillReadingParts, SkillTechnicalDetails } from './SkillReading';
 
 type ViewMode = 'skill' | 'uat';
 
@@ -25,12 +27,15 @@ const markdownComponents: Components = {
     ),
 };
 
-export function SkillDetailView({ skill }: { skill: Skill }) {
+export function SkillDetailView({ skill, categoryId = skill.domain }: { skill: Skill; categoryId?: string }) {
     const [viewMode, setViewMode] = useState<ViewMode>('skill');
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+    const vi = language === 'vi';
+    const copy = skillPresentation(categoryId, skill, vi);
+    const reading = skillReadingParts(skillContentInLanguage(skill, categoryId, language), Boolean(skill.assfProjectionClass));
 
     const handleCopy = async () => {
-        const text = viewMode === 'skill' ? (skill.content || '') : (skill.uatContent || '');
+        const text = viewMode === 'skill' ? skillContentInLanguage(skill, categoryId, 'en') : (skill.uatContent || '');
         try {
             await navigator.clipboard.writeText(text);
         } catch {
@@ -44,44 +49,19 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">{skill.domain}</span>
-                            {skill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION' && (
-                                <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
-                                    Certified ASSF
-                                </span>
-                            )}
-                            {skill.runtimePackageProjection && (
-                                <span className="rounded-full bg-sky-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-sky-700 dark:bg-sky-500/10 dark:text-sky-300">
-                                    Runtime package
-                                </span>
-                            )}
+                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{skillCategoryName(categoryId, skill.domain, vi)}</span>
                             {skill.difficulty && (
                                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
-                                    {t('skills.difficultyLabel')}: {skill.difficulty}
+                                    {t('skills.difficultyLabel')}: {skillDifficulty(skill.difficulty, vi)}
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-2xl font-semibold tracking-[-0.02em] text-slate-700 dark:text-slate-100 sm:text-[1.75rem]">{skill.title}</h1>
-                        {skill.summary && (
+                        <h2 className="text-2xl font-semibold tracking-[-0.02em] text-slate-700 dark:text-slate-100 sm:text-[1.75rem]">{copy.title}</h2>
+                        {vi && copy.title !== copy.english && <p lang="en" className="text-xs text-slate-600 dark:text-slate-300">{copy.english}</p>}
+                        {copy.hint && (
                             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-white/55">
-                                {skill.summary}
+                                {copy.hint}
                             </p>
-                        )}
-                        {skill.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION' && (
-                            <div className="mt-4 grid gap-1 rounded-2xl border border-emerald-200/80 bg-emerald-50/80 p-3 text-xs text-emerald-950 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-100">
-                                <div className="font-semibold">ASSF package projection</div>
-                                <div>Certification: {skill.certificationState}</div>
-                                <div>UAT: {skill.uatState}</div>
-                                {skill.runtimePackageProjection && (
-                                    <>
-                                        <div>Runtime eligible: {skill.runtimeEligible ? 'YES' : 'NO'}</div>
-                                        <div>Activation: {skill.activationDecision}</div>
-                                        {skill.primaryDomain && <div>Domain: {skill.primaryDomain}</div>}
-                                    </>
-                                )}
-                                <div>Adapter: {skill.externalCliMcpDisposition}</div>
-                                {skill.canonicalRoot && <div className="break-all">Source: {skill.canonicalRoot}</div>}
-                            </div>
                         )}
                     </div>
                     <div className="flex items-center gap-2">
@@ -113,6 +93,7 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
             </div>
 
             <div className="max-h-[70vh] overflow-y-auto p-6 text-slate-700 dark:text-slate-200 sm:p-8">
+                <SkillTechnicalDetails skill={skill} metadata={reading.metadata} vi={vi} components={markdownComponents} />
                 {viewMode === 'uat' ? (
                     skill.uatContent ? (
                         <div className="prose prose-lg max-w-none prose-headings:tracking-[-0.03em] prose-h2:text-2xl prose-h2:font-semibold prose-p:leading-8 prose-code:rounded prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-pink-600 prose-pre:rounded-2xl prose-pre:bg-[#0d0f1a] prose-pre:text-slate-100 dark:prose-invert dark:prose-code:bg-white/[0.06] dark:prose-code:text-pink-300">
@@ -126,7 +107,7 @@ export function SkillDetailView({ skill }: { skill: Skill }) {
                 ) : (
                     <div className="prose prose-lg max-w-none prose-headings:tracking-[-0.03em] prose-h2:text-2xl prose-h2:font-semibold prose-p:leading-8 prose-code:rounded prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-pink-600 prose-pre:rounded-2xl prose-pre:bg-[#0d0f1a] prose-pre:text-slate-100 dark:prose-invert dark:prose-code:bg-white/[0.06] dark:prose-code:text-pink-300">
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                            {skill.content || ''}
+                            {reading.body}
                         </ReactMarkdown>
                     </div>
                 )}

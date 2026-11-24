@@ -7,7 +7,7 @@ import vectors from '../../scripts/fixtures/skill-summary-vectors.json';
 
 const require = createRequire(import.meta.url);
 const common = require('../../scripts/skill-summary.js') as {
-    summarizeSkillContent: (content: string) => string;
+    summarizeSkillContent: (content: string, options?: { includeEnglishPurpose: boolean }) => string;
     serializeAsciiJson: (value: unknown) => string;
 };
 
@@ -25,6 +25,13 @@ describe('delivered-content summaries', () => {
             expect(expected).toBe(vector.expected);
         });
     }
+
+    it('derives an English Web index summary without changing the legacy parser', () => {
+        const content = '## Purpose\nWrite analysis reports.\n\n**When to use:**\n- Summarize a finding.';
+        expect(common.summarizeSkillContent(content)).toBe('');
+        expect(common.summarizeSkillContent(content, { includeEnglishPurpose: true }))
+            .toBe('Write analysis reports. When to use: Summarize a finding.');
+    });
 });
 
 describe('canonical ASCII JSON serialization', () => {

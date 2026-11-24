@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useModals } from './useModals';
 
 describe('useModals', () => {
@@ -11,55 +11,17 @@ describe('useModals', () => {
         vi.restoreAllMocks();
     });
 
-    it('shows onboarding after mount when onboarding is not completed', async () => {
-        const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
+    it('starts a first-time user without opening legacy onboarding', async () => {
         const { result } = renderHook(() => useModals());
-
-        await waitFor(() => {
-            expect(result.current.showOnboarding).toBe(true);
-        });
-        expect(getItemSpy).toHaveBeenCalledWith('cvf_onboarding_complete');
-    });
-
-    it('keeps onboarding hidden when onboarding is already completed', async () => {
-        localStorage.setItem('cvf_onboarding_complete', 'true');
-        const { result } = renderHook(() => useModals());
-
-        await waitFor(() => {
-            expect(result.current.showOnboarding).toBe(false);
-        });
-    });
-
-    it('handles onboarding completion and persists completion flag', async () => {
-        const { result } = renderHook(() => useModals());
-
-        await waitFor(() => {
-            expect(result.current.showOnboarding).toBe(true);
-        });
-
-        act(() => {
-            result.current.handleOnboardingComplete();
-        });
-
+        await act(async () => { await Promise.resolve(); });
         expect(result.current.showOnboarding).toBe(false);
         expect(result.current.showQuickStart).toBe(false);
-        expect(localStorage.getItem('cvf_onboarding_complete')).toBe('true');
     });
 
-    it('opens quick start when onboarding completes into starter mode', async () => {
+    it('opens the legacy starter only on explicit request', () => {
         const { result } = renderHook(() => useModals());
-
-        await waitFor(() => {
-            expect(result.current.showOnboarding).toBe(true);
-        });
-
-        act(() => {
-            result.current.handleOnboardingComplete('starter');
-        });
-
-        expect(result.current.showOnboarding).toBe(false);
+        act(() => result.current.openModal('quickStart'));
         expect(result.current.showQuickStart).toBe(true);
-        expect(localStorage.getItem('cvf_onboarding_complete')).toBe('true');
     });
 
     it('respects permission gates for settings, ai usage, and context modals', () => {

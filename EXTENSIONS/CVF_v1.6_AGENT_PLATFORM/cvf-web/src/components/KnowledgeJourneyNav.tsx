@@ -7,9 +7,10 @@ import { BookOpen, FileInput, ShieldCheck, Download, Send } from 'lucide-react';
 
 interface KnowledgeJourneyNavProps {
     currentStep: number;
+    wrap?: boolean;
 }
 
-export function KnowledgeJourneyNav({ currentStep }: KnowledgeJourneyNavProps) {
+export function KnowledgeJourneyNav({ currentStep, wrap = false }: KnowledgeJourneyNavProps) {
     const { language } = useLanguage();
 
     const steps = [
@@ -21,8 +22,8 @@ export function KnowledgeJourneyNav({ currentStep }: KnowledgeJourneyNavProps) {
     ];
 
     return (
-        <nav aria-label="Knowledge Journey" className="mb-6 w-full overflow-x-auto">
-            <div className="flex min-w-max items-center gap-2 rounded-2xl bg-white p-2 shadow-sm border border-slate-200 dark:bg-gray-800 dark:border-gray-700">
+        <nav aria-label="Knowledge Journey" className={`mb-6 w-full ${wrap ? '' : 'overflow-x-auto'}`}>
+            <div className={`flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800 ${wrap ? 'flex-wrap' : 'min-w-max'}`}>
                 {steps.map((step, index) => {
                     const isActive = step.id === currentStep;
                     const isPast = step.id < currentStep;
@@ -34,7 +35,7 @@ export function KnowledgeJourneyNav({ currentStep }: KnowledgeJourneyNavProps) {
                             <Link
                                 href={step.path}
                                 aria-current={isActive ? 'step' : undefined}
-                                className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                                className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${wrap ? 'min-h-11' : ''} ${
                                     isActive
                                         ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300'
                                         : isPast
@@ -45,7 +46,7 @@ export function KnowledgeJourneyNav({ currentStep }: KnowledgeJourneyNavProps) {
                                 <Icon size={16} className={isActive ? 'text-indigo-600 dark:text-indigo-400' : ''} />
                                 <span className="whitespace-nowrap">{label}</span>
                             </Link>
-                            {index < steps.length - 1 && (
+                            {!wrap && index < steps.length - 1 && (
                                 <div className="h-4 w-px bg-slate-200 dark:bg-gray-700 mx-1" aria-hidden="true" />
                             )}
                         </React.Fragment>

@@ -26,8 +26,8 @@ const { probe, chatMode, providerChat, SETTINGS } = vi.hoisted(() => ({
     chatMode: { real: false },
     providerChat: vi.fn(),
     SETTINGS: {
-        preferences: { defaultProvider: 'alibaba' },
-        providers: { alibaba: { apiKey: 'synthetic-key', selectedModel: 'qwen-plus' } },
+        preferences: { defaultProvider: 'openai' },
+        providers: { openai: { apiKey: 'synthetic-key', selectedModel: 'gpt-4o-mini' } },
     },
 }));
 
@@ -166,7 +166,7 @@ describe('history consistency: real sidebar + hook, recorder Chat leaf', () => {
         ]);
         expect(body()).toBe('');
         expect(stored().sessions).toHaveLength(3);
-        expect(stored().sessions[0].provider).toBe('alibaba');
+        expect(stored().sessions[0].provider).toBe('openai');
         expectAgreement();
         snap('new-chat');
 
@@ -273,7 +273,7 @@ describe('history consistency: real sidebar + hook, recorder Chat leaf', () => {
             expect(body()).toBe('');
             const h = stored();
             expect(h.sessions).toHaveLength(1);
-            expect(h.sessions[0]).toMatchObject({ provider: 'alibaba', messages: [] });
+            expect(h.sessions[0]).toMatchObject({ provider: 'openai', messages: [] });
             expect(h.activeSessionId).toBe(h.sessions[0].id);
             expect(JSON.stringify(h)).not.toContain('body-A');
             view.rerender(strict ? <StrictMode>{shell}</StrictMode> : shell);

@@ -1,5 +1,7 @@
 # CVF Skill Deduplication Policy
 
+> Catalog status: `NOT_ACTIVE` for current discovery. Retained as the original catalog assessment and deduplication guidance. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md).
+>
 > **Version:** 1.0.0  
 > **Status:** Active  
 > **Date:** 2026-02-08

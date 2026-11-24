@@ -1,5 +1,7 @@
 # Hướng dẫn: Quy trình Multi-Agent (v1.6 Agent Platform)
 
+> Lập kế hoạch gồm DESIGN, SPEC và WORK ORDER; ghi FREEZE sau khi kiểm tra. Tên vai trò mô tả phối hợp và không tự cấp quyền. Xem [vòng đời công việc](lifecycle.md).
+
 **Thời gian:** 20 phút  
 **Cấp độ:** Trung cấp  
 **Yêu cầu trước:** Đã cài đặt và chạy Web UI  
@@ -9,14 +11,14 @@
 
 ## Multi-Agent trong CVF là gì?
 
-Thay vì để một AI làm mọi thứ, CVF v1.6 phân chia công việc cho **4 agent chuyên biệt**, mỗi agent tương ứng với một phase CVF:
+Thay vì để một AI làm mọi thứ, CVF v1.6 phân chia công việc cho **4 agent chuyên biệt**, phối hợp qua các giai đoạn:
 
-| Agent | Vai trò | Phase CVF | Chuyên môn |
+| Agent | Vai trò | BUILDVF | Chuyên môn |
 |-------|---------|-----------|------------|
-| 🎯 **Orchestrator** | Điều phối & phân công | Phase A (Khám phá) | Hiểu ý định, phân tách nhiệm vụ |
-| 📐 **Architect** | Thiết kế giải pháp | Phase B (Thiết kế) | Kiến trúc, thiết kế thành phần, đánh đổi |
-| 🔨 **Builder** | Viết code | Phase C (Xây dựng) | Triển khai, tuân theo spec chính xác |
-| 🔍 **Reviewer** | Đảm bảo chất lượng | Phase D (Đánh giá) | Kiểm thử, tìm lỗi, kiểm tra tuân thủ |
+| 🎯 **Orchestrator** | Điều phối & phân công | INTAKE (Khám phá) | Hiểu ý định, phân tách nhiệm vụ |
+| 📐 **Architect** | Thiết kế giải pháp | DESIGN (Thiết kế) | Kiến trúc, thiết kế thành phần, đánh đổi |
+| 🔨 **Builder** | Viết code | BUILD (Xây dựng) | Triển khai, tuân theo spec chính xác |
+| 🔍 **Reviewer** | Đảm bảo chất lượng | REVIEW (Đánh giá) | Kiểm thử, tìm lỗi, kiểm tra tuân thủ |
 
 ### Tại sao dùng Multi-Agent?
 
@@ -73,7 +75,7 @@ Mỗi agent sử dụng một nhà cung cấp AI khác nhau.
 
 ### Ví dụ: Xây dựng Dashboard thời tiết
 
-**1. Bắt đầu với Orchestrator (Phase A)**
+**1. Bắt đầu với Orchestrator (INTAKE)**
 
 Nhập ý định của bạn:
 
@@ -116,7 +118,7 @@ OUT: User accounts, favorites, weather alerts, PWA
 - Single page
 ```
 
-**2. Chuyển giao cho Architect (Phase B)**
+**2. Chuyển giao cho Architect (DESIGN)**
 
 Architect nhận bản tóm tắt từ Orchestrator và thiết kế giải pháp:
 
@@ -155,7 +157,7 @@ User types city → app.js calls API → parse JSON → update DOM
 - No internet → "Check your connection."
 ```
 
-**3. Builder thực thi (Phase C)**
+**3. Builder thực thi (BUILD)**
 
 Builder nhận bản thiết kế và viết code:
 
@@ -164,7 +166,7 @@ Builder nhận bản thiết kế và viết code:
 - Tạo `app.js` với các lệnh gọi API và xử lý lỗi
 - Tuân theo thiết kế chính xác — không "cải tiến" tự ý
 
-**4. Reviewer kiểm tra chất lượng (Phase D)**
+**4. Reviewer kiểm tra chất lượng (REVIEW)**
 
 Reviewer đánh giá code của Builder so với ý định ban đầu:
 
@@ -199,7 +201,7 @@ Reviewer đánh giá code của Builder so với ý định ban đầu:
 Trong chế độ governance CVF đầy đủ, các agent tự động chuyển giao:
 
 ```
-Orchestrator → (Phase A hoàn thành?) → Architect → (Phase B hoàn thành?) → Builder → (Phase C hoàn thành?) → Reviewer
+Orchestrator → (INTAKE hoàn thành?) → Architect → (DESIGN hoàn thành?) → Builder → (BUILD hoàn thành?) → Reviewer
 ```
 
 Mỗi lần chuyển giao yêu cầu checklist của phase trước phải được hoàn thành.
@@ -222,7 +224,7 @@ Nếu Reviewer phát hiện vấn đề, quy trình có thể quay lại:
 
 Khi sử dụng **chế độ governance CVF đầy đủ**, phase gate đảm bảo chất lượng:
 
-### Cổng Phase A → B (Orchestrator → Architect)
+### Cổng INTAKE → B (Orchestrator → Architect)
 
 ```
 Checklist:
@@ -234,7 +236,7 @@ Checklist:
 
 Tất cả các mục phải được đánh dấu trước khi Architect bắt đầu.
 
-### Cổng Phase B → C (Architect → Builder)
+### Cổng DESIGN → C (Architect → Builder)
 
 ```
 Checklist:
@@ -245,7 +247,7 @@ Checklist:
 - [ ] Build is feasible within constraints
 ```
 
-### Cổng Phase C → D (Builder → Reviewer)
+### Cổng BUILD → D (Builder → Reviewer)
 
 ```
 Checklist:
@@ -279,7 +281,7 @@ Trong thực tế:
 
 ### 1. Cụ thể với Orchestrator
 
-Chất lượng toàn bộ quy trình phụ thuộc vào Phase A. Cung cấp cho Orchestrator:
+Chất lượng toàn bộ quy trình phụ thuộc vào INTAKE. Cung cấp cho Orchestrator:
 
 - Ý định rõ ràng (cái gì, không phải cách nào)
 - Ràng buộc cụ thể
@@ -287,11 +289,11 @@ Chất lượng toàn bộ quy trình phụ thuộc vào Phase A. Cung cấp cho
 
 ### 2. Xem lại thiết kế của Architect trước khi xây dựng
 
-Đừng vội vàng chuyển sang Phase C. Thiết kế tệ = code tệ. Dành 2 phút xem lại kết quả của Architect.
+Đừng vội vàng chuyển sang BUILD. Thiết kế tệ = code tệ. Dành 2 phút xem lại kết quả của Architect.
 
 ### 3. Để Builder tuân theo Spec
 
-Đừng can thiệp trong Phase C trừ khi có lỗi rõ ràng. Builder nên làm theo thiết kế của Architect, không tự ý sáng tạo.
+Đừng can thiệp trong BUILD trừ khi có lỗi rõ ràng. Builder nên làm theo thiết kế của Architect, không tự ý sáng tạo.
 
 ### 4. Sử dụng phản hồi của Reviewer
 
@@ -308,7 +310,7 @@ Multi-agent sử dụng token nhiều gấp 3–4 lần so với single-agent. T
 | Tôi muốn... | Xem... |
 |-------------|--------|
 | Tạo template skill tái sử dụng | Hướng dẫn Custom Skills |
-| Hiểu sâu hơn về phase gate | Quy trình 4 Phase |
+| Hiểu sâu hơn về phase gate | [Vòng đời công việc](lifecycle.md) |
 | Tìm hiểu về mức độ rủi ro | Mô hình Rủi ro |
 | Triển khai web UI cho nhóm | Hướng dẫn Triển khai |
 | Thiết lập governance cho nhóm | Hướng dẫn Thiết lập Nhóm |
@@ -316,3 +318,5 @@ Multi-agent sử dụng token nhiều gấp 3–4 lần so với single-agent. T
 ---
 
 *Cập nhật lần cuối: 15 tháng 2 năm 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     buildExecutionDiagnostic,
+    buildGatewayExecutionDiagnostic,
     buildProviderExecutionDiagnostic,
     classifyProviderError,
     redactDiagnosticMessage,
@@ -94,5 +95,37 @@ describe('execution diagnostics', () => {
         }));
         expect(rendered).toContain('selected provider has no configured API key');
         expect(rendered).toContain('Next action: check_api_key');
+    });
+});
+
+describe('Gateway failure diagnostics', () => {
+    const build = (error: Parameters<typeof buildGatewayExecutionDiagnostic>[0]['error']) =>
+        buildGatewayExecutionDiagnostic({ provider: 'openai', model: 'gpt-4o-mini', error, latencyMs: 5 });
+
+    it.each([
+        ['401 bad key', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 401 }, retryable: false }, 'invalid_api_key', false, 'check_api_key'],
+        ['403', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 403 }, retryable: false }, 'invalid_api_key', false, 'check_api_key'],
+        ['429 rate limit', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 429 }, retryable: true }, 'rate_limited', true, 'wait_and_retry'],
+        ['quota locked', { providerDiagnostic: { code: 'quota_locked', httpStatus: 429 }, retryable: false }, 'insufficient_balance', false, 'top_up_or_check_quota'],
+        ['404 model', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 404 }, retryable: false }, 'model_unavailable', false, 'change_model'],
+        ['400', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 400 }, retryable: false }, 'provider_http_error', false, 'do_not_retry_without_new_evidence'],
+        ['503', { providerDiagnostic: { code: 'provider_http_error', httpStatus: 503 }, retryable: true }, 'provider_http_error', true, 'wait_and_retry'],
+        ['incomplete output', { providerDiagnostic: { code: 'output_incomplete' }, retryable: false }, 'provider_parse_error', false, 'revise_request'],
+        ['deadline', { providerDiagnostic: { code: 'provider_timeout' }, retryable: false }, 'provider_timeout', true, 'wait_and_retry'],
+        ['credential', { providerDiagnostic: { code: 'credential_unavailable' }, retryable: false }, 'missing_api_key', false, 'check_api_key'],
+        ['destination', { providerDiagnostic: { code: 'destination_denied' }, retryable: false }, 'policy_blocked', false, 'contact_admin'],
+        ['network (not retryable per Gateway)', { providerDiagnostic: { code: 'network_error' }, retryable: false }, 'network_error', false, 'do_not_retry_without_new_evidence'],
+        ['unknown', { providerDiagnostic: { code: 'unknown_error' }, retryable: false }, 'unknown_error', false, 'do_not_retry_without_new_evidence'],
+        ['shielded credential envelope', { errorClass: 'credential_shielded', message: 'Credential metadata unavailable', retryable: false }, 'missing_api_key', false, 'check_api_key'],
+    ] as const)('classifies %s from the closed code, not free text', (_name, error, expectedClass, retryable, userAction) => {
+        expect(build(error)).toMatchObject({ stage: 'provider', class: expectedClass, retryable, userAction, provider: 'openai', model: 'gpt-4o-mini' });
+    });
+
+    it('never lets free text override a closed code', () => {
+        expect(build({ message: 'quota 401 timeout rate limit', providerDiagnostic: { code: 'output_incomplete' }, retryable: false }).class).toBe('provider_parse_error');
+    });
+
+    it('carries the HTTP status', () => {
+        expect(build({ providerDiagnostic: { code: 'provider_http_error', httpStatus: 401 }, retryable: false }).httpStatus).toBe(401);
     });
 });

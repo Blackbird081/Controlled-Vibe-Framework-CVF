@@ -1,4 +1,7 @@
+<!-- Text Encoding Exception: preserve Vietnamese orientation and historical technical labels. -->
 # Technical Review Domain
+
+Trang chủ CVF Web có các mẫu kết quả đang dùng. Phần dưới lưu hướng dẫn của v1.5.2 để tra cứu lịch sử.
 
 > **Source:** CVF Governance + Engineering Best Practices  
 > **Skills:** 3 | **Level:** Medium to Advanced
@@ -15,17 +18,16 @@ Domain này giúp End User làm việc với AI để review và đánh giá cá
 
 ---
 
-## 📚 Danh sách Skills
+## Danh mục lịch sử
 
 | # | Skill | Mô tả | Level |
 |---|-------|-------|-------|
-| 1 | [Code Review](./01_code_review.skill.md) | Review code changes | ⭐⭐ Medium |
-| 2 | [Architecture Review](./02_architecture_review.skill.md) | Đánh giá thiết kế hệ thống | ⭐⭐⭐ Advanced |
-| 3 | [Security Audit](./03_security_audit.skill.md) | Kiểm tra bảo mật | ⭐⭐⭐ Advanced |
+| 1 | Code Review | Review code changes | ⭐⭐ Medium |
+| 2 | Architecture Review | Đánh giá thiết kế hệ thống | ⭐⭐⭐ Advanced |
 
 ---
 
-## 🚀 Cách chọn Skill
+## 🚀 Cách chọn Skill (v1.5.2)
 
 ```
 Bạn muốn review gì?

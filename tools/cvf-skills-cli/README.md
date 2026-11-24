@@ -1,6 +1,6 @@
 # cvf-skills
 
-> CVF Skill Library CLI — Search, Plan, and Apply 131 active skills across 12 domains.
+> CVF Skill Library CLI — Search and prepare work with the [Local end-user form index](../../governance/skill-library/registry/user-skills/INDEX.md).
 
 **Zero dependencies. Pure Node.js. Works offline.**
 

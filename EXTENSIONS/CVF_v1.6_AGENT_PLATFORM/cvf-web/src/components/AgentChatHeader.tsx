@@ -1,13 +1,17 @@
 'use client';
 
+// Text Encoding Exception: Vietnamese assistant status and controls use UTF-8.
+
 import { ChatMessage, CVFMode, MODE_CONFIG } from '@/lib/agent-chat';
 import { ProviderKey } from '@/lib/quota-manager';
 import { ExportMenu } from './ExportMenu';
+import { PROVIDER_NAMES } from '@/lib/agent-model-catalog';
 
 interface AgentChatHeaderProps {
     currentMode: CVFMode;
     language: 'vi' | 'en';
     defaultProvider: ProviderKey;
+    modelName?: string;
     isStreaming: boolean;
     showExportMenu: boolean;
     onToggleExportMenu: () => void;
@@ -23,6 +27,7 @@ export function AgentChatHeader({
     currentMode,
     language,
     defaultProvider,
+    modelName,
     isStreaming,
     showExportMenu,
     onToggleExportMenu,
@@ -39,14 +44,9 @@ export function AgentChatHeader({
             <div className="flex flex-wrap items-center gap-3">
                 <span className="text-2xl">🤖</span>
                 <div>
-                    <h3 className="font-bold text-white">CVF Agent</h3>
+                    <h3 className="font-bold text-white">{language === 'vi' ? 'Trợ lý AI' : 'AI assistant'}</h3>
                     <p className="text-xs text-blue-100">
-                        {defaultProvider === 'gemini' && '✨ Gemini'}
-                        {defaultProvider === 'openai' && '🤖 GPT-4'}
-                        {defaultProvider === 'anthropic' && '🧠 Claude'}
-                        {defaultProvider === 'alibaba' && '🧭 Qwen'}
-                        {defaultProvider === 'openrouter' && '🧩 OpenRouter'}
-                        {defaultProvider === 'deepseek' && '🦋 DeepSeek'}
+                        {modelName ?? PROVIDER_NAMES[defaultProvider]}
                     </p>
                 </div>
                 {currentMode !== 'simple' && (
@@ -57,9 +57,9 @@ export function AgentChatHeader({
             </div>
             <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end">
                 {isStreaming && (
-                    <span className="px-2 py-1 bg-white/20 rounded-full text-xs text-white flex items-center gap-1">
-                        <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                        Streaming...
+                    <span role="status" className="px-2 py-1 bg-white/20 rounded-full text-xs text-white flex items-center gap-1">
+                        <span aria-hidden="true" className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                        {language === 'vi' ? 'Đang trả lời…' : 'Writing a reply…'}
                     </span>
                 )}
 

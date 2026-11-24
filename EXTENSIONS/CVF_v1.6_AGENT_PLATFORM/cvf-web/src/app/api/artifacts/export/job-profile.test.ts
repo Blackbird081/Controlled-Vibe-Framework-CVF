@@ -27,7 +27,7 @@ describe('selected synthetic job export', () => {
         return Reflect.get(target, key); } });
       vi.stubGlobal('process', Object.assign(Object.create(realProcess), { env }));
       const request = (origin: string) => new NextRequest('http://localhost/api/artifacts/export', { method: 'POST',
-        headers: { origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body) });
+        headers: { host: 'localhost', origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body) });
       const response = await POST(request('http://localhost'));
       const payload = await response.json();
       expect(response.status).toBe(200);

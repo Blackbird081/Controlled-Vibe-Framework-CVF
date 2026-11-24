@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { NO_DATA_LABEL } from '@/lib/presentation-labels';
 
 export interface RiskTrendPoint {
     date: string;
@@ -22,7 +23,6 @@ const LABELS = {
         increasing: '↗ Tăng',
         stable: '→ Ổn định',
         decreasing: '↘ Giảm',
-        noData: 'Chưa có dữ liệu',
         loading: 'Đang tải...',
     },
     en: {
@@ -33,15 +33,14 @@ const LABELS = {
         increasing: '↗ Increasing',
         stable: '→ Stable',
         decreasing: '↘ Decreasing',
-        noData: 'No data yet',
         loading: 'Loading...',
     },
 };
 
 type TimeRange = '7' | '30' | '90';
 
-function computeTrend(points: RiskTrendPoint[]): 'increasing' | 'stable' | 'decreasing' {
-    if (points.length < 2) return 'stable';
+function computeTrend(points: RiskTrendPoint[]): 'increasing' | 'stable' | 'decreasing' | 'insufficient' {
+    if (points.length < 2) return 'insufficient';
     const n = points.length;
     const half = Math.floor(n / 2);
     const firstHalf = points.slice(0, half);
@@ -76,7 +75,7 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
                     setData(json.data?.points || []);
                 }
             } catch {
-                // silently fail, show noData
+                // Retain the current data if the request fails.
             } finally {
                 if (!cancelled) setLoading(false);
             }
@@ -91,7 +90,8 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
         switch (trend) {
             case 'increasing': return { text: l.increasing, color: 'text-red-500' };
             case 'decreasing': return { text: l.decreasing, color: 'text-green-500' };
-            default: return { text: l.stable, color: 'text-yellow-500' };
+            case 'stable': return { text: l.stable, color: 'text-yellow-500' };
+            case 'insufficient': return null;
         }
     }, [trend, l]);
 
@@ -131,15 +131,17 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
                     {l.title}
                 </h3>
                 <div className="flex items-center gap-2">
-                    <span className={`text-xs font-bold ${trendDisplay.color}`}>
-                        {trendDisplay.text}
-                    </span>
+                    {trendDisplay && (
+                        <span className={`text-xs font-bold ${trendDisplay.color}`}>
+                            {trendDisplay.text}
+                        </span>
+                    )}
                     <div className="flex gap-1">
                         {(['7', '30', '90'] as TimeRange[]).map(r => (
                             <button
                                 key={r}
                                 onClick={() => setRange(r)}
-                                className={`text-xs px-2 py-0.5 rounded ${
+                                className={`min-h-11 min-w-11 text-xs px-2 py-0.5 rounded ${
                                     range === r
                                         ? 'bg-blue-500 text-white'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
@@ -153,7 +155,7 @@ export function RiskTrendChart({ data: propData }: RiskTrendChartProps) {
             </div>
 
             {data.length === 0 ? (
-                <p className="text-sm text-gray-400 text-center py-8">{l.noData}</p>
+                <p className="text-sm text-gray-400 text-center py-8">{NO_DATA_LABEL[language]}</p>
             ) : (
                 <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-48">
                     {/* Grid lines */}

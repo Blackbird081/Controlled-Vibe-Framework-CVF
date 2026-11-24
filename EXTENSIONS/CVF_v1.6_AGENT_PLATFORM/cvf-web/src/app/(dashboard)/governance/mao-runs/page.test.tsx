@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+import { LanguageProvider } from '@/lib/i18n';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import type { MaoDurableRunReadoutReport } from '@/lib/server/mao-durable-run-readout';
@@ -55,7 +56,7 @@ describe('MaoDurableRunsPage', () => {
         );
 
         const { default: MaoDurableRunsPage } = await import('./page');
-        render(await MaoDurableRunsPage());
+        render(await MaoDurableRunsPage(), { wrapper: LanguageProvider });
 
         expect(screen.getByText('graph-abc')).toBeTruthy();
         expect(screen.getByText('task-1')).toBeTruthy();
@@ -72,7 +73,7 @@ describe('MaoDurableRunsPage', () => {
         getMaoDurableRunReadoutMock.mockResolvedValue(baseReport({ state: 'EMPTY' }));
 
         const { default: MaoDurableRunsPage } = await import('./page');
-        render(await MaoDurableRunsPage());
+        render(await MaoDurableRunsPage(), { wrapper: LanguageProvider });
 
         expect(screen.getByText('No durable MAO runs have been discovered yet.')).toBeTruthy();
         expect(screen.queryByRole('button')).toBeNull();
@@ -84,7 +85,7 @@ describe('MaoDurableRunsPage', () => {
         );
 
         const { default: MaoDurableRunsPage } = await import('./page');
-        const { container } = render(await MaoDurableRunsPage());
+        const { container } = render(await MaoDurableRunsPage(), { wrapper: LanguageProvider });
 
         expect(screen.getByText('Durable run data is currently unavailable.')).toBeTruthy();
         expect(screen.getByText('MAO_RUN_STORE_NOT_CONFIGURED')).toBeTruthy();
@@ -96,7 +97,7 @@ describe('MaoDurableRunsPage', () => {
         getMaoDurableRunReadoutMock.mockResolvedValue(baseReport());
 
         const { default: MaoDurableRunsPage } = await import('./page');
-        render(await MaoDurableRunsPage());
+        render(await MaoDurableRunsPage(), { wrapper: LanguageProvider });
 
         expect(screen.getByText(/Read-only durable-event projection/)).toBeTruthy();
         expect(screen.getByText(/excludes evidence records, evidence milestones, evidence freshness, heartbeat/)).toBeTruthy();

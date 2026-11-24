@@ -19,6 +19,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 import { useExecutionStore } from '@/lib/store';
 import type { Execution } from '@/types';
 
@@ -38,10 +43,13 @@ vi.mock('@/lib/i18n', () => ({ useLanguage: () => ({ language: 'en', t: (key: st
 vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));
 vi.mock('@/components/Settings', () => ({ useSettings: () => mockSettings }));
 vi.mock('@/lib/skill-template-map', () => ({ getSkillForTemplate: () => null }));
-vi.mock('@/lib/hooks/useExecute', () => {
+vi.mock('@/lib/hooks/useExecute', async (importOriginal) => {
     const providers: never[] = [];
     const fetchProviders = () => undefined;
-    return { useProviders: () => ({ providers, anyConfigured: false, fetchProviders }) };
+    return {
+        ...(await importOriginal<typeof import('@/lib/hooks/useExecute')>()),
+        useProviders: () => ({ providers, anyConfigured: false, fetchProviders }),
+    };
 });
 vi.mock('@/components', async () => {
     const { DynamicForm } = await vi.importActual<typeof import('@/components/DynamicForm')>('@/components/DynamicForm');
@@ -302,6 +310,21 @@ describe('REQ-COMPOSE: recovered draft -> edit -> confirm -> English Working Bri
 });
 
 describe('REQ-REVISION: one current artifact; stale confirmation cannot be used', () => {
+    it('keeps the download available when raised risk blocks the intake handoff', async () => {
+        await recoverA();
+        const highRiskNotes = 'Delete production records after collecting the approved list.';
+        fill({ currentNotes: highRiskNotes });
+        openExport();
+
+        const text = await confirmExport();
+
+        expect(text).toContain(highRiskNotes);
+        expect(sendButton().disabled).toBe(true);
+        fireEvent.click(sendButton());
+        expect(handoffs).toEqual([]);
+        expect(requestedUrls).toEqual([]);
+    });
+
     it('keeps preview, clipboard, Blob download and the cvf:openAgent prompt identical and executes nothing', async () => {
         await recoverA();
         const [aBefore, bBefore] = [serial(A_ID), serial(B_ID)];

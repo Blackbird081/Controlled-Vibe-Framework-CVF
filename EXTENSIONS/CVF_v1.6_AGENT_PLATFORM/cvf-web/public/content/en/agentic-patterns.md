@@ -1,6 +1,6 @@
 # Agentic Patterns from Claude Quickstarts
 
-> Lessons learned from [claude-quickstarts](https://github.com/anthropics/claude-quickstarts) — mapped to CVF governance.
+> Lessons learned from [claude-quickstarts](https://github.com/anthropics/claude-quickstarts) for planning agent workflows.
 
 ## What Is Claude Quickstarts?
 
@@ -14,7 +14,7 @@ Anthropic's [claude-quickstarts](https://github.com/anthropics/claude-quickstart
 | **Autonomous Coding** | Two-Agent Pattern + Session Persistence | Claude Agent SDK, Git |
 | **Browser Use Demo** | Browser Automation + DOM Tools | Python, Playwright, Streamlit |
 
-## Key Patterns & CVF Mapping
+## Design patterns
 
 ### 1. RAG (Retrieval-Augmented Generation)
 
@@ -25,15 +25,6 @@ Anthropic's [claude-quickstarts](https://github.com/anthropics/claude-quickstart
 ```
 User Query → Embedding → Vector Search → Top-K Documents → Context Injection → Claude Response
 ```
-
-**CVF Mapping:**
-
-- **New Skill:** AGT-009 RAG Knowledge Retrieval (R2, Supervised)
-- **Risk:** R2 because retrieved context influences AI output quality
-- **Governance:** Must cite sources, log retrieved document IDs, reject hallucinated references
-- **Phase Gate:** Allowed in all 4 phases — context retrieval is fundamental
-
-**What CVF adds:** Source citation audit trail, relevance score thresholds, PII filtering on retrieved content.
 
 ---
 
@@ -47,15 +38,6 @@ User Query → Embedding → Vector Search → Top-K Documents → Context Injec
 Data Upload → Claude Analysis → Chart Config JSON → Recharts Render → Interactive Dashboard
 ```
 
-**CVF Mapping:**
-
-- **New Skill:** AGT-010 Data Visualization Generator (R1, Auto)
-- **Risk:** R1 because output is read-only visualization, no data modification
-- **Governance:** Chart configs validated against schema, no executable code in output
-- **Phase Gate:** Build + Review phases
-
-**What CVF adds:** Data sensitivity classification (public/internal/confidential), export audit logging.
-
 ---
 
 ### 3. Multi-Format Document Parsing
@@ -67,15 +49,6 @@ Data Upload → Claude Analysis → Chart Config JSON → Recharts Render → In
 ```
 File Upload → Type Detection → Parser (PDF.js / CSV / Vision) → Structured Data → Analysis Ready
 ```
-
-**CVF Mapping:**
-
-- **New Skill:** AGT-011 Document Parser (R1, Auto)
-- **Risk:** R1 because parsing is read-only with structured output
-- **Governance:** PII detection hooks, file size limits, supported format allowlist
-- **Phase Gate:** All phases — document parsing serves discovery through review
-
-**What CVF adds:** Automatic PII sanitization, file type validation, extraction schema enforcement.
 
 ---
 
@@ -97,20 +70,11 @@ App Spec → Initializer Agent → feature_list.json (200 items)
 
 **Key innovation:** Progress persists across fresh context windows via git + feature list.
 
-**CVF Mapping:**
-
-- **New Skill:** AGT-012 Agentic Loop Controller (R3, Manual)
-- **Risk:** R3 because autonomous multi-step execution with file system access
-- **Governance:** Iteration limits, bash command allowlist, filesystem sandboxing, mandatory human review
-- **Phase Gate:** Build + Review only — autonomous execution is too risky for Discovery/Design
-
 **Security model (from claude-quickstarts):**
 
 1. OS-level sandbox
 2. Filesystem restricted to project directory
 3. Bash allowlist: `ls`, `cat`, `head`, `tail`, `wc`, `grep`, `npm`, `node`, `git`, `ps`, `lsof`, `sleep`, `pkill`
-
-**What CVF adds:** Per-iteration governance checks, risk escalation on repeated failures, mandatory audit trail with git commit hashes.
 
 ---
 
@@ -126,21 +90,12 @@ User Instruction → Claude → Browser Tool Call → Playwright Action → Scre
 
 **Key innovation:** Element targeting via `ref` parameter (DOM reference) instead of brittle pixel coordinates.
 
-**CVF Mapping:**
-
-- **New Skill:** AGT-013 Browser Automation (R3, Manual)
-- **Risk:** R3 because browser can access external systems, submit forms, navigate to arbitrary pages
-- **Governance:** Containerized execution (Docker), domain allowlist, no credential input, screenshot logging
-- **Phase Gate:** Build only — browser automation is execution-level activity
-
 **Safety measures (from claude-quickstarts):**
 
 1. Isolated Docker container with virtual display (XVFB)
 2. No personal credentials or sensitive information
 3. Domain allowlist recommended
 4. Human confirmation for real-world consequences (financial transactions, ToS acceptance)
-
-**What CVF adds:** Domain governance policy, action-level audit log, automated containment breach detection.
 
 ---
 
@@ -161,70 +116,8 @@ agent = Agent(
 )
 ```
 
-**CVF Mapping:**
-
-- **New Skill:** AGT-014 MCP Server Connector (R2, Supervised)
-- **Risk:** R2 because external server access with dynamic tool discovery
-- **Governance:** Server allowlist, connection timeout limits, tool result validation
-- **Phase Gate:** Build + Review phases
-
-**What CVF adds:** Server certification requirements, tool schema validation before invocation, connection lifecycle auditing.
-
 ---
 
-## Architecture Comparison
+The examples describe design patterns. Choosing a pattern does not determine the permission or risk for a real action. Those depend on the work, the data, and the allowed scope.
 
-| Aspect | claude-quickstarts | CVF |
-|--------|-------------------|-----|
-| **Approach** | Minimal, unopinionated, <300 LOC core | Governance-first, structured, multi-layer |
-| **Risk Management** | Per-project safety caveats | Systematic R0-R4 classification |
-| **Tool Use** | Direct API tool calls | Governance-wrapped tool invocation |
-| **Multi-Agent** | Two-agent pattern (init + work) | Four-role system (Orchestrator, Architect, Builder, Reviewer) |
-| **Session Management** | Git commits + feature list | Phase-gated state machine |
-| **Security** | Bash allowlist + Docker isolation | Risk levels + operator roles + phase gates + audit |
-| **Monitoring** | Console output | Audit logger + enforcement log + factual scoring |
-
-## What CVF Gains
-
-### New Skills Added (AGT-009 → AGT-014)
-
-| ID | Skill | Risk | Autonomy | Pattern Source |
-|----|-------|------|----------|---------------|
-| AGT-009 | RAG Knowledge Retrieval | R2 | Supervised | Customer Support Agent |
-| AGT-010 | Data Visualization Generator | R1 | Auto | Financial Data Analyst |
-| AGT-011 | Document Parser | R1 | Auto | Financial Data Analyst |
-| AGT-012 | Agentic Loop Controller | R3 | Manual | Autonomous Coding |
-| AGT-013 | Browser Automation | R3 | Manual | Browser Use Demo |
-| AGT-014 | MCP Server Connector | R2 | Supervised | Agents Module |
-
-### Updated Agent Tool Registry
-
-| Risk Level | Before | After | Tools |
-|------------|--------|-------|-------|
-| **R0** | 3 | 3 | Calculator, DateTime, JSON Parse |
-| **R1** | 1 | 3 | File Read, **Data Viz**, **Doc Parser** |
-| **R2** | 3 | 5 | Web Search, URL Fetch, File Write, **RAG**, **MCP** |
-| **R3** | 1 | 3 | Code Execute, **Agentic Loop**, **Browser Automation** |
-| **Total** | 8 | 14 | +75% capability expansion |
-
-### Key Takeaways
-
-1. **RAG is table stakes** — Every serious AI application needs grounded context retrieval. CVF now has a governance-wrapped pattern.
-
-2. **Autonomous loops need hard limits** — claude-quickstarts' bash allowlist + filesystem sandbox is a good security pattern. CVF adds iteration caps and per-step governance checks.
-
-3. **Browser automation is high-risk, high-value** — Container isolation is mandatory. CVF treats it as R3 with domain allowlisting.
-
-4. **MCP is the future of tool interop** — Dynamic tool discovery via MCP servers enables composable agent architectures. CVF wraps this with server certification.
-
-5. **Data visualization is low-risk** — Chart generation is read-only and safe. R1 classification allows automated use with minimal overhead.
-
-6. **Document parsing needs PII awareness** — Unlike claude-quickstarts, CVF automatically flags PII in parsed documents.
-
-## Related Resources
-
-- [CVF Toolkit Reference](/docs/toolkit-reference) — Governance engine implementation
-- [Custom Skills](/docs/custom-skills) — Create your own CVF skills
-- [Risk Model](/docs/risk-model) — R0-R3 risk classification
-- [Agent Platform](/docs/agent-platform) — Multi-agent orchestration
-- [claude-quickstarts on GitHub](https://github.com/anthropics/claude-quickstarts) — Original source
+[Browse packages for agents](/skills) or [start a specification from a template](/home).

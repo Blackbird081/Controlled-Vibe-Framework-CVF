@@ -1,8 +1,12 @@
+import { isClaudeSubscriptionMode, resolveClaudeSubscriptionModel } from '@/lib/server/claude-cli-profile';
+import { originalBrief, parseExplicitWordLimit } from '@/lib/pack-content-constraints';
 import { buildDlpRedactedReadoutRequest } from './route-dlp-readout';
+import { createMaoCanonicalSingleWorker, resolveMaoRisk, MAO_SINGLE_WORKER_ENV } from '@/lib/server/mao-canonical-single-worker';
+import { createMaoCanonicalRolePlan, deniedAttemptFact, rolePlanFailureEvidence, maoRolePlanConfigConflict, maoRolePlanQuotaTooLow, maoRolePlanReviewerModelUnfit, MAO_ROLE_PLAN_ENV, ROLE_PLAN_FIT_REVIEWER_MODEL } from '@/lib/server/mao-canonical-role-plan';
 import { NextRequest, NextResponse } from 'next/server';
 import { readBoundedRequestBody } from '@/lib/bounded-request-body';
 import { validateExecuteRequestShape } from '@/lib/execute-request-validation';
-import { executeAI, type AIProvider, type ExecutionRequest, type ExecutionResponse } from '@/lib/ai';
+import type { AIProvider, CanonicalGatewayEvidence, ExecutionRequest, ExecutionResponse } from '@/lib/ai/types';
 import { evaluateEnforcement } from '@/lib/enforcement';
 import { getTemplateById } from '@/lib/templates';
 import { verifySessionCookie } from '@/lib/middleware-auth';
@@ -15,12 +19,13 @@ import { runExecuteRouteMandatoryGateway } from '@/lib/route-guard-gateway';
 import { validateOutput, shouldRetry, type ValidationResult, type RetryState } from '@/lib/output-validator';
 import { routeWebProvider } from '@/lib/ai/provider-router-adapter';
 import { lookupGuidedResponse } from './guided.response.registry';
-import { buildExecutionPrompt } from '@/lib/execute-prompt-contract';
+import { buildExecutionPrompt, resolveResponseLanguage } from '@/lib/execute-prompt-contract';
 import { checkTeamQuota } from '@/lib/quota-guard';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { applyDLPFilter } from '@/lib/dlp-filter';
 import { withSessionAuditPayload } from '@/lib/middleware-auth';
 import { resolveAlibabaApiKey } from '@/lib/alibaba-env';
+import { resolveOpenAIApiKey } from '@/lib/openai-env';
 import { blockInlineKnowledgeContextBypass } from './route-knowledge-context';
 import { resolveMemoryContext, selectKnowledgeContext, sot3RejectionResponse } from './route-context-selection';
 import { buildEvidenceReceipt, buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
@@ -33,17 +38,17 @@ import { buildExecutionIdentityDecision } from '@/lib/execution-identity';
 import { evaluateExecutionActorRoleGate, resolveExecutionCVFRole, resolveExecutionOutputClass } from '@/lib/execute-role-resolver';
 import { buildOutputBypassGuardResult, checkRoleOutputPermission, detectBypassInOutput, resolveGuardAction, shouldRequireSkillPreflight } from '@/lib/execute-route-guards';
 import { buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
-import { admitAndInvokeProvider, buildProviderAttemptDeniedResponse, buildProviderAttemptReconciliation, buildProviderRequestCancelledResponse, createProviderAttemptLedger } from '@/lib/provider-attempt-admission';
+import { buildProviderAttemptDeniedResponse, buildProviderAttemptReconciliation, buildProviderRequestCancelledResponse, createProviderAttemptLedger } from '@/lib/provider-attempt-admission';
 import type { ProviderAttemptLedger } from '@/lib/provider-attempt-admission';
-import { assertNonVisionExecutionPathIsDirect, sot3CanonicalExecutionIdFanoutArg } from '@/lib/canonical-web-gateway-execution';
-import { getApprovalStore, type ApprovalRequestRecord } from '../approvals/store';
-import { approvalRecordMatchesActor, buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
-import { executeVisionRouteRequest, prepareVisionRouteRequest } from './vision-route-helper';
-import { buildExecuteFinalResponse, buildOutputValidationExhaustedResponse, buildExecuteRouteFailure } from './route-final-response';
+import { CANONICAL_WEB_DEFAULT_MODEL, CANONICAL_WEB_OPENAI_DEFAULT_MODEL, CANONICAL_WEB_PROFILE_DENIED_MESSAGE, canonicalWebProfileDenied, canonicalWebExecutionResponse, canonicalWebSystemPrompt, createAlibabaCanonicalWebExecutor, createOpenAiCanonicalWebExecutor, createClaudeSubscriptionCanonicalWebExecutor, sot3CanonicalExecutionIdFanoutArg } from '@/lib/canonical-web-gateway-execution';
+import { getApprovalStore } from '../approvals/store';
+import { buildApprovalActorBinding, buildApprovalRequestSnapshot, computeApprovalRequestHash } from '../approvals/approval-binding';
+import { buildExecuteFinalResponse, buildOutputValidationExhaustedResponse, buildExecuteRouteFailure, resolveRouteLineage, type RouteLineageTracker } from './route-final-response';
+import { routingGateResponse, routedProviderMismatchResponse, routedProviderPreflightResponse, maoFailureResponse, withRolePlanFailureEvidence } from './route-provider-routing';
 import { buildMemoryAdvisoryReadout } from './route-memory-advisory';
 import { buildGovernedStopOutput } from './route-governed-stop-output';
-import { prepareHtmlPilotExecution, claimHtmlPilotExecution, measurePilotProvider, htmlPilotDisclosureGet } from './route-html-pilot';
-import { htmlPilotSystemPrompt } from '@/lib/server/html-execution-evidence';
+import { htmlPilotDisclosureGet } from './route-html-pilot';
+import { buildExecuteTraceHash, hasExpiredExecuteApproval, loadExecuteApproval, resolveExecuteGovernanceAuthority } from './route-governance-authority';
 
 export async function GET(request: NextRequest) {
     return htmlPilotDisclosureGet(request);
@@ -57,6 +62,7 @@ export async function POST(request: NextRequest) {
     let selectedCancellationSignalForCatch: AbortSignal | undefined;
     let selectedProviderForCatch = 'alibaba';
     let selectedModelForCatch: string | undefined;
+    let lineageForCatch: RouteLineageTracker | undefined;
     try {
         const rawBodyText = await readBoundedRequestBody(request, 16 * 1024 * 1024);
         if (rawBodyText === null) return NextResponse.json({ success: false, error: 'Execution request body exceeds 16 MiB limit.' }, { status: 413 });
@@ -87,28 +93,23 @@ export async function POST(request: NextRequest) {
                 { status: 401 }
             );
         }
+        if (maoRolePlanConfigConflict()) return NextResponse.json({ success: false, code: 'MAO_CONFIG_CONFLICT', error: 'The single-worker and role-plan lanes cannot both be enabled.' }, { status: 503 });
+        if (maoRolePlanQuotaTooLow()) return NextResponse.json({ success: false, code: 'MAO_CONFIG_QUOTA_TOO_LOW', error: 'The role plan needs a provider quota of at least 4 calls per minute.' }, { status: 503 });
         const shapeError = validateExecuteRequestShape(rawBody);
         if (shapeError) return NextResponse.json({ success: false, error: shapeError, diagnostic: buildExecutionDiagnostic({ stage: 'request_validation', class: 'invalid_input', httpStatus: 400 }) }, { status: 400 });
-        const body = rawBody as Partial<ExecutionRequest>;
+        const body = { ...(rawBody as Partial<ExecutionRequest>) };
         body.inputs = Object.fromEntries(Object.entries(body.inputs || {}).map(([k, v]) => [k, String(v ?? '').trim()]));
         if (typeof body.model === 'string') body.model = body.model.trim() || undefined;
-        const htmlPilotPrepared = await prepareHtmlPilotExecution(body, session, isServiceAllowed);
-        if (htmlPilotPrepared instanceof NextResponse) return htmlPilotPrepared;
-        const isVisionExecution = prepareVisionRouteRequest(body).isVisionExecution;
-        if (body.provider === 'alibaba' && !isVisionExecution) {
-            selectedCancellationSignalForCatch = request.signal;
-            selectedModelForCatch = body.model;
+        if (canonicalWebProfileDenied(body, process.env.DEFAULT_AI_PROVIDER)) {
+            return NextResponse.json({ success: false, error: CANONICAL_WEB_PROFILE_DENIED_MESSAGE }, { status: 403 });
         }
-        // -- CP7/CP8: Build governance envelope + policy snapshot id ----------
-        const govEnvelope = buildGovernanceEnvelope({
-            routeId: '/api/execute',
-            surfaceClass: 'governance-execution',
-            evidenceMode: 'live',
-            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : null),
-            actorRole: session?.role ?? (isServiceAllowed ? 'service' : null),
-            phase: body.cvfPhase ?? null,
-            riskLevel: body.cvfRiskLevel ?? null,
-        });
+        const nativeClaude = (body.provider || process.env.DEFAULT_AI_PROVIDER) === 'claude' && isClaudeSubscriptionMode();
+        if (nativeClaude) {
+            try { body.model = resolveClaudeSubscriptionModel(body.model); } catch { return NextResponse.json({ success: false, error: 'Only the sonnet subscription alias is supported.', code: 'CLAUDE_NATIVE_MODEL_UNSUPPORTED' }, { status: 400 }); }
+            if (process.env[MAO_SINGLE_WORKER_ENV] !== '1' || !process.env.CVF_MAO_DURABLE_RUN_PATH) return NextResponse.json({ success: false, code: 'CLAUDE_NATIVE_NOT_READY', error: 'Subscription execution requires the configured MAO lane.' }, { status: 503 });
+        }
+        selectedCancellationSignalForCatch = request.signal;
+        selectedModelForCatch = body.model;
         // Rate limit by session + IP (after provider known)
         const limiter = getRateLimiter();
         const limitIdentity = session?.userId
@@ -117,7 +118,8 @@ export async function POST(request: NextRequest) {
         const limitResult = await limiter.consume(request, limitIdentity, body.provider);
         if (!limitResult.allowed) {
             return NextResponse.json(
-                { success: false, error: 'Too many requests. Please slow down.' },
+                { success: false, error: 'Too many requests. Please slow down.', retryAfterSeconds: limitResult.retryAfterSeconds,
+                    diagnostic: buildExecutionDiagnostic({ stage: 'rate_limit', class: 'rate_limited', httpStatus: 429 }) },
                 { status: 429, headers: { 'Retry-After': String(limitResult.retryAfterSeconds) } }
             );
         }
@@ -132,8 +134,6 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
-        const inlineKnowledgeContextBlockResponse = await blockInlineKnowledgeContextBypass({ session, isServiceAllowed, knowledgeContext: body.knowledgeContext, templateLabel: body.templateName || body.templateId || 'unknown-template', riskLevel: body.cvfRiskLevel, phase: body.cvfPhase });
-        if (inlineKnowledgeContextBlockResponse) return inlineKnowledgeContextBlockResponse;
         // Get provider config from environment or request
         const provider: AIProvider = body.provider ||
             (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
@@ -141,89 +141,28 @@ export async function POST(request: NextRequest) {
             session,
             serviceIdentity: isServiceAllowed ? serviceIdentity : null,
         });
-        const approvalSnapshot = buildApprovalRequestSnapshot(body as Partial<ExecutionRequest>, provider, approvalActor);
+        const approvalSnapshot = buildApprovalRequestSnapshot(body, provider, approvalActor);
         const approvalRequestHash = computeApprovalRequestHash(approvalSnapshot);
-        let approvedRequestRecord: ApprovalRequestRecord | null = null;
-        if (body.approvalId) {
-            const approvalId = String(body.approvalId);
-            const approvalStore = getApprovalStore();
-            const approvalRecord = approvalStore.get(approvalId);
-            if (!approvalRecord) {
-                return NextResponse.json(
-                    { success: false, error: 'Approval request not found.', approvalId },
-                    { status: 404 },
-                );
-            }
-            if (!approvalRecord.requestHash) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: 'Approval request predates request binding and must be re-issued.',
-                        approvalId,
-                    },
-                    { status: 409 },
-                );
-            }
-            if (!approvalRecord.requestSnapshot?.actorId || !approvalRecord.submittedByActorId || !approvalRecord.submittedByAuthMode) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: 'Approval request predates actor binding and must be re-issued.',
-                        approvalId,
-                    },
-                    { status: 409 },
-                );
-            }
-            if (!approvalRecordMatchesActor(approvalRecord, approvalActor)) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: 'Approval request was issued for a different actor and cannot be reused.',
-                        approvalId,
-                    },
-                    { status: 403 },
-                );
-            }
-            if (approvalRecord.requestHash !== approvalRequestHash) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: 'Approval request does not match the current execution payload.',
-                        approvalId,
-                    },
-                    { status: 409 },
-                );
-            }
-            if (new Date(approvalRecord.expiresAt).getTime() <= Date.now()) {
-                approvalStore.set(approvalRecord.id, {
-                    ...approvalRecord,
-                    status: 'expired',
-                });
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: 'Approval request has expired and must be re-submitted.',
-                        approvalId,
-                    },
-                    { status: 409 },
-                );
-            }
-            if (approvalRecord.status !== 'approved') {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        error: `Approval request is ${approvalRecord.status} and cannot authorize execution.`,
-                        approvalId,
-                        approvalStatus: approvalRecord.status,
-                    },
-                    { status: 409 },
-                );
-            }
-            approvedRequestRecord = approvalRecord;
-        }
+        const authority = resolveExecuteGovernanceAuthority(body);
+        body.cvfPhase = authority.phase;
+        body.cvfRiskLevel = authority.riskLevel;
+        const govEnvelope = buildGovernanceEnvelope({
+            routeId: '/api/execute',
+            surfaceClass: 'governance-execution',
+            evidenceMode: 'live',
+            actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : null),
+            actorRole: session?.role ?? (isServiceAllowed ? 'service' : null),
+            phase: authority.phase,
+            riskLevel: authority.riskLevel,
+        });
+        const inlineKnowledgeContextBlockResponse = await blockInlineKnowledgeContextBypass({ session, isServiceAllowed, knowledgeContext: body.knowledgeContext, templateLabel: body.templateName || body.templateId || 'unknown-template', riskLevel: authority.riskLevel, phase: authority.phase });
+        if (inlineKnowledgeContextBlockResponse) return inlineKnowledgeContextBlockResponse;
+        const approval = loadExecuteApproval(body.approvalId, approvalActor, approvalRequestHash, authority);
+        if (approval instanceof Response) return approval;
+        const approvedRequestRecord = approval;
         // Get API key from environment
         const apiKeyMap: Record<AIProvider, string | undefined> = {
-            openai: process.env.OPENAI_API_KEY,
+            openai: resolveOpenAIApiKey(),
             claude: process.env.ANTHROPIC_API_KEY,
             gemini: process.env.GOOGLE_AI_API_KEY,
             alibaba: resolveAlibabaApiKey(),
@@ -231,8 +170,7 @@ export async function POST(request: NextRequest) {
             deepseek: process.env.DEEPSEEK_API_KEY,
         };
         // Build the prompt from template inputs
-        const userPrompt = buildExecutionPrompt(body as ExecutionRequest,
-            htmlPilotPrepared ? { htmlPilot: htmlPilotPrepared.mode } : undefined);
+        const userPrompt = buildExecutionPrompt(body as ExecutionRequest);
         const dlpResult = await applyDLPFilter(userPrompt);
         let filteredPrompt = dlpResult.redacted;
         const readoutRequest = await buildDlpRedactedReadoutRequest(body, dlpResult.wasRedacted);
@@ -357,28 +295,25 @@ export async function POST(request: NextRequest) {
             return buildRoleOutputDeniedResponse({ session, body, provider, envelope: govEnvelope, resolvedRole: resolvedExecutionRole, resolvedOutputClass, rolePermission, executionIdentity });
         }
         const workflowBinding = resolveWorkflowBindingForExecution(executionTemplateId);
-        const specFields = htmlPilotPrepared
-            ? (template?.fields || []).filter(field => field.id === 'websiteGoal' && field.required)
-            : template?.fields || [];
-        if (htmlPilotPrepared && specFields.length !== 1) {
-            return NextResponse.json({ success: false, error: 'PILOT_SPEC_SCHEMA_REFUSED' }, { status: 403 });
-        }
+        const specFields = template?.fields || [];
         const requiresSkillPreflight = shouldRequireSkillPreflight({
             phase: body.cvfPhase,
-            templateCategory: template?.category,
+            // This registered artifact is an intake product brief, not a build result.
+            templateCategory: template?.id === 'app_builder_complete' ? undefined : template?.category,
             intent: body.intent,
             templateId: template?.id ?? body.templateId,
         });
-        const memoryAdvisoryReadout = buildMemoryAdvisoryReadout({ request: readoutRequest, actorRole: resolvedExecutionRole.role ?? 'unknown', actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'), sessionId: session?.userId ?? serviceIdentity ?? null });
+        const memoryAdvisoryReadout = authority.riskLevel === 'R4' ? undefined : buildMemoryAdvisoryReadout({ request: readoutRequest, actorRole: resolvedExecutionRole.role ?? 'unknown', actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : 'unknown-actor'), sessionId: session?.userId ?? serviceIdentity ?? null });
         const enforcement = evaluateEnforcement({
             mode,
             content: filteredPrompt,
+            riskText: authority.riskText,
             budgetOk: checkBudget(filteredPrompt),
             specFields: specFields.length ? specFields : undefined,
             specValues: body.inputs,
             cvfPhase: body.cvfPhase,
             cvfRiskLevel: body.cvfRiskLevel,
-            memoryEligibility: memoryAdvisoryReadout.eligibility,
+            memoryEligibility: memoryAdvisoryReadout?.eligibility,
             requiresSkillPreflight,
             skillPreflight: {
                 passed: body.skillPreflightPassed,
@@ -388,14 +323,15 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        if (enforcement.status === 'BLOCK') {
+        if (enforcement.status === 'BLOCK' || authority.riskLevel === 'R4') {
             const guidedResponse = lookupGuidedResponse(userPrompt);
-            const blockReason = enforcement.reasons.join(' | ') || 'Execution blocked by CVF policy.';
+            const blockReason = enforcement.reasons.join(' | ')
+                || (authority.riskLevel === 'R4' ? 'Risk level R4 is blocked by policy.' : 'Execution blocked by CVF policy.');
             const output = buildGovernedStopOutput({ decision: 'BLOCK', reason: blockReason, guidedResponse });
             const governanceEvidenceReceipt = buildEvidenceReceipt({
                 envelope: govEnvelope,
-                decision: enforcement.status,
-                riskLevel: enforcement.riskGate?.riskLevel,
+                decision: 'BLOCK',
+                riskLevel: authority.riskLevel,
                 provider,
                 model: 'blocked',
             });
@@ -418,6 +354,16 @@ export async function POST(request: NextRequest) {
                 },
                 { status: 400 }
             );
+        }
+
+        if (requiresSkillPreflight || resolvedOutputClass.outputClass === 'code_patch'
+            || (body.fileScope?.length ?? 0) > 0) {
+            return NextResponse.json({
+                success: false,
+                error: 'This request needs a server-authorized build phase. The current workflow is at intake.',
+                governanceEnvelope: govEnvelope,
+                policySnapshotId: govEnvelope.policySnapshotId,
+            }, { status: 403 });
         }
 
         if (enforcement.status === 'CLARIFY') {
@@ -453,6 +399,11 @@ export async function POST(request: NextRequest) {
 
         if (enforcement.status === 'NEEDS_APPROVAL') {
             if (approvedRequestRecord) {
+                if (getApprovalStore().get(approvedRequestRecord.id) !== approvedRequestRecord
+                    || hasExpiredExecuteApproval(approvedRequestRecord)) {
+                    return NextResponse.json({ success: false, error: 'Approval has expired, changed, or already been used.' }, { status: 409 });
+                }
+                getApprovalStore().delete(approvedRequestRecord.id);
                 await appendAuditEvent({
                     eventType: 'APPROVAL_CONSUMED',
                     actorId: session?.userId ?? 'service-account',
@@ -467,7 +418,6 @@ export async function POST(request: NextRequest) {
                         requestHash: approvedRequestRecord.requestHash,
                     }),
                 });
-                getApprovalStore().delete(approvedRequestRecord.id);
             } else {
                 const guidedResponse = lookupGuidedResponse(userPrompt);
                 // CP9: Auto-create approval record so the user can track and resume post-approval
@@ -532,21 +482,29 @@ export async function POST(request: NextRequest) {
         }
 
         // -- PRE-GUARDS: Run mandatory gateway exactly once (T1 composition) --
+        const action = resolveGuardAction({ ...(rawBody as Record<string, unknown>), cvfPhase: authority.phase });
+        const traceHash = authority.riskLevel === 'R2' || authority.riskLevel === 'R3'
+            ? buildExecuteTraceHash({
+                envelopeId: govEnvelope.envelopeId,
+                requestHash: approvalRequestHash,
+                phase: authority.phase,
+                riskLevel: authority.riskLevel,
+                role: resolvedExecutionRole.permissionRole,
+                mode,
+                action,
+            })
+            : undefined;
         const guardContext = buildWebGuardContext({
             requestId: (rawBody as Record<string, unknown>).requestId as string || undefined,
             phase: body.cvfPhase,
             riskLevel: body.cvfRiskLevel,
+            traceHash,
             role: resolvedExecutionRole.permissionRole,
             userRole: isServiceAllowed ? 'admin' : session?.role,
             actorId: session?.userId ?? (isServiceAllowed ? 'service-account' : undefined),
-            action: htmlPilotPrepared?.build.action ?? resolveGuardAction(rawBody as Record<string, unknown>),
+            action,
             intent: body.intent,
-            fileScope: htmlPilotPrepared?.build.fileScope ?? (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
-            targetFiles: htmlPilotPrepared?.build.targetFiles,
-            traceHash: htmlPilotPrepared?.build.traceHash,
-            approvalBinding: htmlPilotPrepared?.build.approvalBinding,
-            riskApproval: htmlPilotPrepared?.build.riskApproval,
-            buildAuthority: htmlPilotPrepared?.build.buildAuthority,
+            fileScope: (rawBody as Record<string, unknown>).fileScope as string[] | undefined,
             aiCommit: (rawBody as Record<string, unknown>).aiCommit as {
                 commitId: string;
                 agentId: string;
@@ -568,8 +526,10 @@ export async function POST(request: NextRequest) {
         const guardResult: GuardPipelineResult = gatewayOutcome.guardResult;
 
         // -- PROVIDER ROUTER: Consult Track 5A canonical governance routing --
-        const configuredProviders = (Object.keys(apiKeyMap) as AIProvider[]).filter(
-            p => !!apiKeyMap[p]
+        // A requested canonical provider without a server key stays visible to the router so the route reports the missing
+        // key (400) instead of silently selecting another provider.
+        const configuredProviders = nativeClaude ? ['claude' as const] : (Object.keys(apiKeyMap) as AIProvider[]).filter(
+            p => !!apiKeyMap[p] || (p === provider && (p === 'openai' || p === 'alibaba'))
         );
         const routingResult = routeWebProvider({
             requestedProvider: provider,
@@ -578,96 +538,27 @@ export async function POST(request: NextRequest) {
             configuredProviders,
         });
 
-        if (routingResult.decision === 'DENY') {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: routingResult.deniedReason || 'Provider denied by governance routing policy.',
-                    provider,
-                    model: 'router-denied',
-                    enforcement,
-                    guardResult,
-                    providerRouting: {
-                        decision: routingResult.decision,
-                        rationale: routingResult.rationale,
-                    },
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider,
-                        model: 'router-denied',
-                        routingDecision: routingResult.decision,
-                    }),
-                    diagnostic: buildExecutionDiagnostic({ stage: 'routing', class: 'routing_denied', provider, model: 'router-denied', httpStatus: 403 }),
-                },
-                { status: 403 }
-            );
-        }
+        const routingGate = routingGateResponse({ routingResult, provider, enforcement, guardResult, govEnvelope });
+        if (routingGate) return routingGate;
+        // routingGateResponse returned null, so a provider was selected.
+        const selectedProvider = routingResult.selectedProvider as AIProvider;
 
-        if (routingResult.decision === 'ESCALATE') {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'Provider selection requires explicit approval.',
-                    provider,
-                    model: 'router-escalated',
-                    enforcement,
-                    guardResult,
-                    providerRouting: {
-                        decision: routingResult.decision,
-                        rationale: routingResult.rationale,
-                    },
-                    governanceEnvelope: govEnvelope,
-                    policySnapshotId: govEnvelope.policySnapshotId,
-                    governanceEvidenceReceipt: buildEvidenceReceipt({
-                        envelope: govEnvelope,
-                        decision: enforcement.status,
-                        riskLevel: enforcement.riskGate?.riskLevel,
-                        provider,
-                        model: 'router-escalated',
-                        routingDecision: routingResult.decision,
-                    }),
-                },
-                { status: 409 }
-            );
+        govEnvelope.providerLane = selectedProvider;
+        const routedProvider: AIProvider = selectedProvider;
+        const providerMismatch = routedProviderMismatchResponse(nativeClaude, routedProvider, provider);
+        if (providerMismatch) return providerMismatch;
+        const preflight = routedProviderPreflightResponse({ nativeClaude, routedProvider, apiKey: apiKeyMap[routedProvider], requestedModel: body.model, enforcement, govEnvelope, routingDecision: routingResult.decision });
+        if (preflight) return preflight;
+        // The role-plan reviewer model check precedes knowledge/memory resolution, lineage reservation and any provider call.
+        const canonicalModel = body.model || (routedProvider === 'openai' ? CANONICAL_WEB_OPENAI_DEFAULT_MODEL : CANONICAL_WEB_DEFAULT_MODEL);
+        if (process.env[MAO_ROLE_PLAN_ENV] === '1' && routedProvider === 'alibaba' && maoRolePlanReviewerModelUnfit(canonicalModel)) {
+            return NextResponse.json({ success: false, code: 'ROLE_PLAN_REVIEWER_MODEL_UNFIT', error: `The role plan needs a reviewer model that is not a flash model; use ${ROLE_PLAN_FIT_REVIEWER_MODEL}.`, provider: routedProvider, model: canonicalModel }, { status: 400 });
         }
-
-        // Use router-selected provider (may differ from requested if default was ineligible)
-        if (!routingResult.selectedProvider) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: 'Provider routing failed to resolve an executable provider.',
-                    provider,
-                    model: 'router-error',
-                    enforcement,
-                    guardResult,
-                    providerRouting: {
-                        decision: routingResult.decision,
-                        rationale: routingResult.rationale,
-                    },
-                },
-                { status: 500 },
-            );
-        }
-
-        govEnvelope.providerLane = routingResult.selectedProvider;
-        const routedProvider: AIProvider = routingResult.selectedProvider;
-        if (htmlPilotPrepared && (routedProvider !== htmlPilotPrepared.profile.provider || body.model !== htmlPilotPrepared.profile.model)) {
-            return NextResponse.json({ success: false, error: 'PILOT_ROUTE_PIN_REFUSED' }, { status: 403 });
-        }
-        const routedApiKey = apiKeyMap[routedProvider];
-        const executionMaxTokens = htmlPilotPrepared
-            ? Math.min(resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model) ?? htmlPilotPrepared.profile.maxTokens,
-                htmlPilotPrepared.profile.maxTokens)
-            : resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model);
+        const executionMaxTokens = resolveExecutionMaxTokens(executionTemplateId, routedProvider, body.model);
 
         // -- KNOWLEDGE RETRIEVAL + TENANT PARTITION ENFORCEMENT + SOT3 ACTIVATION --
         // A verified server-side pilot binding selects the no-ambient-lookup path; no request field can.
-        const knowledgeContext = await selectKnowledgeContext(!!htmlPilotPrepared, {
+        const knowledgeContext = await selectKnowledgeContext(false, {
             intent: body.intent!,
             orgId: session?.orgId,
             teamId: session?.teamId,
@@ -685,29 +576,15 @@ export async function POST(request: NextRequest) {
 
         const memoryContext = await resolveMemoryContext({ body, session, knowledge: knowledgeContext,
             actor: { id: executionActorId, executionRole: resolvedExecutionRole.role, targetResource: executionTargetResource },
-            envelope: govEnvelope, enforcement, guardResult, routedProvider, routingResult, htmlPilotPrepared: !!htmlPilotPrepared });
+            envelope: govEnvelope, enforcement, guardResult, routedProvider, routingResult, htmlPilotPrepared: false });
         if (memoryContext.response) return memoryContext.response;
         const { durableMemoryRoute, aifMemoryReinjection, enrichedSystemPrompt } = memoryContext;
 
-        if (!routedApiKey) {
-            const governanceEvidenceReceipt = buildEvidenceReceipt({
-                envelope: govEnvelope, decision: enforcement.status, riskLevel: enforcement.riskGate?.riskLevel, provider: routedProvider,
-                model: 'not configured', routingDecision: routingResult.decision, knowledgeSource, knowledgeInjected,
-                knowledgeCollectionId: requestedKnowledgeCollectionId, knowledgeChunkCount: retrievalResult.allowedChunkCount,
-                aifMemoryReinjection: aifMemoryReinjection.receipt, durableMemoryRead: durableMemoryRoute.receipt,
-            });
-            return NextResponse.json(
-                { success: false, error: `API key not configured for provider: ${routedProvider}. Please set the corresponding environment variable.`, provider: routedProvider, model: 'not configured', governanceEnvelope: govEnvelope, policySnapshotId: govEnvelope.policySnapshotId, governanceEvidenceReceipt },
-                { status: 400 }
-            );
-        }
-
-        // -- PRE-PROVIDER VALIDATION before attempt admission (DSH-WRA-R1-RV-F01):
-        // an invalid vision-provider request is rejected here so it never
-        // consumes attempt quota or counts as a provider call. --
-        if (isVisionExecution && routedProvider !== 'alibaba') {
-            return NextResponse.json({ success: false, error: 'Vision execution requires the Alibaba qwen-vl-plus provider lane.', provider: routedProvider, model: body.model ?? 'vision-router-error', enforcement, guardResult }, { status: 409 });
-        }
+        // T3 lineage: readiness and verified identity are resolved before any port entry; failure is 503 JOURNAL_NOT_READY.
+        const lineageResolution = await resolveRouteLineage({ request, session, isServiceAllowed, canonicalId: govEnvelope.envelopeId, governance: { guardResult, knowledge: knowledgeContext, memoryContextInjected: durableMemoryRoute.injected || Boolean(aifMemoryReinjection.promptBlock) } });
+        if ('response' in lineageResolution) return lineageResolution.response;
+        const lineage = lineageResolution.tracker;
+        lineageForCatch = lineage;
 
         // -- PROVIDER-ATTEMPT ADMISSION: admission happens before every call;
         // providerCallCount is recorded only at the real invocation boundary
@@ -718,16 +595,16 @@ export async function POST(request: NextRequest) {
             providerModel: `${routedProvider}:${body.model ?? 'default'}`,
         });
         providerAttemptLedgerForCatch = providerAttemptLedger;
-        const selectedRequestSignal = htmlPilotPrepared
-            ? AbortSignal.any([request.signal, AbortSignal.timeout(htmlPilotPrepared.profile.maxSeconds * 1000)])
-            : routedProvider === 'alibaba' && !isVisionExecution ? request.signal : undefined;
+        const selectedRequestSignal = request.signal;
         selectedCancellationSignalForCatch = selectedRequestSignal;
         selectedProviderForCatch = routedProvider;
         selectedModelForCatch = body.model;
-        const cancelled = () => selectedRequestSignal?.aborted === true;
-        const cancellationResponse = () => buildProviderRequestCancelledResponse({ ledger: providerAttemptLedger, routedProvider, requestedModel: body.model });
-        const htmlPilotClaim = htmlPilotPrepared ? await claimHtmlPilotExecution(htmlPilotPrepared) : null;
-        if (htmlPilotClaim instanceof NextResponse) return htmlPilotClaim;
+        const cancelled = () => selectedRequestSignal.aborted;
+        // A role-plan failure (optional argument) adds its partial evidence to the unchanged cancellation response.
+        const cancellationResponse = async (failed?: Parameters<typeof withRolePlanFailureEvidence>[1]) => {
+            const cancelledResponse = buildProviderRequestCancelledResponse({ ledger: providerAttemptLedger, routedProvider, requestedModel: body.model });
+            return lineage.conclude(failed ? await withRolePlanFailureEvidence(cancelledResponse, failed) : cancelledResponse, 'CANCELLED');
+        };
         const denyProviderAttempt = (retryAfterSeconds: number) => buildProviderAttemptDeniedResponse({
             ledger: providerAttemptLedger, retryAfterSeconds, routedProvider, requestedModel: body.model,
             govEnvelope, enforcementRiskLevel: enforcement.riskGate?.riskLevel, routingDecision: routingResult.decision,
@@ -736,32 +613,93 @@ export async function POST(request: NextRequest) {
             enforcement, guardResult,
         });
 
-        // -- EXECUTE AI with auto-retry on output validation failure. F01:
-        // admitAndInvokeProvider composes admission, call-start accounting,
-        // invocation, and reconciliation-bearing error handling in one call.
-        // CSCC-R1-T2: exactly the direct executeAI path per the selection above. --
-        assertNonVisionExecutionPathIsDirect();
+        let executor;
+        try { executor = nativeClaude ? await createClaudeSubscriptionCanonicalWebExecutor({ model: canonicalModel, signal: request.signal })
+            : routedProvider === 'openai' ? createOpenAiCanonicalWebExecutor({ model: canonicalModel, maxTokens: executionMaxTokens })
+            : createAlibabaCanonicalWebExecutor({ model: canonicalModel, maxTokens: executionMaxTokens }); }
+        catch { return NextResponse.json(nativeClaude
+            ? { success: false, code: 'CLAUDE_NATIVE_NOT_READY', error: 'Native subscription readiness is unavailable. Do not resend automatically.', automaticRetryAllowed: false }
+            : { success: false, code: 'PROVIDER_EXECUTOR_NOT_READY', error: 'Provider execution is unavailable. Do not resend automatically.', automaticRetryAllowed: false }, { status: 503 }); }
+        const maoEnabled = process.env[MAO_SINGLE_WORKER_ENV] === '1';
+        const executeCanonical = (prompt: string, purpose: 'initial' | 'retry' | 'continuation', systemPrompt?: string) => executor.execute({
+            canonicalExecutionId: govEnvelope.envelopeId, prompt,
+            systemPrompt: systemPrompt ?? canonicalWebSystemPrompt(enrichedSystemPrompt),
+            policy: { traceId: govEnvelope.envelopeId, policyResult: 'allow', reason: 'web_guard_and_routing_passed', allowedProviderIds: [routedProvider] },
+            preferredProviderId: routedProvider, routing: { requestedModelId: canonicalModel },
+            ledger: providerAttemptLedger, purpose, signal: selectedRequestSignal,
+        });
+        const toGatewayEvidence = (result: Awaited<ReturnType<typeof executeCanonical>>): CanonicalGatewayEvidence | undefined => canonicalWebExecutionResponse(result, canonicalModel, Date.now(), routedProvider).canonicalGateway;
+        // Ledger fact of a denied attempt: exactly one new attempt since the call started, not admitted, with its retry-after.
+        const deniedFact = (since: number) => deniedAttemptFact(providerAttemptLedger.attempts, since);
+        // Exactly one factory per request; the private reservation/launch claim is never reset.
+        const maoWorker = maoEnabled ? createMaoCanonicalSingleWorker({
+            owner: lineage, durableRunPath: process.env.CVF_MAO_DURABLE_RUN_PATH,
+            riskLevel: resolveMaoRisk(enforcement.riskGate?.riskLevel, authority.riskLevel),
+            execute: () => executeCanonical(filteredPrompt, 'initial'), signal: selectedRequestSignal,
+            attemptCount: () => providerAttemptLedger.attempts.length, deniedAttempt: deniedFact, toEvidence: toGatewayEvidence,
+        }) : null;
+        // Role plan (draft, review, revise): the consumer reserves and settles every step itself; the retry loop is off in both MAO modes.
+        const rolePlanEnabled = process.env[MAO_ROLE_PLAN_ENV] === '1';
+        const rolePlan = rolePlanEnabled ? createMaoCanonicalRolePlan({
+            owner: lineage, durableRunPath: process.env.CVF_MAO_DURABLE_RUN_PATH, prompt: filteredPrompt, templateName: body.templateName!, intent: body.intent!, inputs: body.inputs!,
+            responseLanguage: resolveResponseLanguage(body as ExecutionRequest),
+            riskLevel: resolveMaoRisk(enforcement.riskGate?.riskLevel, authority.riskLevel),
+            execute: call => executeCanonical(call.prompt, call.purpose, call.systemPrompt), attemptCount: () => providerAttemptLedger.attempts.length,
+            deniedAttempt: deniedFact, toEvidence: toGatewayEvidence,
+            sanitize: async text => { const safe = runSafetyWorkflowChain((await applyDLPFilter(text)).redacted); return safe.blocked || applySafetyFilters(safe.sanitized).blocked ? null : safe.sanitized; },
+            signal: selectedRequestSignal,
+        }) : null;
+        // A definite no-call denial answered like the non-MAO denied path: 429 + Retry-After, concluded DENIED (a role-plan failure adds its partial evidence).
+        const deniedRefusal = async (retryAfterSeconds: number, evidence: CanonicalGatewayEvidence | undefined, failed?: Parameters<typeof withRolePlanFailureEvidence>[1]) => {
+            const deniedResponse = denyProviderAttempt(retryAfterSeconds);
+            const refusal = NextResponse.json({ ...await deniedResponse.json(), ...(evidence ? { canonicalGateway: evidence } : {}) },
+                { status: deniedResponse.status, headers: { 'Retry-After': String(retryAfterSeconds) } });
+            return lineage.conclude(failed ? await withRolePlanFailureEvidence(refusal, failed) : refusal, 'DENIED');
+        };
+        const invokeCanonical = async (prompt: string, purpose: 'initial' | 'retry') => {
+            const startedAt = Date.now();
+            const attemptsBefore = providerAttemptLedger.attempts.length;
+            const plan = rolePlan ? await rolePlan.run() : null;
+            if (plan && !plan.ok) {
+                const failedEvidence = rolePlanFailureEvidence(plan);
+                const maoInput = { mao: plan, nativeClaude, routedProvider, model: canonicalModel, canonicalId: lineage.canonicalId, evidence: failedEvidence };
+                const blockedBody = { success: false, error: 'Safety screening blocked a role-plan step.', provider: routedProvider, model: 'blocked' };
+                const lastAttempt = providerAttemptLedger.attempts[providerAttemptLedger.attempts.length - 1];
+                if (plan.reason === 'MAO_REQUEST_CANCELLED') return { response: await cancellationResponse(failedEvidence) };
+                if (plan.reason === 'MAO_STEP_PROMPT_BLOCKED') return { response: await lineage.conclude(await withRolePlanFailureEvidence(NextResponse.json(blockedBody, { status: 400 }), failedEvidence), 'DENIED') };
+                if (plan.reason !== 'MAO_ATTEMPT_DENIED' || !lastAttempt || lastAttempt.admitted || lastAttempt.retryAfterSeconds === undefined) return { response: await maoFailureResponse(maoInput) };
+                // Denied at the draft: a definite no-call outcome, answered like the non-MAO denied path (429 + Retry-After).
+                return { response: await deniedRefusal(lastAttempt.retryAfterSeconds, plan.evidence, failedEvidence) };
+            }
+            if (plan?.ok) return { result: Object.assign(canonicalWebExecutionResponse(plan.payload, canonicalModel, startedAt, routedProvider), { maoRolePlan: plan.rolePlan }) };
+            const mao = maoWorker ? await maoWorker.run() : null;
+            // Single worker: a ledger-verified, settled pre-invoke denial is the same definite no-call refusal as the other lanes.
+            if (mao && !mao.ok && mao.reason === 'MAO_ATTEMPT_DENIED' && mao.retryAfterSeconds !== undefined) return { response: await deniedRefusal(mao.retryAfterSeconds, mao.evidence) };
+            if (mao && !mao.ok) return { response: await maoFailureResponse({ mao, nativeClaude, routedProvider, model: canonicalModel, canonicalId: lineage.canonicalId }) };
+            const reservation = mao?.ok ? { ordinal: mao.ordinal } : await lineage.reserveNext();
+            if ('response' in reservation) return { response: reservation.response };
+            const callAdmission = mao?.ok ? null : lineage.beforeProviderCall(reservation.ordinal);
+            if (callAdmission) return { response: callAdmission };
+            const result = mao?.ok ? mao.payload : await executeCanonical(prompt, purpose);
+            const response = canonicalWebExecutionResponse(result, canonicalModel, startedAt, routedProvider);
+            if (mao?.ok) response.maoExecution = mao.reference;
+            const settleFailure = await lineage.settleNext(reservation.ordinal, response.canonicalGateway,
+                providerAttemptLedger.attempts.length > attemptsBefore ? attemptsBefore : null);
+            if (settleFailure) return { response: settleFailure };
+            if (result.attemptOutcome === 'denied') {
+                const denied = providerAttemptLedger.attempts[providerAttemptLedger.attempts.length - 1];
+                if (!denied || denied.admitted || denied.retryAfterSeconds === undefined) return { result: response };
+                return { response: await deniedRefusal(denied.retryAfterSeconds, response.canonicalGateway) };
+            }
+            return { result: response };
+        };
         if (cancelled()) return cancellationResponse();
-        let aiResult: ExecutionResponse;
-        let pilotProviderElapsedMs = 0;
-        {
-            const outcome = await admitAndInvokeProvider({
-                ledger: providerAttemptLedger, purpose: 'initial', routedProvider, requestedModel: body.model,
-                onDenied: denyProviderAttempt, errorLogLabel: 'Provider invocation error:', errorFallbackMessage: 'Provider invocation failed.',
-                requestSignal: selectedRequestSignal, onCancelled: cancellationResponse,
-                invoke: () => isVisionExecution
-                    ? executeVisionRouteRequest({ apiKey: routedApiKey, body, prompt: filteredPrompt, traceId: govEnvelope.envelopeId })
-                    : htmlPilotPrepared
-                        ? measurePilotProvider(() => executeAI(routedProvider, routedApiKey, filteredPrompt,
-                            { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal,
-                                systemPrompt: htmlPilotSystemPrompt(htmlPilotPrepared.parentRunId) }),
-                            elapsed => { pilotProviderElapsedMs = elapsed; })
-                        : executeAI(routedProvider, routedApiKey, filteredPrompt, { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
-            });
-            if (!outcome.ok) return outcome.response;
-            aiResult = outcome.result;
-        }
+        const initial = await invokeCanonical(filteredPrompt, 'initial');
+        if (initial.response) return initial.response;
+        let aiResult: ExecutionResponse = initial.result!;
         if (cancelled()) return cancellationResponse();
+        const explicitWordLimit = template?.id === 'documentation'
+            ? parseExplicitWordLimit(originalBrief(body.inputs)) : undefined;
         let outputValidation: ValidationResult | undefined;
         const retryState: RetryState = { attempt: 0, previousIssues: [] };
         let outputSafetyAuditEmitted = false;
@@ -786,12 +724,13 @@ export async function POST(request: NextRequest) {
             });
         };
 
-        if (aiResult.success && !isVisionExecution) {
+        if (aiResult.success) {
             outputValidation = validateOutput({
                 output: aiResult.output ?? '',
                 intent: body.intent!,
                 templateName: body.templateName,
                 templateCategory: template?.category,
+                explicitWordLimit,
             });
 
             // -- OUTPUT_SAFETY_TRIGGERED: fire on first UNSAFE_CONTENT detection --
@@ -799,7 +738,7 @@ export async function POST(request: NextRequest) {
             if (cancelled()) return cancellationResponse();
 
             // Auto-retry loop (max 2 retries, invisible to user)
-            while (!htmlPilotPrepared && outputValidation.decision === 'RETRY') {
+            while (!maoEnabled && !rolePlanEnabled && outputValidation.decision === 'RETRY') {
                 if (cancelled()) return cancellationResponse();
                 if (!hasValidationRetryBudget(routeStartedAtMs)) break;
                 const retryDecision = shouldRetry(outputValidation, retryState);
@@ -816,19 +755,13 @@ export async function POST(request: NextRequest) {
                 if (cancelled()) return cancellationResponse();
                 const retrySafety = runSafetyWorkflowChain(retryDlpPrompt);
                 if (retrySafety.blocked || applySafetyFilters(retrySafety.sanitized).blocked) {
-                    return NextResponse.json({ success: false, error: 'Safety screening blocked the validation retry.', provider: routedProvider, model: 'blocked' }, { status: 400 });
+                    return lineage.conclude(NextResponse.json({ success: false, error: 'Safety screening blocked the validation retry.', provider: routedProvider, model: 'blocked' }, { status: 400 }), 'DENIED');
                 }
                 const retryPrompt = retrySafety.sanitized;
 
-                assertNonVisionExecutionPathIsDirect(); // CSCC-R1-T2: same selected path as initial call
-                const retryOutcome = await admitAndInvokeProvider({
-                    ledger: providerAttemptLedger, purpose: 'retry', routedProvider, requestedModel: body.model,
-                    onDenied: denyProviderAttempt, errorLogLabel: 'Provider retry invocation error:', errorFallbackMessage: 'Provider retry invocation failed.',
-                    requestSignal: selectedRequestSignal, onCancelled: cancellationResponse,
-                    invoke: () => executeAI(routedProvider, routedApiKey, retryPrompt, { model: body.model, maxTokens: executionMaxTokens, signal: selectedRequestSignal, ...(enrichedSystemPrompt ? { systemPrompt: enrichedSystemPrompt } : {}) }),
-                });
-                if (!retryOutcome.ok) return retryOutcome.response;
-                aiResult = retryOutcome.result;
+                const retryOutcome = await invokeCanonical(retryPrompt, 'retry');
+                if (retryOutcome.response) return retryOutcome.response;
+                aiResult = retryOutcome.result!;
                 if (cancelled()) return cancellationResponse();
                 if (!aiResult.success) break;
 
@@ -837,32 +770,22 @@ export async function POST(request: NextRequest) {
                     intent: body.intent!,
                     templateName: body.templateName,
                     templateCategory: template?.category,
+                    explicitWordLimit,
                 });
                 await emitOutputSafetyTriggered(outputValidation, aiResult);
                 if (cancelled()) return cancellationResponse();
             }
         }
 
-        if (aiResult.success && outputValidation?.decision === 'RETRY') {
-            // F01/file-size rework: the OUTPUT_VALIDATION_EXHAUSTED audit event
-            // and 422 response are now built by buildOutputValidationExhaustedResponse
-            // in route-final-response.ts, called from this exact branch.
-            return buildOutputValidationExhaustedResponse({
-                session, isServiceAllowed, serviceIdentity: serviceIdentity ?? null, body, outputValidation, retryState,
-                routedProvider, aiResult, enforcement, guardResult, govEnvelope, routingResult, knowledgeSource,
-                knowledgeInjected, requestedKnowledgeCollectionId, retrievalResult, approvedRequestRecord,
-                aifMemoryReinjection, durableMemoryRoute, providerAttemptLedger,
-            });
-        }
-
         // -- POST-EXECUTION BYPASS DETECTION GUARD ------------------------------
+        // Runs before the validation refusal so a bypass echo is recorded as DENIED even when the output is also refused.
         if (aiResult.success && aiResult.output) {
             const bypassCheck = detectBypassInOutput(aiResult.output);
             if (bypassCheck.detected) {
                 const bypassGuardResult = buildOutputBypassGuardResult(guardResult, bypassCheck.matchedPattern);
                 // F01: this terminal path also needs reconciliation evidence.
                 const bypassReconciliation = buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default');
-                return NextResponse.json(
+                return lineage.conclude(NextResponse.json(
                     {
                         success: false,
                         error: 'Response blocked: governance bypass approval detected in model output.',
@@ -871,10 +794,23 @@ export async function POST(request: NextRequest) {
                         enforcement,
                         guardResult: bypassGuardResult,
                         providerAttemptReconciliation: bypassReconciliation,
+                        canonicalGateway: aiResult.canonicalGateway,
                     },
                     { status: 400 },
-                );
+                ), 'DENIED');
             }
+        }
+
+        if (aiResult.success && (outputValidation?.decision === 'RETRY' || outputValidation?.decision === 'BLOCK')) {
+            // F01/file-size rework: the OUTPUT_VALIDATION_EXHAUSTED audit event
+            // and 422 response are now built by buildOutputValidationExhaustedResponse
+            // in route-final-response.ts, called from this exact branch.
+            return lineage.conclude(await buildOutputValidationExhaustedResponse({
+                session, isServiceAllowed, serviceIdentity: serviceIdentity ?? null, body, outputValidation, retryState,
+                routedProvider, aiResult, enforcement, guardResult, govEnvelope, routingResult, knowledgeSource,
+                knowledgeInjected, requestedKnowledgeCollectionId, retrievalResult, approvedRequestRecord,
+                aifMemoryReinjection, durableMemoryRoute, providerAttemptLedger,
+            }), outputValidation.decision === 'BLOCK' ? 'VALIDATION_FAILED' : 'EXHAUSTED');
         }
 
         if (cancelled()) return cancellationResponse();
@@ -886,7 +822,7 @@ export async function POST(request: NextRequest) {
             template,
             routeStartedAtMs,
             routeStartedMonotonicMs,
-            pilotProviderElapsedMs,
+            pilotProviderElapsedMs: 0,
             session,
             serviceIdentity: serviceIdentity ?? null,
             isServiceAllowed,
@@ -908,16 +844,15 @@ export async function POST(request: NextRequest) {
             executionTemplateId,
             executionIdentity,
             routedProvider,
-            isVisionExecution,
+            isVisionExecution: false,
             requestedProvider: provider,
             filteredPrompt,
             actorRoleGate,
             providerAttemptReconciliation: buildProviderAttemptReconciliation(providerAttemptLedger, routedProvider, body.model ?? 'default'),
-            htmlPilotClaim: htmlPilotClaim ?? undefined,
         });
         if (cancelled()) return cancellationResponse();
-        return finalResponse;
+        return lineage.conclude(finalResponse);
     } catch (error) {
-        return buildExecuteRouteFailure(error, providerAttemptLedgerForCatch, selectedCancellationSignalForCatch, selectedProviderForCatch, selectedModelForCatch);
+        return buildExecuteRouteFailure(error, providerAttemptLedgerForCatch, selectedCancellationSignalForCatch, selectedProviderForCatch, selectedModelForCatch, lineageForCatch);
     }
 }

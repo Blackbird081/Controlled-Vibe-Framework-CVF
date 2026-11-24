@@ -1,5 +1,7 @@
 # CVF Architecture Separation Diagram
 
+Text Encoding Exception: preserve the original Unicode box drawing in the architecture diagrams.
+
 > **Updated 2026-03-09** — CVF Core vs CVF Full separation, Layer 0–5 + ECOSYSTEM meta layer
 
 ---
@@ -91,7 +93,7 @@
 │     v1.2    Capability Extension (Risk R0–R3, Skill Spec)        │
 │     v1.2.1  External Integration (supply chain, audit ledger)    │
 │     v1.3    SDK & Tooling (Python, TypeScript, CLI)              │
-│     v1.5.2  Skill Library (141 skills × 12 domains)              │
+│     v1.5.2  Skill Library (legacy source collection)             │
 │     v1.7    Controlled Intelligence (reasoning, entropy, prompt) │
 │     v1.1.1  Phase Governance Protocol (state enforcement)        │
 ├──────────────────────────────────────────────────────────────────┤
@@ -164,7 +166,7 @@ CVF Ecosystem
        │     ├── v1.2   Capability Extension (Risk R0–R3)
        │     ├── v1.2.1 External Integration (29 tests)
        │     ├── v1.3   SDK & Tooling
-       │     ├── v1.5.2 Skill Library (141 skills)
+       │     ├── v1.5.2 Skill Library (legacy sources)
        │     ├── v1.7   Controlled Intelligence
        │     └── v1.1.1 Phase Governance Protocol
        │

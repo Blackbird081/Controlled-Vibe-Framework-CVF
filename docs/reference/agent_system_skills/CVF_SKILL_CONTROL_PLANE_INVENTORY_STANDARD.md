@@ -91,25 +91,87 @@ create package bodies, promote lifecycle state, implement a Web page, implement
 an MCP server, call providers, public-sync, or grant production action
 authority.
 
+## Offline Orchestrator Projection
+
+The opt-in CLI interface is `--orchestrator-request <JSON-file> --json`.
+It adopts the selected offline contract retained at
+`docs/reviews/evidence/jev-orchestrator-adapter-design-20261107/selected-design-section.txt`
+(SHA256 `ddac226287b49a9599d35b0d3811a655bbf5ae7bf5145716e9475ded14fc727c`).
+Legacy inventory and recommendation defaults remain unchanged; combining this
+flag with legacy filters is an error. Invalid/unreadable request JSON exits2;
+valid requests return structured metadata results, including BLOCKED, at exit0.
+
+The request binds task text/class/role/phase/exact surface/risk ceiling and a
+reasoned main-agent native decision. Native sufficiency returns NO_SKILL/NONE;
+an unknown native decision returns BLOCKED/NEEDS_MAIN_DECISION. Both precede
+metadata enumeration and Git lookup. Other requests read only the canonical
+ASSF index, its registry entries and selection profiles, plus explicitly named
+user-skill governance metadata through
+`governance/skill-library/registry/user-skills/INDEX.md`. Source/body links in
+those metadata files are never followed. User role/phase vocabularies are not
+mapped to internal agent permissions; these references remain UNKNOWN_UNMAPPED.
+
+Limits are 4000 task characters, 200 source records, 20 explicit user IDs,
+10 returned candidates, 2MiB per metadata file and 32KiB per request/compact
+projection. Duplicate keys/IDs, unknown fields, redirects, source inconsistency,
+dirty metadata, unavailable revision and over-cap inputs fail closed. Raw
+metadata hashes and Git revision describe observed bytes; consistency does not
+prove approval or quality. Package instruction bodies, truth/readiness owners,
+body-bearing Web index and provider transports are outside this route.
+
+Pure `project_candidates`, `validate_advisory` and `bind_main_decision` helpers
+live in `governance/compat/orchestrator_capability_projection.py`. They reuse
+the existing selection read model and rank the complete bounded eligible set
+before truncation, with an explicit inventory dictionary even when empty.
+Unknown risk fails eligibility, surfaces match exactly, and runtime bonuses
+are omitted because readiness is UNKNOWN_NOT_EVALUATED. Snapshot-bound opaque
+references keep advisory suggestions separate from the main NONE/SINGLE/
+PROPOSED_COMPOSITION/ABSTAIN decision. Composition remains unverified; metadata
+selection grants no reference read, activation, invocation or use proof.
+
+The focused component tests and immutable legacy parity fixtures prove only
+this offline route. Actual Orchestrator consumption, live Jev efficacy,
+composition execution and NCR/product acceptance remain separate owned proof.
+
 ## Agent Operation Trace Block
+
+Original SCPL-T1 inventory adoption is historical Git evidence; this trace covers the current bounded opt-in change.
 
 | Field | Evidence |
 |---|---|
-| Actor | Codex reviewer/closer role |
-| Provider or surface | local workspace |
-| Session or invocation | SCPL-T1 skill control plane inventory, 2026-06-30 |
+| Actor | INTERNAL_AGENT LOCAL implementation worker |
+| Provider or surface | private local filesystem |
+| Session or invocation | CVF-JEV-ORCHESTRATOR-REENTRY-20261117-worker |
 | Working directory | repository root |
-| Command or tool surface | source reads, apply_patch, generator, checker, governance gates |
-| Target paths | `docs/reference/agent_system_skills/CVF_SKILL_CONTROL_PLANE_INVENTORY_STANDARD.md`; `docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json`; `governance/compat/generate_skill_control_plane_inventory.py`; `governance/compat/run_skill_control_plane_inventory.py`; `governance/compat/check_skill_control_plane_inventory.py`; `governance/compat/test_skill_control_plane_inventory.py`; local hook and autorun catalogs |
-| Allowed scope source | operator request for unified Skill Control Plane / Inventory Reconciliation before scaling more package skills |
-| Before status evidence | ASSF foundation and runtime-loader lanes existed without a unified cross-surface inventory read model |
-| After status evidence | generated inventory, CLI readout, drift checker, and catalog wiring added |
-| Diff evidence | `git diff --name-status` before material commit |
-| Approval boundary | generated read model and checker only |
-| Claim boundary | no package promotion, runtime/provider call, Web page, MCP server, public-sync, or production action authority |
-| Agent type | reviewer/closer |
-| Invocation ID | `scpl-t1-skill-control-plane-inventory-2026-06-30` |
-| Expected manifest | `docs/reference/agent_system_skills/CVF_SKILL_CONTROL_PLANE_INVENTORY_STANDARD.md`; `docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json`; `governance/compat/generate_skill_control_plane_inventory.py`; `governance/compat/run_skill_control_plane_inventory.py`; `governance/compat/check_skill_control_plane_inventory.py`; `governance/compat/test_skill_control_plane_inventory.py`; `governance/compat/agent_autorun_command_catalog.py`; `governance/compat/local_governance_hook_catalog_reviewer_fast.py`; `governance/compat/local_governance_hook_catalog_pre_commit.py`; `governance/compat/local_governance_hook_catalog_pre_push.py` |
-| Actual changed set | material commit steward will verify before commit |
-| Manifest delta | MATCH_AFTER_COMMIT_REVIEW |
+| Command or tool surface | exact offline source edits, focused native tests and worker-return helper |
+| Target paths | governance/compat/run_skill_control_plane_inventory.py; governance/compat/orchestrator_capability_projection.py; governance/compat/test_orchestrator_capability_projection.py; docs/reference/agent_system_skills/CVF_SKILL_CONTROL_PLANE_INVENTORY_STANDARD.md; docs/reviews/CVF_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_WORKER_RETURN_2026-11-07.md |
+| Allowed scope source | released current offline projection work order at material80430ce52 and continuity6a6e072bf |
+| Before status evidence | clean actual executionBaseHead6a6e072bf053590259a9a586421a065754671544; raw preimages retained |
+| After status evidence | bounded opt-in projection with unknown readiness; legacy defaults retained |
+| Diff evidence | git diff --name-status; git status --short |
+| Approval boundary | exact4source+formal5; WORKER_MUST_NOT_COMMIT; provider/runtime0 |
+| Claim boundary | offline metadata source behavior only; no invocation or product acceptance |
+| Agent type | INTERNAL_AGENT |
+| Invocation ID | CVF-JEV-ORCHESTRATOR-REENTRY-20261117-worker |
+| Expected manifest | governance/compat/run_skill_control_plane_inventory.py; governance/compat/orchestrator_capability_projection.py; governance/compat/test_orchestrator_capability_projection.py; docs/reference/agent_system_skills/CVF_SKILL_CONTROL_PLANE_INVENTORY_STANDARD.md; docs/reviews/CVF_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_WORKER_RETURN_2026-11-07.md |
+| Actual changed set | governance/compat/run_skill_control_plane_inventory.py; governance/compat/orchestrator_capability_projection.py; governance/compat/test_orchestrator_capability_projection.py; docs/reference/agent_system_skills/CVF_SKILL_CONTROL_PLANE_INVENTORY_STANDARD.md; docs/reviews/CVF_JEV_ORCHESTRATOR_OFFLINE_PROJECTION_WORKER_RETURN_2026-11-07.md |
+| Manifest delta | MATCH |
 | Deletion or rename disposition | N/A with reason: no deletion or rename |
+
+## Epistemic Process Block
+
+### Expected Result / Prediction
+
+The opt-in metadata adapter should preserve legacy output and avoid body/provider effects.
+
+### Evidence Comparison
+
+Focused source tests and immutable legacy parity fixtures are recorded in the governed worker return; the actual repository metadata consumer smoke remains NOT_RUN there.
+
+### Contradiction Or Gap Disposition
+
+Preliminary source review corrected unknown-readiness and snapshot-binding gaps without changing the native ranker or frozen oracle.
+
+### Claim Update
+
+This reference documents bounded offline source behavior; independent acceptance and runtime/product proof remain separate.

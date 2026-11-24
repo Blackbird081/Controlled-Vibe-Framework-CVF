@@ -16,6 +16,7 @@ import type { AuditMemoryReceipt } from '@/lib/audit-memory-receipt';
 import type { Phase2CProductBriefSlice } from '@/lib/phase2c-product-brief-slice';
 import type { Phase3EEmissionPilot } from '@/lib/phase3e-operational-emission';
 import type { RouteRequestContextReadout } from '@/lib/route-request-context-readout';
+import { normalizeRunnableRiskLevel } from '@/lib/risk-check';
 import type { WorkflowExecutionProjection } from '@/lib/workflows/workflow-resolver';
 
 export const VERTICAL_INTEGRATION_READOUT_VERSION = 'cvf.verticalWorkflowIntegration.vi1.v1';
@@ -141,13 +142,6 @@ export interface BuildVerticalIntegrationReadoutInput {
 }
 
 const REQUIRED_SURFACE_COUNT = 5;
-
-function normalizeRiskLevel(riskLevel?: string): 'R0' | 'R1' | 'R2' | 'R3' {
-    if (riskLevel === 'R0' || riskLevel === 'R1' || riskLevel === 'R2' || riskLevel === 'R3') {
-        return riskLevel;
-    }
-    return 'R1';
-}
 
 function mapPolicyDecision(decision?: string): 'allow' | 'allow_limited' | 'deny' | 'require_human_approval' {
     const normalized = String(decision ?? '').toUpperCase();
@@ -320,7 +314,7 @@ export function buildVerticalIntegrationReadout(
         actorId: input.actorId,
         projectId: input.templateId ?? receipt.routeId,
         eventType: 'execution_result',
-        riskLevel: normalizeRiskLevel(receipt.riskLevel),
+        riskLevel: normalizeRunnableRiskLevel(receipt.riskLevel),
         policyDecision: mapPolicyDecision(receipt.decision),
         memoryIds,
         containsSensitiveData: false,

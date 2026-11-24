@@ -1,8 +1,11 @@
 'use client';
 
+// Text Encoding Exception: bilingual Vietnamese/English UI copy for the governed-route provider note (operator language).
+
 import { useMemo, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { validateApiKey } from '@/lib/security';
+import { GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 import { AVAILABLE_MODELS, ProviderKey, SettingsData } from './Settings';
 
 interface ApiKeyWizardProps {
@@ -14,22 +17,22 @@ interface ApiKeyWizardProps {
 }
 
 const PROVIDERS: Array<{ id: ProviderKey; name: string; icon: string; hint: string }> = [
-    { id: 'gemini', name: 'Google Gemini', icon: '✨', hint: 'Recommended for most users' },
-    { id: 'openai', name: 'OpenAI', icon: '🤖', hint: 'Best for GPT-4 class models' },
+    { id: 'openai', name: 'OpenAI', icon: '🤖', hint: 'Recommended: runs on the governed route (default gpt-4o-mini)' },
+    { id: 'gemini', name: 'Google Gemini', icon: '✨', hint: 'Strong free tier' },
     { id: 'anthropic', name: 'Anthropic Claude', icon: '🧠', hint: 'Strong for long-form reasoning' },
     { id: 'deepseek', name: 'DeepSeek', icon: '🦋', hint: 'Direct DeepSeek Chat/Reasoner' },
 ];
 
 export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, updatePreferences }: ApiKeyWizardProps) {
     const { language } = useLanguage();
-    const initialProvider: ProviderKey = 'gemini';
+    const initialProvider: ProviderKey = 'openai';
 
     const [step, setStep] = useState(0);
     const [provider, setProvider] = useState<ProviderKey>(initialProvider);
     const [apiKey, setApiKey] = useState(() => settings.providers[initialProvider].apiKey || '');
     const [showKey, setShowKey] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [defaultProvider, setDefaultProvider] = useState<ProviderKey>(() => settings.preferences.defaultProvider);
+    const [defaultProvider, setDefaultProvider] = useState<ProviderKey>(() => (isGovernedRouteProvider(settings.preferences.defaultProvider) ? settings.preferences.defaultProvider : initialProvider));
     const [selectedModel, setSelectedModel] = useState<string>(() => settings.providers[initialProvider].selectedModel || AVAILABLE_MODELS[initialProvider][0].id);
 
     const handleProviderChange = (nextProvider: ProviderKey) => {
@@ -139,7 +142,8 @@ export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, up
                                 <button
                                     key={p.id}
                                     onClick={() => handleProviderChange(p.id)}
-                                    className={`p-4 rounded-xl border-2 text-left transition-all
+                                    disabled={!isGovernedRouteProvider(p.id)}
+                                    className={`p-4 rounded-xl border-2 text-left transition-all disabled:cursor-not-allowed disabled:opacity-60
                                         ${provider === p.id
                                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                                             : 'border-gray-200 dark:border-gray-700 hover:border-gray-400'
@@ -147,7 +151,7 @@ export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, up
                                 >
                                     <div className="text-xl mb-2">{p.icon}</div>
                                     <div className="font-medium text-gray-900 dark:text-white">{p.name}</div>
-                                    <div className="text-xs text-gray-500">{p.hint}</div>
+                                    <div className="text-xs text-gray-500">{isGovernedRouteProvider(p.id) ? p.hint : GOVERNED_ROUTE_UNSUPPORTED_NOTE}</div>
                                 </button>
                             ))}
                         </div>
@@ -194,7 +198,7 @@ export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, up
                         >
                             {AVAILABLE_MODELS[provider].map(model => (
                                 <option key={model.id} value={model.id}>
-                                    {model.name} {model.recommended ? '⭐' : ''}
+                                    {model.name}
                                 </option>
                             ))}
                         </select>

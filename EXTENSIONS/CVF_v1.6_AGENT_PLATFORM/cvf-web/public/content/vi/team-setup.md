@@ -1,5 +1,7 @@
 # CVF cho Nhóm
 
+> Các quyết định Local hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây không tự cấp quyền. [Vòng đời công việc](lifecycle.md).
+
 **Đối tượng:** Nhóm từ 2–10 lập trình viên làm việc với AI  
 **Thời gian đọc:** 15 phút  
 **Khuyến nghị:** v1.1 (governance) + v1.3 (toolkit) + v1.6 (giao diện web)
@@ -16,7 +18,7 @@ Khi nhiều người cùng code với AI, những vấn đề mới xuất hiệ
 | Mất ngữ cảnh | Không ai biết AI của người khác đã làm gì | Trace Action Unit |
 | Nợ kỹ thuật | Phong cách code không nhất quán giữa các dev | Agent archetype + preset |
 | Lãng phí thời gian | Giải lại những bài đã giải | Skill Library dùng chung |
-| Không đánh giá | "Nó chạy được" = đủ tốt | Phase D + Phase gate |
+| Không đánh giá | "Nó chạy được" = đủ tốt | REVIEW + Phase gate |
 
 CVF mang đến cho nhóm bạn một **ngôn ngữ chung** để làm việc với AI, mà không thêm quy trình nặng nề.
 
@@ -90,15 +92,15 @@ Chọn chế độ governance của bạn:
 
 ### Rules
 1. Every task needs an INPUT_SPEC before AI execution
-2. Every PR needs Phase D checklist completed
+2. Every PR needs REVIEW checklist completed
 3. Decisions that affect architecture → Decision Log
 4. High-risk changes (infrastructure, auth, data) → ARCHITECT approval
 
 ### Phase Gates
-- Phase A → B: Self-service (just write the spec)
-- Phase B → C: Peer review of design (any BUILDER)
-- Phase C → D: Self-review with checklist
-- Phase D → Merge: PR review by someone who didn't write it
+- INTAKE → DESIGN: Self-service (just write the spec)
+- DESIGN → SPEC → WORK ORDER → BUILD: Complete design, specification and work assignment under applicable authority
+- BUILD → REVIEW: Review the result with evidence
+- REVIEW → FREEZE: PR review by someone who didn't write it
 ```
 
 ---
@@ -111,18 +113,18 @@ Chọn chế độ governance của bạn:
 ┌─────────────────────────────────────────────────────────────┐
 │  Developer chọn tác vụ từ backlog                           │
 │  ↓                                                          │
-│  Phase A: Viết INPUT_SPEC (mục tiêu + tiêu chí chấp nhận)  │
+│  INTAKE: Viết INPUT_SPEC (mục tiêu + tiêu chí chấp nhận)  │
 │  ↓                                                          │
-│  Phase B: Thiết kế cách tiếp cận (đồng nghiệp review)      │
+│  DESIGN: Thiết kế cách tiếp cận (đồng nghiệp review)      │
 │  ↓                                                          │
-│  Phase C: Thực thi với AI (tuân theo spec đóng băng)        │
+│  BUILD: Thực thi với AI (tuân theo spec đóng băng)        │
 │  ↓                                                          │
-│  Phase D: Tự đánh giá với danh sách kiểm tra               │
+│  REVIEW: Đánh giá kết quả cùng bằng chứng               │
 │  ↓                                                          │
 │  Tạo PR với:                                                │
 │    • Code                                                   │
 │    • INPUT_SPEC.md                                          │
-│    • Danh sách kiểm tra Phase D (đã hoàn thành)             │
+│    • Danh sách kiểm tra REVIEW (đã hoàn thành)             │
 │    • Trace AU (AI đã làm gì)                                │
 │  ↓                                                          │
 │  Reviewer kiểm tra: code + tuân thủ spec + governance       │
@@ -138,7 +140,7 @@ Thêm vào `.github/PULL_REQUEST_TEMPLATE.md`:
 ```markdown
 ## CVF Checklist
 
-### Phase D Review
+### REVIEW Review
 - [ ] Output matches INPUT_SPEC requirements
 - [ ] Acceptance criteria met (list each)
 - [ ] No scope expansion beyond spec
@@ -242,11 +244,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check Phase D Checklist
+      - name: Check REVIEW Checklist
         run: |
           # Ensure PR description contains completed checklist
           if ! grep -q "\[x\]" "$GITHUB_EVENT_PATH"; then
-            echo "❌ Phase D checklist not completed"
+            echo "❌ REVIEW checklist not completed"
             exit 1
           fi
 
@@ -291,7 +293,7 @@ fi
 **Giải pháp:** Bắt đầu với chế độ governance Simple. Chỉ có 2 yêu cầu:
 
 1. Viết INPUT_SPEC trước khi yêu cầu AI
-2. Hoàn thành danh sách kiểm tra Phase D trong PR
+2. Hoàn thành danh sách kiểm tra REVIEW trong PR
 
 Mọi thứ khác là tùy chọn. Thêm cấu trúc khi bạn cảm thấy cần.
 
@@ -318,7 +320,7 @@ Mọi thứ khác là tùy chọn. Thêm cấu trúc khi bạn cảm thấy cầ
 | Thay đổi | Rủi ro Mặc định | Cần Phê duyệt |
 |----------|:---------------:|:--------------:|
 | Thay đổi UI (màu sắc, văn bản) | R0 | Không |
-| API endpoint mới | R1 | Peer review |
+| API endpoint mới | Ít nhất R2 | Theo ranh giới phê duyệt áp dụng |
 | Auth / thanh toán / migration dữ liệu | R2 | ARCHITECT |
 | Hạ tầng / pipeline deploy | R3 | GOVERNOR |
 
@@ -367,3 +369,5 @@ npm install && npm run dev
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

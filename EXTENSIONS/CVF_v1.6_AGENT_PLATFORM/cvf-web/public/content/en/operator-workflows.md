@@ -27,22 +27,22 @@ This tutorial gives you **10 ready-to-use prompt templates** for Sales, Marketin
 
 | # | Workflow | For | Risk |
 |---|---------|-----|------|
-| 1 | [Pipeline Risk Manager](#workflow-1) | Sales | R2 |
-| 2 | [Signal-Based Prospecting](#workflow-2) | Sales | R2 |
-| 3 | [Ad Spend Watchdog](#workflow-3) | Marketing | R2 |
-| 4 | [Content Distribution Engine](#workflow-4) | Marketing | R1 |
-| 5 | [Voice of Customer Engine](#workflow-5) | Support | R2 |
-| 6 | [Product Manager's Weekly](#workflow-6) | Product | R2 |
-| 7 | [Process Surgeon](#workflow-7) | Operations | R2 |
-| 8 | [Meeting Optimizer](#workflow-8) | All | R2 |
-| 9 | [Financial Analysis Protocol](#workflow-9) | Finance | R2 |
-| 10 | [Competitive Intelligence Swarm](#workflow-10) | Strategy | R3 |
+| 1 | [Pipeline Risk Manager](#workflow-1-pipeline-risk-manager) | Sales | R2 |
+| 2 | [Signal-Based Prospecting](#workflow-2-signal-based-prospecting) | Sales | R2 |
+| 3 | [Ad Spend Watchdog](#workflow-3-ad-spend-watchdog) | Marketing | R2 |
+| 4 | [Content Distribution Engine](#workflow-4-content-distribution-engine) | Marketing | R1 |
+| 5 | [Voice of Customer Engine](#workflow-5-voice-of-customer-engine) | Support | R2 |
+| 6 | [Product Manager's Weekly](#workflow-6-product-managers-weekly) | Product | R2 |
+| 7 | [Process Surgeon](#workflow-7-process-surgeon) | Operations | R2 |
+| 8 | [Meeting Optimizer](#workflow-8-meeting-optimizer) | All | R2 |
+| 9 | [Financial Analysis Protocol](#workflow-9-financial-analysis-protocol) | Finance | R2 |
+| 10 | [Competitive Intelligence Swarm](#workflow-10-competitive-intelligence-swarm) | Strategy | R3 |
 
 ---
 
 ## Revenue Operations
 
-### Workflow 1: Pipeline Risk Manager {#workflow-1}
+### Workflow 1: Pipeline Risk Manager
 
 **Risk:** R2 | **Connector:** CRM (HubSpot/Salesforce)
 
@@ -66,7 +66,7 @@ VERIFICATION (required):
 
 ---
 
-### Workflow 2: Signal-Based Prospecting {#workflow-2}
+### Workflow 2: Signal-Based Prospecting
 
 **Risk:** R2 | **Connector:** Web Search
 
@@ -91,7 +91,7 @@ GOVERNANCE:
 
 ---
 
-### Workflow 3: Ad Spend Watchdog {#workflow-3}
+### Workflow 3: Ad Spend Watchdog
 
 **Risk:** R2 | **Connector:** CSV Upload
 
@@ -113,7 +113,7 @@ DATA INTEGRITY CHECK:
 
 ---
 
-### Workflow 4: Content Distribution Engine {#workflow-4}
+### Workflow 4: Content Distribution Engine
 
 **Risk:** R1 (read + transform only — no external actions)
 
@@ -138,7 +138,7 @@ QUALITY CHECK:
 
 ## Product & Operations
 
-### Workflow 5: Voice of Customer Engine {#workflow-5}
+### Workflow 5: Voice of Customer Engine
 
 **Risk:** R2 | **Connector:** Intercom/Zendesk
 
@@ -164,7 +164,7 @@ GOVERNANCE:
 
 ---
 
-### Workflow 6: Product Manager's Weekly {#workflow-6}
+### Workflow 6: Product Manager's Weekly
 
 **Risk:** R2 | **Connector:** Jira + Notion
 
@@ -188,7 +188,7 @@ VERIFICATION:
 
 ---
 
-### Workflow 7: Process Surgeon {#workflow-7}
+### Workflow 7: Process Surgeon
 
 **Risk:** R2 | **Connector:** File Upload (large context)
 
@@ -216,7 +216,7 @@ OUTPUT:
 
 ---
 
-### Workflow 8: Meeting Optimizer {#workflow-8}
+### Workflow 8: Meeting Optimizer
 
 **Risk:** R2 | **Connector:** Google Calendar
 
@@ -239,7 +239,7 @@ Include suggested agenda: [your agenda here]
 
 ## Finance & Strategy
 
-### Workflow 9: Financial Analysis Protocol {#workflow-9}
+### Workflow 9: Financial Analysis Protocol
 
 **Risk:** R2 | **Connector:** Financial Data / File Upload
 
@@ -266,7 +266,7 @@ MANDATORY GOVERNANCE:
 
 ---
 
-### Workflow 10: Competitive Intelligence Swarm {#workflow-10}
+### Workflow 10: Competitive Intelligence Swarm
 
 **Risk:** R3 (multi-agent — requires manual review)
 
@@ -310,6 +310,5 @@ Use this **before acting on any AI-generated business output**:
 
 ## What's Next?
 
-- See the full governance spec: [AGT-034 Operator Workflow Orchestrator](../../../governance/skill-library/registry/agent-skills/AGT-034_OPERATOR_WORKFLOW_ORCHESTRATOR.gov.md)
-- Browse all 34 skills: [Agent Skills Catalog](agent-skills-catalog)
+- [Browse packages for agents](/skills)
 - Learn CVF risk model: [Risk Model](risk-model)

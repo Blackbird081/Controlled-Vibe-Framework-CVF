@@ -65,6 +65,9 @@ vi.mock('@/components', async () => ({
     SystemDesignWizard: () => null, ContentStrategyWizard: () => null, DataAnalysisWizard: () => null,
 }));
 vi.mock('@/components/home/HomeBrowseExperience', () => ({ HomeBrowseExperience: () => <div data-testid="browse" /> }));
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 
 const RECEIPT = {
     receiptId: 'rcpt-isolation-fixture', evidenceMode: 'static' as const, routeId: '/fixture',
@@ -527,5 +530,19 @@ describe('Home to ResultViewer history seam (real Home, store and ResultViewer)'
         expect(text()).toContain('OUTPUT_A');
         expect(draftBox().value).toBe('');
         snap('home-a-b-a');
+    });
+});
+
+
+describe('pack verification presentation', () => {
+    it('separates structural status from an over-limit output and unverified accuracy', () => {
+        const props = mk('quality', { output: Array(151).fill('word').join(' ') });
+        props.execution.input = { subject: 'Shift', currentNotes: 'tối đa 150 từ, gồm 3 bước và checklist' };
+        render(<ResultViewer {...props} />);
+        const text = screen.getByTestId('deliverable-pack-preview').textContent ?? '';
+        expect(text).toContain('structural checks only: PASS');
+        expect(text).toContain('FAIL 150-word maximum');
+        expect(text).toContain('NOT_CHECKED Business accuracy and unsupported assumptions');
+        expect(text).toContain('Human review is required');
     });
 });

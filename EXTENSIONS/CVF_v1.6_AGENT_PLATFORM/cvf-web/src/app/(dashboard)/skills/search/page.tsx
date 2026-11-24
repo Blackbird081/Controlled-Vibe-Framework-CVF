@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: localized Vietnamese user-facing labels and instructions.
 
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import {
     SurfaceTopBar,
 } from '@/components';
 import { useLanguage } from '@/lib/i18n';
+import { NO_DATA_LABEL } from '@/lib/presentation-labels';
 import type { SkillRecord, SearchResult } from '@/lib/skill-search';
 import type { SkillPlan } from '@/lib/skill-planner';
 
@@ -66,15 +68,15 @@ function SkillSearchPageInner() {
         },
         {
             label: language === 'vi' ? 'Bước kế hoạch' : 'Plan steps',
-            value: String(plan?.phases.length ?? 0),
+            value: plan === null ? NO_DATA_LABEL[language] : String(plan.phases.length),
             icon: GitBranch,
-            tone: 'emerald' as const,
+            tone: plan === null ? 'neutral' as const : 'emerald' as const,
         },
         {
             label: language === 'vi' ? 'Kỹ năng đề xuất' : 'Recommended skills',
-            value: String(plan?.total_skills ?? 0),
+            value: plan === null ? NO_DATA_LABEL[language] : String(plan.total_skills),
             icon: Workflow,
-            tone: 'amber' as const,
+            tone: plan === null ? 'neutral' as const : 'amber' as const,
         },
         {
             label: language === 'vi' ? 'Chi tiết đang chọn' : 'Selected detail',

@@ -1,6 +1,7 @@
 /** Server-only request handlers for saving/reopening a confirmed spec review. The actor always comes
  * from the request session owner; saved content is SPEC_REVIEW_ONLY_NO_BUILD_AUTHORITY, never approval.
  */
+import { isSameBrowserOrigin } from '@/lib/server/browser-origin';
 import { createHash } from 'node:crypto';
 import { MAX_CONFIRMATION_BYTES } from './intent-spec-confirmation';
 import { resolveIntentSpecActor, type IntentSpecActor } from './intent-spec-actor';
@@ -17,15 +18,6 @@ const reply = (status: number, body: Record<string, unknown>) => Response.json(b
     headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, Origin' },
 });
 const refuse = (status: number, error: string) => reply(status, { ok: false, error });
-
-/** State-changing browser requests must be same-origin; absent or foreign Origin is refused. */
-function sameOrigin(request: Request): boolean {
-    try {
-        const origin = request.headers.get('origin');
-        const site = request.headers.get('sec-fetch-site');
-        return !!origin && origin === new URL(request.url).origin && (!site || site === 'same-origin');
-    } catch { return false; }
-}
 
 async function readBody(request: Request): Promise<unknown> {
     const declared = request.headers.get('content-length');
@@ -69,7 +61,7 @@ async function openStore(actor: IntentSpecActor): Promise<FileIntentSpecAcceptan
 
 export async function handleSaveReview(request: Request): Promise<Response> {
     try {
-        if (!sameOrigin(request)) return refuse(403, 'ORIGIN_REFUSED');
+        if (!isSameBrowserOrigin(request)) return refuse(403, 'ORIGIN_REFUSED');
         const actor = await requestActor(request);
         if (!actor) return refuse(401, 'AUTH_REQUIRED');
         if (!(request.headers.get('content-type') ?? '').toLowerCase().startsWith('application/json')) return refuse(415, 'JSON_REQUIRED');

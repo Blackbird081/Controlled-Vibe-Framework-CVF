@@ -1,5 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmdirSync, unlinkSync } from 'node:fs';
+import { lstatSync, mkdtempSync, readFileSync, readdirSync, rmdirSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { SQLiteAtomicRecordAdapter, type AtomicSQLiteRow, type AtomicSQLiteWrite } from '../storage-adapter';
 import { LawReadoutPilot, readoutInputSha256, readoutTextSha256 as sha,
@@ -13,8 +14,7 @@ const revision = 'Make provenance source and development-owned remainder explici
 const initialOutput = 'Bản V1: quy tắc đã giao, bằng chứng chỉ có phạm vi giới hạn.';
 const revisionOutput = 'Bản V2: workspace nhận từ provenance; đội phát triển giữ phần kiểm kỹ thuật.';
 const now = new Date('2026-10-29T08:00:00Z');
-const root = path.resolve(process.cwd(), '../../../.cvf/runtime/law-readout-offline-fixtures');
-mkdirSync(root, { recursive: true });
+const root = mkdtempSync(path.join(tmpdir(), 'cvf-law-readout-offline-fixtures-'));
 const fixtures: string[] = [];
 const fetchTrap = vi.fn(() => { throw new Error('EXTERNAL_FETCH_FORBIDDEN'); });
 beforeAll(() => vi.stubGlobal('fetch', fetchTrap));
@@ -31,6 +31,7 @@ afterAll(() => {
         }
         rmdirSync(directory);
     }
+    rmdirSync(root);
 });
 afterEach(() => { vi.useRealTimers(); expect(fetchTrap).not.toHaveBeenCalled(); });
 

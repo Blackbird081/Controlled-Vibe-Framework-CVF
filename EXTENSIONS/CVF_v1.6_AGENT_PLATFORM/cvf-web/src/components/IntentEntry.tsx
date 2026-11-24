@@ -20,9 +20,11 @@ import {
   submitClarificationAnswer,
   buildClarificationState,
   advanceClarificationState,
+  type ClarificationLanguage,
   type ClarificationState,
   type ClarificationResult,
 } from '@/lib/intent-router-clarification';
+import { detectSpecLanguage } from '@/lib/spec-first-mediation';
 import { trackEvent } from '@/lib/analytics';
 
 interface IntentEntryProps {
@@ -93,9 +95,12 @@ export function IntentEntry({ onRoute, language = 'vi' }: IntentEntryProps) {
       isClarificationEligible(result.fallback)
     ) {
       trackEvent('clarification_weak_confidence_detected', { input: userInput });
-      const state = buildClarificationState(userInput);
+      // The questions follow the language the user typed; the UI language only decides when the text is undetectable.
+      const typed = detectSpecLanguage(userInput);
+      const questionLanguage: ClarificationLanguage = typed === 'unknown' ? language : typed === 'vi' ? 'vi' : 'en';
+      const state = buildClarificationState(userInput, questionLanguage);
       setClarState(state);
-      const cr = startClarification(result);
+      const cr = startClarification(result, questionLanguage);
       setClarResult(cr);
       if (cr.recoveryMode === 'clarify') {
         trackEvent('clarification_question_asked', { depth: cr.depth });

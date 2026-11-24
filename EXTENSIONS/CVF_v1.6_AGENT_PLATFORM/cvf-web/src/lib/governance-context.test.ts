@@ -44,10 +44,10 @@ describe('governance-context', () => {
             expect(values).toEqual(['OBSERVER', 'ANALYST', 'BUILDER', 'REVIEWER', 'GOVERNOR']);
         });
 
-        it('RISK_OPTIONS has R0-R4', () => {
-            expect(RISK_OPTIONS).toHaveLength(5);
+        it('RISK_OPTIONS has R0-R3', () => {
+            expect(RISK_OPTIONS).toHaveLength(4);
             const values = RISK_OPTIONS.map(r => r.value);
-            expect(values).toEqual(['R0', 'R1', 'R2', 'R3', 'R4']);
+            expect(values).toEqual(['R0', 'R1', 'R2', 'R3']);
         });
 
         it('all options have bilingual labels', () => {
@@ -68,42 +68,44 @@ describe('governance-context', () => {
     });
 
     describe('isRiskAllowed', () => {
-        it('allows R0 and R1 in INTAKE (max R1)', () => {
-            expect(isRiskAllowed('R0', 'INTAKE')).toBe(true);
-            expect(isRiskAllowed('R1', 'INTAKE')).toBe(true);
+        it('allows R0 and R1 for ANALYST in INTAKE', () => {
+            expect(isRiskAllowed('R0', 'INTAKE', 'ANALYST')).toBe(true);
+            expect(isRiskAllowed('R1', 'INTAKE', 'ANALYST')).toBe(true);
         });
 
-        it('blocks R2+ in INTAKE', () => {
-            expect(isRiskAllowed('R2', 'INTAKE')).toBe(false);
-            expect(isRiskAllowed('R3', 'INTAKE')).toBe(false);
+        it('blocks R2+ for ANALYST in INTAKE', () => {
+            expect(isRiskAllowed('R2', 'INTAKE', 'ANALYST')).toBe(false);
+            expect(isRiskAllowed('R3', 'INTAKE', 'ANALYST')).toBe(false);
         });
 
-        it('allows up to R2 in DESIGN', () => {
-            expect(isRiskAllowed('R0', 'DESIGN')).toBe(true);
-            expect(isRiskAllowed('R2', 'DESIGN')).toBe(true);
-            expect(isRiskAllowed('R3', 'DESIGN')).toBe(false);
+        it('allows up to R2 for GOVERNOR in DESIGN', () => {
+            expect(isRiskAllowed('R0', 'DESIGN', 'GOVERNOR')).toBe(true);
+            expect(isRiskAllowed('R2', 'DESIGN', 'GOVERNOR')).toBe(true);
+            expect(isRiskAllowed('R3', 'DESIGN', 'GOVERNOR')).toBe(false);
         });
 
-        it('allows up to R3 in BUILD', () => {
-            expect(isRiskAllowed('R3', 'BUILD')).toBe(true);
+        it('preserves distinct nominal BUILD caps for HUMAN and BUILDER', () => {
+            expect(isRiskAllowed('R3', 'BUILD', 'HUMAN')).toBe(true);
+            expect(isRiskAllowed('R3', 'BUILD', 'BUILDER')).toBe(false);
         });
 
-        it('allows up to R2 in REVIEW', () => {
-            expect(isRiskAllowed('R2', 'REVIEW')).toBe(true);
-            expect(isRiskAllowed('R3', 'REVIEW')).toBe(false);
+        it('allows up to R2 for REVIEWER in REVIEW', () => {
+            expect(isRiskAllowed('R2', 'REVIEW', 'REVIEWER')).toBe(true);
+            expect(isRiskAllowed('R3', 'REVIEW', 'REVIEWER')).toBe(false);
         });
 
-        it('allows up to R4 in FREEZE', () => {
-            expect(isRiskAllowed('R0', 'FREEZE')).toBe(true);
-            expect(isRiskAllowed('R4', 'FREEZE')).toBe(true);
+        it('allows through R3 in the nominal GOVERNOR cell for FREEZE', () => {
+            expect(isRiskAllowed('R0', 'FREEZE', 'GOVERNOR')).toBe(true);
+            expect(isRiskAllowed('R3', 'FREEZE', 'GOVERNOR')).toBe(true);
+            expect(isRiskAllowed('R4', 'FREEZE', 'GOVERNOR')).toBe(false);
         });
     });
 
     describe('getAllowedActions', () => {
         it('returns actions for INTAKE/ANALYST', () => {
             const actions = getAllowedActions('INTAKE', 'ANALYST');
-            expect(actions).toContain('read context');
-            expect(actions).toContain('analyze inputs');
+            expect(actions).toContain('read');
+            expect(actions).toContain('analyze');
         });
 
         it('returns empty array for FREEZE/BUILDER', () => {
@@ -111,21 +113,21 @@ describe('governance-context', () => {
             expect(actions).toEqual([]);
         });
 
-        it('returns write code for BUILD/BUILDER', () => {
+        it('returns Local actions for BUILD/BUILDER', () => {
             const actions = getAllowedActions('BUILD', 'BUILDER');
-            expect(actions).toContain('write code');
-            expect(actions).toContain('run tests');
+            expect(actions).toContain('write');
+            expect(actions).not.toContain('approve');
         });
 
         it('returns governor-specific actions', () => {
-            expect(getAllowedActions('INTAKE', 'GOVERNOR')).toContain('set constraints');
-            expect(getAllowedActions('DESIGN', 'GOVERNOR')).toContain('approve design');
-            expect(getAllowedActions('REVIEW', 'GOVERNOR')).toContain('final approval');
+            expect(getAllowedActions('INTAKE', 'GOVERNOR')).toContain('scope');
+            expect(getAllowedActions('DESIGN', 'GOVERNOR')).toContain('approve');
+            expect(getAllowedActions('REVIEW', 'GOVERNOR')).toContain('override');
         });
 
-        it('returns OBSERVER read-only in BUILD', () => {
+        it('returns no actions for OBSERVER in BUILD', () => {
             const actions = getAllowedActions('BUILD', 'OBSERVER');
-            expect(actions).toEqual(['read code']);
+            expect(actions).toEqual([]);
         });
     });
 
@@ -143,7 +145,7 @@ describe('governance-context', () => {
             expect(prompt).toContain('Phase: BUILD');
             expect(prompt).toContain('Role: BUILDER');
             expect(prompt).toContain('Risk Level: R2');
-            expect(prompt).toContain('write code');
+            expect(prompt).toContain('\u2705 write');
             expect(prompt).toContain('QUY TẮC BẮT BUỘC');
         });
 
@@ -152,6 +154,8 @@ describe('governance-context', () => {
             expect(prompt).toContain('CVF GOVERNANCE TOOLKIT');
             expect(prompt).toContain('Phase: BUILD');
             expect(prompt).toContain('MANDATORY RULES');
+            expect(prompt).toContain('Maximum risk for this role and phase: R2');
+            expect(prompt).toContain('The server checks permissions and required approvals.');
             expect(prompt).toContain('REFUSAL TEMPLATE');
         });
 
@@ -406,7 +410,7 @@ describe('governance-context', () => {
             expect(block).toContain('CVF GOVERNANCE CONTEXT');
             expect(block).toContain('Phase | BUILD');
             expect(block).toContain('Role | BUILDER');
-            expect(block).toContain('write code');
+            expect(block).toContain('\u2705 write');
             expect(block).toContain('Quy tắc bắt buộc');
         });
 
@@ -414,11 +418,12 @@ describe('governance-context', () => {
             const block = buildGovernanceSpecBlock(state, 'en');
             expect(block).toContain('CVF GOVERNANCE CONTEXT');
             expect(block).toContain('Phase | BUILD');
+            expect(block).toContain('Maximum risk for this role and phase | R2');
+            expect(block).toContain('Planning guidance.');
             expect(block).toContain('Mandatory Rules');
         });
 
         it('shows warning for invalid risk', () => {
-            // R2 is now valid in FREEZE (max R4). Use a role with no actions to test.
             const highRisk: GovernanceState = { ...state, phase: 'INTAKE', riskLevel: 'R3' };
             const block = buildGovernanceSpecBlock(highRisk, 'en');
             expect(block).toContain('❌ WARNING');

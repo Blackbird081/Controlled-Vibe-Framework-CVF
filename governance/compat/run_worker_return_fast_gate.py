@@ -108,7 +108,11 @@ def _focused_test_commands(targets: tuple[str, ...]) -> list[FastGateCommand]:
 def build_commands(
     pytest_targets: tuple[str, ...] = (), active_work_order: str | None = None,
     *, repo_root: Path | None = None, work_order_text: str | None = None,
+    return_endpoint: str | None = None,
 ) -> tuple[FastGateCommand, ...]:
+    if return_endpoint and not active_work_order:
+        raise ValueError("--return-endpoint requires --active-work-order")
+    endpoint_args = ("--return-endpoint", return_endpoint) if return_endpoint else ()
     commands: list[FastGateCommand] = _focused_test_commands(pytest_targets)
     probe_admission_command = [
         "python",
@@ -124,6 +128,7 @@ def build_commands(
     if active_work_order:
         probe_admission_command += ["--active-work-order", active_work_order]
         quality_command += ["--active-work-order", active_work_order]
+        quality_command += list(endpoint_args)
         acceptance_command = FastGateCommand(
             "work-order acceptance ledger",
             (
@@ -134,6 +139,7 @@ def build_commands(
                 "--return",
                 _worker_return_path(active_work_order, repo_root=repo_root, work_order_text=work_order_text),
                 "--enforce",
+                *endpoint_args,
             ),
         )
     else:
@@ -219,7 +225,10 @@ def main() -> int:
     )
     parser.add_argument("--max-return-lines", type=int, help="Optional task-selected bound return line limit")
     parser.add_argument("--max-return-bytes", type=int, help="Optional task-selected bound return byte limit")
+    parser.add_argument("--return-endpoint", help="Active return interval only; all other gates remain current-tree")
     args = parser.parse_args()
+    if args.return_endpoint and not args.active_work_order:
+        parser.error("--return-endpoint requires --active-work-order")
     selected_limits = (args.max_return_lines, args.max_return_bytes)
     if any(value is not None and value <= 0 for value in selected_limits):
         parser.error("selected return budgets must be positive")
@@ -241,9 +250,12 @@ def main() -> int:
 
     print("=== CVF Worker Return Fast Gate ===")
     print("Purpose: fail early on worker-return defects before full closure gates.")
+    if args.return_endpoint:
+        print(f"Scope: active-return fulfillment @{args.return_endpoint}; raw pins, probe, reviewer-fast and other gates: current tree. Not a historical whole-helper replay.")
     failures = 0
     total_start = time.perf_counter()
-    for command in build_commands(tuple(args.pytest_target), args.active_work_order):
+    for command in build_commands(tuple(args.pytest_target), args.active_work_order,
+                                  return_endpoint=args.return_endpoint):
         if _run(command) != 0:
             failures += 1
     elapsed = time.perf_counter() - total_start

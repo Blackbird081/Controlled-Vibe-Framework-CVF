@@ -14,26 +14,46 @@ interface LoginPageProps {
 }
 
 const subscribeToHydration = () => () => {};
-const clientReady = () => true;
-const serverReady = () => false;
+const emptyUsername = () => '';
+function readRememberedUsername() {
+    try { return localStorage.getItem('cvf_login_username') ?? ''; }
+    catch { return ''; }
+}
+
+function isInternalPath(path: string): boolean {
+    return path.startsWith('/') && !path.startsWith('//') && !path.startsWith('/\\')
+        && !Array.from(path).some(character => {
+            const code = character.charCodeAt(0);
+            return code < 32 || (code >= 127 && code <= 159);
+        });
+}
+
+function loginReturnPath(path: string | null, origin: string): string {
+    if (!path || !isInternalPath(path)) return '/home';
+    try {
+        const url = new URL(path, origin);
+        if (url.origin === origin && isInternalPath(decodeURIComponent(url.pathname))) return path;
+    } catch {
+        // The supplied path or its percent encoding is invalid.
+    }
+    return '/home';
+}
 
 function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPageProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const from = searchParams.get('from') || '/home';
-    const { language } = useLanguage();
+    const from = typeof window === 'undefined' ? '/home' : loginReturnPath(searchParams.get('from'), window.location.origin);
+    const { language, mounted } = useLanguage();
     const { status } = useSession();
     const isVi = language === 'vi';
     const isLocalMockLogin = localMockAllowed;
 
-    const hydrated = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
-    const [savedUsername] = useState(() => {
-        try { return typeof window === 'undefined' ? '' : localStorage.getItem('cvf_login_username') ?? ''; }
-        catch { return ''; }
-    });
-    const [username, setUsername] = useState(savedUsername);
+    const savedUsername = useSyncExternalStore(subscribeToHydration, readRememberedUsername, emptyUsername);
+    const [editedUsername, setUsername] = useState<string | null>(null);
+    const username = editedUsername ?? savedUsername;
     const [password, setPassword] = useState('');
-    const [rememberUsername, setRememberUsername] = useState(Boolean(savedUsername));
+    const [editedRemember, setRememberUsername] = useState<boolean | null>(null);
+    const rememberUsername = editedRemember ?? Boolean(savedUsername);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +75,7 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
             const res = await signIn('credentials', {
                 username,
                 password,
+                callbackUrl: from,
                 redirect: false,
             });
 
@@ -78,6 +99,7 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
         }
     };
 
+    if (!mounted) return <div aria-busy="true" className="min-h-screen bg-gray-50 dark:bg-gray-900" />;
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
             <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
@@ -96,34 +118,36 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
 
                 {isLocalMockLogin ? <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="cvf-login-username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {isVi ? 'Tên đăng nhập' : 'Username'}
                         </label>
                         <input
-                            value={hydrated ? username : ''}
+                            id="cvf-login-username"
+                            autoComplete="username"
+                            value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             type="text"
                             className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="admin"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="cvf-login-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {isVi ? 'Mật khẩu' : 'Password'}
                         </label>
                         <input
+                            id="cvf-login-password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type={showPassword ? 'text' : 'password'}
                             className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="admin123"
                         />
                     </div>
                     <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={hydrated && rememberUsername}
+                                checked={rememberUsername}
                                 onChange={(e) => setRememberUsername(e.target.checked)}
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
@@ -178,11 +202,11 @@ function LoginPageContent({ localMockAllowed, selectedOAuthProvider }: LoginPage
                 </div>}
 
                 {isLocalMockLogin && <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/60 rounded-lg px-3 py-2 space-y-1">
-                    <p className="font-semibold mb-1">{isVi ? 'Tài khoản giả lập (Enterprise Mock)' : 'Enterprise Mock Accounts'}:</p>
-                    <p>• <strong>owner</strong> / owner123 (Full admin)</p>
-                    <p>• <strong>admin</strong> / admin123 (Admin)</p>
-                    <p>• <strong>dev</strong> / dev123 (Developer - Max: R2)</p>
-                    <p>• <strong>reviewer</strong> / reviewer123 (Approver)</p>
+                    <p className="font-semibold mb-1">{isVi ? 'Tài khoản thực hành trên máy này' : 'Local practice accounts'}</p>
+                    <p><strong>owner</strong> / owner123 ({isVi ? 'chủ tài khoản' : 'owner'})</p>
+                    <p><strong>admin</strong> / admin123 ({isVi ? 'quản trị viên' : 'administrator'})</p>
+                    <p><strong>dev</strong> / dev123 ({isVi ? 'người phát triển' : 'developer'})</p>
+                    <p><strong>reviewer</strong> / reviewer123 ({isVi ? 'người duyệt' : 'reviewer'})</p>
                 </div>}
             </div>
         </div>

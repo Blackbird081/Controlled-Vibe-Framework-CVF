@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.1.0",
-  "generatedAt": "2026-11-06T22:37:44.626Z",
+  "generatedAt": "2026-11-22T14:54:53.467Z",
   "sourceInventory": "../../../docs/reference/agent_system_skills/control_plane/generated/skill-inventory.json",
   "sourceSkillIndex": "../../../docs/reference/agent_system_skills/generated/skill-index.json",
   "dashboardContract": "Read-only CVF Web projection of Skill Control Plane inventory. Web dashboards may consume this file for display and filtering, but it is not runtime authority, activation authority, provider authority, or public certification authority.",
@@ -11,7 +11,7 @@
     "activeResolverReadyPackages": 26,
     "cliMcpAdapterPackages": 26,
     "selectionProfiledPackages": 26,
-    "webProjectionItems": 54,
+    "webProjectionItems": 27,
     "crossSurfaceDriftViolationCount": 0,
     "projectedRuntimePackages": 26
   },

@@ -13,7 +13,7 @@ Progressive Disclosure is a pattern for structuring AI skills so that context is
 
 ### The Problem
 
-Loading all 20 agent skills and 124 user skills fully into context at once would consume ~500K+ tokens. Most interactions only need 1-3 skills.
+Loading every agent package and end-user form fully into context can waste space. Start with metadata and load the instructions for the work at hand.
 
 ### The Solution
 
@@ -206,14 +206,14 @@ references:
 
 ## 4. Context Budget Calculator
 
-| Layer | Per Skill | 20 Agent Skills | 124 User Skills |
+| Layer | Per skill | Sample agent collection | Sample end-user collection |
 |-------|-----------|-----------------|-----------------|
 | Metadata (always) | ~50 tokens | ~1,000 tokens | ~6,200 tokens |
 | Instructions (on-demand) | ~1,000 tokens | Per use | Per use |
 | Resources (explicit) | ~3,000 tokens | Per use | Per use |
 | Scripts (never loaded) | 0 tokens | 0 | 0 |
 
-**Savings:** Instead of loading all 144 skills (~200K tokens), the AI always has ~7,200 tokens of metadata and loads only active skills' instructions (~1-3K per skill on demand).
+**Example:** In this sizing illustration, loading the metadata first takes less context than loading all instructions. Actual token use depends on the selected packages and forms.
 
 **Maximum context per interaction:** ~7,200 (metadata) + ~5,000 (2-3 active skills) = ~12,200 tokens
 

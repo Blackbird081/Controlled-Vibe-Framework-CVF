@@ -1,11 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { mkdtempSync, rmSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: '',
 }));
 
@@ -15,6 +17,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
     withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined, payload?: Record<string, unknown>) => {
         const nextPayload = { ...(payload ?? {}) };
         if (session?.impersonation) {
@@ -26,17 +29,24 @@ vi.mock('@/lib/middleware-auth', () => ({
 }));
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 // W97-T1: Follow-up prompt threading integration tests
 describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
     const originalEnv = { ...process.env };
+    let tempDir = '';
 
     beforeEach(() => {
-        executeAIMock.mockReset();
+        tempDir = mkdtempSync(path.join(os.tmpdir(), 'cvf-route-followup-'));
+        providerSpy.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
         evaluateEnforcementMock.mockReturnValue({ status: 'ALLOW', reasons: [] });
         process.env = { ...originalEnv };
+        // Hermetic: every file the route writes lives in the temp dir (a read-only checkout or masked .env.local must not matter).
+        process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
+        process.env.CVF_FALSE_POSITIVE_REPORTS_PATH = path.join(tempDir, 'false-positive-events.jsonl');
+        delete process.env.CVF_OPENAI_API_KEY;
         delete process.env.OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
@@ -51,7 +61,7 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
             role: 'admin',
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
-        executeAIMock.mockResolvedValue({
+        providerSpy.mockResolvedValue({
             success: true,
             output: '## Follow-up Response\n\nThis is structured output.\n\n### Key Points\n\n1. Point one.\n2. Point two.\n3. Point three.',
             model: 'gpt-4o',
@@ -61,13 +71,14 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
 
     afterEach(() => {
         process.env = { ...originalEnv };
+        if (tempDir) rmSync(tempDir, { recursive: true, force: true });
     });
 
     it('appends _previousOutput as context block and does not expose it as a visible input field', async () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
-                templateName: 'Basic Analysis',
+                templateId: 'meeting_notes', templateName: 'Basic Analysis',
                 intent: 'Analyze this governance topic in depth',
                 inputs: {
                     topic: 'AI governance',
@@ -84,7 +95,7 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         expect(data.success).toBe(true);
 
         // prompt is the 3rd argument: executeAI(provider, apiKey, prompt, options)
-        const capturedPrompt: string = executeAIMock.mock.calls[0][2];
+        const capturedPrompt: string = providerSpy.mock.calls[0][2];
         expect(capturedPrompt).toContain('Previous Output (for context)');
         expect(capturedPrompt).toContain('Original AI output here.');
         expect(capturedPrompt).not.toMatch(/\*\*\s*previous[_ ]output\s*[:\*]/i);
@@ -94,7 +105,7 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
-                templateName: 'Review Task',
+                templateId: 'meeting_notes', templateName: 'Review Task',
                 intent: 'Review and analyze the following content',
                 inputs: {
                     description: 'Improve code quality',
@@ -108,7 +119,7 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         const res = await POST(req as never);
         expect(res.status).toBe(200);
 
-        const capturedPrompt: string = executeAIMock.mock.calls[0][2];
+        const capturedPrompt: string = providerSpy.mock.calls[0][2];
         expect(capturedPrompt).toContain('**Description:**');
         expect(capturedPrompt).not.toContain('_internalMeta');
         expect(capturedPrompt).not.toContain('Internal Meta');
@@ -118,7 +129,7 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         const req = new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
-                templateName: 'Simple Task',
+                templateId: 'meeting_notes', templateName: 'Simple Task',
                 intent: 'Analyze this topic for governance compliance',
                 inputs: {
                     subject: 'Governance review',
@@ -130,8 +141,11 @@ describe('/api/execute — follow-up prompt threading (W97-T1)', () => {
         const res = await POST(req as never);
         expect(res.status).toBe(200);
 
-        const capturedPrompt: string = executeAIMock.mock.calls[0][2];
+        const capturedPrompt: string = providerSpy.mock.calls[0][2];
         expect(capturedPrompt).not.toContain('Previous Output');
         expect(capturedPrompt).not.toContain('follow-up or refinement');
     });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

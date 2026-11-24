@@ -1,5 +1,6 @@
-import { CheckCircle2, CircleAlert, MinusCircle, ServerCog, ShieldCheck, Workflow } from 'lucide-react';
+import { CheckCircle2, CircleAlert, MinusCircle, ServerCog, ShieldCheck } from 'lucide-react';
 import type { ComponentType } from 'react';
+import { TranslatedText } from '@/components/TranslatedText';
 import {
     getMaoDurableRunReadout,
     type MaoDurableRunReadoutRun,
@@ -85,11 +86,7 @@ export default async function MaoDurableRunsPage() {
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
             <header className="flex flex-col gap-4 border-b border-gray-200 pb-5 dark:border-white/[0.08] md:flex-row md:items-start md:justify-between">
                 <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                        <Workflow className="h-4 w-4" />
-                        MAO Durable Runs
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-950 dark:text-white">MAO Durable Runs</h1>
+                    <h1 className="text-2xl font-bold text-gray-950 dark:text-white"><TranslatedText translationKey="nav.maoRuns" /></h1>
                     <p className="max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">
                         Read-only durable-event status view: run discovery, generated task state, timeout counts, and event
                         recency only.

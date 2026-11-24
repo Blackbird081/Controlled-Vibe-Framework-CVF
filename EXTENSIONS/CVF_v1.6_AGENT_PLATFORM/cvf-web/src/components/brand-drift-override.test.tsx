@@ -1,3 +1,4 @@
+import enLabels from '@/lib/i18n/en.json';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrandDriftIndicator, type BrandDriftData } from './BrandDriftIndicator';
@@ -6,7 +7,7 @@ import { ActiveOverrides, type ActiveOverride } from './ActiveOverrides';
 
 // Mock i18n
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: 'en' }),
+    useLanguage: () => ({ language: 'en', t: (key: string) => (enLabels as Record<string, string>)[key] ?? key }),
 }));
 
 describe('BrandDriftIndicator', () => {
@@ -120,7 +121,7 @@ describe('OverrideRequestModal', () => {
 describe('ActiveOverrides', () => {
     it('shows no overrides message when empty', () => {
         render(<ActiveOverrides overrides={[]} />);
-        expect(screen.getByText('No active overrides')).toBeDefined();
+        expect(screen.getByText('No active exceptions')).toBeDefined();
     });
 
     it('renders override entries', () => {

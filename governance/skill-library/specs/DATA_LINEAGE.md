@@ -1,5 +1,7 @@
 # Data Lineage Specification
 
+> Catalog status: `NOT_ACTIVE` for current discovery. Retained as the original provenance design. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md).
+>
 > **Created:** Feb 08, 2026  
 > **Purpose:** Truy vết nguồn gốc (origin) của mỗi skill trong registry
 

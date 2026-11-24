@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { governanceEvaluate } from '@/lib/governance-engine';
+import { isBuildPhase } from '@/lib/governance-model';
 import { resolveGovernanceBindingsForAgent } from '@/lib/server/governance-binding-resolver';
 import type { GovernanceEvaluateRequest } from '@/types/governance-engine';
-
-function isBuildPhase(phase?: string): boolean {
-    if (!phase) return false;
-    const normalized = phase.trim().toUpperCase();
-    return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
-}
 
 /**
  * POST /api/governance/evaluate
@@ -43,7 +38,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (isBuildPhase(body.cvf_phase) && !body.skill_preflight?.declared) {
+        if (body.cvf_phase && isBuildPhase(body.cvf_phase.trim()) && !body.skill_preflight?.declared) {
             return NextResponse.json(
                 {
                     success: false,

@@ -26,7 +26,7 @@ const input: DraftInput = {
 };
 const url = 'http://localhost/api/artifacts/drafts';
 const post = (body: unknown, origin = 'http://localhost') => new NextRequest(url, {
-  method: 'POST', headers: { origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body),
+  method: 'POST', headers: { host: 'localhost', origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body),
 });
 type RouteExtraExports = Exclude<keyof typeof routeEntry, 'GET' | 'POST'>;
 const routeExportTypeGuard: Record<RouteExtraExports, never> = {};

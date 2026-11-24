@@ -105,37 +105,33 @@ git status --short --branch
 git log --oneline "HEAD@{upstream}..HEAD"
 ```
 
-If the current branch has more than two unpushed commits, the agent records a
-push-debt disposition before starting another tranche or creating additional
-optional closure/session-sync commits. Valid dispositions are:
+The upstream ahead count is advisory telemetry. More than two unpublished
+commits calls for concise stack/range disclosure at the planned sync checkpoint;
+it does not require a numeric exception, operator confirmation, forced push or
+local stop. The push-readiness preview reports WARN, including with --enforce.
+An actual missing upstream or unresolved remote divergence still blocks the
+push that depends on it.
 
-- the commit is required to finish the same already-started operator-approved
-  tranche and cannot be safely left uncommitted;
-- the operator has explicitly selected a push, squash, split, rebase, or branch
-  isolation plan for the current stack;
-- the agent records a concrete blocker explaining why the completed safe pair
-  cannot be pushed or consolidated before more work continues.
+One material commit plus one continuity commit is a useful planning target.
+Additional coherent local commits may finish the same admitted scope when they
+preserve reviewable boundaries, required gates and the remaining time/effect
+budget. Root records why an unplanned split or repair was necessary and its cost;
+a count increase alone is not a new tranche or a reason to interrupt the operator.
 
-The normal completed-tranche shape is at most one material commit plus one
-session-sync or handoff-sync commit. More commits for the same tranche require a
-brief reason in the steward evidence. A failed commit attempt is not a reason to
-create another tranche; repair the current changed set or stop with a
-source-backed blocker.
+Operator revision, 2026-11-13: agent-authored commit estimates are soft plans,
+not self-created stop conditions. Prefer complete, tested and reviewable local
+results over meeting an arbitrary commit count. An explicit operator hard cap
+or externally imposed transaction limit remains binding until its owner changes
+it. Do not apply this revision retroactively to erase historical overruns or
+reopen a stopped source, runtime, provider, network, spend or public action.
+Scope, authority, effect ceilings, failed proof, real elapsed budget and
+no-progress/diminishing-return controls still determine when work must stop.
 
-This section is a disclosure and operating-discipline rule for commit authors.
-It does not claim that `run_agent_commit_steward_preflight.py` currently
-machine-enforces the upstream ahead-count threshold. The read-only
-`run_agent_push_readiness_preview.py` upstream check can fail when the local
-ahead count exceeds the preview limit, but commit-steward preflight enforcement
-is limited to the implemented mode and changed-path shape checks until a future
-source-verified checker tranche explicitly adds an upstream-count guard.
-
-Branches that already exceed the threshold when this disclosure rule is adopted
-are `LEGACY_PUSH_DEBT_PRESENT`, not proof that every future commit must hard
-block. They should be routed to an operator-visible push/squash/split/rebase or
-branch-isolation decision before broad new roadmap work continues; a bounded
-in-progress tranche may still be finished when leaving it uncommitted would lose
-reviewable evidence.
+Do not manufacture micro-commits or repeat broad gates without information gain.
+Keep material/continuity separation and exact per-commit range evidence. Count
+is a rework signal to assess, never evidence that the work is safe or unsafe.
+Historical branches above a disclosure threshold retain their recorded debt;
+no hidden reset or history rewrite is implied.
 
 ## Single-Agent Multi-Role Rule
 

@@ -17,7 +17,7 @@
   ],
   "summary": {
     "activeRecentCount": 47,
-    "retainEvidenceCount": 87,
+    "retainEvidenceCount": 88,
     "safeToArchiveCount": 133,
     "archivedCount": 96,
     "derivedAt": "2026-09-24",
@@ -110,6 +110,7 @@
     "docs/audits/CVF_W106_T1_CP1_WORKSPACE_PAGES_VISUAL_SYNC_AUDIT_2026-04-19.md",
     "docs/audits/CVF_W107_T1_CP1_ACCOUNT_MODALS_VISUAL_SYNC_AUDIT_2026-04-19.md",
     "docs/audits/CVF_W108_T1_CP1_AI_MODALS_VISUAL_SYNC_AUDIT_2026-04-19.md",
-    "docs/audits/CVF_W109_T1_CP1_PLATFORM_PAGES_VISUAL_SYNC_AUDIT_2026-04-19.md"
+    "docs/audits/CVF_W109_T1_CP1_PLATFORM_PAGES_VISUAL_SYNC_AUDIT_2026-04-19.md",
+    "docs/audits/CVF_AGENTKIT_SKILLX_LOCAL_ABSORPTION_AUDIT_2026-11-08.md"
   ]
 }

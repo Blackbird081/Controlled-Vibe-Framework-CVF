@@ -236,7 +236,7 @@ describe('evaluateEnforcement', () => {
         expect(result.governanceStateSnapshot.uat.status).toBe('VALIDATED');
     });
 
-    it('allows build actions when declaration appears in content', () => {
+    it('requires actual preflight evidence even when content claims preflight passed', () => {
         const result = evaluateEnforcement({
             mode: 'governance',
             content: 'Skill Preflight PASS. SKILL_PREFLIGHT_RECORD: XD_App/DOCUMENTS/SKILL_PREFLIGHT_RECORD.md',
@@ -244,8 +244,8 @@ describe('evaluateEnforcement', () => {
             cvfPhase: 'BUILD',
             requiresSkillPreflight: true,
         });
-        expect(result.status).toBe('ALLOW');
-        expect(result.skillPreflight?.declared).toBe(true);
-        expect(result.skillPreflight?.source).toBe('content');
+        expect(result.status).toBe('BLOCK');
+        expect(result.skillPreflight?.declared).toBe(false);
+        expect(result.skillPreflight?.source).toBe('none');
     });
 });

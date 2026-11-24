@@ -14,7 +14,7 @@
 | 👤 **Developer cá nhân?** | Solo Guide (sắp có) |
 | 👥 **Team lead?** | Team Setup (sắp có) |
 | 🏢 **Enterprise?** | Enterprise Guide (sắp có) |
-| 📚 **124 Skills** | Skill Library |
+| 📚 [**Thư viện kỹ năng**](/skills) | Xem các gói dành cho agent và giới hạn sử dụng |
 | 🚀 **Web UI** | v1.6 Agent Platform |
 
 ---
@@ -57,7 +57,7 @@ docs/
 │   └── custom-skills.md
 ├── concepts/               ← Chuyên sâu
 │   ├── core-philosophy.md
-│   ├── 4-phase-process.md
+│   ├── lifecycle.md
 │   ├── governance-model.md
 │   └── ...
 └── cheatsheets/            ← Tham khảo
@@ -139,3 +139,5 @@ A: Không. CVF là agent-agnostic. Dùng với Copilot, ChatGPT, Claude, Gemini,
 
 **Q: Tôi chỉ 1 người, có cần phần nào khác?**  
 A: Chỉ cần: `CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` + guide này. Bỏ qua governance, templates, architecture.
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

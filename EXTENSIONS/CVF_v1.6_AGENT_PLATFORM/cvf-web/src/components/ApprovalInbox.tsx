@@ -1,9 +1,11 @@
 'use client';
+// Text Encoding Exception: approval states and recovery actions support Vietnamese and English.
 
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
+import { SessionExpiredNotice } from './SessionExpiredNotice';
 
 type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'expired';
 
@@ -38,7 +40,11 @@ const T = {
   clearFilters: { vi: 'Xóa bộ lọc', en: 'Clear filters' },
   loading: { vi: 'Đang tải…', en: 'Loading…' },
   actionRequired: { vi: 'Cần xử lý', en: 'Action Required' },
-  noPending: { vi: 'Không có yêu cầu chờ duyệt. Đã xử lý hết!', en: 'No pending approvals. All caught up!' },
+  noPending: { vi: 'Chưa có yêu cầu chờ duyệt. Về Trang chủ để tiếp tục công việc.', en: 'No requests are waiting for approval. Go to Home to continue your work.' },
+  noPendingAdmin: { vi: 'Chưa có yêu cầu chờ duyệt. Mở FinOps để tiếp tục quản lý chi phí.', en: 'No requests are waiting for approval. Open FinOps to continue reviewing costs.' },
+  noPendingMatches: { vi: 'Không có yêu cầu chờ duyệt phù hợp. Xóa bộ lọc để xem tất cả yêu cầu.', en: 'No pending requests match these filters. Clear the filters to see all requests.' },
+  loadFailed: { vi: 'Chưa tải được yêu cầu phê duyệt. Hãy thử tải lại.', en: 'Could not load approval requests. Try loading them again.' },
+  retry: { vi: 'Tải lại', en: 'Reload' },
   history: { vi: 'Lịch sử quyết định', en: 'Decision History' },
   colRequest: { vi: 'Yêu cầu', en: 'Request' },
   colRiskPhase: { vi: 'Rủi ro / Pha', en: 'Risk / Phase' },
@@ -51,7 +57,9 @@ const T = {
   expired: { vi: 'Đã hết hạn', en: 'Expired' },
   remaining: { vi: 'còn lại', en: 'remaining' },
   toolPayload: { vi: 'Dữ liệu công cụ', en: 'Tool payload' },
-  pending: { vi: 'pending', en: 'pending' },
+  pending: { vi: 'Đang chờ duyệt', en: 'Pending' },
+  approved: { vi: 'Đã phê duyệt', en: 'Approved' },
+  rejected: { vi: 'Đã từ chối', en: 'Rejected' },
 };
 
 function t(key: keyof typeof T, lang: string) {
@@ -67,6 +75,7 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
   const { language } = useLanguage();
   const [requests, setRequests] = useState<ApprovalRequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadFailure, setLoadFailure] = useState<'expired' | 'unavailable' | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [acting, setActing] = useState<Record<string, boolean>>({});
@@ -79,14 +88,29 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
   const loadRequests = useCallback(async () => {
     try {
       const res = await fetch('/api/approvals');
+      if (res.status === 401) {
+        setLoadFailure('expired');
+        return;
+      }
       const data = await res.json() as { success: boolean; data: ApprovalRequestRecord[] };
-      if (data.success) setRequests(data.data);
+      if (!res.ok || !data?.success || !Array.isArray(data.data)) {
+        setLoadFailure('unavailable');
+        return;
+      }
+      setRequests(data.data);
+      setLoadFailure(null);
+    } catch {
+      setLoadFailure('unavailable');
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { void loadRequests(); }, [loadRequests]);
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => { if (!cancelled) void loadRequests(); });
+    return () => { cancelled = true; };
+  }, [loadRequests]);
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 30000);
     return () => clearInterval(interval);
@@ -167,7 +191,7 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
           <select title={t('status', language)} value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="text-sm border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
             <option value="">{t('all', language)}</option>
             {(['pending', 'approved', 'rejected', 'expired'] as ApprovalStatus[]).map(s => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>{t(s, language)}</option>
             ))}
           </select>
         </div>
@@ -180,13 +204,24 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
 
       {loading && <div className="text-gray-500 py-8 text-center">{t('loading', language)}</div>}
 
-      {!loading && (
+      {!loading && loadFailure === 'expired' && <SessionExpiredNotice vi={language === 'vi'} />}
+
+      {!loading && loadFailure === 'unavailable' && (
+        <div className="py-8 text-center">
+          <p role="alert" className="text-sm text-gray-600 dark:text-gray-300">{t('loadFailed', language)}</p>
+          <button type="button" onClick={() => { setLoading(true); void loadRequests(); }} className="mt-2 min-h-11 text-sm font-semibold text-indigo-600 hover:underline dark:text-indigo-300">
+            {t('retry', language)}
+          </button>
+        </div>
+      )}
+
+      {!loading && !loadFailure && (
         <div className="mb-10">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t('actionRequired', language)}</h2>
           {pending.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-8 text-center border border-dashed border-gray-200 dark:border-gray-700">
-              <div className="text-4xl mb-3">🎉</div>
-              <p className="text-gray-500 font-medium">{t('noPending', language)}</p>
+              <p className="text-gray-600 font-medium dark:text-gray-300">{t(hasFilter ? 'noPendingMatches' : homePath === '/admin/finops' ? 'noPendingAdmin' : 'noPending', language)}</p>
+              {!hasFilter && <Link href={homePath} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-indigo-600 hover:underline dark:text-indigo-300">{homePath === '/admin/finops' ? 'FinOps' : t('breadcrumbHome', language)}</Link>}
             </div>
           ) : (
             <div className="grid gap-4">
@@ -243,7 +278,7 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
         </div>
       )}
 
-      {!loading && history.length > 0 && (
+      {!loading && !loadFailure && history.length > 0 && (
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t('history', language)}</h2>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -269,7 +304,7 @@ function ApprovalInboxContent({ homePath = '/home' }: ApprovalInboxContentProps)
                         req.status === 'approved' ? 'bg-emerald-100 text-emerald-700' :
                         req.status === 'expired' ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' :
                         'bg-red-100 text-red-700'
-                      }`}>{req.status.toUpperCase()}</span>
+                      }`}>{t(req.status, language)}</span>
                     </td>
                     <td className="py-4 px-6">
                       <div className="text-gray-700 dark:text-gray-300 truncate max-w-xs">{req.reviewComment ?? '-'}</div>

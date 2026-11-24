@@ -16,7 +16,7 @@ Choose the path that fits you:
 
 You want to learn CVF<br>for personal projects
 
-**[→ Get Started](#-solo-developer---5-minutes)**
+**[→ Get Started](#solo-developer---5-minutes)**
 
 </td>
 <td width="25%" align="center">
@@ -25,7 +25,7 @@ You want to learn CVF<br>for personal projects
 
 Team of 2-5 people<br>needing collaboration
 
-**[→ Team Setup](#-small-team---15-minutes)**
+**[→ Team Setup](#small-team---15-minutes)**
 
 </td>
 <td width="25%" align="center">
@@ -34,7 +34,7 @@ Team of 2-5 people<br>needing collaboration
 
 Production deployment<br>with full governance
 
-**[→ Enterprise](#-enterprise---30-minutes)**
+**[→ Enterprise](#enterprise---30-minutes)**
 
 </td>
 <td width="25%" align="center">
@@ -43,7 +43,7 @@ Production deployment<br>with full governance
 
 Want to contribute<br>to CVF
 
-**[→ Dev Guide](#%EF%B8%8F-contributors)**
+**[→ Dev Guide](#contributors)**
 
 </td>
 </tr>
@@ -51,7 +51,7 @@ Want to contribute<br>to CVF
 
 ---
 
-## 👤 Solo Developer - 5 Minutes
+## Solo Developer - 5 Minutes
 
 ### Step 1: Understand What CVF Is (2 min read)
 
@@ -67,16 +67,9 @@ When you use AI (ChatGPT/Claude/Copilot) to code:
 - ❌ No documentation
 - ❌ Technical debt accumulates
 
-#### CVF Solution: 4-Phase Process
+#### CVF workflow
 
-```
-Phase A (Discovery)  →  Phase B (Design)  →  Phase C (Build)  →  Phase D (Review)
-      ↓                       ↓                    ↓                    ↓
- Requirements            Architecture          AI Codes           You Validate
- YOU decide              YOU decide          AI executes         YOU approve/reject
-```
-
-**Golden rule:** AI is the executor, YOU are the decision maker.
+Understand → Plan → Build → Check → Close. Planning includes DESIGN, SPEC and WORK ORDER. See the [work lifecycle](lifecycle.md).
 
 ### Step 2: Run Your First Example (3 min)
 
@@ -99,7 +92,7 @@ npm run dev
 
 1. Click "Templates" → Choose "Simple Todo App"
 2. Fill form → Click "Generate"
-3. See 4-phase breakdown
+3. Review the specification
 4. Export prompt to use with AI
 
 #### Option B: Manual (Core CVF)
@@ -120,7 +113,7 @@ After running your first example:
 
 ---
 
-## 👥 Small Team - 15 Minutes
+## Small Team - 15 Minutes
 
 ### Prerequisites
 
@@ -152,10 +145,10 @@ npm run dev
 **Share with the team:**
 
 1. **Roles in CVF:**
-   - 🎯 **Project Owner:** Decides requirements (Phase A)
-   - 🎨 **Architect:** Designs solution (Phase B)
-   - 🤖 **AI Executor:** Generates code (Phase C)
-   - ✅ **Reviewer:** Validates quality (Phase D)
+   - 🎯 **Project Owner:** Decides requirements (INTAKE)
+   - 🎨 **Architect:** Designs solution (DESIGN)
+   - 🤖 **AI Executor:** Generates code (BUILD)
+   - ✅ **Reviewer:** Validates quality (REVIEW)
 
 2. **Workflow:**
 
@@ -166,7 +159,7 @@ npm run dev
 3. **Tools:**
    - Web UI: Templates & Skills
    - Governance Toolkit: Phase gates, risk control
-   - Skill Library: 124 reusable skills
+   - [Agent skill library](/skills)
 
 ### Step 3: First Team Project (5 min)
 
@@ -188,7 +181,7 @@ npm run dev
 
 ---
 
-## 🏢 Enterprise - 30 Minutes
+## Enterprise - 30 Minutes
 
 ### Phase 1: Assessment (10 min)
 
@@ -256,7 +249,7 @@ npm run dev
 
 ---
 
-## 🛠️ Contributors
+## Contributors
 
 ### Want to Contribute?
 
@@ -307,7 +300,7 @@ git push origin feature/your-feature-name
 ### Path 1: Core Concepts (1-2 hours)
 
 1. Core Philosophy - 15 mins
-2. 4-Phase Process - 20 mins
+2. Work lifecycle - 20 mins
 3. Governance Model - 25 mins
 4. Skill System - 20 mins
 
@@ -321,7 +314,7 @@ git push origin feature/your-feature-name
 ### Path 3: Deep Dives (ongoing)
 
 - Governance Toolkit — Comprehensive
-- Skill Library — 124 skills
+- [Agent skill library](/skills)
 - Version History — Evolution
 - Architecture — Technical specs
 

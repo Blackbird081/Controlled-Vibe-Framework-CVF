@@ -14,9 +14,11 @@
 
 'use client';
 
+import { RISK_OPTIONS, type RuntimeRisk } from './governance-model';
+
 // ==================== TYPES ====================
 
-export type SafetyRiskLevel = 'R0' | 'R1' | 'R2' | 'R3';
+export type SafetyRiskLevel = RuntimeRisk;
 export type PolicyDecision = 'ALLOW' | 'ESCALATE' | 'BLOCK';
 export type ThreatSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
@@ -68,12 +70,9 @@ const CVF_RISK_SCORE_MAP: Record<SafetyRiskLevel, number> = {
     R3: 0.92,
 };
 
-const RISK_LABELS: Record<SafetyRiskLevel, { vi: string; en: string; emoji: string }> = {
-    R0: { vi: 'An toàn', en: 'Safe', emoji: '🟢' },
-    R1: { vi: 'Cần chú ý', en: 'Attention', emoji: '🟡' },
-    R2: { vi: 'Cần duyệt', en: 'Review Required', emoji: '🟠' },
-    R3: { vi: 'Nguy hiểm', en: 'Dangerous', emoji: '🔴' },
-};
+const RISK_LABELS = Object.fromEntries(RISK_OPTIONS.map(option => [
+    option.value, { vi: option.label, en: option.labelEn, emoji: option.icon },
+])) as Record<SafetyRiskLevel, { vi: string; en: string; emoji: string }>;
 
 const RISK_DESCRIPTIONS: Record<SafetyRiskLevel, { vi: string; en: string }> = {
     R0: { vi: 'AI đang hoạt động bình thường, không cần can thiệp', en: 'AI operating normally, no intervention needed' },
@@ -328,7 +327,7 @@ export function getSafetyStatus(riskLevel: SafetyRiskLevel): SafetyStatus {
 }
 
 export function getAllRiskLevels(): SafetyStatus[] {
-    return (['R0', 'R1', 'R2', 'R3'] as SafetyRiskLevel[]).map(getSafetyStatus);
+    return RISK_OPTIONS.map(option => getSafetyStatus(option.value));
 }
 
 // Re-export constants for external use

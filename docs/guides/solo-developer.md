@@ -309,10 +309,12 @@ A: A prompt is one-shot. CVF gives you persistent context (specs), decision hist
 
 - 📖 [Understand the Controlled Execution Loop](../concepts/controlled-execution-loop.md)
 - 🧪 [Try Your First CVF Project (Tutorial)](../tutorials/first-project.md)
-- 📚 [Browse 131 skills](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/)
+- 📚 [Browse reusable forms for end users](../../governance/skill-library/registry/user-skills/INDEX.md)
 - 🖥️ [Set Up Web UI](../tutorials/web-ui-setup.md)
 - 👥 [Ready for a team? → Team Guide](team-setup.md)
 
 ---
 
 *Last updated: March 20, 2026 | Canonical loop aligned*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

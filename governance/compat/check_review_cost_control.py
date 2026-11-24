@@ -13,8 +13,8 @@ bounded convergence/self-proof envelope of changed self-declared worker
 returns.
 
 This checker is intentionally narrow. It validates field presence, value
-shape, controlled tokens, the round-three escalation rule, and the multi-commit
-exception reason.
+shape, controlled tokens, and the round-three escalation rule. Commit counts
+are required telemetry and do not impose a count-based cap.
 It never scores semantic review quality, root-cause independence, or value
 delta; those remain reviewer judgment. Applicability is artifact-shape based,
 not bare-substring based. Standards, tests, archived artifacts, and unchanged
@@ -508,21 +508,6 @@ def diagnose(path: str, text: str, *, root: Path | None = None, now: datetime | 
     if delay_value is not None and delay_value not in ALLOWED_DELAY_TOKENS:
         issues.append(
             f"field `{DELAY_FIELD}` must be one of {ALLOWED_DELAY_TOKENS}, got `{delay_value}`"
-        )
-
-    material_count = values.get("materialCommitCount")
-    continuity_count = values.get("continuityCommitCount")
-    excessive_commits = any(
-        value is not None and _is_non_negative_integer(value) and int(value) > 1
-        for value in (material_count, continuity_count)
-    )
-    if excessive_commits and (
-        commit_plan_value is None
-        or not _has_reason(commit_plan_value, COMMIT_EXCEPTION_PREFIX)
-    ):
-        issues.append(
-            "materialCommitCount or continuityCommitCount > 1 requires "
-            f"`{COMMIT_PLAN_FIELD}` to use `{COMMIT_EXCEPTION_PREFIX}: <reason>`"
         )
 
     return Diagnostic(path=path, applicable=True, issues=tuple(issues))

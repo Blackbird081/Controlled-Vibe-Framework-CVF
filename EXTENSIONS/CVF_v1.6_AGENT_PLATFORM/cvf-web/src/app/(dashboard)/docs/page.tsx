@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese navigation and documentation labels.
 'use client';
 
 import Link from 'next/link';
@@ -176,8 +177,8 @@ export default function DocsPage() {
                         </h3>
                         <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600 dark:text-white/58">
                             {language === 'vi'
-                                ? '85 skills từ Orchestra Research — chỉ dùng tham khảo patterns & implementation. Không tích hợp trực tiếp vào CVF.'
-                                : '85 skills from Orchestra Research — reference only for patterns & implementation. Not directly integrated into CVF.'}
+                                ? 'Bộ tài liệu của Orchestra Research để tham khảo cách thiết kế và triển khai. CVF không tích hợp trực tiếp bộ tài liệu này.'
+                                : 'External design and implementation references from Orchestra Research.'}
                         </p>
                     </div>
 
@@ -224,7 +225,7 @@ export default function DocsPage() {
                             rel="noopener noreferrer"
                             className="rounded-full bg-slate-100 px-4 py-2 font-semibold text-slate-600 transition hover:bg-slate-200 dark:bg-white/[0.06] dark:text-white/65 dark:hover:bg-white/[0.1]"
                         >
-                            {language === 'vi' ? 'Xem toàn bộ 85 skills →' : 'View all 85 skills →'}
+                            {language === 'vi' ? 'Mở bộ tài liệu tham khảo →' : 'Open reference collection →'}
                         </a>
                     </div>
                 </section>

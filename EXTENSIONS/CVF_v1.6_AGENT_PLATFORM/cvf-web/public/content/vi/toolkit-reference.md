@@ -6,7 +6,7 @@
 
 CVF Toolkit Reference là một **governance enforcement engine viết bằng TypeScript** minh họa cách triển khai các khái niệm governance CVF trong code. Bao gồm:
 
-- **Risk Classifier** — Đánh giá rủi ro ngữ cảnh (R0–R4) với leo thang domain, environment và capability
+- **Risk Classifier** — Đánh giá rủi ro ngữ cảnh (R0–R3; R4 blocked) với leo thang domain, environment và capability
 - **Phase Controller** — Vòng đời tuần tự P0→P6 với protocol đóng băng
 - **Governance Guard** — Bộ điều phối enforcement trung tâm kiểm tra risk + phase + operator + change + freeze + environment
 - **Skill Registry** — Đăng ký, truy vấn và vô hiệu hóa skill có kiểm soát
@@ -44,7 +44,7 @@ CVF Toolkit Reference là một **governance enforcement engine viết bằng Ty
 | **R1** | Thấp | Cho phép mọi nơi | — |
 | **R2** | Trung bình | dev + staging | UAT |
 | **R3** | Cao | chỉ dev | UAT + Phê duyệt + Đóng băng |
-| **R4** | Nghiêm trọng | Bị chặn | UAT + Đa phê duyệt + Đóng băng |
+| **R4** | Bị chặn | Bị chặn | Không bao giờ chạy |
 
 ## Mô Hình Phase (P0–P6)
 
@@ -53,7 +53,7 @@ P0_DESIGN → P1_BUILD → P2_INTERNAL_VALIDATION → P3_UAT → P4_APPROVED →
 ```
 
 - Chỉ tuần tự (không bỏ qua phase)
-- R3/R4 phải đóng băng trước khi production
+- R4 bị chặn và không bao giờ chạy; đánh giá R3 theo kiểm soát Local áp dụng
 - Chỉ ADMIN có thể rollback P6 → P0
 
 ## Luồng Governance
@@ -101,3 +101,5 @@ EXTENSIONS/CVF_TOOLKIT_REFERENCE/
 ```
 
 **Liên quan:** [CVF Web Platform](/docs/web-ui-setup) | [Mô Hình Governance](/docs/governance-model) | [Mô Hình Rủi Ro](/docs/risk-model)
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

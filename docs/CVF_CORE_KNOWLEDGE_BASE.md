@@ -25,7 +25,7 @@ CVF = Governance Framework (Rules + Process + Tools)
 |---|---|
 | **Tên chính thức** | Controlled Vibe Framework (CVF) |
 | **Phiên bản hiện tại** | **v4.0.0 Runtime** (Apr 2026) |
-| **Slogan** | "Controlled vibe coding — not faster, but smarter." |
+| **Slogan** | "Controlled vibe coding. Safe and governable, with speed and cost in mind." |
 | **Định vị** | Governance Framework for AI-assisted development |
 | **Agent-agnostic** | ✅ Works with Claude, GPT, Gemini, Copilot, local LLMs |
 | **Mục tiêu** | Human controls quality; AI executes under governance |
@@ -143,7 +143,7 @@ Khi đánh giá giá trị sản phẩm hiện tại của CVF, mặc định hi
 │     v1.2 — Skill Governance: Registry, Risk model R0–R3    │
 │     v1.5 — UX Platform (FROZEN)                            │
 │     v1.5.1 — End-User Orientation                           │
-│     v1.5.2 — Skill Library (62 active skills, 12 domains)   │
+│     Skill catalog: agent packs and guided outcome forms     │
 ├─────────────────────────────────────────────────────────────┤
 │  🛡️ LAYER 1.5 — DEVELOPMENT GOVERNANCE                      │
 │     v1.1.1 — Phase Governance Protocol (STABLE ✅)          │
@@ -251,7 +251,7 @@ Authoritative skill-library facts live in:
 
 - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md`
 
-Current orientation fact: 62 active skills across 12 domains.
+The catalog has certified skill packs for agents and guided outcome templates for users.
 
 ---
 

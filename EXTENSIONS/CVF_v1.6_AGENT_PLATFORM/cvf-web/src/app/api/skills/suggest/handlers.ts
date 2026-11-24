@@ -1,3 +1,4 @@
+import { isSameBrowserOrigin } from '@/lib/server/browser-origin';
 import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { CredentialBoundary, type AdapterAdmissionRecord } from 'cvf-model-gateway';
@@ -10,7 +11,6 @@ import { JevSuggestionCustody, JevCustodyError, jevDigest, jevPolicyDigest, vali
 import type { JevAuthorizedRuntime, JevTrialRuntime } from '@/lib/server/jev-authorized-runtime';
 
 const reply=(status:number,body:Record<string,unknown>)=>NextResponse.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',Vary:'Cookie, Origin'}});
-function sameOrigin(request:Request):boolean{try{const origin=request.headers.get('origin');const site=request.headers.get('sec-fetch-site');return !!origin&&origin===new URL(request.url).origin&&(!site||site==='same-origin');}catch{return false;}}
 /** Same native getToken default cookie name; bearer fallback is refused by this pilot. */
 export function verifiedJevCookieBinding(request:NextRequest):string|null{
   if(request.headers.has('authorization'))return null;
@@ -105,7 +105,7 @@ export function skillSuggestionHandlers(deps:Dependencies={}){
       }catch(error){return failed(error);}
     },
     async POST(request:NextRequest):Promise<NextResponse>{
-      if(!sameOrigin(request))return reply(403,{error:'ORIGIN_REFUSED'});
+      if(!isSameBrowserOrigin(request))return reply(403,{error:'ORIGIN_REFUSED'});
       const actor=await principal(request);if(actor instanceof NextResponse)return actor;
       if(!(request.headers.get('content-type')??'').toLowerCase().startsWith('application/json'))return reply(415,{error:'JSON_REQUIRED'});
       const declared=request.headers.get('content-length');if(declared&&(!/^\d+$/.test(declared)||Number(declared)>2500))return reply(413,{error:'BODY_TOO_LARGE'});

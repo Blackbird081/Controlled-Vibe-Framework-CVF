@@ -6,17 +6,17 @@
 
 ## 📋 Table of Contents
 
-- [Setup Issues](#-setup-issues)
-- [Web UI Problems](#%EF%B8%8F-web-ui-problems)
-- [Version Confusion](#-version-confusion)
-- [Skill Errors](#-skill-errors)
-- [Governance Issues](#-governance-issues)
-- [Performance Problems](#-performance-problems)
-- [Common Error Messages](#%EF%B8%8F-common-error-messages)
+- [Setup Issues](#setup-issues)
+- [Web UI Problems](#web-ui-problems)
+- [Version Confusion](#version-confusion)
+- [Skill Errors](#skill-errors)
+- [Governance Issues](#governance-issues)
+- [Performance Problems](#performance-problems)
+- [Common Error Messages](#common-error-messages)
 
 ---
 
-## 🔧 Setup Issues
+## Setup Issues
 
 ### Issue: `npm install` fails
 
@@ -146,7 +146,7 @@ fatal: could not read Username
 
 ---
 
-## 🖥️ Web UI Problems
+## Web UI Problems
 
 ### Issue: Web UI shows blank page
 
@@ -273,7 +273,7 @@ fatal: could not read Username
 
 ---
 
-## 🔀 Version Confusion
+## Version Confusion
 
 ### Issue: Not sure which version to use
 
@@ -315,7 +315,7 @@ fatal: could not read Username
 
 ---
 
-## 🧩 Skill Errors
+## Skill Errors
 
 ### Issue: Skill validation fails
 
@@ -373,100 +373,13 @@ Missing required field: risk_level
 
 ---
 
-### Issue: "Risk level exceeds phase limit"
+## Governance Issues
 
-**Symptoms:**
+### Risk or authority blocks the work
 
-```
-⚠️ Warning: Risk level R3 not allowed in Phase A
-```
+Do not lower a declared risk or change the phase merely to bypass a stop. Check the request, current phase, role and the reason given. Supply missing information, resolve the issue within your authority, or ask the responsible owner to decide. R4 is blocked and cannot execute. See the [risk model](risk-model.md) and [work lifecycle](lifecycle.md).
 
-**Solutions:**
-
-1. **Understand risk model:**
-   - Phase A (Discovery): R0-R1 only
-   - Phase B (Design): R0-R2
-   - Phase C (Build): R0-R3
-   - Phase D (Review): R0-R1
-
-2. **Lower risk level or change phase:**
-
-   ```yaml
-   # Either:
-   risk_level: R1  # Lower risk
-   
-   # Or use in different phase
-   # Move from Phase A to Phase C
-   ```
-
-3. **See risk guide:**
-   - [Governance Model](../docs/concepts/governance-model.md#risk-model)
-
----
-
-## 🔐 Governance Issues
-
-### Issue: Phase gates blocking progress
-
-**Symptoms:**
-
-- Can't proceed to next phase
-- Checklist not complete
-
-**Solutions:**
-
-1. **Review checklist items:**
-
-   ```bash
-   # Check phase gate requirements
-   governance/toolkit/01_BOOTSTRAP/phase-gates.md
-   ```
-
-2. **Complete missing items:**
-   - Each phase has specific requirements
-   - Must be checked off before proceeding
-
-3. **Override (if authorized):**
-
-   ```yaml
-   # In governance config
-   allow_phase_skip: true  # Use with caution!
-   ```
-
----
-
-### Issue: Authority matrix conflicts
-
-**Symptoms:**
-
-- "User not authorized for this role"
-- Permission denied errors
-
-**Solutions:**
-
-1. **Check role assignment:**
-
-   ```yaml
-   # governance/toolkit/03_CONTROL/authority-matrix.yaml
-   roles:
-     - user: alice@example.com
-       phase: A
-       role: Owner
-   ```
-
-2. **Verify role for phase:**
-   - Phase A: Owner only
-   - Phase B: Architect only
-   - Phase C: Executor (AI)
-   - Phase D: Reviewer only
-
-3. **Request role change:**
-   - Contact project admin
-   - Update authority matrix
-
----
-
-## ⚡ Performance Problems
+## Performance Problems
 
 ### Issue: Web UI is slow
 
@@ -520,7 +433,7 @@ Missing required field: risk_level
 
 ---
 
-## ⚠️ Common Error Messages
+## Common Error Messages
 
 ### Error: "Module not found"
 
@@ -615,8 +528,8 @@ Access to fetch at '...' has been blocked by CORS policy
 
 ### Step 1: Search Documentation
 
-- 🔍 [Full docs](../docs/GET_STARTED.md)
-- ❓ [FAQ](faq.md)
+- 🔍 [Full docs](/docs/getting-started)
+- ❓ [FAQ](/docs/troubleshooting)
 
 ### Step 2: Check Existing Issues
 
@@ -670,10 +583,10 @@ Access to fetch at '...' has been blocked by CORS policy
 
 ## 📚 More Resources
 
-- [Getting Started](../docs/GET_STARTED.md)
+- [Getting Started](/docs/getting-started)
 - [Version Picker](version-picker.md)
-- [Quick Reference](cheatsheets/quick-reference.md)
-- [FAQ](faq.md)
+- [Quick Reference](/docs/version-picker)
+- [FAQ](/docs/troubleshooting)
 
 ---
 
@@ -681,6 +594,8 @@ Access to fetch at '...' has been blocked by CORS policy
 
 **Vẫn stuck?** [💬 Hỏi trên Discord](https://discord.gg/cvf)
 
-[⬅️ Back to Docs](../docs/GET_STARTED.md)
+[⬅️ Back to Docs](/docs/getting-started)
 
 </div>
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

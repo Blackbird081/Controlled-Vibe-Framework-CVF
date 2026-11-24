@@ -126,14 +126,13 @@ export function resolveExecutionOutputClass(
   templateCategory?: string | null,
   mode?: string | null,
 ): ResolvedExecutionOutputClass {
-  const normalizedTemplateId = templateId?.trim();
-  if (normalizedTemplateId === 'app_builder_complete') {
-    return { outputClass: 'artifact', source: 'template_id' };
-  }
-
   const normalizedMode = mode?.trim().toLowerCase();
   if (normalizedMode === 'code') {
     return { outputClass: 'code_patch', source: 'default' };
+  }
+
+  if (templateId?.trim() === 'app_builder_complete') {
+    return { outputClass: 'artifact', source: 'template_id' };
   }
 
   return { outputClass: 'summary', source: 'default' };

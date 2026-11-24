@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -9,7 +9,6 @@ const appendCostEventMock = vi.hoisted(() => vi.fn());
 let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -19,6 +18,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
     withSessionAuditPayload: (session: { impersonation?: { realActorId: string; sessionId: string; impersonatedUserId: string } } | null | undefined, payload?: Record<string, unknown>) => {
         const nextPayload = { ...(payload ?? {}) };
         if (session?.impersonation) {
@@ -46,6 +46,15 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { getApprovalStore } from '../approvals/store';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
+
+function makeExecuteRequest(body: Record<string, unknown>): Request {
+    return new Request('http://localhost/api/execute', {
+        method: 'POST',
+        body: JSON.stringify(body),
+    });
+}
 
 describe('/api/execute governanceTrace receipt enrichment', () => {
     const originalEnv = { ...process.env };
@@ -60,12 +69,13 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
     ].join('\n');
 
     beforeEach(() => {
-        executeAIMock.mockReset();
+        providerSpy.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
         appendAuditEventMock.mockReset();
         auditEventSequence = 0;
+        getApprovalStore().clear();
         appendAuditEventMock.mockImplementation(async () => ({
             id: `governance-trace-audit-${++auditEventSequence}`,
         }));
@@ -87,7 +97,7 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
             teamId: 'team-1',
             expiresAt: Date.now() + 1000 * 60 * 60,
         });
-        executeAIMock.mockResolvedValue({
+        providerSpy.mockResolvedValue({
             success: true,
             output: validOutput,
             provider: 'openai',
@@ -103,6 +113,121 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
 
     afterEach(() => {
         process.env = { ...originalEnv };
+    });
+
+    it('derives intake and raises a declared R0 to R3 before issuing approval', async () => {
+        const { evaluateEnforcement } = await vi.importActual<typeof import('@/lib/enforcement')>('@/lib/enforcement');
+        evaluateEnforcementMock.mockImplementationOnce(evaluateEnforcement);
+        const requestBody = {
+            templateName: 'Deployment plan',
+            intent: 'Prepare a production rollout plan',
+            inputs: { scope: 'Prepare a plan before any changes are made' },
+            provider: 'openai',
+            mode: 'governance',
+            cvfPhase: 'REVIEW',
+            cvfRiskLevel: 'R0',
+        };
+        const response = await POST(makeExecuteRequest(requestBody) as never);
+
+        const data = await response.json();
+        expect(response.status, data.error).toBe(409);
+        expect(data.enforcement.riskGate.riskLevel).toBe('R3');
+        expect(getApprovalStore().get(data.approvalId)).toMatchObject({ phase: 'INTAKE', riskLevel: 'R3' });
+        const previous = getApprovalStore().get(data.approvalId)!;
+        getApprovalStore().set(data.approvalId, {
+            ...previous,
+            status: 'approved',
+            requestContext: { ...previous.requestContext, cvfRiskLevel: 'R0' },
+        });
+        const resumed = await POST(makeExecuteRequest({
+            ...requestBody,
+            approvalId: data.approvalId,
+        }) as never);
+        expect(resumed.status).toBe(409);
+        expect((await resumed.json()).error).toMatch(/effective phase or risk changed/);
+        expect(providerSpy).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        ['R0: handle this request', 'R0', 'R3', 409],
+        ['Prepare a short fictional summary', 'R4', 'R4', 400],
+    ])('uses server evidence for %s even if the request declares %s', async (intent, declared, riskLevel, status) => {
+        const { evaluateEnforcement } = await vi.importActual<typeof import('@/lib/enforcement')>('@/lib/enforcement');
+        evaluateEnforcementMock.mockImplementationOnce(evaluateEnforcement);
+        const response = await POST(makeExecuteRequest({
+            templateName: 'Unclassified draft', intent, inputs: {}, mode: 'full',
+            cvfPhase: 'FREEZE', cvfRiskLevel: declared,
+        }) as never);
+
+        const data = await response.json();
+        expect(response.status, data.error).toBe(status);
+        expect(data.enforcement.riskGate.riskLevel).toBe(riskLevel);
+        expect(providerSpy).not.toHaveBeenCalled();
+    });
+
+    it('denies a client-only build even with a preflight declaration', async () => {
+        const response = await POST(makeExecuteRequest({
+            templateId: 'build_my_app',
+            templateName: 'Build My App',
+            intent: 'Write code for an application',
+            inputs: { appIdea: 'Task manager' },
+            fileScope: ['src/app.ts'],
+            cvfPhase: 'BUILD',
+            cvfRiskLevel: 'R0',
+            skillPreflightPassed: true,
+        }) as never);
+
+        const data = await response.json();
+        expect(response.status, data.error).toBe(403);
+        expect(data.error).toMatch(/server-authorized build phase/);
+        expect(providerSpy).not.toHaveBeenCalled();
+        expect(getApprovalStore().size).toBe(0);
+    });
+
+    it('does not treat a product brief in code mode as an intake draft', async () => {
+        const response = await POST(makeExecuteRequest({
+            templateId: 'app_builder_complete', templateName: 'Product Brief',
+            intent: 'Draft product requirements', inputs: { appName: 'Demo' },
+            mode: 'code', cvfPhase: 'BUILD', cvfRiskLevel: 'R0',
+            action: 'analyze product brief',
+        }) as never);
+
+        expect(response.status).toBe(403);
+        expect(providerSpy).not.toHaveBeenCalled();
+        expect(getApprovalStore().size).toBe(0);
+    });
+
+    it('uses a certified template floor even when the request declares R0', async () => {
+        evaluateEnforcementMock.mockReturnValueOnce({ status: 'BLOCK', reasons: [] });
+        await POST(makeExecuteRequest({
+            templateId: 'data_analysis',
+            templateName: 'Data Analysis',
+            intent: 'Summarize the supplied figures',
+            inputs: { values: '4, 8, 12' },
+            provider: 'openai',
+            mode: 'governance',
+            cvfRiskLevel: 'R0',
+        }) as never);
+
+        expect(evaluateEnforcementMock).toHaveBeenCalledWith(expect.objectContaining({
+            cvfPhase: 'INTAKE',
+            cvfRiskLevel: 'R2',
+        }));
+        expect(providerSpy).not.toHaveBeenCalled();
+    });
+
+    it('includes user-controlled field names in the effective risk', async () => {
+        const { evaluateEnforcement } = await vi.importActual<typeof import('@/lib/enforcement')>('@/lib/enforcement');
+        evaluateEnforcementMock.mockImplementationOnce(evaluateEnforcement);
+        const response = await POST(makeExecuteRequest({
+            templateId: 'strategy_analysis', templateName: 'Strategy',
+            intent: 'Prepare a short outline',
+            inputs: { topic: 'Rollout plan', context: 'Fictional example', productionChange: 'Schedule' },
+            provider: 'openai', mode: 'simple', cvfRiskLevel: 'R0',
+        }) as never);
+        expect(response.status).toBe(400);
+        expect((await response.json()).enforcement.riskGate.riskLevel).toBe('R3');
+        expect(providerSpy).not.toHaveBeenCalled();
     });
 
     it('returns bounded governanceTrace entries on successful route receipts', async () => {
@@ -162,7 +287,8 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
         expect(serialized).not.toContain('This response provides a structured recommendation');
         expect(data.governanceEvidenceReceipt?.runtimeTelemetry).toMatchObject({
             schemaVersion: 'cvf.runtimeTelemetry.v1',
-            providerLatencyMs: 123,
+            // Latency is now measured by the canonical route around the Gateway call (the provider no longer self-reports it).
+            providerLatencyMs: expect.any(Number),
             tokenUsage: {
                 inputTokens: 10,
                 outputTokens: 20,
@@ -191,4 +317,7 @@ describe('/api/execute governanceTrace receipt enrichment', () => {
         expect(JSON.stringify(data.governanceEvidenceReceipt.receiptIntegrity)).not.toContain('route-test-signing-secret');
         expect(JSON.stringify(data.governanceEvidenceReceipt.receiptIntegrity)).not.toContain('test-key');
     });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

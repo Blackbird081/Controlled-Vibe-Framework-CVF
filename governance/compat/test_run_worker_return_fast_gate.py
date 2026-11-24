@@ -17,6 +17,33 @@ SPEC.loader.exec_module(MODULE)
 
 
 class WorkerReturnFastGateTests(unittest.TestCase):
+    def test_endpoint_is_forwarded_only_to_two_return_consumers(self):
+        end = "a" * 40
+        commands = MODULE.build_commands((), "order.md", work_order_text="workerReturnPath: `return.md`\n", return_endpoint=end)
+        selected = [c for c in commands if "--return-endpoint" in c.command]
+        self.assertEqual({c.name for c in selected}, {"work-order acceptance ledger", "worker-return quality gate"})
+        for c in selected:
+            self.assertEqual(c.command[-2:], ("--return-endpoint", end))
+        with self.assertRaises(ValueError):
+            MODULE.build_commands(return_endpoint=end)
+
+    def test_endpoint_without_active_order_fails_before_commands(self):
+        with mock.patch.object(sys, "argv", ["gate", "--return-endpoint", "a" * 40]), mock.patch.object(MODULE, "_run") as run:
+            with self.assertRaises(SystemExit) as exc:
+                MODULE.main()
+        self.assertEqual(exc.exception.code, 2)
+        run.assert_not_called()
+
+    def test_cli_labels_scopes_and_forwards_endpoint(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        out = StringIO()
+        with mock.patch.object(sys, "argv", ["gate", "--active-work-order", "order.md", "--return-endpoint", "a" * 40]), \
+             mock.patch.object(MODULE, "build_commands", return_value=()) as build, redirect_stdout(out):
+            self.assertEqual(MODULE.main(), 0)
+        build.assert_called_once_with((), "order.md", return_endpoint="a" * 40)
+        self.assertIn("Not a historical whole-helper replay", out.getvalue())
+
     def test_selected_budget_uses_actual_bytes_and_normal_newline_counts(self):
         for raw in (b'a\nb\n', b'a\r\nb\r\n', b'a\rb\r'):
             self.assertEqual(MODULE.return_budget_issues(raw, 2, len(raw)), [])

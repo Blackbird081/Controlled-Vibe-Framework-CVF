@@ -3,7 +3,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -11,7 +11,6 @@ const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -21,6 +20,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (
     session: {
       impersonation?: {
@@ -59,6 +59,7 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
 import { resetSharedMandatoryGateway } from '@/lib/mandatory-gateway-singleton';
 import { resetSharedGuardEngine } from '@/lib/guard-engine-singleton';
@@ -95,7 +96,7 @@ describe('/api/execute mandatory gateway invocation', () => {
 
   beforeEach(async () => {
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-mandatory-gateway-invocation-'));
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
@@ -154,7 +155,7 @@ describe('/api/execute mandatory gateway invocation', () => {
     const requestId = 't2-gateway-allow-request';
     const auditEventId = 't2-gateway-allow-audit';
     appendAuditEventMock.mockResolvedValue({ id: auditEventId });
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -163,7 +164,7 @@ describe('/api/execute mandatory gateway invocation', () => {
 
     const response = await POST(makeExecuteRequest({
       requestId,
-      templateName: 'Strategy',
+      templateId: 'meeting_notes', templateName: 'Strategy',
       intent: 'Analyze the market',
       inputs: { targetMarket: 'SMBs' },
       provider: 'openai',
@@ -175,7 +176,7 @@ describe('/api/execute mandatory gateway invocation', () => {
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(executeAIMock).toHaveBeenCalledTimes(1);
+    expect(providerSpy).toHaveBeenCalledTimes(1);
 
     const events = mandatoryGatewayEvents();
     expect(events).toHaveLength(1);
@@ -211,7 +212,7 @@ describe('/api/execute mandatory gateway invocation', () => {
 
     const response = await POST(makeExecuteRequest({
       requestId,
-      templateName: 'Strategy',
+      templateId: 'meeting_notes', templateName: 'Strategy',
       intent: 'Analyze the market',
       inputs: { targetMarket: 'SMBs' },
       provider: 'openai',
@@ -227,7 +228,7 @@ describe('/api/execute mandatory gateway invocation', () => {
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(executeAIMock).not.toHaveBeenCalled();
+    expect(providerSpy).not.toHaveBeenCalled();
     expect(data.guardResult.finalDecision).toBe('BLOCK');
 
     const events = mandatoryGatewayEvents();
@@ -256,4 +257,7 @@ describe('/api/execute mandatory gateway invocation', () => {
     expect(data.governanceEnvelope.auditEventIds).toContain(auditEventId);
     expect(data.governanceEvidenceReceipt.decision).toBe('BLOCK');
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

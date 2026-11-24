@@ -1,22 +1,13 @@
+<!-- Text Encoding Exception: preserve Vietnamese orientation and historical technical labels. -->
 # HR & Operations
+
+Trang chủ CVF Web có các mẫu kết quả đang dùng. Phần dưới lưu hướng dẫn của v1.5.2 để tra cứu lịch sử.
 
 > Kỹ năng quản lý nhân sự và vận hành tổ chức
 
 ---
 
-## 📚 Skills trong Domain này
-
-| # | Skill | Difficulty | Mô tả |
-|---|-------|------------|-------|
-| 1 | [Job Description](./01_job_description.skill.md) | ⭐ Easy | Tạo mô tả công việc chuẩn |
-| 2 | [Interview Evaluation](./02_interview_evaluation.skill.md) | ⭐⭐ Medium | Đánh giá ứng viên sau phỏng vấn |
-| 3 | [Performance Review](./03_performance_review.skill.md) | ⭐⭐ Medium | Viết đánh giá hiệu suất nhân viên |
-| 4 | [Onboarding Checklist](./04_onboarding_checklist.skill.md) | ⭐ Easy | Tạo checklist onboarding |
-| 5 | [Policy Documentation](./05_policy_documentation.skill.md) | ⭐⭐ Medium | Viết tài liệu chính sách công ty |
-
----
-
-## 🎯 Khi nào dùng Domain này
+## 🎯 Khi nào dùng Domain này (v1.5.2)
 
 - Tuyển dụng và đánh giá ứng viên
 - Quản lý hiệu suất nhân viên

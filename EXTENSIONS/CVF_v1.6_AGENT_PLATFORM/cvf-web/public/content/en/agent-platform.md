@@ -1,5 +1,7 @@
 # Tutorial: Multi-Agent Workflows (v1.6 Agent Platform)
 
+> Planning includes DESIGN, SPEC and WORK ORDER; record FREEZE after review. Role labels describe coordination and do not grant authority. See the [work lifecycle](lifecycle.md).
+
 **Time:** 20 minutes  
 **Level:** Intermediate  
 **Prerequisites:** [Web UI set up and running](web-ui-setup.md)  
@@ -9,14 +11,14 @@
 
 ## What is Multi-Agent in CVF?
 
-Instead of one AI doing everything, CVF v1.6 splits work across **4 specialized agents**, each mapped to a CVF phase:
+Instead of one AI doing everything, CVF v1.6 splits work across **4 specialized agents**, working across the lifecycle:
 
 | Agent | Role | CVF Phase | Specialty |
 |-------|------|-----------|-----------|
-| 🎯 **Orchestrator** | Coordinate & delegate | Phase A (Discovery) | Understanding intent, breaking down tasks |
-| 📐 **Architect** | Design solution | Phase B (Design) | Architecture, component design, trade-offs |
-| 🔨 **Builder** | Write code | Phase C (Build) | Implementation, following specs precisely |
-| 🔍 **Reviewer** | Quality assurance | Phase D (Review) | Testing, finding bugs, compliance checking |
+| 🎯 **Orchestrator** | Coordinate & delegate | INTAKE | Understanding intent, breaking down tasks |
+| 📐 **Architect** | Design solution | DESIGN | Architecture, component design, trade-offs |
+| 🔨 **Builder** | Write code | BUILD | Implementation, following specs precisely |
+| 🔍 **Reviewer** | Quality assurance | REVIEW | Testing, finding bugs, compliance checking |
 
 ### Why Multi-Agent?
 
@@ -73,7 +75,7 @@ Each agent uses a different AI provider.
 
 ### Example: Build a Weather Dashboard
 
-**1. Start with the Orchestrator (Phase A)**
+**1. Start with the Orchestrator (INTAKE)**
 
 Type your intent:
 
@@ -116,7 +118,7 @@ OUT: User accounts, favorites, weather alerts, PWA
 - Single page
 ```
 
-**2. Hand off to the Architect (Phase B)**
+**2. Hand off to the Architect (DESIGN)**
 
 The Architect receives the Orchestrator's brief and designs the solution:
 
@@ -155,7 +157,7 @@ User types city → app.js calls API → parse JSON → update DOM
 - No internet → "Check your connection."
 ```
 
-**3. Builder executes (Phase C)**
+**3. Builder executes (BUILD)**
 
 The Builder receives the design and writes code:
 
@@ -164,7 +166,7 @@ The Builder receives the design and writes code:
 - Creates `app.js` with API calls and error handling
 - Follows the design exactly — no "improvements"
 
-**4. Reviewer checks quality (Phase D)**
+**4. Reviewer checks quality (REVIEW)**
 
 The Reviewer evaluates the Builder's code against the original intent:
 
@@ -199,7 +201,7 @@ The Reviewer evaluates the Builder's code against the original intent:
 In Full CVF governance mode, agents hand off automatically:
 
 ```
-Orchestrator → (Phase A complete?) → Architect → (Phase B complete?) → Builder → (Phase C complete?) → Reviewer
+Orchestrator → (INTAKE complete?) → Architect → (DESIGN complete?) → Builder → (BUILD complete?) → Reviewer
 ```
 
 Each transition requires the previous phase's checklist to be completed.
@@ -222,7 +224,7 @@ If the Reviewer finds issues, the workflow can loop back:
 
 When using **Full CVF governance mode**, phase gates enforce quality:
 
-### Phase A → B Gate (Orchestrator → Architect)
+### INTAKE → B Gate (Orchestrator → Architect)
 
 ```
 Checklist:
@@ -234,7 +236,7 @@ Checklist:
 
 All boxes must be checked before Architect starts.
 
-### Phase B → C Gate (Architect → Builder)
+### DESIGN → C Gate (Architect → Builder)
 
 ```
 Checklist:
@@ -245,7 +247,7 @@ Checklist:
 - [ ] Build is feasible within constraints
 ```
 
-### Phase C → D Gate (Builder → Reviewer)
+### BUILD → D Gate (Builder → Reviewer)
 
 ```
 Checklist:
@@ -279,7 +281,7 @@ In practice:
 
 ### 1. Be Specific with the Orchestrator
 
-The quality of the entire workflow depends on Phase A. Give the Orchestrator:
+The quality of the entire workflow depends on INTAKE. Give the Orchestrator:
 
 - Clear intent (what, not how)
 - Explicit constraints
@@ -287,11 +289,11 @@ The quality of the entire workflow depends on Phase A. Give the Orchestrator:
 
 ### 2. Review the Architect's Design Before Building
 
-Don't rush to Phase C. A bad design = bad code. Take 2 minutes to review the Architect's output.
+Don't rush to BUILD. A bad design = bad code. Take 2 minutes to review the Architect's output.
 
 ### 3. Let the Builder Follow the Spec
 
-Don't intervene during Phase C unless something is clearly wrong. The Builder should follow the Architect's design, not improvise.
+Don't intervene during BUILD unless something is clearly wrong. The Builder should follow the Architect's design, not improvise.
 
 ### 4. Use the Reviewer's Feedback
 
@@ -308,11 +310,13 @@ Multi-agent uses 3–4x more tokens than single-agent. Monitor the usage tracker
 | I want to... | Go to... |
 |-------------|---------|
 | Create reusable skill templates | [Custom Skills Tutorial](custom-skills.md) |
-| Understand phase gates deeper | [4-Phase Process](../concepts/4-phase-process.md) |
+| Understand phase gates deeper | [Work lifecycle](lifecycle.md) |
 | Learn about risk levels | [Risk Model](../concepts/risk-model.md) |
-| Deploy the web UI for my team | [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
+| Deploy the web UI for my team | [Setup guide](/help/setup) |
 | Set up team governance | [Team Setup Guide](../guides/team-setup.md) |
 
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

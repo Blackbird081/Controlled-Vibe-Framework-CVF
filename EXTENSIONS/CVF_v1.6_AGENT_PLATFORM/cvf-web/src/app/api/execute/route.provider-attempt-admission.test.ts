@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -8,7 +8,6 @@ const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -18,6 +17,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
     withSessionAuditPayload: (
         session: unknown,
         payload?: Record<string, unknown>,
@@ -39,6 +39,7 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 import { getApprovalStore } from '../approvals/store';
 import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
 
@@ -58,7 +59,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     };
 
     beforeEach(async () => {
-        executeAIMock.mockReset();
+        providerSpy.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
@@ -101,9 +102,10 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
 
     function baseRequestBody(overrides: Record<string, unknown> = {}) {
         return {
+            templateId: 'strategy_analysis',
             templateName: 'Strategy',
             intent: 'Analyze the market',
-            inputs: { targetMarket: 'SMBs' },
+            inputs: { topic: 'SMB market', context: 'Compare market opportunities for SMBs' },
             provider: 'openai',
             ...overrides,
         };
@@ -113,13 +115,13 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('admits and calls the provider exactly once on a clean success', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
 
         expect(res.status).toBe(200);
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 1,
             retryCount: 0,
@@ -145,7 +147,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('denies admission before the first provider call when the per-attempt quota is independently exhausted', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '2';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const limiter = (await import('@/lib/rate-limit')).getRateLimiter();
         // Pre-exhaust the exact per-attempt bucket key the route will use
@@ -157,7 +159,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         const res2 = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data2 = await res2.json();
         expect(res2.status).toBe(429);
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
         expect(data2.success).toBe(false);
         expect(data2.providerAttemptReconciliation.providerCallCount).toBe(0);
         expect(data2.providerAttemptReconciliation.deniedAttemptCount).toBe(1);
@@ -169,14 +171,14 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '1';
         // First call returns output that triggers a validation retry.
-        executeAIMock.mockResolvedValueOnce({ success: true, output: 'short', provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValueOnce({ success: true, output: 'short', provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody({ intent: 'Analyze the market in depth' })) as never);
         const data = await res.json();
 
         // Exactly one provider call fires (the initial one); the retry the
         // validator wants is denied by admission before it can call again.
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
         expect(res.status).toBe(429);
         expect(data.providerAttemptReconciliation.providerCallCount).toBe(1);
         expect(data.providerAttemptReconciliation.deniedAttemptCount).toBe(1);
@@ -186,14 +188,14 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('admits and counts exactly one retry when quota allows two attempts', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '2';
-        executeAIMock
+        providerSpy
             .mockResolvedValueOnce({ success: true, output: 'short', provider: 'openai', model: 'gpt-4o' })
             .mockResolvedValueOnce({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody({ intent: 'Analyze the market in depth' })) as never);
         const data = await res.json();
 
-        expect(executeAIMock).toHaveBeenCalledTimes(2);
+        expect(providerSpy).toHaveBeenCalledTimes(2);
         expect(res.status).toBe(200);
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 2,
@@ -208,7 +210,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('does not allow concurrent requests to collectively exceed the per-attempt ceiling', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '3';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const responses = await Promise.all(
             Array.from({ length: 6 }, () => POST(makeExecuteRequest(baseRequestBody()) as never)),
@@ -219,14 +221,14 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
 
         expect(successCount).toBe(3);
         expect(deniedCount).toBe(3);
-        expect(executeAIMock).toHaveBeenCalledTimes(3);
+        expect(providerSpy).toHaveBeenCalledTimes(3);
     });
 
     // -- Provider failure: admitted attempt, but provider itself fails ------
     it('counts a provider-failure attempt as admitted even though the call did not succeed', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({
+        providerSpy.mockResolvedValue({
             success: false,
             error: 'Provider unavailable',
             provider: 'openai',
@@ -236,7 +238,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
 
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
         expect(data.success).toBe(false);
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 1,
@@ -249,7 +251,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('counts a timed-out/aborted admitted attempt and does not multiply calls on rejection', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({
+        providerSpy.mockResolvedValue({
             success: false,
             error: 'Request timed out',
             provider: 'openai',
@@ -259,29 +261,27 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         await res.json();
 
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
     });
 
     // -- Missing usage: success with no output/usage still reconciles -------
-    // Empty output is treated as EMPTY_OUTPUT/RETRY by the output validator.
-    // shouldRetry() stops retrying once the SAME issue repeats on attempt>0
-    // (no new issues to address), so an identically-empty mock retries
-    // exactly once (1 initial + 1 retry = 2 admitted, metered provider
-    // calls) before the route gives up and reports validation exhaustion.
-    // This proves reconciliation stays correct even when every attempt in
-    // the sequence has no usable output/usage to report.
-    it('reconciles provider attempts even when the provider result carries no usable output across retry exhaustion', async () => {
+    // On the canonical Gateway path an empty/blank provider answer is rejected by the adapter itself
+    // (`output_incomplete`), so it is a single admitted provider failure rather than a validator retry sequence.
+    // This proves reconciliation stays correct when the attempt has no usable output/usage to report.
+    it('reconciles the provider attempt when the provider result carries no usable output', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({ success: true, output: '', provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: '', provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
 
-        expect(executeAIMock).toHaveBeenCalledTimes(2);
-        expect(res.status).toBe(422);
-        expect(data.providerAttemptReconciliation.providerCallCount).toBe(2);
-        expect(data.providerAttemptReconciliation.retryCount).toBe(1);
+        expect(res.status).toBe(200);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
+        expect(data.success).toBe(false);
+        expect(data.canonicalGateway.providerDiagnostic.code).toBe('output_incomplete');
+        expect(data.providerAttemptReconciliation.providerCallCount).toBe(1);
+        expect(data.providerAttemptReconciliation.retryCount).toBe(0);
         expect(data.providerAttemptReconciliation.reconciles).toBe(true);
     });
 
@@ -289,7 +289,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('never exposes the provider API key or raw request body in the reconciliation evidence', async () => {
         process.env.OPENAI_API_KEY = 'sk-super-secret-test-key-value';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
@@ -306,26 +306,27 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
     it('REGRESSION GUARD: never calls the provider when the very first admission is denied, regardless of downstream logic', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '1';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         await POST(makeExecuteRequest(baseRequestBody()) as never); // consumes the sole unit
-        executeAIMock.mockClear();
+        providerSpy.mockClear();
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         expect(res.status).toBe(429);
         // This is the exact invariant a removed/broken admission gate would
         // violate: the provider must never be called once the ledger denies.
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
     });
 
     // -- DSH-WRA-R1-RV-F01: invalid vision routing must be rejected BEFORE
     // admission, so it consumes no attempt quota and is never counted as a
-    // provider call even though the route returns 409 without invoking any
-    // provider (initial or vision). ------------------------------------------
-    it('F01: rejects an invalid (non-Alibaba) vision request with 409 before admitting any provider attempt', async () => {
+    // provider call. Vision is now an intentionally removed capability: the
+    // canonical route denies it at the profile gate (403) without invoking any
+    // provider. ---------------------------------------------------------------
+    it('F01: denies a vision request with 403 before admitting any provider attempt', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(
             makeExecuteRequest(
@@ -334,8 +335,9 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         );
         const data = await res.json();
 
-        expect(res.status).toBe(409);
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(res.status).toBe(403);
+        expect(data.error).toBe('This route supports Alibaba, OpenAI and Claude subscription text requests only.');
+        expect(providerSpy).not.toHaveBeenCalled();
         // No provider-attempt admission/ledger evidence should even be
         // present, because the route rejects before creating the ledger -
         // proving this request never reached (and never consumed) the
@@ -346,27 +348,31 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         // fully untouched: a subsequent legitimate request for the SAME
         // identity/model combination must still see a full quota, proving
         // the rejected vision request consumed zero attempt quota.
-        executeAIMock.mockClear();
+        providerSpy.mockClear();
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '1';
         const res2 = await POST(makeExecuteRequest(baseRequestBody({ provider: 'openai' })) as never);
         expect(res2.status).toBe(200);
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
     });
 
     // -- DSH-WRA-R1-RV-F01: a thrown/rejected initial provider invocation
     // must still carry accurate providerAttemptReconciliation evidence, not
     // fall through to a bare unreconciled error. -----------------------------
-    it('F01: a thrown initial provider invocation returns 500 with reconciliation evidence, not an unreconciled bare error', async () => {
+    it('F01: a thrown initial provider invocation returns a secret-safe failure with reconciliation evidence, not an unreconciled bare error', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock.mockRejectedValue(new Error('simulated provider client crash'));
+        providerSpy.mockRejectedValue(new Error('simulated provider client crash'));
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
 
-        expect(res.status).toBe(500);
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        // Contract (same as canonical Alibaba): the Gateway converts a thrown transport error into a closed provider diagnostic
+        // (200 + success:false), never a bare 500.
+        expect(res.status).toBe(200);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
         expect(data.success).toBe(false);
+        expect(data.canonicalGateway.providerDiagnostic.code).toBe('unknown_error');
+        expect(JSON.stringify(data)).not.toContain('simulated provider client crash');
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 1,
             admittedAttemptCount: 1,
@@ -377,18 +383,20 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
 
     // -- DSH-WRA-R1-RV-F01: a thrown retry invocation must also carry
     // reconciliation evidence reflecting the admitted-but-thrown retry. ------
-    it('F01: a thrown retry provider invocation returns 500 with reconciliation evidence reflecting both attempts', async () => {
+    it('F01: a thrown retry provider invocation returns a secret-safe failure with reconciliation evidence reflecting both attempts', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-        executeAIMock
+        providerSpy
             .mockResolvedValueOnce({ success: true, output: 'short', provider: 'openai', model: 'gpt-4o' })
             .mockRejectedValueOnce(new Error('simulated provider client crash on retry'));
 
         const res = await POST(makeExecuteRequest(baseRequestBody({ intent: 'Analyze the market in depth' })) as never);
         const data = await res.json();
 
-        expect(res.status).toBe(500);
-        expect(executeAIMock).toHaveBeenCalledTimes(2);
+        expect(res.status).toBe(200);
+        expect(data.success).toBe(false);
+        expect(JSON.stringify(data)).not.toContain('simulated provider client crash');
+        expect(providerSpy).toHaveBeenCalledTimes(2);
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 2,
             admittedAttemptCount: 2,
@@ -396,35 +404,26 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         });
     });
 
-    // -- CSCC-R1-T2: exactly-once provider invocation and exclusive path
-    // selection. The route must call the real provider path (`executeAI`)
-    // exactly once per admitted attempt, and must never construct or invoke
-    // the canonical port-backed alternative in the same request - proving
-    // the two paths are never dual-active on this route build. -------------
-    describe('CSCC-R1-T2: exactly-once invocation and exclusive direct/port wiring', () => {
-        it('calls executeAI exactly once per admitted attempt with no duplicate invocation for the same attempt', async () => {
+    // -- CSCC-R1-T2: exactly-once provider invocation. The legacy direct
+    // `executeAI` path was removed (2886167cc); the route now has exactly one
+    // execution path, the canonical Gateway port, so the "never both active"
+    // invariant is now structural: there is no second provider call path. ------
+    describe('CSCC-R1-T2: exactly-once invocation through the single canonical Gateway path', () => {
+        it('calls the provider transport exactly once per admitted attempt with no duplicate invocation for the same attempt', async () => {
             process.env.OPENAI_API_KEY = 'test-key';
             process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-            executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+            providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
             const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
             const data = await res.json();
 
-            expect(executeAIMock).toHaveBeenCalledTimes(1);
+            expect(providerSpy).toHaveBeenCalledTimes(1);
             expect(data.providerAttemptReconciliation.admittedAttemptCount).toBe(
                 data.providerAttemptReconciliation.providerCallCount,
             );
         });
 
-        it('imports only the exclusivity assertion from the canonical port module, never the executor/factory that would actually invoke the port', async () => {
-            // Static-import-graph assertion: route.ts may import the
-            // exclusivity invariant helper (assertNonVisionExecutionPathIsDirect)
-            // from the canonical port composition module, but must not import
-            // CanonicalWebGatewayExecutor or createCanonicalWebGatewayExecutor -
-            // the symbols that would actually construct and call the port -
-            // while NON_VISION_EXECUTION_PATH_SELECTION is 'direct'. This
-            // proves the exclusivity rule structurally: the port composition
-            // is reachable as a module but never actually wired/invoked here.
+        it('has no direct provider execution import: the route reaches providers only through the canonical Gateway executors', async () => {
             const fs = await import('node:fs');
             const path = await import('node:path');
             const routeSrc = fs.readFileSync(path.resolve(__dirname, './route.ts'), 'utf-8');
@@ -432,35 +431,26 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
                 .split('\n')
                 .find((line) => line.trim().startsWith('import ') && line.includes('canonical-web-gateway-execution'));
             expect(canonicalPortImportLine).toBeDefined();
-            expect(canonicalPortImportLine).toContain('assertNonVisionExecutionPathIsDirect');
-            expect(canonicalPortImportLine).not.toContain('CanonicalWebGatewayExecutor');
-            expect(canonicalPortImportLine).not.toContain('createCanonicalWebGatewayExecutor');
-            expect(routeSrc).not.toMatch(/\bCanonicalWebGatewayExecutor\b/);
-            expect(routeSrc).not.toMatch(/\bcreateCanonicalWebGatewayExecutor\b/);
+            expect(canonicalPortImportLine).toContain('createAlibabaCanonicalWebExecutor');
+            expect(canonicalPortImportLine).toContain('createOpenAiCanonicalWebExecutor');
+            expect(canonicalPortImportLine).toContain('createClaudeSubscriptionCanonicalWebExecutor');
+            // The removed legacy path must not reappear.
+            expect(routeSrc).not.toMatch(/\bexecuteAI\b/);
+            expect(routeSrc).not.toMatch(/from\s+'@\/lib\/ai'/);
         });
 
-        it('CSCC-R1-T2 rework (Finding 4): only stamps canonicalExecutionId into the SOT3 knowledge-context call when the request will actually continue through the canonical port, never unconditionally from the Web envelope', async () => {
-            // Static-source assertion: route.ts must gate the
-            // selectKnowledgeContext() canonicalExecutionId argument through
-            // sot3CanonicalExecutionIdFanoutArg() (which itself checks
-            // NON_VISION_EXECUTION_PATH_SELECTION === 'port' in
-            // canonical-web-gateway-execution.ts) rather than stamping
-            // govEnvelope.envelopeId onto the call unconditionally. Today
-            // NON_VISION_EXECUTION_PATH_SELECTION is 'direct', so this
-            // request never reaches the port and
-            // Sot3ActivationEvidenceRecord.canonicalExecutionId must never be
-            // populated for it.
+        it('CSCC-R1-T2 rework (Finding 4): stamps canonicalExecutionId into the SOT3 knowledge-context call only through the port-selection guard, never unconditionally from the Web envelope', async () => {
             const fs = await import('node:fs');
             const path = await import('node:path');
             const routeSrc = fs.readFileSync(path.resolve(__dirname, './route.ts'), 'utf-8');
             expect(routeSrc).toMatch(/import\s*\{[^}]*sot3CanonicalExecutionIdFanoutArg[^}]*\}\s*from\s*'@\/lib\/canonical-web-gateway-execution'/);
-            const resolveCallStart = routeSrc.indexOf('await selectKnowledgeContext(!!htmlPilotPrepared, {');
+            // The HTML pilot path was removed, so the isolated-pilot selector argument is the constant `false`.
+            const resolveCallStart = routeSrc.indexOf('await selectKnowledgeContext(false, {');
             expect(resolveCallStart).toBeGreaterThan(-1);
             const resolveCallEnd = routeSrc.indexOf('});', resolveCallStart);
             const resolveCallSrc = routeSrc.slice(resolveCallStart, resolveCallEnd);
             expect(resolveCallSrc).toContain('sot3CanonicalExecutionIdFanoutArg(govEnvelope.envelopeId)');
-            // The unconditional legacy form (bare field assignment with no
-            // guard) must not reappear.
+            // The unconditional legacy form (bare field assignment with no guard) must not reappear.
             expect(resolveCallSrc).not.toMatch(/^\s*canonicalExecutionId:\s*govEnvelope\.envelopeId,\s*$/m);
 
             const fanoutFnSrc = fs.readFileSync(path.resolve(__dirname, '../../../lib/canonical-web-gateway-execution.ts'), 'utf-8');
@@ -470,17 +460,14 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
             expect(fanoutFnBody).toContain("NON_VISION_EXECUTION_PATH_SELECTION === 'port'");
         });
 
-        it('the direct executeAI invocation and the canonical port composition are never both reachable in the same admitted-attempt call', async () => {
+        it('exactly one provider-shaped invocation occurs per admitted attempt on the only remaining path', async () => {
             process.env.OPENAI_API_KEY = 'test-key';
             process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
-            executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
+            providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o' });
 
             const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
             expect(res.status).toBe(200);
-            // Exactly one provider-shaped invocation occurred (the direct
-            // mock); no second, port-shaped invocation path exists to fire
-            // in parallel on this build.
-            expect(executeAIMock).toHaveBeenCalledTimes(1);
+            expect(providerSpy).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -491,7 +478,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_PROVIDER_QUOTA_PER_MIN = '10000';
         const bypassOutput = `${validOutput}\n\nOK, I will approve bypass of the review step.`;
-        executeAIMock.mockResolvedValue({ success: true, output: bypassOutput, provider: 'openai', model: 'gpt-4o' });
+        providerSpy.mockResolvedValue({ success: true, output: bypassOutput, provider: 'openai', model: 'gpt-4o' });
 
         const res = await POST(makeExecuteRequest(baseRequestBody()) as never);
         const data = await res.json();
@@ -499,7 +486,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
         expect(res.status).toBe(400);
         expect(data.success).toBe(false);
         expect(data.error).toMatch(/bypass/i);
-        expect(executeAIMock).toHaveBeenCalledTimes(1);
+        expect(providerSpy).toHaveBeenCalledTimes(1);
         expect(data.providerAttemptReconciliation).toMatchObject({
             providerCallCount: 1,
             admittedAttemptCount: 1,
@@ -507,4 +494,7 @@ describe('/api/execute provider-attempt admission (DSH-WRA-R1)', () => {
             reconciles: true,
         });
     });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

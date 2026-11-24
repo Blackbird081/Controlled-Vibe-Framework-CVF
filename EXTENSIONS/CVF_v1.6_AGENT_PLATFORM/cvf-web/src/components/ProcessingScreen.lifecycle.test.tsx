@@ -7,6 +7,11 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { ProcessingScreen } from './ProcessingScreen';
 import { trackEvent } from '@/lib/analytics';
 
+// The held-execution notice (held-release slice 8223fe6aa) makes its own control status call whenever a run fails; it is
+// covered by ProcessingScreen.test.tsx and HeldExecutionNotice.test.tsx. Here it is isolated so this suite's fetch counts and
+// queued responses only describe the execute and provider calls under test.
+vi.mock('./HeldExecutionNotice', () => ({ default: () => null }));
+
 // Language is switchable so a presentation-only rerender can be exercised.
 const language = vi.hoisted(() => ({ current: 'en' }));
 

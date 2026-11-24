@@ -7,7 +7,7 @@ interface SurfaceStatCardProps {
     label: string;
     value: string;
     icon: LucideIcon;
-    tone?: 'accent' | 'emerald' | 'amber' | 'violet';
+    tone?: 'accent' | 'emerald' | 'amber' | 'violet' | 'neutral';
 }
 
 const TONE_STYLES = {
@@ -15,6 +15,7 @@ const TONE_STYLES = {
     emerald: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/12 dark:text-emerald-300',
     amber: 'bg-amber-100 text-amber-600 dark:bg-amber-500/12 dark:text-amber-300',
     violet: 'bg-violet-100 text-violet-600 dark:bg-violet-500/12 dark:text-violet-300',
+    neutral: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300',
 } as const;
 
 export function SurfaceStatCard({
@@ -33,7 +34,9 @@ export function SurfaceStatCard({
                     <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-white/35">
                         {label}
                     </div>
-                    <div className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                    <div className={clsx('mt-4 font-semibold', tone === 'neutral'
+                        ? 'text-base text-slate-600 dark:text-slate-300'
+                        : 'text-4xl tracking-[-0.04em] text-slate-950 dark:text-white')}>
                         {value}
                     </div>
                 </div>

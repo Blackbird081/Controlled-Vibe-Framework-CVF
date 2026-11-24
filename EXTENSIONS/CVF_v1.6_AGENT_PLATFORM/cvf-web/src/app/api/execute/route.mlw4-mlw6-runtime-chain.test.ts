@@ -3,13 +3,12 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -19,6 +18,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
@@ -34,6 +34,7 @@ vi.mock('@/lib/guard-engine-singleton', () => ({
 }));
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 describe('/api/execute MLW4-MLW6 runtime chain readouts', () => {
   const originalEnv = { ...process.env };
@@ -55,12 +56,12 @@ describe('/api/execute MLW4-MLW6 runtime chain readouts', () => {
     delete process.env.CVF_ALIBABA_API_KEY;
     delete process.env.CVF_SERVICE_TOKEN;
 
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
 
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -94,7 +95,7 @@ describe('/api/execute MLW4-MLW6 runtime chain readouts', () => {
     const res = await POST(new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Summarize scoped learning-plane runtime metadata gates for governance users',
         inputs: {
           question: 'Which runtime metadata gates are present?',
@@ -154,4 +155,7 @@ describe('/api/execute MLW4-MLW6 runtime chain readouts', () => {
       mlw6: data.simulationFailureGateReadout,
     })).not.toMatch(/TENANT-A-SIGNAL|SHADOW-BETA|openai-test-key|sk-/i);
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

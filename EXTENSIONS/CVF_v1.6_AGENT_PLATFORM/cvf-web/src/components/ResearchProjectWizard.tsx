@@ -242,7 +242,6 @@ function buildResearchProjectGovernedPacket(data: WizardData) {
             `Validate the methodology and scope for "${researchTopic}" with the research owner`,
             'Open a separate follow-up batch for implementation or publication work outside this proposal packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:research-${slug}`,
         inputs: {
             researchTopic: data.researchTopic || '',
             researchQuestion: data.researchQuestion || '',
@@ -434,9 +433,7 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -606,7 +603,6 @@ export function ResearchProjectWizard({ onBack }: ResearchProjectWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

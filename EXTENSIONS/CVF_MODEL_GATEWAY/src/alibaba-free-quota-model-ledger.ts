@@ -3,7 +3,7 @@ export const ALIBABA_DASHSCOPE_INTL_ENDPOINT =
 export const ALIBABA_DASHSCOPE_MAINLAND_ENDPOINT =
   "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" as const;
 export const ALIBABA_WORKSPACE_DASHSCOPE_ENDPOINT =
-  "https://ws-remplsp27g5oicq1.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions" as const;
+  "https://ws-pxgeef9hg5vwddtl.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions" as const;
 export const ALIBABA_FREE_QUOTA_LEDGER_REFERENCE =
   "docs/reference/model_gateway/CVF_ALIBABA_FREE_QUOTA_MODEL_LEDGER.json" as const;
 
@@ -26,90 +26,36 @@ export interface AlibabaFreeQuotaModelLedgerEntry {
 // Generated from the JSON ledger; no credentials belong here.
 export const ALIBABA_FREE_QUOTA_MODELS = [
   {
-    "modelId": "deepseek-v4-pro-0813",
+    "modelId": "qwen-plus-character",
     "modelFamily": "text",
-    "expirationDate": "2026-11-12",
-    "freeQuotaRemainingAtCapture": 981240,
-    "freeQuotaTotalAtCapture": 1000000,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen3.8-2.4t-a95b",
-    "modelFamily": "text",
-    "expirationDate": "2026-11-11",
-    "freeQuotaRemainingAtCapture": 991820,
-    "freeQuotaTotalAtCapture": 1000000,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen-image-2.1-pro",
-    "modelFamily": "vision",
-    "expirationDate": "2026-12-31",
-    "freeQuotaRemainingAtCapture": 10,
-    "freeQuotaTotalAtCapture": 10,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "wan3.0-video",
-    "modelFamily": "vision",
-    "expirationDate": "2026-11-04",
-    "freeQuotaRemainingAtCapture": 30,
-    "freeQuotaTotalAtCapture": 30,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen-mt-image-2.0",
-    "modelFamily": "vision",
-    "expirationDate": "2026-11-25",
-    "freeQuotaRemainingAtCapture": 100,
-    "freeQuotaTotalAtCapture": 100,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen-image-2.1-turbo",
-    "modelFamily": "vision",
-    "expirationDate": "2026-12-31",
-    "freeQuotaRemainingAtCapture": 10,
-    "freeQuotaTotalAtCapture": 10,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "wan3.0-video-prime",
-    "modelFamily": "vision",
-    "expirationDate": "2026-11-20",
-    "freeQuotaRemainingAtCapture": 30,
-    "freeQuotaTotalAtCapture": 30,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen3.8-omni-flash",
-    "modelFamily": "multimodal",
-    "expirationDate": "2026-12-16",
-    "freeQuotaRemainingAtCapture": 991740,
-    "freeQuotaTotalAtCapture": 1000000,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen3.8-omni-flash-realtime",
-    "modelFamily": "multimodal",
-    "expirationDate": "2026-12-20",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
     "stopOnExhaustAtCapture": true
   },
   {
+    "modelId": "qwen-flash-character",
+    "modelFamily": "text",
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 1000000,
+    "freeQuotaTotalAtCapture": 1000000,
+    "statusAtCapture": "Enabled",
+    "stopOnExhaustAtCapture": true
+  },
+  {
+    "modelId": "qwen-mt-image-2.0",
+    "modelFamily": "vision",
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 100,
+    "freeQuotaTotalAtCapture": 100,
+    "statusAtCapture": "Enabled",
+    "stopOnExhaustAtCapture": true
+  },
+  {
     "modelId": "qwen-audio-3.1-asr-flash-message",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
@@ -118,7 +64,7 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen-audio-3.1-tts-plus",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-15",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 10000,
     "freeQuotaTotalAtCapture": 10000,
     "statusAtCapture": "Enabled",
@@ -127,7 +73,7 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen-audio-3.1-asr-flash-streaming",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
@@ -136,16 +82,7 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen-audio-3.1-asr-flash",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
-    "freeQuotaRemainingAtCapture": 1000000,
-    "freeQuotaTotalAtCapture": 1000000,
-    "statusAtCapture": "Enabled",
-    "stopOnExhaustAtCapture": true
-  },
-  {
-    "modelId": "qwen-audio-3.1-asr-flash-filetrans",
-    "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
@@ -154,8 +91,17 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen-audio-3.1-tts-flash",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
-    "freeQuotaRemainingAtCapture": 999840,
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 1000000,
+    "freeQuotaTotalAtCapture": 1000000,
+    "statusAtCapture": "Enabled",
+    "stopOnExhaustAtCapture": true
+  },
+  {
+    "modelId": "qwen-audio-3.1-asr-flash-filetrans",
+    "modelFamily": "speech",
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
     "stopOnExhaustAtCapture": true
@@ -163,7 +109,7 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen-audio-3.1-tts-next",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-20",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
@@ -172,17 +118,26 @@ export const ALIBABA_FREE_QUOTA_MODELS = [
   {
     "modelId": "qwen3.8-livetranslate-flash-realtime",
     "modelFamily": "speech",
-    "expirationDate": "2026-12-15",
+    "expirationDate": "2027-02-09",
     "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
     "stopOnExhaustAtCapture": true
   },
   {
+    "modelId": "fun-asr-flash-2026-06-15",
+    "modelFamily": "speech",
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 36000,
+    "freeQuotaTotalAtCapture": 36000,
+    "statusAtCapture": "Enabled",
+    "stopOnExhaustAtCapture": true
+  },
+  {
     "modelId": "qwen3.7-text-embedding",
     "modelFamily": "embedding",
-    "expirationDate": "2026-11-08",
-    "freeQuotaRemainingAtCapture": 999500,
+    "expirationDate": "2027-02-09",
+    "freeQuotaRemainingAtCapture": 1000000,
     "freeQuotaTotalAtCapture": 1000000,
     "statusAtCapture": "Enabled",
     "stopOnExhaustAtCapture": true

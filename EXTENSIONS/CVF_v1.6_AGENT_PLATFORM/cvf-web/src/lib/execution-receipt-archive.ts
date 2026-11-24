@@ -1,5 +1,7 @@
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+import type { GovernanceRolePlanSummary } from '@/lib/ai/types';
 import type { ExecutionEvidenceSnapshot } from '@/types';
+import { isReviewDiagnostic } from './role-plan-review-status';
 
 export const RECEIPT_ARCHIVE_VERSION = 'cvf.executionReceiptArchive.v1' as const;
 export const PILOT_RECEIPT_ARCHIVE_VERSION = 'cvf.executionReceiptArchive.pilot.v2' as const;
@@ -15,8 +17,15 @@ const optionalBooleanFields = ['knowledgeInjected', 'vision'] as const;
 const receiptFields = new Set<string>([
     ...requiredStringFields, ...optionalStringFields,
     ...optionalBooleanFields, 'evidenceMode', 'knowledgeCollectionId',
-    'knowledgeChunkCount',
+    'knowledgeChunkCount', 'rolePlan',
 ]);
+const ROLE_PLAN_KEYS = ['reviewerVerdict', 'revisionApplied', 'revisionReviewed', 'recheckVerdict', 'stoppedEarly', 'promptContract', 'stepCount'] as const;
+const ROLE_PLAN_DIAGNOSTICS = ['reviewerDiagnostic', 'recheckDiagnostic'] as const;
+const ROLE_PLAN_ALL_KEYS = new Set<string>([...ROLE_PLAN_KEYS, ...ROLE_PLAN_DIAGNOSTICS]);
+const ROLE_PLAN_VERDICTS = ['PASS', 'REVISE', 'UNPARSEABLE', 'NOT_RUN'];
+const ROLE_PLAN_STOPS = ['DEADLINE', 'EMPTY_DRAFT', 'ATTEMPT_DENIED', 'FAILED'];
+const MAX_ROLE_PLAN_CONTRACT_CHARS = 128;
+const MAX_ROLE_PLAN_STEPS = 16;
 
 export type SavedReceiptProjection = Pick<GovernanceEvidenceReceipt,
     'receiptId' | 'evidenceMode' | 'routeId' | 'generatedAt'> &
@@ -24,7 +33,7 @@ export type SavedReceiptProjection = Pick<GovernanceEvidenceReceipt,
     'decision' | 'riskLevel' | 'provider' | 'model' | 'routingDecision' |
     'policySnapshotId' | 'envelopeId' | 'canonicalExecutionId' |
     'knowledgeSource' | 'knowledgeInjected' | 'knowledgeCollectionId' |
-    'knowledgeChunkCount' | 'approvalId' | 'validationHint' | 'vision'>>;
+    'knowledgeChunkCount' | 'approvalId' | 'validationHint' | 'vision' | 'rolePlan'>>;
 
 interface ScalarExecutionReceiptArchive {
     schemaVersion: typeof RECEIPT_ARCHIVE_VERSION;
@@ -46,6 +55,24 @@ function record(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+/** Exact copy of the compact role-plan verdict summary (outcome fidelity O6), or undefined when the value is not exactly that shape. */
+function projectRolePlan(value: unknown): GovernanceRolePlanSummary | undefined {
+    if (!record(value) || Object.keys(value).some(key => !ROLE_PLAN_ALL_KEYS.has(key)) || !ROLE_PLAN_KEYS.every(key => Object.prototype.hasOwnProperty.call(value, key))) return undefined;
+    for (const key of ROLE_PLAN_DIAGNOSTICS) {
+        if (Object.prototype.hasOwnProperty.call(value, key) && (!isReviewDiagnostic(value[key]) || value[key === 'reviewerDiagnostic' ? 'reviewerVerdict' : 'recheckVerdict'] !== 'UNPARSEABLE')) return undefined;
+    }
+    if (!ROLE_PLAN_VERDICTS.includes(value.reviewerVerdict as string) || typeof value.revisionApplied !== 'boolean') return undefined;
+    if (value.revisionReviewed !== null && typeof value.revisionReviewed !== 'boolean') return undefined;
+    if (value.recheckVerdict !== null && !ROLE_PLAN_VERDICTS.includes(value.recheckVerdict as string)) return undefined;
+    if (value.stoppedEarly !== null && !ROLE_PLAN_STOPS.includes(value.stoppedEarly as string)) return undefined;
+    if (typeof value.promptContract !== 'string' || value.promptContract.length > MAX_ROLE_PLAN_CONTRACT_CHARS) return undefined;
+    if (typeof value.stepCount !== 'number' || !Number.isSafeInteger(value.stepCount) || value.stepCount < 0 || value.stepCount > MAX_ROLE_PLAN_STEPS) return undefined;
+    const copy: Record<string, unknown> = {};
+    for (const key of ROLE_PLAN_KEYS) copy[key] = value[key];
+    for (const key of ROLE_PLAN_DIAGNOSTICS) if (Object.prototype.hasOwnProperty.call(value, key)) copy[key] = value[key];
+    return copy as unknown as GovernanceRolePlanSummary;
+}
+
 function projectReceipt(value: unknown, rejectUnknown: boolean): SavedReceiptProjection | undefined {
     if (!record(value)) return undefined;
     if (rejectUnknown && Object.keys(value).some(key => !receiptFields.has(key))) return undefined;
@@ -63,11 +90,14 @@ function projectReceipt(value: unknown, rejectUnknown: boolean): SavedReceiptPro
     if (value.knowledgeChunkCount !== undefined &&
         (typeof value.knowledgeChunkCount !== 'number' || !Number.isSafeInteger(value.knowledgeChunkCount) || value.knowledgeChunkCount < 0)) return undefined;
     if (value.canonicalExecutionId !== undefined && value.canonicalExecutionId !== value.envelopeId) return undefined;
+    const rolePlan = value.rolePlan === undefined ? undefined : projectRolePlan(value.rolePlan);
+    if (value.rolePlan !== undefined && !rolePlan) return undefined;
 
     const result: Record<string, unknown> = {};
     for (const key of receiptFields) {
-        if (Object.prototype.hasOwnProperty.call(value, key) && value[key] !== undefined) result[key] = value[key];
+        if (key !== 'rolePlan' && Object.prototype.hasOwnProperty.call(value, key) && value[key] !== undefined) result[key] = value[key];
     }
+    if (rolePlan) result.rolePlan = rolePlan;
     return result as unknown as SavedReceiptProjection;
 }
 
@@ -82,6 +112,7 @@ export async function createReceiptArchive(
 ): Promise<ExecutionReceiptArchive | undefined> {
     if (!executionId || typeof output !== 'string') return undefined;
     if (routeReceipt.htmlPilotEvidence) {
+        if (routeReceipt.rolePlan !== undefined && !projectRolePlan(routeReceipt.rolePlan)) return undefined;
         const evidence = routeReceipt.htmlPilotEvidence;
         const outputSha256 = await hashExactOutput(output);
         if (routeReceipt.evidenceMode !== 'live' || routeReceipt.routeId !== '/api/execute'
@@ -112,6 +143,7 @@ export async function restoreReceiptArchive(
         typeof archive.outputSha256 !== 'string' || !/^[a-f0-9]{64}$/.test(archive.outputSha256)) return undefined;
     const pilot = archive.schemaVersion === PILOT_RECEIPT_ARCHIVE_VERSION;
     const receipt = pilot ? archive.receipt as GovernanceEvidenceReceipt : projectReceipt(archive.receipt, true);
+    if (pilot && record(archive.receipt) && archive.receipt.rolePlan !== undefined && !projectRolePlan(archive.receipt.rolePlan)) return undefined;
     if (pilot && (!record(archive.receipt) || !record(archive.receipt.htmlPilotEvidence)
         || !record(archive.receipt.receiptIntegrity)
         || archive.receipt.receiptIntegrity.signatureStatus !== 'SIGNED'

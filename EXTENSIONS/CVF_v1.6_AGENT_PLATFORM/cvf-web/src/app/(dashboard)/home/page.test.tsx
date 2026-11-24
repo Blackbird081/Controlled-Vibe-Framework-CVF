@@ -5,11 +5,19 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { webcrypto } from 'node:crypto';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library, initialTemplate, selectionRequest }: { library: React.ReactNode; initialTemplate?: string; selectionRequest?: { id: string } | null }) => (
+        <div data-testid="home-composer" data-initial-template={selectionRequest?.id ?? initialTemplate ?? ''}>{library}</div>
+    ),
+}));
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import type { Execution } from '@/types';
 import { createReceiptArchive } from '@/lib/execution-receipt-archive';
 
+const readiness = vi.hoisted(() => ({ selected: undefined as string | undefined, models: {} as Record<string, { selectedModel?: string }>, providers: [] as Array<{ provider: string; configured: boolean; executionSurface?: string; nativeAuthState?: string; readiness?: string; checkedAt?: string }> }));
 const navigation = vi.hoisted(() => ({ params: new URLSearchParams() }));
 
 vi.mock('next/navigation', () => ({
@@ -26,14 +34,13 @@ vi.mock('@/lib/analytics', () => ({
 }));
 
 vi.mock('@/components/Settings', () => ({
-    useSettings: () => ({ settings: { providers: {} } }),
+    useSettings: () => ({ settings: { providers: readiness.models, preferences: { defaultProvider: readiness.selected } } }),
 }));
 
 vi.mock('@/lib/hooks/useExecute', () => {
-    const providers: never[] = [];
     const fetchProviders = () => undefined;
     return {
-        useProviders: () => ({ providers, anyConfigured: false, fetchProviders }),
+        useProviders: () => ({ providers: readiness.providers, anyConfigured: readiness.providers.some(p => p.configured), fetchProviders }),
     };
 });
 
@@ -94,9 +101,17 @@ vi.mock('@/components', () => ({
 vi.mock('@/components/home/HomeBrowseExperience', () => ({
     HomeBrowseExperience: (props: {
         templates: Array<{ id: string }>;
+        filteredTemplates: Array<{ id: string }>;
+        searchQuery: string;
+        setSearchQuery: (value: string) => void;
+        setupConfidence: { label: string; description: string; liveTaskReady: boolean };
         handleSelectTemplate: (template: unknown) => void;
     }) => (
         <div data-testid="home-browse-experience">
+            <input aria-label="test library search" value={props.searchQuery} onChange={event => props.setSearchQuery(event.target.value)} />
+            <span data-testid="test-filtered-ids">{props.filteredTemplates.map(item => item.id).join(",")}</span>
+            <span>{props.setupConfidence.label}</span>
+            <p data-testid="setup-description">{props.setupConfidence.description}</p>
             <button onClick={() => props.handleSelectTemplate(props.templates.find(t => t.id === 'documentation'))}>
                 pick-documentation
             </button>
@@ -177,6 +192,7 @@ function startFreshRun() {
 }
 
 beforeEach(() => {
+    readiness.selected = undefined; readiness.providers = [];
     vi.stubGlobal('crypto', webcrypto);
     localStorage.clear();
     sessionStorage.clear();
@@ -186,6 +202,29 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('HomePage', () => {
+    it('keeps Home-only deep links in the composer instead of opening an execution form', async () => {
+        navigation.params = new URLSearchParams('template=short_message');
+        render(<HomePage />);
+        await waitFor(() => expect(screen.getByTestId('home-composer').getAttribute('data-initial-template')).toBe('short_message'));
+        expect(screen.queryByTestId('dynamic-form')).toBeNull();
+    });
+
+    it('preserves the existing HTML pilot deep link and websiteGoal control', async () => {
+        navigation.params = new URLSearchParams('template=web_build_handoff&htmlPilot=1');
+        const { container } = render(<HomePage />);
+        await waitFor(() => expect(container.querySelector('input[name="websiteGoal"]')).toBeTruthy());
+        expect(screen.queryByTestId('home-composer')).toBeNull();
+    });
+
+    it('finds displayed translated titles and preserves original-name search', () => {
+        render(<HomePage />);
+        const search = screen.getByLabelText('test library search');
+        fireEvent.change(search, { target: { value: 'Job description' } });
+        expect(screen.getByTestId('test-filtered-ids').textContent).toContain('job_description');
+        fireEvent.change(search, { target: { value: 'Mô tả Công việc' } });
+        expect(screen.getByTestId('test-filtered-ids').textContent).toContain('job_description');
+    });
+
     it('captures route receipt without delaying the completed result', async () => {
         render(<HomePage />);
         startFreshRun();
@@ -518,3 +557,32 @@ describe('HomePage', () => {
         });
     });
 });
+
+describe('selected native home readiness', () => {
+    it('does not let ready Alibaba mark selected unknown Claude ready', () => {
+        readiness.selected = 'anthropic'; readiness.providers = [{ provider: 'alibaba', configured: true }, { provider: 'claude', configured: false, executionSurface: 'claude_cli_subscription', nativeAuthState: 'unknown', readiness: 'unknown' }];
+        render(<HomePage />); expect(screen.getByText('Claude subscription unavailable')).toBeTruthy(); expect(screen.queryByText('Live task ready')).toBeNull();
+    });
+});
+
+describe('live-ready readiness names the provider and model before spend (outcome fidelity O7)', () => {
+    afterEach(() => { readiness.selected = undefined; readiness.models = {}; readiness.providers = []; });
+    const description = () => screen.getByTestId('setup-description').textContent ?? '';
+    it('names the selected provider and the model chosen in settings', () => {
+        readiness.selected = 'openai'; readiness.models = { openai: { selectedModel: 'gpt-4o-mini' } }; readiness.providers = [{ provider: 'openai', configured: true }, { provider: 'alibaba', configured: true }];
+        render(<HomePage />);
+        expect(screen.getByText('Live task ready')).toBeTruthy();
+        expect(description()).toContain('A run will use provider openai, model gpt-4o-mini.'); expect(description()).not.toContain('alibaba');
+    });
+    it('names the provider and states the server default when settings choose no model', () => {
+        readiness.selected = 'alibaba'; readiness.models = {}; readiness.providers = [{ provider: 'openai', configured: true }, { provider: 'alibaba', configured: true }];
+        render(<HomePage />);
+        expect(description()).toContain('A run will use provider alibaba, model server default.'); expect(description()).not.toContain('openai');
+    });
+    it('does not name a run target when the selected provider is not ready', () => {
+        readiness.selected = 'openai'; readiness.models = { openai: { selectedModel: 'gpt-4o-mini' } }; readiness.providers = [{ provider: 'openai', configured: false }, { provider: 'alibaba', configured: true }];
+        render(<HomePage />);
+        expect(description()).not.toContain('A run will use provider'); expect(screen.queryByText('Live task ready')).toBeNull();
+    });
+});
+// Text Encoding Exception: tests quote bilingual template names as displayed.

@@ -22,26 +22,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        try {
-            const saved = window.localStorage.getItem('cvf_language');
-            if (saved === 'vi' || saved === 'en') {
-                setLanguageState(saved);
-                document.documentElement.lang = saved;
-            } else {
-                document.documentElement.lang = 'vi';
+        let active = true;
+        queueMicrotask(() => {
+            if (!active) return;
+            let initial: Language = 'vi';
+            try {
+                if (window.localStorage.getItem('cvf_language') === 'en') initial = 'en';
+            } catch {
+                // Use the default language if browser storage is unavailable.
             }
-        } finally {
+            setLanguageState(initial);
+            document.documentElement.lang = initial;
             setMounted(true);
-        }
+        });
+        return () => { active = false; };
     }, []);
-
-    useEffect(() => {
-        document.documentElement.lang = language;
-    }, [language]);
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang);
-        localStorage.setItem('cvf_language', lang);
+        try { localStorage.setItem('cvf_language', lang); }
+        catch { /* The current page still changes language without storage. */ }
         document.documentElement.lang = lang;
     };
 

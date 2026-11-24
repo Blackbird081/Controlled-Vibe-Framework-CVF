@@ -1,9 +1,10 @@
 # CVF SKILL ↔ RISK ↔ AUTHORITY LINKAGE
 
-Canonical Binding Between Skills and CVF Governance
-
+> Catalog status: `NOT_ACTIVE` for current product authority. These records are retained for legacy interpretation. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../../docs/reference/agent_system_skills/generated/skill-index.json).
+Assessment linkage for legacy registry records
+>
 > **Version:** 1.0.0  
-> **Status:** Active  
+> **Status:** Retained for legacy record interpretation
 > **Depends on:** [CVF_RISK_AUTHORITY_MAPPING](./CVF_RISK_AUTHORITY_MAPPING.md)
 
 ## 1. Purpose
@@ -38,7 +39,7 @@ and can always be revoked.
 
 ---
 
-## 3. Risk Levels (Canonical)
+## 3. Legacy assessment scores
 
 Each skill MUST be assigned exactly one primary risk level.
 

@@ -1,4 +1,7 @@
+<!-- Text Encoding Exception: preserve Vietnamese orientation and historical technical labels. -->
 # 🚀 App Development Skills
+
+Trang chủ CVF Web có các mẫu kết quả đang dùng. Phần dưới lưu hướng dẫn của v1.5.2 để tra cứu lịch sử.
 
 > **Domain:** App Development  
 > **Skills:** 8  
@@ -21,22 +24,18 @@ Domain này cung cấp các skills để tạo **spec chất lượng cao** cho 
 
 ---
 
-## 📋 Danh sách Skills
+## Danh mục lịch sử
 
 | # | Skill | Mô tả | Dùng khi |
 |:-:|-------|-------|----------|
-| 1 | [App Requirements Spec](./01_app_requirements_spec.skill.md) | Thu thập yêu cầu, định nghĩa scope | Bắt đầu dự án mới |
-| 2 | [Tech Stack Selection](./02_tech_stack_selection.skill.md) | Chọn framework, database, tools | Sau khi có requirements |
-| 3 | [Architecture Design](./03_architecture_design.skill.md) | System design, component structure | Trước khi code |
-| 4 | [Database Schema Design](./04_database_schema_design.skill.md) | Data modeling, relationships | Apps có database |
-| 5 | [API Design Spec](./05_api_design_spec.skill.md) | Endpoints, request/response | Apps có API |
-| 6 | [Desktop App Spec](./06_desktop_app_spec.skill.md) | Electron/Tauri apps | Desktop applications |
-| 7 | [Project Init Checklist](./07_project_init_checklist.skill.md) | Project setup, init checklist | Starting any new project |
-| 8 | [Local Deployment](./08_local_deployment.skill.md) | Packaging, distribution | Ready to ship |
+| 1 | App Requirements Spec | Thu thập yêu cầu, định nghĩa scope | Bắt đầu dự án mới |
+| 3 | Architecture Design | System design, component structure | Trước khi code |
+| 5 | API Design Spec | Endpoints, request/response | Apps có API |
+| 7 | Project Init Checklist | Project setup, init checklist | Starting any new project |
 
 ---
 
-## 🔄 Recommended Workflow
+## 🔄 Recommended Workflow (v1.5.2)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -149,12 +148,11 @@ Hotkeys: Ctrl+N (new), Ctrl+F (search)
 
 ---
 
-## 🔗 Related Skills
+## Chỉ mục lưu trữ
 
-- [Security Audit](../technical_review/03_security_audit.skill.md) - Đánh giá bảo mật sau khi build
-- [Code Review](../technical_review/01_code_review.skill.md) - Review code quality
-- [CVF Web UX Redesign System](../product_ux/cvf_web_ux_redesign_system.skill.md) - Chuẩn UI/UX web theo `DESIGN.md`
-- [UX Heuristic Evaluation](../product_ux/ux_heuristic_evaluation.skill.md) - Đánh giá UX sau build
+- Code Review - Review code quality
+- CVF Web UX Redesign System - Chuẩn UI/UX web theo `DESIGN.md`
+- UX Heuristic Evaluation - Đánh giá UX sau build
 
 ---
 

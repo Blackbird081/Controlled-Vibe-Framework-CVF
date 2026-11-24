@@ -56,6 +56,27 @@ describe('GovernanceBar', () => {
         language = 'en';
     });
 
+    it.each(['R3', 'R4'] as const)('keeps saved %s when the message supplies a lower label', riskLevel => {
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true, phase: 'INTAKE', role: 'ANALYST', riskLevel,
+        }));
+        const onStateChange = vi.fn();
+        renderBar({ onStateChange, lastMessage: 'R0: prepare a short summary' });
+
+        expect(onStateChange).toHaveBeenLastCalledWith(expect.objectContaining({ riskLevel }));
+        expect(JSON.parse(localStorage.getItem(GOV_STORAGE_KEY)!).riskLevel).toBe(riskLevel);
+    });
+
+    it('does not let a low label hide a higher message risk', () => {
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true, phase: 'INTAKE', role: 'ANALYST', riskLevel: 'R1',
+        }));
+        const onStateChange = vi.fn();
+        renderBar({ onStateChange, lastMessage: 'R0: change a production service' });
+
+        expect(onStateChange).toHaveBeenLastCalledWith(expect.objectContaining({ riskLevel: 'R3' }));
+    });
+
     it('renders the CVF Toolkit label', async () => {
         renderBar();
         await waitFor(() => {
@@ -333,7 +354,7 @@ describe('GovernanceBar', () => {
         });
     });
 
-    it('shows risk warning when risk exceeds phase limit', async () => {
+    it('shows a warning when risk exceeds the role and phase limit', async () => {
         localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
             toolkitEnabled: true,
             phase: 'INTAKE',
@@ -344,8 +365,23 @@ describe('GovernanceBar', () => {
         renderBar();
 
         await waitFor(() => {
-            expect(screen.getByText(/Risk exceeds phase limit/i)).toBeTruthy();
+            expect(screen.getByText(/Risk exceeds the role and phase limit/i)).toBeTruthy();
         });
+    });
+
+    it('shows a historical R4 value as blocked and disabled in the selector', () => {
+        localStorage.setItem(GOV_STORAGE_KEY, JSON.stringify({
+            toolkitEnabled: true,
+            phase: 'FREEZE',
+            role: 'GOVERNOR',
+            riskLevel: 'R4',
+        }));
+        localStorage.setItem('cvf_governance_advanced', 'true');
+        renderBar();
+
+        const option = screen.getByRole('option', { name: 'Blocked (R4)' }) as HTMLOptionElement;
+        expect(option.disabled).toBe(true);
+        expect(screen.getByText('R4 is blocked')).toBeTruthy();
     });
 
     it('shows auto-detect info line when in auto mode with lastMessage', async () => {
@@ -474,8 +510,8 @@ describe('GovernanceBar', () => {
             expect(screen.getByText('Đang hoạt động')).toBeTruthy();
             expect(screen.getByText('Chế độ nâng cao')).toBeTruthy();
             expect(screen.getByText('Đơn giản')).toBeTruthy();
-            expect(screen.getByText((text) => text.includes('Có thể duyệt'))).toBeTruthy();
-            expect(screen.getByText((text) => text.includes('Có thể ghi đè'))).toBeTruthy();
+            expect(screen.getByText('Gi\u1edbi h\u1ea1n theo vai tr\u00f2 v\u00e0 giai \u0111o\u1ea1n (R3)')).toBeTruthy();
+            expect(screen.queryByText(/C\u00f3 th\u1ec3 duy\u1ec7t|C\u00f3 th\u1ec3 ghi \u0111\u00e8/)).toBeNull();
         });
 
         for (const notify of approvalSubscribers) {

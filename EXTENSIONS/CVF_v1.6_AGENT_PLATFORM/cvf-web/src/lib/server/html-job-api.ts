@@ -1,3 +1,4 @@
+import { isSameBrowserOrigin } from './browser-origin';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { requireAdminApiSession } from '@/lib/admin-session';
@@ -16,11 +17,6 @@ const reply = (status: number, body: Record<string, unknown>) => NextResponse.js
   status, headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, Origin' },
 });
 const fail = (status: number, error: string) => reply(status, { success: false, error });
-const sameOrigin = (request: Request) => {
-  try { const origin = request.headers.get('origin'); const site = request.headers.get('sec-fetch-site');
-    return !!origin && origin === new URL(request.url).origin && (!site || site === 'same-origin'); }
-  catch { return false; }
-};
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 const scoped = (source: string, prefix: string) => SOURCE_ID.test(source) && source.startsWith(prefix);
 /** `bound` is an explicitly injected nonsecret disclosure. It is never read from a query, body, header or the environment. */
@@ -53,7 +49,7 @@ export function jobRouteHandlers(deps: Dependencies = {}) {
   }
   return {
     async POST(request: NextRequest): Promise<NextResponse> {
-      if (!sameOrigin(request)) return fail(403, 'ORIGIN_REFUSED');
+      if (!isSameBrowserOrigin(request)) return fail(403, 'ORIGIN_REFUSED');
       const owner = await principal(request); if (owner instanceof NextResponse) return owner;
       if (!store || !profile) return fail(503, 'JOB_PROFILE_DISABLED');
       if (!(request.headers.get('content-type') ?? '').toLowerCase().startsWith('application/json')) return fail(415, 'JSON_REQUIRED');

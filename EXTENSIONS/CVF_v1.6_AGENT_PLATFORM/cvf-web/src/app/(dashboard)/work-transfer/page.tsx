@@ -3,9 +3,10 @@
 // Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, CheckCircle2, ClipboardCheck, FileCheck2, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react';
+import { ArrowRight, FileCheck2, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react';
 
 import { useLanguage } from '@/lib/i18n';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
 import { validateHandoff, type HandoffDecision } from '@/lib/agent-handoff-validator';
 import { ArtifactExportPanel, type ArtifactExportRequest } from '@/components/ArtifactExportPanel';
 import { HtmlDraftRecovery } from '@/components/HtmlDraftRecovery';
@@ -16,75 +17,6 @@ import { restoreReceiptArchive } from '@/lib/execution-receipt-archive';
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { KnowledgeJourneyNav } from '@/components/KnowledgeJourneyNav';
 import type { AgentRole } from '@/lib/multi-agent';
-
-const COPY = {
-  en: {
-    label: 'Work Transfer',
-    title: 'Pass reviewed work forward with less guesswork',
-    intro: 'Check whether a reviewed packet carries enough context for the next person or assistant to continue safely.',
-    from: 'From step',
-    to: 'Next step',
-    status: 'Previous step status',
-    output: 'Reviewed summary',
-    outputPlaceholder: 'Paste the short review summary that should move forward.',
-    check: 'Transfer check',
-    carried: 'The reviewed context is present and can move forward.',
-    missing: 'The reviewed context is missing and should not move forward yet.',
-    summary: 'Carried summary',
-    issues: 'Review notes',
-    noIssues: 'No transfer issues were found. Keep the source, receipt, and review boundary visible.',
-    historyTitle: 'Recent audit events',
-    historyEmpty: 'No audit events found.',
-    historyLoading: 'Loading audit history...',
-    historyError: 'Could not load audit history.',
-    historyNote: 'These are audit events, not proof that a work transfer occurred.',
-    openRecord: 'Open HTML panel',
-    closeRecord: 'Close HTML panel',
-    recordPanelNote: 'Opening the panel does not build or save anything. Closing it before Build discards edits you have not submitted. Closing does not cancel, or confirm the stop of, a build that already started.',
-    exportingRecord: 'Exporting',
-    exportPanel: 'HTML Export',
-    benefitsTitle: 'Why this helps people review work',
-    boundary: 'This page checks whether the next step has enough context. It is not final proof by itself. Checking context does not save or create a transfer record.',
-    benefits: [
-      'The next person can see what was reviewed and what still needs attention.',
-      'The visible receipt makes the packet easier to trust, share, and revisit.',
-      'New knowledge becomes a clear transfer note instead of hidden background context.',
-    ],
-  },
-  vi: {
-    label: 'Bàn giao',
-    title: 'Bàn giao công việc cho bước tiếp theo',
-    intro: 'Kiểm tra gói đã rà soát có đủ ngữ cảnh để người hoặc trợ lý tiếp theo tiếp tục an toàn hay không.',
-    from: 'Bước trước',
-    to: 'Bước tiếp theo',
-    status: 'Trạng thái bước trước',
-    output: 'Tóm tắt đã rà soát',
-    outputPlaceholder: 'Dán tóm tắt ngắn cần chuyển tiếp.',
-    check: 'Kiểm tra chuyển giao',
-    carried: 'Ngữ cảnh đã rà soát có đủ để chuyển tiếp.',
-    missing: 'Ngữ cảnh đã rà soát đang thiếu và chưa nên chuyển tiếp.',
-    summary: 'Tóm tắt được chuyển tiếp',
-    issues: 'Ghi chú rà soát',
-    noIssues: 'Không phát hiện vấn đề trong chuyển giao. Vẫn cần giữ nguồn, biên nhận và ranh giới rà soát.',
-    historyTitle: 'Sự kiện nhật ký kiểm tra gần đây',
-    historyEmpty: 'Không tìm thấy sự kiện nào trong nhật ký kiểm tra.',
-    historyLoading: 'Đang tải nhật ký kiểm tra...',
-    historyError: 'Không thể tải nhật ký kiểm tra.',
-    historyNote: 'Đây là các sự kiện nhật ký kiểm tra, không phải bằng chứng rằng một lần bàn giao đã diễn ra.',
-    openRecord: 'Mở bảng HTML',
-    closeRecord: 'Đóng bảng HTML',
-    recordPanelNote: 'Mở bảng không tạo hay lưu gì. Đóng bảng trước khi tạo sẽ bỏ các chỉnh sửa chưa gửi. Đóng bảng không hủy, cũng không xác nhận đã dừng, một lượt tạo đã bắt đầu.',
-    exportingRecord: 'Đang xuất',
-    exportPanel: 'Xuất HTML',
-    benefitsTitle: 'Vì sao hữu ích cho người rà soát',
-    boundary: 'Trang này kiểm tra bước tiếp theo có đủ ngữ cảnh hay chưa. Nó không phải bằng chứng cuối cùng. Việc kiểm tra ngữ cảnh không lưu hay tạo bản ghi bàn giao.',
-    benefits: [
-      'Người tiếp theo thấy rõ phần nào đã rà soát và phần nào còn cần chú ý.',
-      'Biên nhận nhìn thấy được giúp gói nội dung dễ tin, dễ chia sẻ và dễ xem lại.',
-      'Kiến thức mới trở thành ghi chú chuyển giao rõ ràng thay vì ngữ cảnh ẩn.',
-    ],
-  },
-};
 
 interface AuditRecord {
   id: string;
@@ -102,10 +34,19 @@ const DECISION_STYLE: Record<HandoffDecision, string> = {
   BLOCK: 'border-red-200 bg-red-50 text-red-800 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-100',
 };
 
-const ROLE_LABELS = {
-  en: { orchestrator: 'Coordinator', architect: 'Planner', builder: 'Maker', reviewer: 'Reviewer' },
-  vi: { orchestrator: 'Điều phối', architect: 'Lập kế hoạch', builder: 'Thực hiện', reviewer: 'Rà soát' },
-} satisfies Record<'en' | 'vi', Record<AgentRole, string>>;
+const DECISION_LABEL: Record<HandoffDecision, string> = {
+  ALLOW: 'ready',
+  WARN: 'review',
+  BLOCK: 'waiting',
+};
+
+const ACTIVITY_LABEL: Record<string, string> = {
+  SUCCESS: 'loggedSuccess',
+  FAILED: 'loggedError',
+  FAILURE: 'loggedError',
+  DENIED: 'loggedDenied',
+  BLOCKED: 'loggedDenied',
+};
 
 function recordToExportRequest(record: AuditRecord): Partial<ArtifactExportRequest> {
   return {
@@ -154,16 +95,24 @@ export default function WorkTransferPage() {
   }, [pilotExecutionId, pilotExecution?.id, pilotExecution?.templateId, pilotExecution?.status,
     pilotExecution?.savedReceiptArchive, pilotExecution?.output, pilotExecution?.evidenceReceiptSnapshot,
     pilotExecution?.htmlPilot?.runId]);
-  const { language } = useLanguage();
-  const copy = COPY[language === 'vi' ? 'vi' : 'en'];
-  const roleLabels = ROLE_LABELS[language === 'vi' ? 'vi' : 'en'];
+  const { language, t } = useLanguage();
+  const roleLabels: Record<AgentRole, string> = {
+    orchestrator: t('workTransferPage.roleOrchestrator'),
+    architect: t('workTransferPage.roleArchitect'),
+    builder: t('workTransferPage.roleBuilder'),
+    reviewer: t('workTransferPage.roleReviewer'),
+  };
+  const statusOptions = {
+    completed: t('workTransferPage.completed'),
+    running: t('workTransferPage.running'),
+    failed: t('workTransferPage.failed'),
+  };
 
   const [fromAgent, setFromAgent] = useState<AgentRole>('architect');
   const [toAgent, setToAgent] = useState<AgentRole>('builder');
   const [status, setStatus] = useState<'completed' | 'running' | 'failed'>('completed');
-  const [output, setOutput] = useState(() => language === 'vi'
-    ? 'Kiến thức mới đã sẵn sàng để rà soát. Hãy giữ ghi chú nguồn, biên nhận và ranh giới khẳng định cùng nhau.'
-    : 'The new knowledge is ready for review. Keep the source note, receipt, and claim boundary together.');
+  const [editedOutput, setOutput] = useState<string>();
+  const output = editedOutput ?? t('workTransferPage.example');
 
   const [records, setRecords] = useState<AuditRecord[]>([]);
   const [historyState, setHistoryState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -209,57 +158,53 @@ export default function WorkTransferPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 text-gray-900 dark:text-gray-100">
       <header className="border-b border-gray-200 pb-5 dark:border-white/[0.08]">
-        <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-300">
-          <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
-          {copy.label}
-        </div>
-        <h1 className="text-3xl font-bold tracking-normal text-gray-950 dark:text-white">{copy.title}</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">{copy.intro}</p>
+        <h1 className="text-3xl font-bold tracking-normal text-gray-950 dark:text-white">{t('workTransferPage.title')}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">{t('workTransferPage.intro')}</p>
       </header>
 
-      <KnowledgeJourneyNav currentStep={5} />
+      <KnowledgeJourneyNav currentStep={5} wrap />
 
       {pilotExecutionId && <section data-testid="home-html-pilot-transfer" className="rounded-lg border border-indigo-300 bg-white p-5 dark:bg-gray-900">
-        <h2 className="text-lg font-semibold">Home result to exact HTML job</h2>
+        <h2 className="text-lg font-semibold">{t('workTransferPage.pilotTitle')}</h2>
         {pilotReceipt && pilotExecution?.output
           ? <PilotHtmlJobControls key={`${pilotExecution.id}:${pilotReceipt.htmlPilotEvidence?.runId}:${pilotReceipt.htmlPilotEvidence?.outputSha256}`}
               sourceExecutionId={pilotExecution.id} output={pilotExecution.output}
               receipt={pilotReceipt} existingJobId={pilotExecution.htmlPilot?.jobId} />
-          : <p role="status">Signed completed Home source is unavailable. No job or AI attempt was started.</p>}
+          : <p role="status">{t('workTransferPage.pilotUnavailable')}</p>}
       </section>}
 
       <section className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-indigo-500" aria-hidden="true" />
-            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.check}</h2>
+            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{t('workTransferPage.check')}</h2>
           </div>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <SelectField label={copy.from} value={fromAgent} onChange={v => setFromAgent(v as AgentRole)} options={roleLabels} />
-            <SelectField label={copy.to} value={toAgent} onChange={v => setToAgent(v as AgentRole)} options={roleLabels} />
-            <SelectField label={copy.status} value={status} onChange={v => setStatus(v as 'completed' | 'running' | 'failed')} options={language === 'vi' ? { completed: 'Đã hoàn tất', running: 'Đang thực hiện', failed: 'Thất bại' } : ['completed', 'running', 'failed']} />
+            <SelectField label={t('workTransferPage.from')} value={fromAgent} onChange={v => setFromAgent(v as AgentRole)} options={roleLabels} />
+            <SelectField label={t('workTransferPage.to')} value={toAgent} onChange={v => setToAgent(v as AgentRole)} options={roleLabels} />
+            <SelectField label={t('workTransferPage.status')} value={status} onChange={v => setStatus(v as 'completed' | 'running' | 'failed')} options={statusOptions} />
             <div className="hidden items-end justify-center sm:flex">
               <ArrowRight className="mb-3 h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
             <label className="sm:col-span-2 text-sm font-semibold">
-              {copy.output}
-              <textarea value={output} onChange={e => setOutput(e.target.value)} placeholder={copy.outputPlaceholder} rows={6} className="mt-1 w-full resize-y rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm leading-6 dark:border-gray-700 dark:bg-gray-950" />
+              {t('workTransferPage.output')}
+              <textarea value={output} onChange={e => setOutput(e.target.value)} placeholder={t('workTransferPage.outputPlaceholder')} rows={6} className="mt-1 w-full resize-y rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm leading-6 dark:border-gray-700 dark:bg-gray-950" />
             </label>
           </div>
           <div className={`mt-4 rounded-lg border p-4 text-sm leading-6 ${DECISION_STYLE[result.decision]}`}>
-            <div className="font-semibold">{language === 'vi' ? 'Quyết định' : 'Decision'}: {result.decision}</div>
-            <div className="mt-1">{result.contextCarried ? copy.carried : copy.missing}</div>
+            <div className="font-semibold">{t('workTransferPage.decision')}{' · '}{t(`workTransferPage.${DECISION_LABEL[result.decision]}`)}</div>
+            <div className="mt-1">{t(result.contextCarried ? 'workTransferPage.carried' : 'workTransferPage.missing')}</div>
           </div>
         </div>
 
         <div className="space-y-5">
           <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.summary}</h2>
+            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{t('workTransferPage.summary')}</h2>
             <p className="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-600 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300">{result.outputSummary}</p>
-            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100">{copy.boundary}</div>
+            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100">{t('workTransferPage.boundary')}</div>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.issues}</h2>
+            <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{t('workTransferPage.issues')}</h2>
             {result.issues.length > 0 ? (
               <div className="mt-4 space-y-3">
                 {result.issues.map(issue => (
@@ -270,7 +215,7 @@ export default function WorkTransferPage() {
                 ))}
               </div>
             ) : (
-              <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{copy.noIssues}</p>
+              <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{t('workTransferPage.noIssues')}</p>
             )}
           </div>
         </div>
@@ -279,32 +224,32 @@ export default function WorkTransferPage() {
       <section data-testid="history-panel" className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex items-center gap-2">
           <FileCheck2 className="h-5 w-5 text-indigo-500" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.historyTitle}</h2>
+          <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{t('workTransferPage.historyTitle')}</h2>
         </div>
-        <p data-testid="history-note" className="mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400">{copy.historyNote}</p>
-        <p id="record-panel-note" data-testid="record-panel-note" className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">{copy.recordPanelNote}</p>
+        <p data-testid="history-note" className="mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400">{t('workTransferPage.historyNote')}</p>
+        <p id="record-panel-note" data-testid="record-panel-note" className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">{t('workTransferPage.recordPanelNote')}</p>
         <div className="mt-4">
           {historyState === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              {copy.historyLoading}
+              {t('workTransferPage.historyLoading')}
             </div>
           )}
           {historyState === 'error' && (
-            <p data-testid="history-error" className="text-sm text-red-600 dark:text-red-400">{copy.historyError}</p>
+            <p data-testid="history-error" className="text-sm text-red-600 dark:text-red-400">{t('workTransferPage.historyError')}</p>
           )}
           {historyState === 'ready' && records.length === 0 && (
-            <p data-testid="history-empty" className="text-sm text-gray-500 dark:text-gray-400">{copy.historyEmpty}</p>
+            <p data-testid="history-empty" className="text-sm text-gray-500 dark:text-gray-400">{t('workTransferPage.historyEmpty')}</p>
           )}
           {historyState === 'ready' && records.length > 0 && (
             <div className="space-y-2" data-testid="history-list">
               {records.map(record => (
                 <div key={record.id} className="rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950">
-                  <div className="flex items-center justify-between gap-3 px-4 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{record.action}</p>
+                      <p className="break-words text-sm font-medium text-gray-900 dark:text-white">{t(`workTransferPage.${Object.hasOwn(ACTIVITY_LABEL, record.outcome) ? ACTIVITY_LABEL[record.outcome] : 'loggedAction'}`)}</p>
                       <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                        {record.actorId} · {new Date(record.timestamp).toLocaleString()}
+                        {new Date(record.timestamp).toLocaleString(language === 'vi' ? 'vi-VN' : 'en-US')}
                       </p>
                     </div>
                     <button
@@ -317,9 +262,19 @@ export default function WorkTransferPage() {
                       className="shrink-0 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgb(var(--cvf-accent-rgb))] dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200 dark:hover:bg-indigo-900/40"
                     >
                       <FileCheck2 className="h-3.5 w-3.5" aria-hidden="true" />
-                      {selectedRecord?.id === record.id ? copy.closeRecord : copy.openRecord}
+                      {t(selectedRecord?.id === record.id ? 'workTransferPage.closeRecord' : 'workTransferPage.openRecord')}
                     </button>
                   </div>
+                  <TechnicalDetails className="mx-4 mb-3" label={t('common.technicalDetails')}>
+                    <dl>
+                      <dt>{t('workTransferPage.originalAction')}</dt>
+                      <dd>{record.action}</dd>
+                      <dt className="mt-2">{t('workTransferPage.originalOutcome')}</dt>
+                      <dd>{record.outcome}</dd>
+                      <dt className="mt-2">{t('workTransferPage.actorReference')}</dt>
+                      <dd className="[overflow-wrap:anywhere]">{record.actorId}</dd>
+                    </dl>
+                  </TechnicalDetails>
                   {selectedRecord?.id === record.id && exportRequest && (
                     <div id={`record-panel-${record.id}`} className="border-t border-gray-200 px-4 pb-4 pt-4 dark:border-gray-800" data-testid="inline-export-panel">
                       {record.id.startsWith('ncr-synthetic-')
@@ -336,28 +291,27 @@ export default function WorkTransferPage() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-        <h2 className="text-lg font-semibold text-gray-950 dark:text-white">{copy.benefitsTitle}</h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          {copy.benefits.map(item => (
-            <div key={item} className="flex gap-3 text-sm leading-6 text-gray-600 dark:text-gray-300">
-              <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-500" aria-hidden="true" />
-              <span>{item}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <TechnicalDetails label={t('common.technicalDetails')}>
+        <ul className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+          <li>Work Transfer</li>
+          <li>Transfer check</li>
+          <li>Carried summary</li>
+          <li>Recent audit events</li>
+          <li>Home result to exact HTML job</li>
+          <li>HTML Export</li>
+        </ul>
+        <p>{t('workTransferPage.decision')}{' · '}{result.decision}</p>
+      </TechnicalDetails>
     </div>
   );
 }
 
-function SelectField({ label, value, options, onChange }: { label: string; value: string; options: string[] | Record<string, string>; onChange: (value: string) => void }) {
-  const entries = Array.isArray(options) ? options.map(o => [o, o]) : Object.entries(options);
+function SelectField({ label, value, options, onChange }: { label: string; value: string; options: Record<string, string>; onChange: (value: string) => void }) {
   return (
     <label className="text-sm font-semibold">
       {label}
-      <select value={value} onChange={e => onChange(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950">
-        {entries.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+      <select value={value} onChange={e => onChange(e.target.value)} className="mt-1 min-h-11 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-950">
+        {Object.entries(options).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
       </select>
     </label>
   );

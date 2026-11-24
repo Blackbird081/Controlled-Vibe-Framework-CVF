@@ -1,4 +1,6 @@
-import { NextResponse } from 'next/server';
+import { verifySessionCookie } from '@/lib/middleware-auth';
+import { isClaudeSubscriptionMode, claudeSubscriptionReadiness } from '@/lib/server/claude-cli-profile';
+import { NextRequest, NextResponse } from 'next/server';
 import { AIProvider, DEFAULT_MODELS, ProviderStatus } from '@/lib/ai';
 import { isAlibabaApiKeyConfigured, resolveAlibabaApiKeySourceName } from '@/lib/alibaba-env';
 import { isDeepSeekApiKeyConfigured, resolveDeepSeekApiKeySourceName } from '@/lib/deepseek-env';
@@ -33,7 +35,10 @@ function providerStatus(input: {
     };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+    const native = isClaudeSubscriptionMode();
+    if (native && (!request || !await verifySessionCookie(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: { 'Cache-Control': 'no-store' } });
+    const nativeStatus = native ? await claudeSubscriptionReadiness(request?.signal) : null;
     const openaiConfigured = isOpenAIApiKeyConfigured();
     const alibabaConfigured = isAlibabaApiKeyConfigured();
     const deepseekConfigured = isDeepSeekApiKeyConfigured();
@@ -77,6 +82,13 @@ export async function GET() {
         }),
     ];
 
+    if (nativeStatus) {
+        const index = providers.findIndex(p => p.provider === 'claude');
+        const ready = nativeStatus.state === 'available';
+        providers[index] = { provider: 'claude', configured: ready, model: 'sonnet', modelKind: 'alias', laneStatus: ready ? 'EXPERIMENTAL' : 'UNCONFIGURED',
+            keySourceName: null, readiness: ready ? 'live_task_ready' : nativeStatus.state === 'unavailable' ? 'unavailable' : 'unknown', nativeAuthState: nativeStatus.state,
+            checkedAt: nativeStatus.checkedAt, executionSurface: 'claude_cli_subscription' };
+    }
     const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
     const anyConfigured = providers.some(p => p.configured);
 
@@ -87,5 +99,5 @@ export async function GET() {
         message: anyConfigured
             ? 'At least one provider is configured'
             : 'No providers configured. Please set API keys in .env.local',
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
 }

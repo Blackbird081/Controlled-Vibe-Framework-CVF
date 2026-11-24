@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateCompleteSpec, generateIntent, getTemplateById } from './templates';
+import { generateSpec } from '@/components/SpecExport';
+import { generateIntent, getTemplateById } from './templates';
 
 type RewriteContract = {
   requiredFields: string[];
@@ -135,7 +136,7 @@ describe('front-door rewrite regression contracts', () => {
 
       const sampleValues = sampleValuesForTemplate(templateId);
       const intent = generateIntent(template!, sampleValues);
-      const spec = generateCompleteSpec(template!, sampleValues);
+      const spec = generateSpec(template!, sampleValues, 'en', 'governance');
 
       expect(intent, `${templateId} generated intent should not leave template placeholders behind`).not.toMatch(unresolvedPlaceholderPattern);
       expect(spec, `${templateId} generated spec should not leave template placeholders behind`).not.toMatch(unresolvedPlaceholderPattern);

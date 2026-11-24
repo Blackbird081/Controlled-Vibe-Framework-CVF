@@ -1,5 +1,7 @@
 # Quá Trình Phát Triển Phiên Bản
 
+> So sánh phiên bản dưới đây mô tả các bản cũ. Với cách làm hiện tại, xem [vòng đời công việc](lifecycle.md) và [mô hình rủi ro](risk-model.md).
+
 CVF đã phát triển qua 6 phiên bản, mỗi phiên bản thêm một lớp khả năng mới trong khi vẫn duy trì tương thích ngược. Tất cả các phiên bản trước v1.6 đều đã **đóng băng** — nghĩa là spec của chúng là bản cuối cùng và sẽ không thay đổi.
 
 ---
@@ -148,14 +150,14 @@ v1.6  Nền Tảng Agent        ████████████████
 **Những gì được thêm:**
 
 - Định hướng người dùng cuối (v1.5.1): hướng dẫn cho người không phải lập trình viên
-- Thư viện Skill cho người dùng cuối (v1.5.2): 114 skill trên 12 lĩnh vực
+- Thư viện Skill cho người dùng cuối (v1.5.2): biểu mẫu dùng lại cho người dùng
 - Tài liệu và hướng dẫn hướng đến người dùng
 
 **File quan trọng:**
 
 - `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` — Spec nền tảng
 - `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` — Hướng dẫn người dùng cuối
-- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Thư viện skill đầy đủ
+- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Nguồn biểu mẫu cho người dùng
 
 **Phù hợp cho:** Các nhóm đang đưa thành viên không chuyên kỹ thuật vào quy trình CVF.
 
@@ -215,7 +217,7 @@ v1.6  Nền Tảng Agent        ████████████████
 | Python SDK/CLI | — | — | — | ✅ | ✅ | ✅ |
 | Tích hợp CI/CD | — | — | — | ✅ | ✅ | ✅ |
 | Hướng dẫn người dùng cuối | — | — | — | — | ✅ | ✅ |
-| Thư viện Skill (114) | — | — | — | — | ✅ | ✅ |
+| Thư viện Skill | — | — | — | — | ✅ | ✅ |
 | Giao diện Web | — | — | — | — | — | ✅ |
 | Chat đa Agent | — | — | — | — | — | ✅ |
 | Chế độ Governance | — | — | — | — | — | ✅ |
@@ -283,3 +285,5 @@ Nếu bạn dùng v1.6, bạn tự động có quyền truy cập vào tất c�
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

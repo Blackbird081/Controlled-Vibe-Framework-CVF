@@ -1,5 +1,7 @@
 # CVF Skill Governance - Integration Roadmap
 
+> Catalog status: `NOT_ACTIVE` for current planning and discovery. These records are retained for legacy interpretation. See the [Web skill catalog](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../docs/reference/agent_system_skills/generated/skill-index.json).
+>
 > **Created:** Feb 07, 2026  
 > **Status:** Planning  
 > **Owner:** CVF Team

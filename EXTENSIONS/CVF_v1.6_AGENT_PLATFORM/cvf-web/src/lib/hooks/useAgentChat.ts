@@ -4,8 +4,17 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createAIProvider, AIMessage, AIProvider } from '@/lib/ai-providers';
+import {
+    AssistantRateLimitError,
+    assistantRateLimitMessage,
+    assistantRetryDelaySeconds,
+    MAX_ASSISTANT_RETRY_DELAY_SECONDS,
+    waitForAssistantRetry,
+} from '@/lib/assistant-rate-limit';
 import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
 import { checkResponseGovernance } from '@/lib/governance-post-check';
+import { GOVERNED_ROUTE_DEFAULT_MODEL, GOVERNED_ROUTE_DEFAULT_PROVIDER } from '@/lib/governed-route-providers';
+import { type AgentModelSelection } from '@/lib/agent-model-catalog';
 import {
     calculateQualityScore,
     shouldRequireAcceptance,
@@ -48,9 +57,16 @@ interface AgentChatLabels {
 
 interface UseAgentChatOptions {
     initialPrompt?: string;
+    initialDraft?: string;
     existingMessages?: ChatMessage[];
     language: 'vi' | 'en';
     settings: AgentChatSettings;
+    modelSelection?: AgentModelSelection | null;
+    canUseConfiguredKeys?: boolean;
+    verifySession?: (usesConfiguredKey: boolean) => Promise<boolean>;
+    usesPersonalKey?: boolean;
+    historyProvider?: ProviderKey;
+    selectedModelKey?: string;
     labels: AgentChatLabels;
     onComplete?: (messages: ChatMessage[]) => void;
     onClose?: () => void;
@@ -61,11 +77,24 @@ interface UseAgentChatOptions {
 const ALLOWED_FILE_TYPES = ['.txt', '.md', '.json', '.js', '.ts', '.tsx', '.css', '.html', '.py', '.yaml', '.yml'];
 const MAX_FILE_SIZE_BYTES = 100 * 1024;
 
+function budgetExceededMessage(language: 'vi' | 'en'): string {
+    return language === 'vi'
+        ? '🚫 Đã vượt ngân sách. Hãy tăng ngân sách hoặc chờ đến kỳ tiếp theo.'
+        : '🚫 Budget exceeded. Please increase budget or wait for reset before continuing.';
+}
+
 export function useAgentChat({
     initialPrompt,
+    initialDraft,
     existingMessages,
     language,
     settings,
+    modelSelection,
+    canUseConfiguredKeys,
+    verifySession,
+    usesPersonalKey,
+    historyProvider,
+    selectedModelKey,
     labels,
     onComplete,
     onClose,
@@ -90,7 +119,7 @@ export function useAgentChat({
     const { detectPhase } = usePhaseDetection();
 
     const [messages, setMessages] = useState<ChatMessage[]>(existingMessages || []);
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState(initialDraft ?? '');
     const [isLoading, setIsLoading] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [attachedFile, setAttachedFile] = useState<{ name: string; content: string } | null>(null);
@@ -104,6 +133,13 @@ export function useAgentChat({
     const [decisionLog, setDecisionLog] = useState<DecisionLogEntry[]>([]);
 
     const handledPromptRef = useRef<string | null>(null);
+    const chatLifetimeRef = useRef<AbortController | null>(null);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        chatLifetimeRef.current = controller;
+        return () => controller.abort();
+    }, []);
 
     useEffect(() => {
         if (onMessagesChange && messages.length > 0) {
@@ -139,6 +175,9 @@ export function useAgentChat({
         apiKey: string,
         model: string
     ) => {
+        const lifetime = chatLifetimeRef.current;
+        if (!lifetime || lifetime.signal.aborted) return;
+        const { signal } = lifetime;
         const aiMessages: AIMessage[] = messages
             .filter(m => m.role !== 'system')
             .map(m => ({ role: m.role, content: m.content }));
@@ -157,18 +196,49 @@ export function useAgentChat({
         const aiProvider = createAIProvider(provider, { apiKey, language, model });
         let fullText = '';
 
-        const response = await aiProvider.chat(aiMessages, (chunk) => {
-            if (!chunk.isComplete && chunk.text) {
-                fullText += chunk.text;
-                setMessages(prev =>
-                    prev.map(m =>
-                        m.id === messageId
-                            ? { ...m, content: fullText }
-                            : m
-                    )
-                );
+        async function sendToProvider(allowRetry: boolean): Promise<Awaited<ReturnType<typeof aiProvider.chat>> | null> {
+            if (verifySession && !await verifySession(!usesPersonalKey)) {
+                throw new Error('Agent account no longer verified');
             }
-        });
+            if (signal.aborted) return null;
+            if (!allowRetry && !checkBudget().ok) {
+                const content = budgetExceededMessage(language);
+                setMessages(prev => prev.map(m => m.id === messageId ? { ...m, content, status: 'error' } : m));
+                return null;
+            }
+
+            try {
+                return await aiProvider.chat(aiMessages, (chunk) => {
+                    if (!chunk.isComplete && chunk.text) {
+                        fullText += chunk.text;
+                        setMessages(prev => prev.map(m => m.id === messageId ? { ...m, content: fullText } : m));
+                    }
+                });
+            } catch (error: unknown) {
+                if (!(error instanceof AssistantRateLimitError)) throw error;
+                if (signal.aborted) return null;
+
+                const delay = assistantRetryDelaySeconds(error.retryAfter);
+                if (allowRetry && !fullText && delay <= MAX_ASSISTANT_RETRY_DELAY_SECONDS) {
+                    const content = assistantRateLimitMessage(language === 'vi', 'waiting', delay);
+                    setMessages(prev => prev.map(m => m.id === messageId ? { ...m, content } : m));
+                    if (await waitForAssistantRetry(delay, signal)) return sendToProvider(false);
+                    return null;
+                }
+
+                const notice = assistantRateLimitMessage(
+                    language === 'vi', fullText ? 'interrupted' : 'limited', error.retryAfter ? delay : undefined,
+                );
+                const content = fullText ? `${fullText}
+
+${notice}` : notice;
+                setMessages(prev => prev.map(m => m.id === messageId ? { ...m, content, status: 'error' } : m));
+                return null;
+            }
+        }
+
+        const response = await sendToProvider(true);
+        if (!response || signal.aborted) return;
 
         const detectedPhase = detectPhase(response.text || fullText);
         const phaseLabel = detectedPhase || 'Processing';
@@ -216,8 +286,8 @@ export function useAgentChat({
             )
         );
 
-        const inputTokens = aiMessages.reduce((sum, m) => sum + Math.ceil(m.content.length / 4), 0);
-        const outputTokens = response.usage?.totalTokens || Math.ceil(fullText.length / 4);
+        const inputTokens = response.usage?.promptTokens ?? aiMessages.reduce((sum, m) => sum + Math.ceil(m.content.length / 4), 0);
+        const outputTokens = response.usage?.completionTokens ?? Math.ceil((response.text || fullText).length / 4);
         trackUsage(provider as ProviderKey, model, inputTokens, outputTokens);
 
         if (effectiveMode === 'full' && detectedPhase) {
@@ -238,8 +308,8 @@ export function useAgentChat({
                 id: `msg_${Date.now() + 2}`,
                 role: 'system',
                 content: language === 'vi'
-                    ? '⚠️ Pre-UAT (Agent self-check) chưa đạt. Nên yêu cầu chỉnh sửa trước khi user đánh giá.'
-                    : '⚠️ Pre-UAT (Agent self-check) failed. Request revisions before user evaluation.',
+                    ? '⚠️ Kiểm tra tự động phát hiện điểm cần sửa. Hãy yêu cầu chỉnh sửa trước khi chấp nhận câu trả lời.'
+                    : '⚠️ The automatic check found issues. Ask for a revision before accepting the reply.',
                 timestamp: new Date(),
             };
             setMessages(prev => [...prev, warnMessage]);
@@ -262,35 +332,52 @@ export function useAgentChat({
                 setMessages(prev => [...prev, govMessage]);
             }
         }
-    }, [messages, language, detectPhase, trackUsage]);
+    }, [messages, language, detectPhase, trackUsage, checkBudget, usesPersonalKey, verifySession]);
 
     const handleSendMessage = useCallback(async (messageContent?: string) => {
         const content = messageContent || input.trim();
         if (!content || isLoading) return;
 
-        let provider = settings.preferences.defaultProvider;
-        let apiKey = settings.providers[provider]?.apiKey;
+        let provider = modelSelection?.provider ?? settings.preferences.defaultProvider;
+        let apiKey = modelSelection
+            ? selectedModelKey
+            : canUseConfiguredKeys !== false ? settings.providers[provider]?.apiKey : undefined;
 
-        if (!apiKey) {
+        if (!modelSelection && !apiKey && canUseConfiguredKeys !== false) {
             try {
                 const freshSettings = JSON.parse(localStorage.getItem('cvf_settings') || '{}');
-                provider = freshSettings.preferences?.defaultProvider || 'gemini';
+                provider = freshSettings.preferences?.defaultProvider || GOVERNED_ROUTE_DEFAULT_PROVIDER;
                 apiKey = freshSettings.providers?.[provider]?.apiKey;
             } catch {
                 apiKey = '';
             }
         }
 
-        const selectedModel = settings.providers[provider]?.selectedModel || 'gemini-2.5-flash';
+        const selectedModel = modelSelection?.model ?? (settings.providers[provider]?.selectedModel || GOVERNED_ROUTE_DEFAULT_MODEL);
 
-        if (!apiKey) {
+        const providerChanged = historyProvider !== undefined && historyProvider !== provider;
+        const demoWithoutKey = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1' && canUseConfiguredKeys !== false;
+        if ((!apiKey && !demoWithoutKey) || provider === 'alibaba' || providerChanged) {
+            let contentForUser = labels.noApiKey;
+            if (modelSelection) {
+                contentForUser = language === 'vi' ? 'Hãy nhập khóa API cho nhà cung cấp của model đã chọn.' : 'Enter an API key for the selected model’s provider.';
+            } else if (canUseConfiguredKeys === false) {
+                contentForUser = language === 'vi' ? 'Hãy chọn model rồi nhập khóa API của bạn.' : 'Choose a model, then enter your API key.';
+            }
+            if (provider === 'alibaba') {
+                contentForUser = language === 'vi' ? 'Hãy dùng Qwen từ Trang chủ để kiểm tra hạn mức miễn phí.' : 'Use Qwen from Home to enforce the free quota.';
+            }
+            if (providerChanged) {
+                contentForUser = language === 'vi' ? 'Hãy mở chat mới để đổi nhà cung cấp.' : 'Start a new chat to change provider.';
+            }
             const errorMsg: ChatMessage = {
                 id: `msg_${Date.now()}`,
                 role: 'system',
-                content: `⚠️ ${labels.noApiKey}`,
+                content: `⚠️ ${contentForUser}`,
                 timestamp: new Date(),
             };
             setMessages(prev => [...prev, errorMsg]);
+            if (modelSelection) setInput(content);
             return;
         }
 
@@ -342,9 +429,7 @@ ${attachedFile.content}
                 const budgetMessage: ChatMessage = {
                     id: `msg_${Date.now() + 1}`,
                     role: 'system',
-                    content: language === 'vi'
-                        ? '🚫 Đã vượt budget. Vui lòng tăng budget hoặc chờ reset trước khi tiếp tục.'
-                        : '🚫 Budget exceeded. Please increase budget or wait for reset before continuing.',
+                    content: budgetExceededMessage(language),
                     timestamp: new Date(),
                 };
                 setMessages(prev => [...prev, budgetMessage]);
@@ -353,8 +438,8 @@ ${attachedFile.content}
                     id: `msg_${Date.now() + 1}`,
                     role: 'system',
                     content: language === 'vi'
-                        ? `⛔ Yêu cầu bị chặn do rủi ro ${enforcement.riskGate.riskLevel}. Vui lòng chuyển sang Governance/Full mode hoặc giảm rủi ro.`
-                        : `⛔ Request blocked due to risk ${enforcement.riskGate.riskLevel}. Switch to Governance/Full mode or reduce risk.`,
+                        ? `⛔ Yêu cầu bị chặn do rủi ro ${enforcement.riskGate.riskLevel}. Hãy dùng chế độ Có quy tắc hoặc Quy trình đầy đủ, hoặc giảm rủi ro.`
+                        : `⛔ Request blocked due to risk ${enforcement.riskGate.riskLevel}. Use the work rules or full workflow mode, or reduce the risk.`,
                     timestamp: new Date(),
                 };
                 setMessages(prev => [...prev, blockMessage]);
@@ -440,7 +525,7 @@ ${attachedFile.content}
         setIsStreaming(true);
 
         try {
-            await callRealAI(assistantId, content, provider as AIProvider, apiKey, selectedModel);
+            await callRealAI(assistantId, content, provider as AIProvider, apiKey ?? '', selectedModel);
         } catch {
             setMessages(prev => prev.map(m =>
                 m.id === assistantId
@@ -451,7 +536,7 @@ ${attachedFile.content}
             setIsLoading(false);
             setIsStreaming(false);
         }
-    }, [attachedFile, callRealAI, checkBudget, input, isLoading, labels, language, settings]);
+    }, [attachedFile, callRealAI, canUseConfiguredKeys, checkBudget, historyProvider, input, isLoading, labels, language, modelSelection, selectedModelKey, settings]);
 
     useEffect(() => {
         if (initialPrompt && handledPromptRef.current !== initialPrompt) {
@@ -470,8 +555,8 @@ ${attachedFile.content}
                     id: `msg_${Date.now()}`,
                     role: 'system',
                     content: language === 'vi'
-                        ? `🚀 CVF Agent Mode bắt đầu | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`
-                        : `🚀 CVF Agent Mode started | ${MODE_CONFIG[detectedMode].icon} ${modeInfo}`,
+                        ? `Chế độ trò chuyện: ${modeInfo}`
+                        : `Chat mode: ${modeInfo}`,
                     timestamp: new Date(),
                 };
                 setMessages((prev) => [...prev, systemMessage]);

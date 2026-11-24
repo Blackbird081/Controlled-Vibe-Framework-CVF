@@ -85,7 +85,7 @@ Quantity is never proof of quality.
 
 ## 3. Two-Layer Screening Model
 
-Every item must pass two layers.
+Every item considered for the non-coder front door or trusted benchmark use must pass two layers. Agent-only capability intake follows the Governed Capability Intake Doctrine and the existing proportional routing standard.
 
 ### Layer A — Legacy CVF Intake Fit
 
@@ -130,6 +130,7 @@ Allowed values:
 | Dimension | What it measures | Main source lineage |
 |---|---|---|
 | Unique Value | not redundant with existing corpus | old skill-intake governance |
+| Uplift over native | material benefit over the available authorized native approach after setup, maintenance, review, cost, and risk | P0 and governed capability intake |
 | Domain / Phase Fit | natural fit with CVF workflow and domain model | old skill-intake governance |
 | Risk / Authority Fit | deterministic mapping to CVF governance boundaries | external skill intake |
 | Input Discipline | quality of required fields and bounded form structure | old skill-intake governance + current front-door needs |
@@ -139,6 +140,8 @@ Allowed values:
 | Legacy Contamination Risk | how much the item reflects pre-standard or imported low-confidence quality | current rescreen need |
 
 ---
+
+Score uplift `PASS` when evidence supports a material benefit for the named use. Score `MIXED` when the benefit is plausible and evidence is still incomplete, and `FAIL` when native already suffices or the cost or risk outweighs the benefit. Keep material uncertainty in `REVIEW_REQUIRED`. A passive R0 reference uses its owner evidence rather than a corpus matrix.
 
 ## 5. Deterministic Classification Outcome
 
@@ -224,7 +227,7 @@ This is important:
 - the standard applies to existing corpus re-screen
 - and should also apply to future intake/adoption
 
-So from this point onward, future adopted skills/templates should be evaluated against this standard instead of older intake rules alone.
+Future skills/templates considered for non-coder front-door or trusted benchmark use must be evaluated against this standard. Use the applicable earlier intake requirements for the proposed use.
 
 The older rules remain necessary, but no longer sufficient by themselves for public non-coder use.
 

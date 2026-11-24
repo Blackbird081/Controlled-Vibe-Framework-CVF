@@ -39,6 +39,16 @@ export function createDeterministicClock(startIso: string): MaoDeterministicCloc
   };
 }
 
+/** Real event timestamps use UTC; elapsed time uses process-local monotonic samples. */
+export function createRealClock(): MaoDeterministicClock {
+  const samples = new Map<string, number>();
+  return {
+    now(): string { const iso = new Date().toISOString(); if (!samples.has(iso)) samples.set(iso, performance.now()); return iso; },
+    elapsedMs(since: string): number { const start = samples.get(since); return start === undefined ? Number.POSITIVE_INFINITY : Math.max(0, performance.now() - start); },
+    advance(): void { throw new Error("real clock cannot advance manually"); },
+  };
+}
+
 // --- Timeout detection ---
 
 /**
@@ -243,8 +253,8 @@ export class MaoLifecycleController {
   private readonly cancelTrackers: Map<string, MaoCancelTracker>;
   private readonly heartbeatRecords: Map<string, MaoHeartbeatRecord>;
 
-  constructor(startIso: string) {
-    this.clock = createDeterministicClock(startIso);
+  constructor(startIso: string | { clock: MaoDeterministicClock }) {
+    this.clock = typeof startIso === "string" ? createDeterministicClock(startIso) : startIso.clock;
     this.idempotencyGuard = createIdempotencyGuard();
     this.cancelTrackers = new Map();
     this.heartbeatRecords = new Map();

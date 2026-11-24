@@ -23,7 +23,6 @@ export interface NonCoderReferenceLoopInput {
   baselineArtifact?: string;
   acceptedOutput?: string;
   followUps?: string[];
-  skillPreflightDeclaration?: string;
   inputs?: Record<string, string>;
 }
 
@@ -57,11 +56,9 @@ export interface NonCoderExecutionHandoff {
   templateId: string;
   templateName: string;
   intent: string;
-  cvfPhase: 'BUILD';
   cvfRiskLevel: 'R1' | 'R2' | 'R3';
   inputs: Record<string, string>;
   fileScope: string[];
-  skillPreflightDeclaration: string;
 }
 
 export interface NonCoderReferenceLoopArtifact {
@@ -178,7 +175,6 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
   const title = input.title || `${appName} Governed Non-Coder Reference Packet`;
   const templateId = input.templateId || 'app_builder_wizard';
   const templateName = input.templateName || 'App Builder Wizard';
-  const skillPreflightDeclaration = input.skillPreflightDeclaration || `NONCODER_REFERENCE_PACKET:${slug}`;
   const intent = input.intent || `Build ${appName} for ${targetUsers}. Core problem: ${problem}`;
   const acceptedOutput = input.acceptedOutput || `${appName} v1 governed handoff packet`;
   const followUps = input.followUps && input.followUps.length > 0
@@ -295,11 +291,9 @@ export function buildNonCoderReferenceLoop(input: NonCoderReferenceLoopInput): N
       templateId,
       templateName,
       intent,
-      cvfPhase: 'BUILD',
       cvfRiskLevel: riskLevel,
       inputs: executionInputs,
       fileScope,
-      skillPreflightDeclaration,
     },
     freezeReceipt: {
       acceptedOutput,
@@ -325,10 +319,8 @@ export function buildNonCoderLiveExecutionRequest(
       inputs: artifact.executionHandoff.inputs,
       intent: artifact.executionHandoff.intent,
       mode: artifact.executionHandoff.mode,
-      cvfPhase: artifact.executionHandoff.cvfPhase,
       cvfRiskLevel: artifact.executionHandoff.cvfRiskLevel,
       fileScope: artifact.executionHandoff.fileScope,
-      skillPreflightDeclaration: artifact.executionHandoff.skillPreflightDeclaration,
     },
     freezeReceipt: artifact.freezeReceipt,
   };
@@ -370,10 +362,8 @@ export function formatNonCoderReferenceLoopMarkdown(artifact: NonCoderReferenceL
     `- Mode: ${artifact.executionHandoff.mode}`,
     `- Template: ${artifact.executionHandoff.templateName}`,
     `- Intent: ${artifact.executionHandoff.intent}`,
-    `- Build phase target: ${artifact.executionHandoff.cvfPhase}`,
     `- Risk: ${artifact.executionHandoff.cvfRiskLevel}`,
     `- File scope: ${artifact.executionHandoff.fileScope.join(', ')}`,
-    `- Skill preflight: ${artifact.executionHandoff.skillPreflightDeclaration}`,
     '',
     '## Freeze Receipt',
     `- Accepted output: ${artifact.freezeReceipt.acceptedOutput}`,

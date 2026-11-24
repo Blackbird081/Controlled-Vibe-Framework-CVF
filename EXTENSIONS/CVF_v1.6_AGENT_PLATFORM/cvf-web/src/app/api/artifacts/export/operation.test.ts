@@ -1,9 +1,11 @@
 import { createHash } from 'node:crypto';
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { act, renderHook } from '@testing-library/react';
 import { NextRequest, NextResponse } from 'next/server';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ArtifactExportRequest } from '@/components/ArtifactExportPanel';
 import { useHtmlBuildAttempts, type HtmlJobReference } from '@/components/useHtmlBuildAttempts';
 import type { ControlledEvaluateRequest, ControlledInvoker } from '@/lib/artifacts-receipt-operation-contract';
@@ -23,7 +25,8 @@ vi.mock('@/lib/server/receipt-operation-profile', async importOriginal => {
 });
 const actualProfile = vi.importActual<typeof import('@/lib/server/receipt-operation-profile')>('@/lib/server/receipt-operation-profile');
 
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-binding-repair-20261019', 'worker', 'roots');
+const ROOTS = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-binding-repair-'));
+afterAll(async () => { await fs.rm(ROOTS, { recursive: true, force: true }); });
 const hex = (text: string) => createHash('sha256').update(text).digest('hex');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const BODY = { title: 'Review', sourcePath: 'docs/p.md', sourceContent: '# Source\n\nSynthetic fixture content.', memoryClass: 'FULL_RECORD' as const,
@@ -56,7 +59,7 @@ const createJob = (store: HtmlDraftSnapshotStore, jobId = JOB, request: DraftReq
   store.createJob({ jobId, sourceRecordId, goal: 'Review', criteria: [{ criterionId: 'c1', text: 'Heading' }], expectedOutput: 'HTML', allowedEffects: JOB_EFFECTS, request }, who);
 const selectors = (job = JOB, source = SOURCE) => ({ 'X-CVF-Job-Id': job, 'X-CVF-Source-Record-Id': source });
 const post = (body: unknown, headers: Record<string, string> = {}, origin = 'http://localhost') => POST(new NextRequest('http://localhost/api/artifacts/export', {
-  method: 'POST', headers: { origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin', ...headers }, body: JSON.stringify(body) }));
+  method: 'POST', headers: { host: 'localhost', origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin', ...headers }, body: JSON.stringify(body) }));
 
 const PROFILE_ENV = ['CVF_NCR_DRAFT_PROFILE', 'CVF_NCR_HTML_JOB_PROFILE', 'CVF_NCR_DRAFT_ROOT', 'CVF_NCR_DRAFT_RUN_ID', 'CVF_NCR_RECEIPT_OPERATION_PROFILE'] as const;
 const priorEnv = new Map<string, string | undefined>();

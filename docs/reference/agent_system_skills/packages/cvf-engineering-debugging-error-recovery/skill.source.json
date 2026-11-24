@@ -3,6 +3,7 @@
   "upstreamSlug": "debugging-and-error-recovery",
   "upstreamRepository": "https://github.com/addyosmani/agent-skills.git",
   "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+  "license": "MIT",
   "sourceArtifacts": [
     ".private_reference/source_mirrors/addyosmani__agent-skills/skills/debugging-and-error-recovery/SKILL.md",
     "docs/reviews/CVF_AGSK_R2_AGENT_SKILLS_SOURCE_MIRROR_FULL_PACKAGE_BACKFILL_2026-06-29.md",

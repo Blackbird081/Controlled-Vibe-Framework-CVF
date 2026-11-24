@@ -9,29 +9,16 @@
  * @module lib/friendly-labels
  */
 
+import { getRiskOption, normalizeWebPhaseInput, type CVFPhaseToolkit } from './governance-model';
+
 // ─── Phase Labels ────────────────────────────────────────────────────
 
-export const PHASE_FRIENDLY: Record<string, { vi: string; en: string; icon: string }> = {
+export const PHASE_FRIENDLY: Record<CVFPhaseToolkit, { vi: string; en: string; icon: string }> = {
   'INTAKE': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
   'DESIGN': { vi: 'Thiết kế & Lên kế hoạch', en: 'Design & Plan', icon: '📐' },
   'BUILD': { vi: 'Xây dựng & Thực thi', en: 'Build & Execute', icon: '🔨' },
   'REVIEW': { vi: 'Kiểm tra & Đánh giá', en: 'Review & Verify', icon: '✅' },
   'FREEZE': { vi: 'Chốt kết quả & Khóa phạm vi', en: 'Freeze & Close Out', icon: '🔒' },
-  // Aliases
-  'PHASE A': { vi: 'Tiếp nhận & Làm rõ', en: 'Intake & Clarify', icon: '🧭' },
-  'PHASE B': { vi: 'Thiết kế & Lên kế hoạch', en: 'Design & Plan', icon: '📐' },
-  'PHASE C': { vi: 'Xây dựng & Thực thi', en: 'Build & Execute', icon: '🔨' },
-  'PHASE D': { vi: 'Kiểm tra & Đánh giá', en: 'Review & Verify', icon: '✅' },
-  'PHASE E': { vi: 'Chốt kết quả & Khóa phạm vi', en: 'Freeze & Close Out', icon: '🔒' },
-};
-
-// ─── Risk Labels ─────────────────────────────────────────────────────
-
-export const RISK_FRIENDLY: Record<string, { vi: string; en: string; icon: string; color: string }> = {
-  'R0': { vi: 'An toàn', en: 'Safe', icon: '⚪', color: 'text-gray-500' },
-  'R1': { vi: 'Rủi ro thấp', en: 'Low Risk', icon: '🟢', color: 'text-green-500' },
-  'R2': { vi: 'Cần cẩn thận', en: 'Be Careful', icon: '🟡', color: 'text-amber-500' },
-  'R3': { vi: 'Rủi ro cao — cần xem xét kỹ', en: 'High Risk — Review Required', icon: '🔴', color: 'text-red-500' },
 };
 
 // ─── Guard Decision Labels ───────────────────────────────────────────
@@ -77,20 +64,15 @@ export const STATUS_FRIENDLY: Record<string, { vi: string; en: string }> = {
 
 type Lang = 'vi' | 'en';
 
-function normalizePhaseLabelKey(phase: string): string {
-  const key = phase.toUpperCase().trim();
-  return key === 'DISCOVERY' ? 'INTAKE' : key;
-}
-
 export function friendlyPhase(phase: string, lang: Lang = 'vi'): string {
-  const key = normalizePhaseLabelKey(phase);
-  const entry = PHASE_FRIENDLY[key];
+  const key = normalizeWebPhaseInput(phase);
+  const entry = key ? PHASE_FRIENDLY[key] : undefined;
   return entry ? `${entry.icon} ${entry[lang]}` : phase;
 }
 
 export function friendlyRisk(risk: string, lang: Lang = 'vi'): string {
-  const entry = RISK_FRIENDLY[risk];
-  return entry ? `${entry.icon} ${entry[lang]}` : risk;
+  const entry = getRiskOption(risk);
+  return entry ? `${entry.icon} ${lang === 'vi' ? entry.label : entry.labelEn}` : risk;
 }
 
 export function friendlyDecision(decision: string, lang: Lang = 'vi'): string {

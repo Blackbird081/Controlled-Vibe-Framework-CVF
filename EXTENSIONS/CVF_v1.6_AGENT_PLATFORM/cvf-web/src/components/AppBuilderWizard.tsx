@@ -535,10 +535,8 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
                             fileScope: governedLiveExecution.request.fileScope,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
                         onCancel={() => {
@@ -750,7 +748,6 @@ export function AppBuilderWizard({ onBack }: AppBuilderWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

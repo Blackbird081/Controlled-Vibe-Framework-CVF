@@ -1,8 +1,8 @@
 import { buildMemoryRuntimeReadout, type MemoryRuntimeProjection } from '@/lib/memory-runtime-readout';
+import { normalizeRunnableRiskLevel } from '@/lib/risk-check';
 import type { ExecutionRequest } from '@/lib/ai';
 import { evaluateReadoutEligibility, type MemoryReadoutEligibilityResult } from 'cvf-learning-plane-foundation/memory-runtime';
 import type {
-  MemoryGatewayRiskLevel,
   MemoryRetrievalCandidate,
   MemoryRuntimeWorkflowInput,
   RuntimeMemoryActorRole,
@@ -45,11 +45,6 @@ function normalizeScope(scope?: string | null): 'session' | 'project' | 'organiz
   return 'project';
 }
 
-function normalizeRiskLevel(risk?: string | null): MemoryGatewayRiskLevel {
-  if (risk === 'R0' || risk === 'R1' || risk === 'R2' || risk === 'R3') return risk;
-  return 'R1';
-}
-
 function normalizeActorRole(role?: RuntimeMemoryActorRole | string | null): RuntimeMemoryActorRole {
   if (!role) return 'unknown';
   const normalized = typeof role === 'string' ? role.trim().toUpperCase() : role;
@@ -72,7 +67,7 @@ function buildDefaultCandidates(): MemoryRetrievalCandidate[] {
 function toRuntimeInput(params: BuildMemoryAdvisoryParams): MemoryRuntimeWorkflowInput {
   const normalizedActorRole = normalizeActorRole(params.actorRole);
   const scope = normalizeScope(params.request.durableMemory?.scope ?? null);
-  const normalizedRisk = normalizeRiskLevel(params.request.cvfRiskLevel ?? null);
+  const normalizedRisk = normalizeRunnableRiskLevel(params.request.cvfRiskLevel);
   const query = (params.request.durableMemory?.query ?? params.request.intent ?? '').trim() || 'memory_advisory_request';
   const candidates = buildDefaultCandidates();
 

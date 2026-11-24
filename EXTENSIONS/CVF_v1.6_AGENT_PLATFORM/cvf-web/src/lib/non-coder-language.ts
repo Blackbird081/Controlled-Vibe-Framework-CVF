@@ -1,3 +1,4 @@
+// Text Encoding Exception: preserve Vietnamese operator-facing explanations.
 /**
  * Non-Coder Language Adapter — v1.6 Enhancement Track 2
  *
@@ -11,6 +12,8 @@
 
 'use client';
 
+import { getRiskOption, normalizeWebPhaseInput, type CVFRiskLevel } from './governance-model';
+
 type Lang = 'vi' | 'en';
 
 // ─── Risk Level Labels ────────────────────────────────────────────────
@@ -22,28 +25,32 @@ export interface FriendlyRiskLabel {
   description: string;
 }
 
-const RISK_LABELS: Record<string, Record<Lang, FriendlyRiskLabel>> = {
+const RISK_GUIDANCE: Record<CVFRiskLevel, Record<Lang, Omit<FriendlyRiskLabel, 'label'>>> = {
   R0: {
-    vi: { label: 'An toàn', emoji: '🟢', color: 'green', description: 'Mọi thứ đang hoạt động tốt' },
-    en: { label: 'Safe', emoji: '🟢', color: 'green', description: 'Everything is running smoothly' },
+    vi: { emoji: '🟢', color: 'green', description: 'Mọi thứ đang hoạt động tốt' },
+    en: { emoji: '🟢', color: 'green', description: 'Everything is running smoothly' },
   },
   R1: {
-    vi: { label: 'Bình thường', emoji: '🟡', color: 'yellow', description: 'Đang theo dõi để đảm bảo chất lượng' },
-    en: { label: 'Normal', emoji: '🟡', color: 'yellow', description: 'Monitoring to ensure quality' },
+    vi: { emoji: '🟡', color: 'yellow', description: 'Đang theo dõi để đảm bảo chất lượng' },
+    en: { emoji: '🟡', color: 'yellow', description: 'Monitoring to ensure quality' },
   },
   R2: {
-    vi: { label: 'Cần kiểm tra', emoji: '🟠', color: 'orange', description: 'Tôi sẽ kiểm tra kỹ hơn trước khi tiếp tục' },
-    en: { label: 'Extra check needed', emoji: '🟠', color: 'orange', description: "I'll double-check before proceeding" },
+    vi: { emoji: '🟠', color: 'orange', description: 'Tôi sẽ kiểm tra kỹ hơn trước khi tiếp tục' },
+    en: { emoji: '🟠', color: 'orange', description: "I'll double-check before proceeding" },
   },
   R3: {
-    vi: { label: 'Cần xác nhận', emoji: '🔴', color: 'red', description: 'Cần xác nhận của bạn trước khi tiếp tục' },
-    en: { label: 'Needs your confirmation', emoji: '🔴', color: 'red', description: 'Needs your confirmation before proceeding' },
+    vi: { emoji: '🔴', color: 'red', description: 'Cần xác nhận của bạn trước khi tiếp tục' },
+    en: { emoji: '🔴', color: 'red', description: 'Needs your confirmation before proceeding' },
+  },
+  R4: {
+    vi: { emoji: '🛑', color: 'red', description: 'Yêu cầu này bị chặn' },
+    en: { emoji: '🛑', color: 'red', description: 'This request is blocked' },
   },
 };
 
 export function getFriendlyRiskLabel(riskLevel: string, lang: Lang): FriendlyRiskLabel {
-  const normalized = riskLevel?.toUpperCase?.() || 'R0';
-  return RISK_LABELS[normalized]?.[lang] || RISK_LABELS.R0[lang];
+  const option = getRiskOption(riskLevel?.toUpperCase?.() ?? '') ?? getRiskOption('R0')!;
+  return { label: lang === 'vi' ? option.label : option.labelEn, ...RISK_GUIDANCE[option.value][lang] };
 }
 
 // ─── Phase Labels ─────────────────────────────────────────────────────
@@ -78,18 +85,7 @@ const PHASE_LABELS: Record<string, Record<Lang, FriendlyPhaseLabel>> = {
 };
 
 export function getFriendlyPhaseLabel(phase: string, lang: Lang): FriendlyPhaseLabel {
-  const normalized = phase?.toUpperCase?.().trim() || 'BUILD';
-  // Normalize compatibility aliases without teaching them as canonical phases.
-  const aliasMap: Record<string, string> = {
-    DISCOVERY: 'INTAKE',
-    'PHASE A': 'INTAKE', A: 'INTAKE',
-    'PHASE B': 'DESIGN', B: 'DESIGN',
-    'PHASE C': 'BUILD', C: 'BUILD',
-    'PHASE D': 'REVIEW', D: 'REVIEW',
-    'PHASE E': 'FREEZE', E: 'FREEZE',
-  };
-  const key = aliasMap[normalized] || normalized;
-  return PHASE_LABELS[key]?.[lang] || PHASE_LABELS.BUILD[lang];
+  return PHASE_LABELS[normalizeWebPhaseInput(phase) ?? 'BUILD'][lang];
 }
 
 // ─── Enforcement Status Labels ────────────────────────────────────────
@@ -216,6 +212,22 @@ export function humanizeError(errorMessage: string, lang: Lang): string {
   return lang === 'vi'
     ? 'Có lỗi xảy ra. Vui lòng thử lại.'
     : 'Something went wrong. Please try again.';
+}
+
+// Text Encoding Exception: the key setup message includes Vietnamese UI copy.
+export function serverProviderKeyHelp(provider: string, lang: Lang): string {
+  const names: Readonly<Record<string, string>> = {
+    openai: 'OpenAI',
+    claude: 'Anthropic',
+    gemini: 'Google Gemini',
+    alibaba: 'Alibaba Cloud',
+    openrouter: 'OpenRouter',
+    deepseek: 'DeepSeek',
+  };
+  const name = names[provider] ?? provider;
+  return lang === 'vi'
+    ? `CVF Web cần khóa của ${name}. Bấm đúp Configure-CVF-Web-Keys.cmd, chọn ${name}, lưu khóa rồi mở lại CVF Web.`
+    : `CVF Web needs a ${name} key. Double-click Configure-CVF-Web-Keys.cmd, choose ${name}, save the key, then reopen CVF Web.`;
 }
 
 // ─── Quality Score Labels ─────────────────────────────────────────────

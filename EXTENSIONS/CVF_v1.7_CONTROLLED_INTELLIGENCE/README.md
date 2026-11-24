@@ -11,7 +11,7 @@
 
 This extension provides a **TypeScript agent runtime layer** that operates *under* the base CVF framework:
 
-- **CVF gốc** = human process (4 phases, R0–R3 risk, 124 skills)
+- **CVF gốc** = operator process and a [maintained catalog of end-user forms](../../governance/skill-library/registry/user-skills/INDEX.md)
 - **Extension** = automated enforcement (policy engine, role transitions, telemetry)
 
 The extension does **NOT** replace CVF. It automates enforcement within CVF phases.
@@ -89,3 +89,5 @@ Structure > Chaos
 Determinism > Drift  
 Governance > Intelligence  
 **CVF gốc > Extension**
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

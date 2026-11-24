@@ -424,3 +424,14 @@ export const MODEL_GATEWAY_WRAPPER = {
 // CADP-AI-T3B - Model Gateway provider-neutral constraint projection
 export { reserveActionQuota, transitionActionQuota, validateActionQuota } from "./quota-ledger";
 export type { ActionQuotaSnapshot } from "./quota-ledger";
+
+export { createAlibabaExecutionAdapter } from "./providers/alibaba/execution-adapter";
+export type { AlibabaExecutionAdapterOptions, AlibabaExecutionFetch, AlibabaRequestSignal } from "./providers/alibaba/execution-adapter";
+export { createOpenAiExecutionAdapter, resolveOpenAiChatEndpoint, openAiUsesCompletionTokenParam, OPENAI_CHAT_COMPLETIONS_ENDPOINT } from "./providers/openai/execution-adapter";
+export type { OpenAiExecutionAdapterOptions, OpenAiExecutionFetch, OpenAiRequestSignal } from "./providers/openai/execution-adapter";
+export { ProviderExecutionError, sanitizeGatewayProviderUsage, sanitizeProviderCredentialFingerprint } from "./unified-gateway-interface-contract";
+export type { GatewayProviderDiagnostic, GatewayProviderDiagnosticCode, GatewayProviderUsage } from "./unified-gateway-interface-contract";
+
+export { probeClaudeCliSubscription, createClaudeCliExecutionAdapter } from "./providers/claude-cli/execution-adapter";
+export type { ClaudeCliProbeOptions, ClaudeCliAdapterOptions, ClaudeCliSubscriptionStatus } from "./providers/claude-cli/execution-adapter";
+export type { NativeSubscriptionCredentialReference, BridgeCredentialReference, BridgeCredentialMetadata, NativeSubscriptionCredentialResolver } from "./credential-boundary";

@@ -3,6 +3,9 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import { createElement } from 'react';
+import { hydrateRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import {
     trackEvent,
     getAnalyticsEvents,
@@ -157,5 +160,33 @@ describe('analytics', () => {
             window.dispatchEvent(new Event('storage'));
         });
         expect(result.current.enabled).toBe(false);
+    });
+
+    it('hydrates against server markup before loading browser-local analytics', async () => {
+        function Snapshot() {
+            const { enabled, events } = useAnalyticsEvents();
+            return createElement('span', null, enabled ? `Enabled, ${events.length} events` : 'Disabled');
+        }
+
+        trackEvent('analytics_opened');
+        const container = document.createElement('div');
+        vi.stubGlobal('window', undefined);
+        try {
+            container.innerHTML = renderToString(createElement(Snapshot));
+        } finally {
+            vi.unstubAllGlobals();
+        }
+        document.body.append(container);
+
+        const onRecoverableError = vi.fn();
+        const root = hydrateRoot(container, createElement(Snapshot), { onRecoverableError });
+        try {
+            await act(async () => {});
+            expect(container.textContent).toBe('Enabled, 1 events');
+            expect(onRecoverableError).not.toHaveBeenCalled();
+        } finally {
+            act(() => root.unmount());
+            container.remove();
+        }
     });
 });

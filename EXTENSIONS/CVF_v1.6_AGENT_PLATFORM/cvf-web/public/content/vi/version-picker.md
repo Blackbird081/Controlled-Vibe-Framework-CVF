@@ -1,5 +1,7 @@
 # CVF Version Picker — Chọn Phiên Bản Phù Hợp
 
+> So sánh phiên bản dưới đây mô tả các bản cũ. Với cách làm hiện tại, xem [vòng đời công việc](lifecycle.md) và [mô hình rủi ro](risk-model.md).
+>
 > **🎯 Mục tiêu:** Giúp bạn chọn đúng CVF version trong 2 phút
 
 ---
@@ -35,7 +37,7 @@
 
 | Tính năng | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.6 |
 |-----------|:----:|:----:|:----:|:----:|:----:|:----:|
-| **Quy trình 4 Phase** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Hướng dẫn bốn giai đoạn cũ** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Governance cơ bản** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Input/Output Specs** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Agent Archetypes** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -82,7 +84,7 @@ cat CVF_MANIFESTO.md
 **Bước tiếp theo:**
 
 1. Đọc CVF_MANIFESTO.md
-2. Theo dõi Quy trình 4 Phase
+2. Theo dõi vòng đời công việc hiện tại
 3. Sử dụng Checklists
 4. Xây dựng 1-2 dự án nhỏ
 5. Sau đó nâng cấp lên v1.1 nếu cần
@@ -162,10 +164,10 @@ cat QUICK_START.md
 
 **Vai trò trong team:**
 
-- 🎯 Owner: Phase A (yêu cầu)
-- 🎨 Architect: Phase B (thiết kế)
-- 🤖 AI/Developer: Phase C (xây dựng)
-- ✅ Reviewer: Phase D (kiểm tra)
+- 🎯 Owner: INTAKE (yêu cầu)
+- 🎨 Architect: DESIGN (thiết kế)
+- 🤖 AI/Developer: BUILD (xây dựng)
+- ✅ Reviewer: REVIEW (kiểm tra)
 
 ---
 
@@ -348,7 +350,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### Lộ trình v1.0 (2-3 giờ)
 
 1. Đọc Manifesto - 15 phút
-2. Hiểu 4 Phases - 30 phút
+2. Hiểu vòng đời công việc hiện tại - 30 phút
 3. Nghiên cứu Governance - 30 phút
 4. Thực hành với 1 dự án nhỏ - 60 phút
 
@@ -487,7 +489,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 Trước khi quyết định, hãy tự hỏi:
 
 - [ ] Đã đọc Core Philosophy chưa?
-- [ ] Đã hiểu Quy trình 4 Phase chưa?
+- [ ] Đã hiểu vòng đời công việc hiện tại chưa?
 - [ ] Đã biết quy mô team & độ phức tạp dự án chưa?
 - [ ] Có thời gian để cài đặt không?
 - [ ] Có cần governance không?
@@ -500,3 +502,5 @@ Trước khi quyết định, hãy tự hỏi:
 ---
 
 **Nhớ:** Bạn có thể bắt đầu đơn giản và nâng cấp sau!
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

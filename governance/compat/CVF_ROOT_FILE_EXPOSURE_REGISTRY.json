@@ -32,6 +32,11 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
+      "path": ".env.local",
+      "exposureClass": "PRIVATE_ENTERPRISE_ONLY",
+      "reason": "Machine-local secret configuration ignored by Git. Keep its contents on the workstation and out of all exports."
+    },
+    {
       "path": ".git_commit_error.log",
       "exposureClass": "INTERNAL_ONLY"
     },
@@ -216,6 +221,11 @@
       "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
+      "path": "Configure-CVF-Web-Keys.cmd",
+      "exposureClass": "INTERNAL_ONLY",
+      "reason": "Windows entry point for local provider key management in the private provenance workspace."
+    },
+    {
       "path": "DESIGN.md",
       "exposureClass": "PUBLIC_DOCS_ONLY"
     },
@@ -264,6 +274,16 @@
       "exposureClass": "INTERNAL_ONLY"
     },
     {
+      "path": "Start-CVF-Web.cmd",
+      "exposureClass": "INTERNAL_ONLY",
+      "reason": "Vietnamese Windows launcher for the local Web installation in the private provenance workspace."
+    },
+    {
+      "path": "Start-CVF-Web-EN.cmd",
+      "exposureClass": "INTERNAL_ONLY",
+      "reason": "English Windows launcher for the local Web installation in the private provenance workspace."
+    },
+    {
       "path": "workspace_overlay_catalog.json",
       "exposureClass": "INTERNAL_ONLY"
     },
@@ -304,7 +324,7 @@
       "exposureClass": "PUBLIC_DOCS_ONLY"
     },
     {
-      "path": "AGENT_HANDOFF_V66_2026-11-09.md",
+      "path": "AGENT_HANDOFF_V68_2026-11-20.md",
       "exposureClass": "INTERNAL_ONLY"
     }
   ]

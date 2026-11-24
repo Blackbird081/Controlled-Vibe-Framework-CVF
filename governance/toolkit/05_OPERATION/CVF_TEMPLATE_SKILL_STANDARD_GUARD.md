@@ -3,7 +3,7 @@
 **Control ID:** `GC-044`
 **Guard Class:** `CONTINUITY_AND_DECISION_GUARD`
 **Status:** Active canonical rule for skill/template intake quality, corpus re-screen quality, and trusted-subset admission for public non-coder value proof.
-**Applies to:** all humans and AI agents importing skills from external repos, modifying front-door template/skill surfaces, drafting corpus re-screen packets, or using template/skill sets to justify public non-coder value claims.
+**Applies to:** all humans and AI agents importing skills for the non-coder front door or trusted benchmarks, modifying front-door template/skill surfaces, drafting corpus re-screen packets, or using template/skill sets to justify public non-coder value claims.
 **Enforced by:** `governance/compat/check_template_skill_standard_guard_compat.py`
 
 ## Purpose
@@ -16,7 +16,7 @@
 
 When CVF does any of the following:
 
-- imports or normalizes a skill from another repo
+- imports or normalizes a skill from another repo for the non-coder front door or trusted benchmarks
 - revises the front-door template/skill corpus used by non-coders
 - re-screens legacy templates or mapped skills already present in CVF
 - selects template/skill items for public value-proof tranches
@@ -25,7 +25,7 @@ the canonical quality rule must pass through one shared standard:
 
 - `docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md`
 
-The earlier intake lineage remains mandatory, but no longer sufficient by itself:
+The earlier intake lineage supplies the applicable requirements by use. A front-door skill must also meet Layer B:
 
 - `governance/skill-library/specs/EXTERNAL_SKILL_INTAKE.md`
 - `governance/toolkit/05_OPERATION/SKILL_INTAKE_GOVERNANCE.md`
@@ -54,7 +54,7 @@ If any of the three conditions fails, the affected template/skill must be rewrit
 
 ### Silent Intake Is Forbidden
 
-Future repo-derived skill/template intake must not happen as a silent code/content drop.
+Future repo-derived skill/template intake into the front-door corpus or trusted benchmark subset requires a governed companion trail.
 
 At minimum, a governed companion doc chain must exist in the same batch:
 
@@ -69,10 +69,12 @@ This guard DOES govern:
 
 - skill/template quality for public non-coder use
 - trusted-subset eligibility for benchmark truth
-- future repo-derived skill/template intake quality
+- future repo-derived skill/template intake quality for the front door or trusted benchmarks
 - legacy corpus re-screen quality
 
 This guard does NOT govern:
+
+- agent-only capability intake, which uses the Governed Capability Intake Doctrine and existing proportional routing
 
 - temporary provider freeze decisions
 - model-choice policy for the current benchmark lane

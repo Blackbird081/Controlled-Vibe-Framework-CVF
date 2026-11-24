@@ -48,13 +48,12 @@ function buildProvenance(sourceId: string, content: string): Sot3KnowledgeSource
   };
 }
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -64,6 +63,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (
     session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined,
     payload?: Record<string, unknown>,
@@ -89,6 +89,7 @@ vi.mock('@/lib/guard-engine-singleton', () => ({
 }));
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', () => {
   const originalEnv = { ...process.env };
@@ -123,7 +124,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     delete process.env.DEFAULT_AI_PROVIDER;
     delete process.env.CVF_SERVICE_TOKEN;
 
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
@@ -136,7 +137,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
       hardCapUSD: 100,
       overrideActive: false,
     });
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -185,7 +186,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need a4-reject-signal content details',
         inputs: { question: 'What is the a4-reject-signal?' },
         provider: 'openai',
@@ -196,7 +197,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const data = await res.json();
 
     expect(res.status).toBe(409);
-    expect(executeAIMock).toHaveBeenCalledTimes(0);
+    expect(providerSpy).toHaveBeenCalledTimes(0);
     expect(data.success).toBe(false);
     expect(JSON.stringify(data)).not.toContain('A4-REJECT-SIGNAL');
     expect(data.diagnostic).toMatchObject({ stage: 'governance', class: 'policy_blocked', httpStatus: 409 });
@@ -218,7 +219,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need any content from the empty requested collection',
         inputs: { question: 'What is in this collection?' },
         provider: 'openai',
@@ -230,7 +231,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const data = await res.json();
 
     expect(res.status).toBe(409);
-    expect(executeAIMock).toHaveBeenCalledTimes(0);
+    expect(providerSpy).toHaveBeenCalledTimes(0);
     expect(data.success).toBe(false);
   });
 
@@ -242,7 +243,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'General question unrelated to any governed collection',
         inputs: { question: 'What is the weather like?' },
         provider: 'openai',
@@ -253,7 +254,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(executeAIMock).toHaveBeenCalledTimes(1);
+    expect(providerSpy).toHaveBeenCalledTimes(1);
     expect(data.success).toBe(true);
     expect(data.knowledgeInjection.injected).toBe(false);
   });
@@ -274,7 +275,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need a4-rollback-signal legacy content details',
         inputs: { question: 'What is the a4-rollback-signal?' },
         provider: 'openai',
@@ -285,8 +286,8 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(executeAIMock).toHaveBeenCalledTimes(1);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    expect(providerSpy).toHaveBeenCalledTimes(1);
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
     expect(options.systemPrompt as string).toContain('A4-ROLLBACK-SIGNAL legacy content');
     expect(data.knowledgeInjection.injected).toBe(true);
 
@@ -310,7 +311,7 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need a4-rollback-invalid-mode-signal content details',
         inputs: { question: 'What is the a4-rollback-invalid-mode-signal?' },
         provider: 'openai',
@@ -321,7 +322,10 @@ describe('/api/execute - SOT3-ACT-A4 failure/recovery boundary (route-level)', (
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(executeAIMock).toHaveBeenCalledTimes(1);
+    expect(providerSpy).toHaveBeenCalledTimes(1);
     expect(data.knowledgeInjection.injected).toBe(true);
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

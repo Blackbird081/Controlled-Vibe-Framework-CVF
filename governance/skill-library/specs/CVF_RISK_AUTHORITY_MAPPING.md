@@ -1,7 +1,9 @@
 # 🔐 CVF → Risk Level → Agent Authority Mapping
 
+> Catalog status: `NOT_ACTIVE` for current product authority. These records are retained for legacy interpretation. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../../docs/reference/agent_system_skills/generated/skill-index.json).
+>
 > **Version:** 1.0.1  
-> **Status:** Active  
+> **Status:** Retained for legacy record interpretation
 > **Related:** [v1.2 CAPABILITY_RISK_MODEL](../../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/CAPABILITY_RISK_MODEL.md)  
 > ⚠️ **Note:** Governance layer extends v1.2 risk model (R0–R3) to include **R4 – Critical** for severe/irreversible scenarios.
 
@@ -155,7 +157,7 @@ Any change to risk level or authority requires:
 
 ## 10. Relationship to CVF
 
-This document is the **canonical risk-authority reference** for:
+These legacy assessment examples apply to the following records:
 
 - `CVF_SKILL_RISK_AUTHORITY_LINK.md` - Skill binding
 - `SKILL_MAPPING_RECORD.md` - Per-skill documentation

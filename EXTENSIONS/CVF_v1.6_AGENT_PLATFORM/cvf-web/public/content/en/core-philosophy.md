@@ -1,5 +1,7 @@
 # Core Philosophy
 
+> Current Local decisions: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. The examples below do not grant authority. [Work lifecycle](lifecycle.md).
+>
 > *"Vibe is necessary — but must be controlled."*
 
 ---
@@ -91,7 +93,7 @@ CVF's discipline (phases, specs, checklists) creates space for creativity. Witho
 
 | Principle | In CVF | Example |
 |-----------|--------|---------|
-| Vibe + Control | Phase A captures intent; Phase B structures it | Write down your idea → then design it |
+| Vibe + Control | INTAKE captures intent; DESIGN structures it | Write down your idea → then design it |
 | Outcome > Code | Acceptance criteria define success, not code quality | "Can a user log in?" not "Is the auth module clean?" |
 | Decisions recorded | Decision Log + Action Unit traces | `DEC-001: Use SQLite because...` |
 | Structure, not micro | Phase gates + checklists | Checklist: `[x] Meets spec` |
@@ -118,21 +120,23 @@ CVF's discipline (phases, specs, checklists) creates space for creativity. Witho
 
 If you only take one thing from CVF, take this:
 
-1. **Write what you want** (Phase A — 5 minutes)
-2. **Check the result** (Phase D — 5 minutes)
+1. **Write what you want** (INTAKE — 5 minutes)
+2. **Check the result** (REVIEW — 5 minutes)
 
 That's 10 minutes of overhead that prevents hours of rework.
 
-Everything else — Phase B, governance toolkit, skill library, web UI, risk model — is optional depth that you add when you need it.
+Apply the full lifecycle and the controls appropriate to the risk. Scale supporting documentation to the work; do not skip required boundaries.
 
 ---
 
 ## Further Reading
 
-- [The 4-Phase Process](4-phase-process.md) — How the phases work
+- [Work lifecycle](lifecycle.md) — How the phases work
 - [Governance Model](governance-model.md) — Roles, authority, risk
-- [CVF Manifesto](../../v1.0/CVF_MANIFESTO.md) — Full philosophical foundation
+- [CVF Manifesto](/docs/core-philosophy) — Full philosophical foundation
 
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

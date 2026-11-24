@@ -1,22 +1,13 @@
+<!-- Text Encoding Exception: preserve Vietnamese orientation and historical technical labels. -->
 # Legal & Contracts
+
+Trang chủ CVF Web có các mẫu kết quả đang dùng. Phần dưới lưu hướng dẫn của v1.5.2 để tra cứu lịch sử.
 
 > Kỹ năng về hợp đồng, pháp lý và compliance
 
 ---
 
-## 📚 Skills trong Domain này
-
-| # | Skill | Difficulty | Mô tả |
-|---|-------|------------|-------|
-| 1 | [Contract Review](./01_contract_review.skill.md) | ⭐⭐ Medium | Review hợp đồng, highlight rủi ro |
-| 2 | [NDA Template](./02_nda_template.skill.md) | ⭐⭐ Medium | Tạo và review NDA |
-| 3 | [Terms of Service](./03_terms_of_service.skill.md) | ⭐⭐⭐ Advanced | Viết ToS cho sản phẩm |
-| 4 | [Compliance Checklist](./04_compliance_checklist.skill.md) | ⭐⭐ Medium | Checklist tuân thủ quy định |
-| 5 | [IP Protection](./05_ip_protection.skill.md) | ⭐⭐ Medium | Bảo vệ sở hữu trí tuệ |
-
----
-
-## 🎯 Khi nào dùng Domain này
+## 🎯 Khi nào dùng Domain này (v1.5.2)
 
 - Ký kết hợp đồng với đối tác/vendor
 - Bảo vệ thông tin và IP công ty

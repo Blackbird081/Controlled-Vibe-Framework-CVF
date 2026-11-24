@@ -1,13 +1,16 @@
 'use client';
+// Text Encoding Exception: metric labels support Vietnamese and English.
 
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { NO_DATA_LABEL } from '@/lib/presentation-labels';
+import { SessionExpiredNotice } from './SessionExpiredNotice';
 
 export interface GovernanceMetricsData {
-    riskIndex: number;         // 0-1
-    approvalEfficiency: number; // 0-100%
-    stabilityScore: number;    // 0-100%
-    complianceIntegrity: number; // 0-100%
+    riskIndex: number | null;         // 0-1
+    approvalEfficiency: number | null; // 0-100%
+    stabilityScore: number | null;    // 0-100%
+    complianceIntegrity: number | null; // 0-100%
 }
 
 interface GovernanceMetricsProps {
@@ -18,18 +21,14 @@ const LABELS = {
     vi: {
         riskIndex: 'Chỉ số rủi ro',
         approvalEff: 'Hiệu quả duyệt',
-        stability: 'Ổn định governance',
         compliance: 'Tuân thủ',
         loading: 'Đang tải...',
-        error: 'Không thể tải metrics',
     },
     en: {
         riskIndex: 'Risk Index',
         approvalEff: 'Approval Efficiency',
-        stability: 'Governance Stability',
         compliance: 'Compliance Integrity',
         loading: 'Loading...',
-        error: 'Failed to load metrics',
     },
 };
 
@@ -53,13 +52,19 @@ function getBarColor(value: number): string {
     return 'bg-red-500';
 }
 
+function readMetric(value: unknown, maximum: number): number | null {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= maximum
+        ? value
+        : null;
+}
+
 export function GovernanceMetrics({ data: propData }: GovernanceMetricsProps) {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const l = LABELS[language];
     const [fetchedData, setData] = useState<GovernanceMetricsData | null>(null);
     const data = propData ?? fetchedData;
     const [loading, setLoading] = useState(!propData);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<'expired' | 'unavailable' | null>(null);
 
     useEffect(() => {
         if (propData) return;
@@ -67,55 +72,63 @@ export function GovernanceMetrics({ data: propData }: GovernanceMetricsProps) {
         async function fetchMetrics() {
             try {
                 const res = await fetch('/api/governance/metrics');
+                if (res.status === 401) {
+                    if (!cancelled) setError('expired');
+                    return;
+                }
                 if (!res.ok) throw new Error(`${res.status}`);
                 const json = await res.json();
                 if (!cancelled) {
+                    const measured = json?.fallback === true ? undefined : json?.data;
                     setData({
-                        riskIndex: json.data?.risk_index ?? 0,
-                        approvalEfficiency: json.data?.approval_efficiency ?? 0,
-                        stabilityScore: json.data?.stability_score ?? 0,
-                        complianceIntegrity: json.data?.compliance_integrity ?? 0,
+                        riskIndex: readMetric(measured?.risk_index, 1),
+                        approvalEfficiency: readMetric(measured?.approval_efficiency, 100),
+                        stabilityScore: readMetric(measured?.stability_score, 100),
+                        complianceIntegrity: readMetric(measured?.compliance_integrity, 100),
                     });
                 }
             } catch {
-                if (!cancelled) setError(l.error);
+                if (!cancelled) setError('unavailable');
             } finally {
                 if (!cancelled) setLoading(false);
             }
         }
         fetchMetrics();
         return () => { cancelled = true; };
-    }, [propData, l.error]);
+    }, [propData]);
 
     if (!propData && loading) return <p className="text-sm text-gray-400">{l.loading}</p>;
-    if (!propData && error) return <p className="text-sm text-red-500">{error}</p>;
+    if (!propData && error === 'expired') return <SessionExpiredNotice vi={language === 'vi'} />;
+    if (!propData && error) return <p className="text-sm text-red-500">{t('governancePage.metricsError')}</p>;
     if (!data) return null;
 
     const cards = [
-        { label: l.riskIndex, value: data.riskIndex.toFixed(2), color: getRiskColor(data.riskIndex), bar: data.riskIndex * 100, icon: '🎯' },
-        { label: l.approvalEff, value: `${data.approvalEfficiency.toFixed(0)}%`, color: getPercentColor(data.approvalEfficiency), bar: data.approvalEfficiency, icon: '✅' },
-        { label: l.stability, value: `${data.stabilityScore.toFixed(0)}%`, color: getPercentColor(data.stabilityScore), bar: data.stabilityScore, icon: '📊' },
-        { label: l.compliance, value: `${data.complianceIntegrity.toFixed(0)}%`, color: getPercentColor(data.complianceIntegrity), bar: data.complianceIntegrity, icon: '🛡️' },
+        { label: l.riskIndex, value: data.riskIndex, isRisk: true, icon: '🎯' },
+        { label: l.approvalEff, value: data.approvalEfficiency, icon: '✅' },
+        { label: t('governancePage.stability'), value: data.stabilityScore, icon: '📊' },
+        { label: l.compliance, value: data.complianceIntegrity, icon: '🛡️' },
     ];
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {cards.map(card => (
-                <div key={card.label} className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            {cards.map(({ label, value, isRisk, icon }) => {
+                const width = value === null ? null : isRisk ? value * 100 : value;
+                const tone = value === null ? null : isRisk ? getRiskColor(value) : getPercentColor(value);
+                return <div key={label} className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                        {card.icon} {card.label}
+                        {value !== null && `${icon} `}{label}
                     </p>
-                    <p className={`text-2xl font-bold ${card.color}`}>
-                        {card.value}
+                    <p className={tone ? `text-2xl font-bold ${tone}` : 'text-sm text-gray-600 dark:text-gray-300'}>
+                        {value === null ? NO_DATA_LABEL[language] : isRisk ? value.toFixed(2) : `${value.toFixed(0)}%`}
                     </p>
-                    <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2">
+                    {width !== null && <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-2">
                         <div
-                            className={`h-full rounded-full transition-all ${getBarColor(card.bar)}`}
-                            style={{ width: `${Math.min(100, card.bar)}%` }}
+                            className={`h-full rounded-full transition-all ${getBarColor(width)}`}
+                            style={{ width: `${width}%` }}
                         />
-                    </div>
-                </div>
-            ))}
+                    </div>}
+                </div>;
+            })}
         </div>
     );
 }

@@ -61,6 +61,7 @@ export async function evaluateRouteMandatoryGateway(
       gatewayBypassed: gatewayResult.bypassed,
       gatewayControlMode: gatewayResult.controlMode,
       gatewayRequestId: gatewayResult.evidence?.requestId,
+      ...(input.context.traceHash ? { traceHash: input.context.traceHash } : {}),
       gatewayBlockedBy: gatewayResult.evidence?.blockedBy,
       gatewayEscalatedBy: gatewayResult.evidence?.escalatedBy,
     },

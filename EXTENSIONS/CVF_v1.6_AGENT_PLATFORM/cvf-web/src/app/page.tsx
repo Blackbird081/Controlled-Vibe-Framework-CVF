@@ -1,4 +1,3 @@
-import LandingPage from './(dashboard)/landing/page';
 import { redirect } from 'next/navigation';
 
 type RootSearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -18,9 +17,5 @@ export default async function RootPage({ searchParams }: { searchParams: RootSea
         redirect(`/home?category=${encodeURIComponent(category)}`);
     }
 
-    return (
-        <div className="min-h-screen bg-white dark:bg-[#0d0f1a]">
-            <LandingPage />
-        </div>
-    );
+    redirect('/home');
 }

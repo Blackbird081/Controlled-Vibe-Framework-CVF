@@ -36,12 +36,12 @@ describe('non-coder reference loop', () => {
     ]);
     expect(artifact.executionHandoff.mode).toBe('full');
     expect(artifact.executionHandoff.templateId).toBe('app_builder_wizard');
-    expect(artifact.executionHandoff.cvfPhase).toBe('BUILD');
-    expect(artifact.executionHandoff.skillPreflightDeclaration).toContain('NONCODER_REFERENCE_PACKET');
+    expect(artifact.executionHandoff).not.toHaveProperty('cvfPhase');
+    expect(artifact.executionHandoff).not.toHaveProperty('skillPreflightDeclaration');
     expect(artifact.freezeReceipt.baselineArtifact).toContain('TASKFLOW_FREEZE_RECEIPT.md');
   });
 
-  it('converts the packet into a governed live execution request', () => {
+  it('converts the packet into a governed request without assigning a server phase or preflight', () => {
     const artifact = buildNonCoderReferenceLoop({
       appName: 'DeskMate',
       appType: 'Desktop App',
@@ -53,9 +53,9 @@ describe('non-coder reference loop', () => {
 
     expect(live.request.templateId).toBe('app_builder_wizard');
     expect(live.request.mode).toBe('full');
-    expect(live.request.cvfPhase).toBe('BUILD');
+    expect(live.request).not.toHaveProperty('cvfPhase');
     expect(live.request.fileScope?.length).toBeGreaterThan(0);
-    expect(live.request.skillPreflightDeclaration).toContain('NONCODER_REFERENCE_PACKET');
+    expect(live.request).not.toHaveProperty('skillPreflightDeclaration');
     expect(live.freezeReceipt.acceptedOutput).toContain('DeskMate');
   });
 
@@ -73,5 +73,6 @@ describe('non-coder reference loop', () => {
     expect(markdown).toContain('## Approval Checkpoints');
     expect(markdown).toContain('## Freeze Receipt');
     expect(markdown).toContain('Mode: full');
+    expect(markdown).not.toContain('Build phase target: BUILD');
   });
 });

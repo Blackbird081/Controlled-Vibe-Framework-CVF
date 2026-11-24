@@ -6,7 +6,7 @@ import path from 'node:path';
 
 import { computeServiceRequestSignature } from '@/lib/service-token-auth';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -14,7 +14,6 @@ const appendAuditEventMock = vi.hoisted(() => vi.fn());
 const appendCostEventMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -24,6 +23,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
     withSessionAuditPayload: (
         session: {
             impersonation?: {
@@ -60,6 +60,7 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 import { getApprovalStore } from '../approvals/store';
 import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
 
@@ -91,7 +92,7 @@ describe('/api/execute', () => {
 
     beforeEach(async () => {
         tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-execute-route-'));
-        executeAIMock.mockReset();
+        providerSpy.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
@@ -141,7 +142,7 @@ describe('/api/execute', () => {
         { inputs: ['text'] }, { inputs: 'text' }, { inputs: 42 }, { inputs: null },
         { inputs: { idea: { nested: 'text' } } }, { inputs: { idea: ['text'] } },
         { templateName: 42 }, { intent: { text: 'Analyze' } }, { intent: '   ' },
-        { model: {} }, { provider: [] }, { imageBase64: true }, { imageUrl: {} },
+        { model: {} }, { provider: [] }, { imageBase64: true }, { imageUrl: {} }, { mode: 'unknown' },
         { cvfRiskLevel: 1 }, { skillPreflightPassed: 'true' },
         { skillIds: 'skill-a' }, { skillIds: [42] }, { fileScope: [null] },
         { aifMemoryReinjection: [] }, { aifMemoryReinjection: { enabled: 'true' } },
@@ -157,12 +158,12 @@ describe('/api/execute', () => {
     ])('rejects malformed execute shape before downstream processing %#', async patch => {
         process.env.ALIBABA_API_KEY = 'ali-key';
         process.env.CVF_SERVICE_TOKEN = 'svc';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'alibaba', model: 'qwen3.8-flash' });
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'alibaba', model: 'qwen3.8-flash' });
         const response = await POST(makeSignedServiceRequest({ templateName: 'Strategy', intent: 'Analyze', inputs: { goal: 'Test' }, provider: 'alibaba', ...patch }) as never);
         const data = await response.json();
         expect(response.status).toBe(400);
         expect(data.diagnostic).toMatchObject({ stage: 'request_validation', class: 'invalid_input' });
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
         expect(evaluateEnforcementMock).not.toHaveBeenCalled();
         expect(appendCostEventMock).not.toHaveBeenCalled();
     });
@@ -174,18 +175,18 @@ describe('/api/execute', () => {
         expect((await POST(request as never)).status).toBe(400);
         expect(verifySessionCookieMock).not.toHaveBeenCalled();
         expect(evaluateEnforcementMock).not.toHaveBeenCalled();
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
         expect(appendCostEventMock).not.toHaveBeenCalled();
     });
     it('retains existing scalar input normalization and Vietnamese text', async () => {
-        process.env.ALIBABA_API_KEY = 'ali-key';
+        process.env.OPENAI_API_KEY = 'test-key';
         process.env.CVF_SERVICE_TOKEN = 'svc';
-        executeAIMock.mockResolvedValue({ success: true, output: validOutput, provider: 'alibaba', model: 'qwen3.8-flash' });
-        const response = await POST(makeSignedServiceRequest({ templateName: 'Strategy', intent: 'Phân tích lịch trực', inputs: { goal: '  Đặt lịch  ', count: 30, enabled: false, optional: null }, provider: 'alibaba' }) as never);
+        providerSpy.mockResolvedValue({ success: true, output: validOutput, provider: 'openai', model: 'gpt-4o-mini' });
+        const response = await POST(makeSignedServiceRequest({ templateId: 'meeting_notes', templateName: 'Strategy', intent: 'Phân tích lịch trực', inputs: { goal: '  Đặt lịch  ', count: 30, enabled: false, optional: null }, provider: 'openai' }) as never);
         expect(response.status).toBe(200);
         expect((await response.json()).success).toBe(true);
-        expect(executeAIMock).toHaveBeenCalledOnce();
-        const prompt = executeAIMock.mock.calls[0][2] as string;
+        expect(providerSpy).toHaveBeenCalledOnce();
+        const prompt = providerSpy.mock.calls[0][2] as string;
         expect(prompt).toContain('Đặt lịch');
         expect(prompt).toContain('30');
         expect(prompt).toContain('false');
@@ -196,8 +197,11 @@ describe('/api/execute', () => {
         const response = await POST(makeSignedServiceRequest(payload as unknown as Record<string, unknown>) as never);
         expect(response.status).toBe(400);
         expect((await response.json()).diagnostic?.class).toBe('invalid_input');
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
         expect(evaluateEnforcementMock).not.toHaveBeenCalled();
     });
 
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

@@ -1,4 +1,6 @@
 // Text Encoding Exception: localized Vietnamese system-prompt copy is preserved from the existing provider module.
+import { CVF_FACTUAL_SAFETY_INSTRUCTION } from './ai/types';
+
 // CVF System Prompt - Dynamic based on language
 export function getCVFSystemPrompt(language: 'vi' | 'en' = 'vi'): string {
     const prompts = {
@@ -136,5 +138,7 @@ Hãy cho tôi biết bạn cần hỗ trợ ở Phase nào!
 - Use clear markdown formatting`
     };
 
-    return prompts[language];
+    return `${prompts[language]}
+
+${CVF_FACTUAL_SAFETY_INSTRUCTION}`;
 }

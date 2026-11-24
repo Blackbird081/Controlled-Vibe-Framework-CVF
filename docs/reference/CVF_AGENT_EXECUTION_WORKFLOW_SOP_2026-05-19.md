@@ -98,6 +98,22 @@ task context; receivers verify actual tool access in their own environment.
    credential and provider-call boundaries remain separately scoped; available
    compute credit is not evidence of paid model API authority.
 
+### Readiness on the user's computer
+
+Before handing over a product, explain in plain language what the user needs to
+run it. Provide a self-checking launch entry that names missing requirements
+and explains the next action. Put technical details in a log and show its path.
+
+Use the fewest dependencies that support the result. Verify the launch and
+first use in a clean environment representative of the user's computer. If
+that environment is unavailable, inspect the machine first. Explain what is
+needed, why, how to get it, and which checks would remain unverified. The user
+decides whether to install or change anything.
+
+For interface work, include a local preview link and before-and-after
+screenshots at desktop and phone sizes in the completion report. Publish
+the preview online only when the user requests it.
+
 For UI01, this operator requirement supersedes the conditional Robocopy-first
 next-action recommendation in the earlier staging assessment. Preserve that
 historical evidence; prepare the Docker reuse design before any new runtime

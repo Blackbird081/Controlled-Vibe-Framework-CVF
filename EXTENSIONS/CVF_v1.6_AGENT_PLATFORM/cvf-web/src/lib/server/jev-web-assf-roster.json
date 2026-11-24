@@ -1,0 +1,447 @@
+{
+  "schema": "cvf.ui01.jev-assf-roster.v1",
+  "packages": [
+    {
+      "id": "cvf-engineering-api-interface-design",
+      "title": "CVF Engineering API And Interface Design",
+      "purpose": "Guide contract-first API, module, schema, and component-boundary design while preserving CVF source verification and deprecation discipline.",
+      "triggers": [
+        "api design",
+        "interface boundary",
+        "module contract",
+        "component props",
+        "schema contract"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "4e3903d78e1e36d908e7e1fd00926d7eea4a57556517aad35c9d5390cd94c992"
+      }
+    },
+    {
+      "id": "cvf-engineering-browser-runtime-verification",
+      "title": "CVF Engineering Browser Runtime Verification",
+      "purpose": "Guide browser-based verification with DOM, console, network, accessibility, and screenshot evidence under CVF untrusted-data and profile-isolation boundaries.",
+      "triggers": [
+        "browser test",
+        "devtools verification",
+        "dom inspection",
+        "console errors",
+        "visual verification"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "052684f7bbbdd253383e9c65c8ecae0c774b914d7cbc32ec7ba808df035eadc3"
+      }
+    },
+    {
+      "id": "cvf-engineering-ci-cd-quality-gates",
+      "title": "CVF Engineering CI/CD Quality Gates",
+      "purpose": "Guide CI/CD quality gate design, pipeline evidence, and deployment automation planning without authorizing production deployment by package load.",
+      "triggers": [
+        "ci pipeline",
+        "quality gates",
+        "github actions",
+        "deployment pipeline",
+        "automation checks"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "61eac120cf5e7bf10bbde40d7168197728a3e8c6b1bbda1030cce76e53f458ab"
+      }
+    },
+    {
+      "id": "cvf-engineering-code-review-quality",
+      "title": "CVF Engineering Code Review Quality",
+      "purpose": "Guide multi-axis code review across correctness, readability, architecture, security, and performance using CVF finding-first review discipline.",
+      "triggers": [
+        "code review",
+        "quality review",
+        "pre-merge review",
+        "review another agent",
+        "implementation review"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "917a6f9998a18cd575921b5be3b3ebdef2432b868bad7d0190b05217c50e1aa1"
+      }
+    },
+    {
+      "id": "cvf-engineering-code-simplification",
+      "title": "CVF Engineering Code Simplification",
+      "purpose": "Guide behavior-preserving simplification and debt reduction while requiring comprehension, tests, and project-convention alignment before refactor.",
+      "triggers": [
+        "simplify code",
+        "refactor for clarity",
+        "reduce complexity",
+        "remove duplication"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "67e602bb2076bc2e0e7eb9970c7dbe5dc2e0990ad2b495652a0534b6624a3d26"
+      }
+    },
+    {
+      "id": "cvf-engineering-debugging-error-recovery",
+      "title": "CVF Engineering Debugging And Error Recovery",
+      "purpose": "Guide systematic root-cause debugging, reproduction, and error recovery using CVF diagnostic and evidence discipline.",
+      "triggers": [
+        "debug failure",
+        "root cause",
+        "test failure",
+        "build break",
+        "unexpected behavior"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "7dea8928256f7728f5deb2220b1c7352d5b27bd63b67e5621e11195d83d96e9e"
+      }
+    },
+    {
+      "id": "cvf-engineering-deprecation-migration",
+      "title": "CVF Engineering Deprecation And Migration",
+      "purpose": "Guide deprecation, migration, compatibility, and sunset planning with explicit consumer-impact and rollback boundaries.",
+      "triggers": [
+        "deprecation",
+        "migration",
+        "sunset old system",
+        "compatibility change",
+        "api removal"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "16807c957ecb2d34de4470f29f20578091354862cb2877c1e7abcd2f1770d838"
+      }
+    },
+    {
+      "id": "cvf-engineering-frontend-ui",
+      "title": "CVF Engineering Frontend UI",
+      "purpose": "Guide production-quality frontend UI work while binding output to CVF DESIGN.md, responsive layout, accessibility, and runtime verification requirements.",
+      "triggers": [
+        "frontend ui",
+        "component design",
+        "layout implementation",
+        "user interface",
+        "production UI"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "5f5f69f35dd18c60d7b0f7442b1e35a7031e3c7e873d47f001df63334349519e"
+      }
+    },
+    {
+      "id": "cvf-engineering-incremental-implementation",
+      "title": "CVF Engineering Incremental Implementation",
+      "purpose": "Guide small, reviewable implementation slices with validation after each slice and clear stop conditions for governed work.",
+      "triggers": [
+        "incremental implementation",
+        "small slices",
+        "large task",
+        "multi-file change",
+        "stepwise delivery"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "e7b0c364a37c20fefd1e93b6a93af94a63ca0e4b97645d881a8942179234bf97"
+      }
+    },
+    {
+      "id": "cvf-engineering-observability-instrumentation",
+      "title": "CVF Engineering Observability And Instrumentation",
+      "purpose": "Guide logging, metrics, tracing, alerting, and production diagnostic evidence without claiming live/provider behavior unless separately proven.",
+      "triggers": [
+        "observability",
+        "instrumentation",
+        "logging",
+        "metrics",
+        "tracing",
+        "alerts"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "c4a7423d6e7e6a6b587ecce1e62adec4fd8d04c6c94047fb0503f7fec8abae2d"
+      }
+    },
+    {
+      "id": "cvf-engineering-performance-optimization",
+      "title": "CVF Engineering Performance Optimization",
+      "purpose": "Guide measurement-first performance optimization and regression control across frontend, backend, database, and build surfaces.",
+      "triggers": [
+        "performance optimization",
+        "slow page",
+        "core web vitals",
+        "profiling",
+        "bottleneck"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "e3a062eeb6d606af8f9837ee5909dd5ae4d1cd8b1e8d49fc26893b58c2e806fc"
+      }
+    },
+    {
+      "id": "cvf-engineering-planning-task-breakdown",
+      "title": "CVF Engineering Planning And Task Breakdown",
+      "purpose": "Guide conversion of clear requirements into ordered, dependency-aware, testable tasks under CVF work-order and closure discipline.",
+      "triggers": [
+        "task breakdown",
+        "implementation plan",
+        "split work",
+        "plan from spec",
+        "dependency order"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "33a6c8e89a104721b841fa135b0a2adee2f7322f47b231bee6906986a7709482"
+      }
+    },
+    {
+      "id": "cvf-engineering-security-hardening",
+      "title": "CVF Engineering Security Hardening",
+      "purpose": "Guide threat-model-first hardening for authentication, authorization, untrusted input, secrets, external integrations, and sensitive data.",
+      "triggers": [
+        "security hardening",
+        "threat model",
+        "auth",
+        "untrusted input",
+        "secrets",
+        "owasp"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "cc93bae9e0187dccfc5339ca5b45206ade0e97b2a79575f9928c752eb0a16e88"
+      }
+    },
+    {
+      "id": "cvf-engineering-shipping-launch",
+      "title": "CVF Engineering Shipping And Launch",
+      "purpose": "Guide launch readiness, rollback planning, staged rollout, monitoring, and release evidence without authorizing production deployment.",
+      "triggers": [
+        "shipping",
+        "launch",
+        "release readiness",
+        "rollback plan",
+        "staged rollout"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "2cc8920f4b0721b76cc0b2848a2ea08f6a344e1911ee0b7118e775a4eb3bd952"
+      }
+    },
+    {
+      "id": "cvf-engineering-source-driven-development",
+      "title": "CVF Engineering Source-Driven Development",
+      "purpose": "Guide official-documentation-backed implementation decisions for framework or library work where current source correctness matters.",
+      "triggers": [
+        "source driven development",
+        "official docs",
+        "current best practices",
+        "framework docs",
+        "verify docs"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "6d5ba2863b956e08e27173e2e087afd12c5681e8149f1199ecadd8444432d307"
+      }
+    },
+    {
+      "id": "cvf-engineering-spec-driven-development",
+      "title": "CVF Engineering Spec-Driven Development",
+      "purpose": "Guide source-backed specification before non-trivial implementation, including assumptions, commands, structure, testing, and boundaries.",
+      "triggers": [
+        "spec driven development",
+        "write spec",
+        "requirements unclear",
+        "new feature spec",
+        "spec before code"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "49dc3e87f8fd1b90b73cae481bcff0c7ecdd3dca3dd01ae95c1396acb6e86c32"
+      }
+    },
+    {
+      "id": "cvf-engineering-test-driven-development",
+      "title": "CVF Engineering Test-Driven Development",
+      "purpose": "Guide failing-test-first implementation, bug reproduction, regression coverage, and proof that behavior works before closure.",
+      "triggers": [
+        "test driven development",
+        "write failing test",
+        "bug reproduction",
+        "regression test",
+        "prove it works"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "f7e8658a45125a7f94bd89ade39272f26e506d5d1e85332e16ecac094a1475e3"
+      }
+    },
+    {
+      "id": "cvf-engineering-test-evidence-audit",
+      "title": "CVF Engineering Test Evidence Audit",
+      "purpose": "Give an advisory KEEP/REPAIR/CONSOLIDATE/ADD/DEFER_WITH_REASON disposition for one asserted existing-proof claim tied to a named source file and a named test file, by reading the actual test assertions rather than trusting the claim sentence or a docstring.",
+      "triggers": [
+        "is this tested",
+        "existing test coverage claim",
+        "test evidence audit",
+        "verify existing proof claim",
+        "advisory test disposition"
+      ],
+      "source": {
+        "license": "CVF_PRIVATE_GOVERNED",
+        "upstreamCommit": null,
+        "sourceSha256": "5b31682416bccffa49ef81000a923cd44a7004eeb62bf6e8d3df01d028f1bafe"
+      }
+    },
+    {
+      "id": "cvf-governance-context-engineering",
+      "title": "CVF Governance Context Engineering",
+      "purpose": "Guide session/context setup, rule discovery, and context-budget discipline for agents without promoting provider-local memory to CVF authority.",
+      "triggers": [
+        "context setup",
+        "agent context",
+        "rules files",
+        "session start",
+        "context degradation"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "87a8747fe27a751d765b5a61a84868dfccd55611b84948c3c6004def63196749"
+      }
+    },
+    {
+      "id": "cvf-governance-documentation-adrs",
+      "title": "CVF Governance Documentation And ADRs",
+      "purpose": "Guide decision records and durable documentation so future agents can understand why a governed change exists and how it should be used.",
+      "triggers": [
+        "adr",
+        "architecture decision",
+        "documentation update",
+        "decision record",
+        "write docs"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "a0f314d336b7750a2e5769c0e7470380e149952e872cef4ed75dc977f4b103ef"
+      }
+    },
+    {
+      "id": "cvf-governance-doubt-driven-development",
+      "title": "CVF Governance Doubt-Driven Development",
+      "purpose": "Guide adversarial fresh-context review of non-trivial decisions to reduce hallucination, rationalization, and shallow PASS closeout.",
+      "triggers": [
+        "doubt-driven",
+        "fresh-context review",
+        "adversarial review",
+        "high stakes decision",
+        "verify assumptions"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "189484799b492be3ec912a640eb93f33cb0653af706666d092b3b2ac6bd26081"
+      }
+    },
+    {
+      "id": "cvf-governance-git-workflow-versioning",
+      "title": "CVF Governance Git Workflow And Versioning",
+      "purpose": "Guide disciplined branching, commits, conflict handling, and versioning while preserving CVF material/session-sync commit separation.",
+      "triggers": [
+        "git workflow",
+        "commit",
+        "branching",
+        "merge conflict",
+        "versioning"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "0a125ed87a4e085ea685e5937a0f6bbe96e64683b30d6cf996094039caecbf52"
+      }
+    },
+    {
+      "id": "cvf-governance-idea-refinement",
+      "title": "CVF Governance Idea Refinement",
+      "purpose": "Guide early idea refinement from vague intent into options, constraints, and an actionable governed next move.",
+      "triggers": [
+        "refine idea",
+        "brainstorm",
+        "unclear concept",
+        "options",
+        "shape request"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "bdee89c511cd856fd71ce83a4c60b2ad73d6b34d3330febf557c2ef488c252d1"
+      }
+    },
+    {
+      "id": "cvf-governance-operator-interview",
+      "title": "CVF Governance Operator Interview",
+      "purpose": "Guide one-question-at-a-time clarification when operator intent is underspecified and a risky assumption would distort the work.",
+      "triggers": [
+        "interview me",
+        "clarify request",
+        "underspecified task",
+        "what do you want",
+        "requirements interview"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "2045ec12d105a9508044e7a24173cfc646be5ffb31cc7f1e776d9134f1f14658"
+      }
+    },
+    {
+      "id": "cvf-governance-skill-discovery-invocation",
+      "title": "CVF Governance Skill Discovery And Invocation",
+      "purpose": "Guide metadata-first skill discovery, invocation boundaries, and skill selection without global instruction loading or authority expansion.",
+      "triggers": [
+        "using agent skills",
+        "skill discovery",
+        "skill invocation",
+        "which skill applies",
+        "meta skill"
+      ],
+      "source": {
+        "license": "MIT",
+        "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+        "sourceSha256": "d6eab7e16591b9038cf11dd993ee3ff4b63b60372acab9069224d25621e813ff"
+      }
+    },
+    {
+      "id": "cvf-governance-worker-return-review",
+      "title": "CVF Governance Worker-Return Review",
+      "purpose": "Guide Local reviewer assessment of internal worker returns, reviewer-local repair routing, and evidence-supported bounded closure.",
+      "triggers": [
+        "review worker return",
+        "COMPLETE_PENDING_REVIEW review",
+        "reviewer-local repair or REWORK",
+        "CVF tranche closure review"
+      ],
+      "source": {
+        "license": "CVF_PRIVATE_GOVERNED",
+        "upstreamCommit": null,
+        "sourceSha256": "d2f2272dfb7951af06ad49bea0ae6c80340e6e20e0f4342566beabca2c1f585c"
+      }
+    }
+  ]
+}

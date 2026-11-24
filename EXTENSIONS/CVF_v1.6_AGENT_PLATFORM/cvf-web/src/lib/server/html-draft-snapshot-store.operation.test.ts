@@ -1,17 +1,20 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import ts from 'typescript';
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 import { HtmlDraftSnapshotStore, type AdmitResult } from './html-draft-snapshot-store';
 import {
   attemptIdFor, buildEnvelope, makeOperationConfig, operationKey, recordBytes, type OperationEnvelope,
 } from '../artifacts-receipt-operation-contract';
 import type { DraftInput } from '../html-draft-recovery-contract';
 
-const WORKER = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-binding-repair-20261019', 'worker');
+const WORKER = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-binding-repair-'));
 const ROOTS = path.join(WORKER, 'roots');
+afterAll(async () => { await fs.rm(WORKER, { recursive: true, force: true }); });
 const HOUR = 3_600_000;
 const T0 = Date.parse('2026-10-19T01:00:00.000Z');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };

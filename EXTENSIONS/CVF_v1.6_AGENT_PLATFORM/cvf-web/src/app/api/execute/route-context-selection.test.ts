@@ -133,8 +133,9 @@ describe('selectKnowledgeContext', () => {
   it('is selected only by the server-side pilot binding, never by a request field', () => {
     const source = readFileSync(path.join(__dirname, 'route.ts'), 'utf8');
     const calls = source.match(/selectKnowledgeContext\(([^,]+),/g) ?? [];
-    expect(calls).toEqual(['selectKnowledgeContext(!!htmlPilotPrepared,']);
-    expect(source).toContain('const htmlPilotPrepared = await prepareHtmlPilotExecution(body, session, isServiceAllowed);');
+    // The HTML pilot path was removed with the legacy direct route (2886167cc): the isolated pilot selection is now a constant false.
+    expect(calls).toEqual(['selectKnowledgeContext(false,']);
+    expect(source).not.toContain('prepareHtmlPilotExecution');
     expect(source).not.toMatch(/selectKnowledgeContext\([^)]*body\.(isolat|pilot|skip|ambient)/i);
     expect(source).not.toMatch(/resolveKnowledgeContext\(/);
   });
@@ -156,7 +157,18 @@ describe('sot3RejectionResponse', () => {
     expect(sot3RejectionResponse(base({ terminalOutcome: 'APPROVED' }, 'col-1'))).toBeNull();
     expect(sot3RejectionResponse(base({ terminalOutcome: 'NO_CONTEXT' }, null))).toBeNull();
   });
-  it('fails closed with 409 for a rejected activation and for an explicitly requested empty collection', () => {
+  it('SHADOW is observe-only: a rejected activation and an explicitly requested empty collection never block the request', () => {
+    expect(sot3RejectionResponse(base({ mode: 'SHADOW', terminalOutcome: 'REJECTED' }, null))).toBeNull();
+    expect(sot3RejectionResponse(base({ mode: 'SHADOW', terminalOutcome: 'REJECTED' }, 'col-1'))).toBeNull();
+    expect(sot3RejectionResponse(base({ mode: 'SHADOW', terminalOutcome: 'NO_CONTEXT' }, 'col-1'))).toBeNull();
+    expect(mocks.buildReceipt).not.toHaveBeenCalled();
+  });
+  it('ENFORCE keeps the fail-closed 409 for a rejected activation and an explicitly requested empty collection', () => {
+    for (const input of [base({ mode: 'ENFORCE', terminalOutcome: 'REJECTED' }, null), base({ mode: 'ENFORCE', terminalOutcome: 'NO_CONTEXT' }, 'col-1')]) {
+      expect((sot3RejectionResponse(input) as unknown as Plain).status).toBe(409);
+    }
+  });
+  it('fails closed with 409 for a rejected activation and for an explicitly requested empty collection (mode unspecified)', () => {
     for (const input of [base({ terminalOutcome: 'REJECTED' }, null), base({ terminalOutcome: 'NO_CONTEXT' }, 'col-1')]) {
       const response = sot3RejectionResponse(input) as unknown as Plain;
       expect(response.status).toBe(409);

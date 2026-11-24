@@ -2,9 +2,21 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from 'vitest';
-import { templates, getTemplateById, getTemplatesByCategory, generateIntent, generateCompleteSpec } from './index';
+import * as skillActions from '@/actions/skills';
+import * as templateRegistry from './index';
+import { templates, getTemplateById, getTemplatesByCategory, generateIntent } from './index';
 
 describe('templates/index', () => {
+    it('keeps the active skill catalog without the unused detail action', () => {
+        expect(skillActions.getSkillCategories).toBeTypeOf('function');
+        expect(skillActions).not.toHaveProperty('getSkillDetail');
+    });
+
+    it('keeps intent generation without exporting the retired spec generator', () => {
+        expect(templateRegistry.generateIntent).toBeTypeOf('function');
+        expect(templateRegistry).not.toHaveProperty('generateCompleteSpec');
+    });
+
     it('exports a non-empty templates array', () => {
         expect(Array.isArray(templates)).toBe(true);
         expect(templates.length).toBeGreaterThan(0);
@@ -83,98 +95,6 @@ describe('templates/index', () => {
 
             expect(intent).toContain('Logic risk, Security risk');
             expect(intent).not.toMatch(/\[[A-Za-z0-9_]+\]/);
-        });
-    });
-
-    describe('generateCompleteSpec', () => {
-        it('generates a full CVF spec document', () => {
-            const template = templates[0]!;
-            const values: Record<string, string> = {};
-            template.fields.forEach(f => {
-                values[f.id] = `Value for ${f.id}`;
-            });
-
-            const spec = generateCompleteSpec(template, values);
-            expect(spec).toContain('CVF Task Specification');
-            expect(spec).toContain(template.name);
-            expect(spec).toContain(template.category);
-            expect(spec).toContain('User Input');
-            expect(spec).toContain('Input Coverage');
-            expect(spec).toContain('Execution Constraints');
-            expect(spec).toContain('Validation Hooks');
-            expect(spec).toContain('CVF Non-Coder Success Standard');
-            expect(spec).toContain('Governed Response Rules');
-            expect(spec).toContain('Knowledge Context Preference');
-        });
-
-        it('marks missing required fields', () => {
-            const template = templates.find(t => t.fields.some(f => f.required));
-            if (!template) return;
-
-            const spec = generateCompleteSpec(template, {});
-            expect(spec).toContain('❌');
-        });
-
-        it('marks provided required fields with checkmark', () => {
-            const template = templates.find(t => t.fields.some(f => f.required));
-            if (!template) return;
-
-            const values: Record<string, string> = {};
-            template.fields.filter(f => f.required).forEach(f => {
-                values[f.id] = 'filled';
-            });
-
-            const spec = generateCompleteSpec(template, values);
-            expect(spec).toContain('✅');
-        });
-
-        it('includes user intent if provided', () => {
-            const template = templates[0]!;
-            const spec = generateCompleteSpec(template, {}, 'Custom user intent');
-            expect(spec).toContain(template.name);
-        });
-
-        it('includes expected output section', () => {
-            const template = templates[0]!;
-            const spec = generateCompleteSpec(template, {});
-            expect(spec).toContain('Expected Output');
-        });
-
-        it('includes date', () => {
-            const template = templates[0]!;
-            const spec = generateCompleteSpec(template, {});
-            const today = new Date().toISOString().split('T')[0];
-            expect(spec).toContain(today);
-        });
-
-        it('includes CVF Web Redesign DNA for web build handoff specs', () => {
-            const template = getTemplateById('web_build_handoff');
-            expect(template).toBeTruthy();
-
-            const spec = generateCompleteSpec(template!, {
-                websiteGoal: 'Build a service website',
-                audience: 'Non-coder operators',
-                mustDo: 'Browse services\nSubmit contact form',
-                screens: 'Home\nContact modal',
-                mustPreserve: 'Existing lead API',
-                lookAndFeel: 'Premium and structured',
-            });
-
-            expect(spec).toContain('CVF Web Redesign DNA');
-            expect(spec).toContain('professional command workspace');
-        });
-
-        it('handles template without outputExpected', () => {
-            const template = { ...templates[0]!, outputExpected: [], outputTemplate: undefined };
-            const spec = generateCompleteSpec(template, {});
-            expect(spec).toContain('Comprehensive analysis');
-        });
-
-        it('shows no input provided when values are empty', () => {
-            const template = templates[0]!;
-            const spec = generateCompleteSpec(template, {});
-            // When all values are empty, at least generates without error
-            expect(spec).toBeTruthy();
         });
     });
 });

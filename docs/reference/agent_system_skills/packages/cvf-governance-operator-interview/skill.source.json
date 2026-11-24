@@ -21,6 +21,7 @@
   ],
   "uatState": "PASSED",
   "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+  "license": "MIT",
   "upstreamRepository": "https://github.com/addyosmani/agent-skills.git",
   "upstreamSlug": "interview-me",
   "workerReturnArtifact": "docs/reviews/CVF_AGSK_R3_RUNTIME_PACKAGE_ACTIVATION_WORKER_RETURN_2026-06-29.md"

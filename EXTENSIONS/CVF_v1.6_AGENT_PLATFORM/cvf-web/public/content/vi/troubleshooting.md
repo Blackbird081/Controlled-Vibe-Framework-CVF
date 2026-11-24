@@ -6,17 +6,17 @@
 
 ## 📋 Mục lục
 
-- [Vấn đề cài đặt](#-vấn-đề-cài-đặt)
-- [Vấn đề Web UI](#️-vấn-đề-web-ui)
-- [Nhầm lẫn phiên bản](#-nhầm-lẫn-phiên-bản)
-- [Lỗi Skill](#-lỗi-skill)
-- [Vấn đề Governance](#-vấn-đề-governance)
-- [Vấn đề hiệu suất](#-vấn-đề-hiệu-suất)
-- [Thông báo lỗi thường gặp](#️-thông-báo-lỗi-thường-gặp)
+- [Vấn đề cài đặt](#vấn-đề-cài-đặt)
+- [Vấn đề Web UI](#vấn-đề-web-ui)
+- [Nhầm lẫn phiên bản](#nhầm-lẫn-phiên-bản)
+- [Lỗi Skill](#lỗi-skill)
+- [Vấn đề Governance](#vấn-đề-governance)
+- [Vấn đề hiệu suất](#vấn-đề-hiệu-suất)
+- [Thông báo lỗi thường gặp](#thông-báo-lỗi-thường-gặp)
 
 ---
 
-## 🔧 Vấn đề cài đặt
+## Vấn đề cài đặt
 
 ### Vấn đề: `npm install` thất bại
 
@@ -146,7 +146,7 @@ fatal: could not read Username
 
 ---
 
-## 🖥️ Vấn đề Web UI
+## Vấn đề Web UI
 
 ### Vấn đề: Web UI hiển thị trang trắng
 
@@ -273,7 +273,7 @@ fatal: could not read Username
 
 ---
 
-## 🔀 Nhầm lẫn phiên bản
+## Nhầm lẫn phiên bản
 
 ### Vấn đề: Không chắc nên dùng phiên bản nào
 
@@ -315,7 +315,7 @@ fatal: could not read Username
 
 ---
 
-## 🧩 Lỗi Skill
+## Lỗi Skill
 
 ### Vấn đề: Xác thực skill thất bại
 
@@ -373,100 +373,13 @@ Missing required field: risk_level
 
 ---
 
-### Vấn đề: "Mức rủi ro vượt giới hạn phase"
+## Vấn đề Governance
 
-**Triệu chứng:**
+### Rủi ro hoặc quyền hạn chặn công việc
 
-```
-⚠️ Warning: Risk level R3 not allowed in Phase A
-```
+Không hạ mức rủi ro hay đổi giai đoạn chỉ để vượt điểm dừng. Kiểm tra yêu cầu, giai đoạn, vai trò và lý do được nêu. Bổ sung thông tin còn thiếu, xử lý trong phạm vi quyền hoặc chuyển cho người có trách nhiệm quyết định. R4 bị chặn và không được chạy. Xem [mô hình rủi ro](risk-model.md) và [vòng đời công việc](lifecycle.md).
 
-**Giải pháp:**
-
-1. **Hiểu mô hình rủi ro:**
-   - Phase A (Khám phá): chỉ R0-R1
-   - Phase B (Thiết kế): R0-R2
-   - Phase C (Xây dựng): R0-R3
-   - Phase D (Đánh giá): R0-R1
-
-2. **Giảm mức rủi ro hoặc đổi phase:**
-
-   ```yaml
-   # Either:
-   risk_level: R1  # Lower risk
-   
-   # Or use in different phase
-   # Move from Phase A to Phase C
-   ```
-
-3. **Xem hướng dẫn rủi ro:**
-   - Tham khảo tài liệu Mô hình Governance
-
----
-
-## 🔐 Vấn đề Governance
-
-### Vấn đề: Phase gate chặn tiến trình
-
-**Triệu chứng:**
-
-- Không thể tiến sang phase tiếp theo
-- Checklist chưa hoàn thành
-
-**Giải pháp:**
-
-1. **Xem lại các mục checklist:**
-
-   ```bash
-   # Check phase gate requirements
-   governance/toolkit/01_BOOTSTRAP/phase-gates.md
-   ```
-
-2. **Hoàn thành các mục còn thiếu:**
-   - Mỗi phase có yêu cầu cụ thể
-   - Phải đánh dấu hoàn thành trước khi tiếp tục
-
-3. **Ghi đè (nếu được phân quyền):**
-
-   ```yaml
-   # In governance config
-   allow_phase_skip: true  # Use with caution!
-   ```
-
----
-
-### Vấn đề: Xung đột ma trận quyền hạn
-
-**Triệu chứng:**
-
-- "User not authorized for this role"
-- Lỗi từ chối quyền truy cập
-
-**Giải pháp:**
-
-1. **Kiểm tra phân quyền vai trò:**
-
-   ```yaml
-   # governance/toolkit/03_CONTROL/authority-matrix.yaml
-   roles:
-     - user: alice@example.com
-       phase: A
-       role: Owner
-   ```
-
-2. **Xác minh vai trò cho phase:**
-   - Phase A: chỉ Owner
-   - Phase B: chỉ Architect
-   - Phase C: Executor (AI)
-   - Phase D: chỉ Reviewer
-
-3. **Yêu cầu thay đổi vai trò:**
-   - Liên hệ quản trị viên dự án
-   - Cập nhật ma trận quyền hạn
-
----
-
-## ⚡ Vấn đề hiệu suất
+## Vấn đề hiệu suất
 
 ### Vấn đề: Web UI chậm
 
@@ -520,7 +433,7 @@ Missing required field: risk_level
 
 ---
 
-## ⚠️ Thông báo lỗi thường gặp
+## Thông báo lỗi thường gặp
 
 ### Lỗi: "Module not found"
 
@@ -669,3 +582,5 @@ Access to fetch at '...' has been blocked by CORS policy
 ---
 
 *Cập nhật lần cuối: 15 tháng 2 năm 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

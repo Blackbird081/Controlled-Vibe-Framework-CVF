@@ -4,6 +4,14 @@ import { CVF_WEB_REDESIGN_DNA_APPENDIX, shouldAttachCvfWebRedesignDna } from '@/
 import { resolveGovernanceFamily } from '@/lib/governance-family';
 import { getTemplateById } from '@/lib/templates';
 import { renderTemplateIntent } from '@/lib/template-intent';
+import { originalBrief, parseExplicitWordLimit } from '@/lib/pack-content-constraints';
+
+/** Required sections when a documentation brief sets an explicit word limit; the other four are dropped. */
+const LIMITED_DOCUMENTATION_HEADINGS = [
+  '## What This Document Is For',
+  '## Step-By-Step Procedure',
+  '## Final Handoff Acceptance Checklist',
+] as const;
 
 const TRUSTED_NONCODER_DEPTH_TEMPLATE_IDS = new Set([
   'documentation',
@@ -22,6 +30,7 @@ const TRUSTED_NONCODER_DEPTH_TEMPLATE_IDS = new Set([
 type DeliverableShape = 'faq' | 'acceptance_criteria' | 'checklist' | 'plan' | 'decision_comparison' | 'prioritization' | 'pricing' | 'persona';
 
 const SHAPE_SPECIFIC_TEMPLATE_IDS = new Set([
+  'documentation',
   'faq_outline',
   'operator_plan',
 ]);
@@ -41,7 +50,15 @@ function collectRequestText(request: ExecutionRequest): string {
   ].join('\n').toLowerCase();
 }
 
-function resolveResponseLanguage(request: ExecutionRequest): 'English' | 'Vietnamese' {
+export function resolveResponseLanguage(request: ExecutionRequest): 'English' | 'Vietnamese' {
+  if (request.templateId === 'documentation') {
+    const inputText = Object.entries(request.inputs)
+      .filter(([key]) => !key.startsWith('_'))
+      .map(([, value]) => value || '').join('\n');
+    const explicitVi = /(?:tiếng\s+việt|tieng\s+viet|in\s+vietnamese)/i.test(inputText);
+    const explicitEn = /(?:tiếng\s+anh|tieng\s+anh|in\s+english)/i.test(inputText);
+    if (explicitVi !== explicitEn) return explicitVi ? 'Vietnamese' : 'English';
+  }
   const text = collectRequestText(request);
   const vietnameseMarks = (text.match(/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/gi) || []).length;
   const vietnameseWords = (text.match(/\b(tôi|muốn|cần|cho|với|người|ứng dụng|tính năng|khách|hàng|quy trình|bàn giao|kiểm tra)\b/gi) || []).length;
@@ -483,11 +500,26 @@ export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { html
   const usesShapeSpecificTemplate = Boolean(template?.id && SHAPE_SPECIFIC_TEMPLATE_IDS.has(template.id));
   const primaryDeliverableShape = usesShapeSpecificTemplate ? undefined : resolvePrimaryDeliverableShape(deliverableShapes);
   const primaryDeliverableContract = buildDeliverableContract(primaryDeliverableShape);
-  const taskShapeGuidance = buildTaskShapeGuidance(deliverableShapes);
+  const isDocumentation = template?.id === 'documentation';
+  const taskShapeGuidance = isDocumentation ? [] : buildTaskShapeGuidance(deliverableShapes);
   const responseLanguage = resolveResponseLanguage(request);
+  // Same parser as the pack's mechanical readout, so the model is told exactly the limit it is judged by.
+  const docWordLimit = isDocumentation ? parseExplicitWordLimit(originalBrief(inputs)) : undefined;
+  const headingRule = docWordLimit === undefined
+    ? 'retain the seven English template headings'
+    : `use only the ${LIMITED_DOCUMENTATION_HEADINGS.length} English headings listed under Hard Length Limit`;
 
   let prompt = `## Task: ${templateName}\n\n`;
-  prompt += `### Response Language\nUse ${responseLanguage} for the final answer. Do not translate the deliverable into another language unless the user explicitly asks.\n\n`;
+  if (docWordLimit !== undefined) {
+    prompt += `### Hard Length Limit\n`;
+    prompt += `The user set a maximum of ${docWordLimit} words. The ENTIRE answer must be at most ${docWordLimit} words, counting every heading, list item and checklist line. Aim for about ${Math.floor(docWordLimit * 0.8)} words and count before answering.\n`;
+    prompt += `This limit overrides every other instruction about sections, detail or completeness. Use exactly these ${LIMITED_DOCUMENTATION_HEADINGS.length} headings and nothing else (no title line, no other sections):\n`;
+    prompt += LIMITED_DOCUMENTATION_HEADINGS.map(heading => `${heading}\n`).join('');
+    prompt += `Purpose: one sentence. Procedure: only the requested steps, one short line each. Checklist: at most 4 short items. Use only facts from the user's notes; do not add branches, policies or reporting processes they did not supply.\n\n`;
+  }
+  prompt += isDocumentation
+    ? `### Response Language\nUse ${responseLanguage} for the user-facing body; ${headingRule}.\n\n`
+    : `### Response Language\nUse ${responseLanguage} for the final answer. Do not translate the deliverable into another language unless the user explicitly asks.\n\n`;
   prompt += `### User Intent\n${intent}\n\n`;
   prompt += `### Input Data\n`;
 
@@ -538,15 +570,27 @@ export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { html
 
   if (template?.outputTemplate || template?.outputExpected?.length) {
     prompt += `### Template Output Contract\n`;
-    prompt += `Follow this template contract for structure, but treat it as a minimum outline, not a compression target.\n`;
-    prompt += `Do not return the raw skeleton or a fenced code block. Fill the headings with the supplied user input values, names, constraints, and concrete decisions.\n`;
-    prompt += `Expand each major heading with task-specific depth: assumptions, rationale, concrete next actions, and acceptance checks when the user asks for an actionable non-coder output.\n`;
-    prompt += `If a required detail does not fit a heading cleanly, add a concise subheading under the closest matching section instead of omitting it.\n`;
-    if (isTrustedNoncoderTemplate) {
+    if (isDocumentation && docWordLimit !== undefined) {
+      prompt += `The Hard Length Limit above replaces the default seven-section outline for this request.\n`;
+      prompt += `Do not invent company policies, deadlines, approvals, signatures or escalation rules.\n`;
+      prompt += `Do not return a fenced code block.\n\n`;
+    } else if (isDocumentation) {
+      prompt += `Keep the seven English headings and make the body useful and concise. Explicit user language, word limit and step count take priority over default detail.\n`;
+      prompt += `Do not invent company policies, deadlines, approvals, signatures or escalation rules; mark missing policy Unknown or as a proposal requiring confirmation.\n`;
+      prompt += `Do not return the raw skeleton or a fenced code block. Use the supplied facts and a relevant handoff checklist.\n`;
+    } else {
+      prompt += `Follow this template contract for structure, but treat it as a minimum outline, not a compression target.\n`;
+      prompt += `Do not return the raw skeleton or a fenced code block. Fill the headings with the supplied user input values, names, constraints, and concrete decisions.\n`;
+      prompt += `Expand each major heading with task-specific depth: assumptions, rationale, concrete next actions, and acceptance checks when the user asks for an actionable non-coder output.\n`;
+      prompt += `If a required detail does not fit a heading cleanly, add a concise subheading under the closest matching section instead of omitting it.\n`;
+    }
+    if (isTrustedNoncoderTemplate && !isDocumentation) {
       prompt += `For this trusted non-coder template, produce an operator-ready deliverable rather than a compact summary. Unless the user explicitly asks for brevity, aim for 700-1100 output tokens and make every major option, persona, feature, risk, pricing tier, or step concrete enough to act on.\n`;
       prompt += `For comparison tasks, compare each named or reasonably inferred option before giving a recommendation.\n`;
     }
-    if (primaryDeliverableContract) {
+    if (docWordLimit !== undefined) {
+      // The limited outline above is the only structure; the seven-section outline would contradict it.
+    } else if (primaryDeliverableContract) {
       prompt += `Use this shape-specific deliverable contract as the primary output contract. It replaces generic template headings when they conflict with the user's requested deliverable:\n`;
       prompt += `\`\`\`markdown\n${primaryDeliverableContract}\n\`\`\`\n\n`;
     } else if (template.outputExpected?.length) {
@@ -556,7 +600,7 @@ export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { html
       }
       prompt += `\n`;
     }
-    if (!primaryDeliverableContract && template.outputTemplate) {
+    if (docWordLimit === undefined && !primaryDeliverableContract && template.outputTemplate) {
       const renderedOutputTemplate = renderTemplateIntent(template.outputTemplate, inputs);
       prompt += `Use these headings and labels exactly where applicable:\n`;
       prompt += `\`\`\`markdown\n${renderedOutputTemplate}\n\`\`\`\n\n`;
@@ -570,7 +614,8 @@ export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { html
     }
   }
 
-  const allowFamilyOutputContract = buildAllowFamilyOutputContract(governanceFamily);
+  // A documentation SOP is not a builder handoff; its family items (files, tests, rollback) only add unrelated length.
+  const allowFamilyOutputContract = isDocumentation ? '' : buildAllowFamilyOutputContract(governanceFamily);
   if (allowFamilyOutputContract) {
     prompt += `### Family Output Contract\n${allowFamilyOutputContract}\n\n`;
   }
@@ -586,12 +631,20 @@ export function buildExecutionPrompt(request: ExecutionRequest, trusted?: { html
 
   prompt += `### Output Contract\n`;
   prompt += `- Return a final answer directly in Markdown.\n`;
-  prompt += `- Use ${responseLanguage} for the final answer, matching the primary language of the user intent and supplied inputs.\n`;
+  prompt += isDocumentation
+    ? `- Use ${responseLanguage} for the user-facing body; ${headingRule}.\n`
+    : `- Use ${responseLanguage} for the final answer, matching the primary language of the user intent and supplied inputs.\n`;
   prompt += `- Use short, explicit section headers only when they add clarity.\n`;
-  prompt += `- Keep the result implementation-ready and grounded in the supplied inputs.\n`;
+  prompt += docWordLimit !== undefined
+    ? `- Stay within ${docWordLimit} words in total and grounded in the supplied inputs.\n`
+    : `- Keep the result implementation-ready and grounded in the supplied inputs.\n`;
   prompt += `- Do not invent precise budgets, prices, company sizes, locale-specific currency, dates, quotas, or guarantees unless they were supplied. If an assumption is useful, label it as an assumption and keep it non-binding.\n`;
   prompt += `- Do not describe your internal process or governance workflow.\n\n`;
-  prompt += `Please analyze the above information and provide a comprehensive, structured response following CVF guidelines.`;
+  prompt += docWordLimit !== undefined
+    ? `Provide the response in at most ${docWordLimit} words using only the listed headings.`
+    : isDocumentation
+    ? `Provide a structured response within the user's explicit constraints.`
+    : `Please analyze the above information and provide a comprehensive, structured response following CVF guidelines.`;
 
   return prompt;
 }

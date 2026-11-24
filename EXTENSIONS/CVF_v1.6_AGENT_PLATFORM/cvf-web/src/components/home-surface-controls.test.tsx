@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese clarification fixtures require UTF-8.
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -81,6 +82,36 @@ describe('home surface controls', () => {
     const clarificationOptions = screen.getAllByRole('button');
     fireEvent.click(clarificationOptions[0]);
     expect(onRoute).toHaveBeenCalledTimes(1);
+    vi.unstubAllEnvs();
+  });
+});
+
+describe('IntentEntry clarification language', () => {
+  const start = (value: string, language: 'vi' | 'en') => {
+    const onRoute = vi.fn();
+    vi.stubEnv('NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR', 'true');
+    vi.stubEnv('NEXT_PUBLIC_CVF_NONCODER_CLARIFICATION_LOOP', 'true');
+    render(<IntentEntry onRoute={onRoute} language={language} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value } });
+    fireEvent.click(screen.getByRole('button', { name: /Start with governed path|Bắt đầu với governed path/i }));
+    return onRoute;
+  };
+
+  it('asks in Vietnamese when the user typed Vietnamese even though the UI language is English', () => {
+    const onRoute = start('giúp', 'en');
+    expect(screen.getByText('Hiện tại bạn đang muốn làm việc gì nhất?')).toBeTruthy();
+    expect(screen.getByText(/Tìm hiểu hoặc nghiên cứu một chủ đề/)).toBeTruthy();
+    expect(screen.queryByText(/What best describes what you are trying to do/)).toBeNull();
+    fireEvent.click(screen.getAllByRole('button')[0]);
+    expect(onRoute.mock.calls.length + screen.queryAllByText(/Ai sẽ dùng kết quả của công việc này\?/).length).toBeGreaterThan(0);
+    vi.unstubAllEnvs();
+  });
+
+  it('asks in English when the user typed English even though the UI language is Vietnamese', () => {
+    start('help', 'vi');
+    expect(screen.getByText('What best describes what you are trying to do right now?')).toBeTruthy();
+    expect(screen.getByText(/Research or explore a topic/)).toBeTruthy();
+    expect(screen.queryByText(/Hiện tại bạn đang muốn làm việc gì nhất/)).toBeNull();
     vi.unstubAllEnvs();
   });
 });

@@ -10,6 +10,11 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 import { useExecutionStore } from '@/lib/store';
 import { pilotCopy } from '@/components/html-pilot-copy';
 import { PILOT_LIMITS, assertFixtureGoals, assertSerializedGoal, sha256Utf8 } from '../../../../tests/helpers/ncr-html-pilot-proof-assertions';
@@ -22,7 +27,10 @@ vi.mock('@/lib/i18n', () => ({ useLanguage: () => ({ language: nav.language, t: 
 vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));
 vi.mock('@/lib/enforcement-log', () => ({ logEnforcementDecision: vi.fn() }));
 vi.mock('@/components/Settings', () => ({ useSettings: () => settings.value }));
-vi.mock('@/lib/hooks/useExecute', () => ({ useProviders: () => ({ providers: [], anyConfigured: false, fetchProviders: vi.fn() }) }));
+vi.mock('@/lib/hooks/useExecute', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/hooks/useExecute')>()),
+  useProviders: () => ({ providers: [], anyConfigured: false, fetchProviders: vi.fn() }),
+}));
 vi.mock('@/components/SpecExport', () => ({ SpecExport: () => null }));
 vi.mock('@/lib/skill-template-map', () => ({ getSkillForTemplate: () => null }));
 vi.mock('@/components', async () => {

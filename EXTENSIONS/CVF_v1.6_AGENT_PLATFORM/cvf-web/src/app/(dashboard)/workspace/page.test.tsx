@@ -1,4 +1,5 @@
 // Text Encoding Exception: assertions quote the page's Vietnamese plain-language copy per DESIGN.md section 8.
+import { LanguageProvider } from '@/lib/i18n';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -100,9 +101,9 @@ import WorkspacePage from './page';
 
 describe('WorkspacePage', () => {
     it('renders the read-only operator workspace without mutation controls', () => {
-        render(<WorkspacePage />);
+        render(<WorkspacePage />, { wrapper: LanguageProvider });
 
-        expect(screen.getByRole('heading', { name: 'Trạng thái làm việc của bạn' })).toBeTruthy();
+        expect(screen.getByRole('heading', { name: 'Việc của tôi' })).toBeTruthy();
         expect(screen.getAllByText('WWU-T3 Local Workspace Runtime/MCP remains parked.').length).toBeGreaterThan(0);
         expect(screen.getByText('Workspace State Lanes')).toBeTruthy();
         expect(screen.getByText('accepted_material')).toBeTruthy();
@@ -113,7 +114,7 @@ describe('WorkspacePage', () => {
     });
 
     it('leads with a plain-language ordinary summary before internal detail', () => {
-        render(<WorkspacePage />);
+        render(<WorkspacePage />, { wrapper: LanguageProvider });
 
         const summary = screen.getByTestId('ordinary-summary');
         expect(summary.textContent).toContain('Trạng thái hiện tại');
@@ -134,7 +135,7 @@ describe('WorkspacePage', () => {
     });
 
     it('keeps advanced technical detail closed by default and exposes it as a native disclosure', () => {
-        render(<WorkspacePage />);
+        render(<WorkspacePage />, { wrapper: LanguageProvider });
 
         const advanced = screen.getByTestId('advanced-detail') as HTMLDetailsElement;
         expect(advanced.tagName.toLowerCase()).toBe('details');
@@ -142,7 +143,7 @@ describe('WorkspacePage', () => {
     });
 
     it('exposes exact technical values inside advanced detail without deleting or altering them', () => {
-        render(<WorkspacePage />);
+        render(<WorkspacePage />, { wrapper: LanguageProvider });
 
         const advanced = screen.getByTestId('advanced-detail');
         expect(advanced.textContent).toContain('AGENT_HANDOFF_V19_2026-06-15.md');
@@ -154,7 +155,7 @@ describe('WorkspacePage', () => {
     });
 
     it('renders no mutation controls in either the ordinary summary or advanced detail', () => {
-        render(<WorkspacePage />);
+        render(<WorkspacePage />, { wrapper: LanguageProvider });
         expect(screen.queryByRole('button')).toBeNull();
         expect(screen.queryAllByRole('textbox')).toHaveLength(0);
     });

@@ -53,6 +53,8 @@ INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE
 
 Hướng dẫn cũ theo bốn bước (Discovery → Design → Build → Review) trong [VOM Quick Start](../../ECOSYSTEM/operating-model/CVF_VOM_QUICK_START.md) và theo version trong [HOW_TO_APPLY_CVF](../HOW_TO_APPLY_CVF.md) là các cách nhìn riêng cho người không viết code hoặc cho từng version; chúng không thay thế chuỗi bảy quyết định ở trên.
 
+Khi bắt đầu một dự án trên máy, agent kiểm tra điều kiện cần cho bước tiếp theo. Nếu thiếu điều kiện có thể làm bước đó không an toàn hoặc cho kết quả sai, agent tạm dừng bước đó và ghi rõ phần còn thiếu. Bạn quyết định các điểm liên quan đến mục tiêu, phạm vi, chi phí và quyền thực hiện. Agent ghi quyết định vào hồ sơ dự án đang dùng. Xem [quy trình khởi động dự án](../reference/downstream_gate_profile/CVF_PROJECT_DEVELOPMENT_APPLICATION_STANDARD.md#proactive-new-project-protocol).
+
 ## Phần 4 — Ví Dụ Minh Họa: Giao AI Lọc Danh Sách Chi Tiêu (5 phút)
 
 > **Ví dụ minh họa, chưa chạy thật.** Dữ liệu là dữ liệu giả. Không có lệnh nào của ví dụ được thực thi, và trang này không khẳng định CVF đang kiểm soát IDE của bạn.
@@ -115,7 +117,8 @@ Các mốc tháng 4/2026 (Release Candidate, bằng chứng live, tình trạng 
 | Hiểu cấu trúc repo | [`CVF_PUBLIC_STRUCTURE_OVERVIEW.md`](../reference/CVF_PUBLIC_STRUCTURE_OVERVIEW.md) |
 | Hiểu kiến trúc đầy đủ | [`CVF_CORE_KNOWLEDGE_BASE.md`](../CVF_CORE_KNOWLEDGE_BASE.md) |
 | Xem quyết định kiến trúc | [`CVF_ARCHITECTURE_DECISIONS.md`](../CVF_ARCHITECTURE_DECISIONS.md) |
-| Thư viện skill | [`CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS`](../../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) |
+| Viết bản đặc tả theo mẫu | Chọn kết quả trên Trang chủ CVF Web hoặc mở [danh mục biểu mẫu dùng lại](../../governance/skill-library/registry/user-skills/INDEX.md). |
+| Gói dành cho agent | [Xem phạm vi và tình trạng từng gói](../../docs/reference/agent_system_skills/generated/skill-index.json). |
 | Web UI | [`CVF_v1.6_AGENT_PLATFORM`](../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/) |
 | Hướng dẫn chi tiết solo/team/enterprise | [`docs/guides/`](./) |
 

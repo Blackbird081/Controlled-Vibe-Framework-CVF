@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect, useRef, startTransition } from 'react';
+import { useState, useMemo, useCallback, useContext, useEffect, useRef, startTransition } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Layers3, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { templates, generateIntent } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import { useProviders } from '@/lib/hooks/useExecute';
+import { HomeSpecAccountScope } from '@/lib/hooks/useHomeSpecInput';
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
 import { useSettings } from '@/components/Settings';
 import { Template, Execution } from '@/types';
@@ -21,7 +22,8 @@ import {
 import { isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
 import { buildContinuationExecution, buildEvidenceSnapshot } from '@/lib/execution-continuity';
 import { createReceiptArchive, restoreReceiptArchive } from '@/lib/execution-receipt-archive';
-import { OUTCOME_WORKFLOW_REGISTRY } from '@/lib/workflow-composition';
+import { homeQuickActions as OUTCOME_WORKFLOW_REGISTRY, homeSpecTemplates, getHomeOutcomeByKey, resolveHomeOutcomeId, homeSpecOutcomeTitle, isHomeOnlyOutcome } from '@/lib/home-spec-jev-catalog';
+import { routeEligibleHomeKeywords } from '@/lib/home-spec-keyword-router';
 import {
     DynamicForm,
     ProcessingScreen,
@@ -39,6 +41,7 @@ import {
     OnboardingTour,
 } from '@/components';
 import { HomeBrowseExperience } from '@/components/home/HomeBrowseExperience';
+import { HomeSpecComposer } from '@/components/home/HomeSpecComposer';
 
 type WorkflowState = 'browse' | 'form' | 'processing' | 'result' |
     'wizard' | 'product-wizard' | 'marketing-wizard' | 'business-wizard' |
@@ -79,15 +82,17 @@ const WIZARD_MAP: Record<string, WorkflowState> = {
 
 export default function HomePage() {
     const { t, language } = useLanguage();
+    const accountScope = useContext(HomeSpecAccountScope)?.accountScope;
     const searchParams = useSearchParams();
     const handledLaunchParam = useRef('');
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
     const { settings } = useSettings();
     const hasAnyApiKey = Object.values(settings.providers).some(p => p.apiKey && p.apiKey.trim().length > 0);
-    const { providers, anyConfigured: serverAnyProviderConfigured, fetchProviders } = useProviders();
+    const { providers, fetchProviders } = useProviders();
 
     const [workflowState, setWorkflowState] = useState<WorkflowState>('browse');
     const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+    const [homeSelection, setHomeSelection] = useState<{ id: string; revision: number } | null>(null);
     const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [currentOutput, setCurrentOutput] = useState('');
@@ -99,7 +104,8 @@ export default function HomePage() {
     const [pilotGoal, setPilotGoal] = useState('');
     const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [starterHandoff, setStarterHandoff] = useState<GovernedStarterHandoff | null>(null);
+    const [savedStarter, setStarterHandoff] = useState<{ accountScope: string; handoff: GovernedStarterHandoff } | null>(null);
+    const starterHandoff = savedStarter && savedStarter.accountScope === accountScope ? savedStarter.handoff : null;
     const [iterationContext, setIterationContext] = useState<string | null>(null);
     // Binding for the result view, local decisions and completion; never the ambient store selection.
     const [activeExecutionId, setActiveExecutionId] = useState<string | null>(null);
@@ -108,9 +114,19 @@ export default function HomePage() {
     const [stopNotice, setStopNotice] = useState(false);
     const [formRevision, setFormRevision] = useState(0);
     const attemptSequence = useRef(0);
-    const [bannerDismissed, setBannerDismissed] = useState(
-        () => typeof window !== 'undefined' && localStorage.getItem('cvf_setup_banner_dismissed') === '1',
-    );
+    const [bannerDismissed, setBannerDismissed] = useState(true);
+
+    useEffect(() => {
+        let active = true;
+        queueMicrotask(() => {
+            if (!active) return;
+            let dismissed = false;
+            try { dismissed = window.localStorage.getItem('cvf_setup_banner_dismissed') === '1'; }
+            catch { /* Continue with the setup banner when browser storage is unavailable. */ }
+            setBannerDismissed(dismissed);
+        });
+        return () => { active = false; };
+    }, []);
 
     const { addExecution, updateExecution, getExecutionById } = useExecutionStore();
     const activeExecution = activeExecutionId ? getExecutionById(activeExecutionId) ?? null : null;
@@ -138,7 +154,7 @@ export default function HomePage() {
     useEffect(() => () => { receiptEpoch.current++; }, []);
 
     const allRunnableTemplates = useMemo(
-        () => templates.filter(template => !template.isFolder),
+        () => homeSpecTemplates,
         [],
     );
 
@@ -177,11 +193,6 @@ export default function HomePage() {
         },
     ]), [language, starterHandoff]);
 
-    const liveReadyProviders = useMemo(
-        () => providers.filter(provider => provider.configured),
-        [providers],
-    );
-
     const setupConfidence = useMemo(() => {
         if (mockAiEnabled) {
             return {
@@ -189,23 +200,36 @@ export default function HomePage() {
                 workspaceReady: true,
                 label: language === 'vi' ? 'Demo mode' : 'Demo mode',
                 description: language === 'vi'
-                    ? 'Mock AI đang bật; có thể xem luồng UI nhưng chưa phải bằng chứng governance live.'
-                    : 'Mock AI is enabled; you can inspect UI flow but this is not live governance proof.',
-                nextAction: language === 'vi' ? 'Tắt mock để chạy live' : 'Disable mock to run live',
+                    ? 'Trong chế độ xem thử, câu trả lời của trợ lý là câu mẫu.'
+                    : 'In preview mode, the assistant shows sample replies.',
+                nextAction: language === 'vi' ? 'Tắt chế độ xem thử để dùng AI thật' : 'Turn off preview mode to use real AI',
                 tone: 'amber',
             };
         }
 
-        if (serverAnyProviderConfigured || hasAnyApiKey) {
-            const primary = liveReadyProviders[0];
+        const selectedProvider = settings.preferences?.defaultProvider === 'anthropic' ? 'claude' : settings.preferences?.defaultProvider;
+        const selected = providers.find(p => p.provider === selectedProvider);
+        if (selected?.executionSurface === 'claude_cli_subscription') {
+            const ready = selected.nativeAuthState === 'available' && selected.readiness === 'live_task_ready';
+            return { liveTaskReady: ready, workspaceReady: true, label: ready ? 'Claude subscription ready' : 'Claude subscription unavailable',
+                description: `${language === 'vi' ? 'Đang chọn Claude subscription; sonnet là bí danh, model thực tế chỉ biết sau phản hồi.' : 'Selected Claude subscription; sonnet is an alias, actual model is known only if reported.'} ${selected.checkedAt || ''}`,
+                nextAction: ready ? (language === 'vi' ? 'Chạy task' : 'Run task') : (language === 'vi' ? 'Kiểm tra đăng nhập native' : 'Check native sign-in'), tone: ready ? 'emerald' : 'amber' };
+        }
+        if (selected?.configured) {
+            const primary = selected;
             const source = primary?.keySourceName || (hasAnyApiKey ? 'browser settings' : 'server env');
+            // The provider and model a run will use are named before any spend (selected in Settings; no model means the server default).
+            const chosenModel = settings.preferences?.defaultProvider ? settings.providers?.[settings.preferences.defaultProvider]?.selectedModel : undefined;
+            const spendTarget = language === 'vi'
+                ? `Lượt chạy sẽ dùng provider ${selected.provider}, model ${chosenModel || 'mặc định của máy chủ'}.`
+                : `A run will use provider ${selected.provider}, model ${chosenModel || 'server default'}.`;
             return {
                 liveTaskReady: true,
                 workspaceReady: true,
                 label: language === 'vi' ? 'Live task ready' : 'Live task ready',
                 description: language === 'vi'
-                    ? `Provider đã sẵn sàng qua ${source}. CVF chỉ hiển thị tên nguồn, không hiển thị key.`
-                    : `Provider is ready via ${source}. CVF shows source name only, never the key value.`,
+                    ? `Provider đã sẵn sàng qua ${source}. CVF chỉ hiển thị tên nguồn, không hiển thị key. ${spendTarget}`
+                    : `Provider is ready via ${source}. CVF shows source name only, never the key value. ${spendTarget}`,
                 nextAction: language === 'vi' ? 'Chọn template và chạy task' : 'Pick a template and run a task',
                 tone: 'emerald',
             };
@@ -221,12 +245,12 @@ export default function HomePage() {
             nextAction: language === 'vi' ? 'Mở Provider Keys' : 'Open Provider Keys',
             tone: 'amber',
         };
-    }, [hasAnyApiKey, language, liveReadyProviders, mockAiEnabled, serverAnyProviderConfigured]);
+    }, [hasAnyApiKey, language, mockAiEnabled, providers, settings.preferences, settings.providers]);
 
     const filteredTemplates = useMemo(() => {
         let result = selectedCategory === 'all'
-            ? templates
-            : templates.filter(t => t.category === selectedCategory);
+            ? homeSpecTemplates
+            : homeSpecTemplates.filter(t => t.category === selectedCategory);
 
         if (currentFolder) {
             result = result.filter(t => t.parentFolder === currentFolder);
@@ -238,6 +262,8 @@ export default function HomePage() {
             const q = searchQuery.toLowerCase();
             result = result.filter(t =>
                 t.name.toLowerCase().includes(q) ||
+                homeSpecOutcomeTitle(t.id, 'vi').toLowerCase().includes(q) ||
+                homeSpecOutcomeTitle(t.id, 'en').toLowerCase().includes(q) ||
                 t.description.toLowerCase().includes(q)
             );
         }
@@ -296,6 +322,12 @@ export default function HomePage() {
     }, [clearRecoveryContext]);
 
     const handleSelectTemplate = useCallback((template: Template) => {
+        if (isHomeOnlyOutcome(template.id)) {
+            setHomeSelection(previous => ({ id: template.id, revision: (previous?.revision ?? 0) + 1 }));
+            setWorkflowState('browse');
+            return;
+        }
+        template = templates.find(item => item.id === template.id) ?? template;
         if (template.isFolder) {
             setCurrentFolder(template.id);
             return;
@@ -316,7 +348,7 @@ export default function HomePage() {
     }, [clearRecoveryContext]);
 
     const handleOutcomeQuickAction = useCallback((templateId: string) => {
-        const template = templates.find((item) => item.id === templateId);
+        const template = homeSpecTemplates.find((item) => item.id === resolveHomeOutcomeId(templateId));
         if (!template) {
             return;
         }
@@ -333,7 +365,15 @@ export default function HomePage() {
         handledLaunchParam.current = launchKey;
 
         if (templateId) {
-            const template = templates.find(item => item.id === templateId);
+            const canonicalId = resolveHomeOutcomeId(templateId);
+            if (canonicalId && isHomeOnlyOutcome(canonicalId)) {
+                startTransition(() => {
+                    setHomeSelection(previous => ({ id: canonicalId, revision: (previous?.revision ?? 0) + 1 }));
+                    setWorkflowState('browse');
+                });
+                return;
+            }
+            const template = templates.find(item => item.id === (canonicalId ?? templateId));
             if (!template) {
                 return;
             }
@@ -570,13 +610,14 @@ export default function HomePage() {
 
     useEffect(() => {
         const syncStarterHandoff = () => {
-            setStarterHandoff(readGovernedStarterHandoff());
+            const handoff = accountScope && readGovernedStarterHandoff(accountScope);
+            setStarterHandoff(handoff ? { accountScope, handoff } : null);
         };
 
         syncStarterHandoff();
         window.addEventListener('cvf:starterHandoffReady', syncStarterHandoff);
         return () => window.removeEventListener('cvf:starterHandoffReady', syncStarterHandoff);
-    }, []);
+    }, [accountScope]);
 
     useEffect(() => {
         fetchProviders();
@@ -618,7 +659,7 @@ export default function HomePage() {
             return;
         }
 
-        clearGovernedStarterHandoff();
+        if (accountScope) clearGovernedStarterHandoff(accountScope);
         setStarterHandoff(null);
 
         const wizardState = WIZARD_MAP[starterHandoff.recommendedTemplateId];
@@ -633,14 +674,25 @@ export default function HomePage() {
             setCurrentIntent(starterHandoff.userInput);
             setWorkflowState('form');
         }
-    }, [starterHandoff]);
+    }, [accountScope, starterHandoff]);
 
     const handleDismissGovernedStarter = useCallback(() => {
-        clearGovernedStarterHandoff();
+        if (accountScope) clearGovernedStarterHandoff(accountScope);
         setStarterHandoff(null);
-    }, []);
+    }, [accountScope]);
 
-    const handleIntentRoute = useCallback((result: IntentRouteResult, userInput: string) => {
+    const handleStartNewWork = useCallback(() => {
+        setHomeSelection(null);
+        handleDismissGovernedStarter();
+        const url = new URL(window.location.href);
+        if (!url.searchParams.has('outcome') && !url.searchParams.has('template')) return;
+        url.searchParams.delete('outcome');
+        url.searchParams.delete('template');
+        window.history.replaceState(null, '', url);
+    }, [handleDismissGovernedStarter]);
+
+    const handleIntentRoute = useCallback((_result: IntentRouteResult, userInput: string) => {
+        const result = routeEligibleHomeKeywords(userInput);
         // §8.A4 hard contract: refuse to route on weak confidence.
         // W126: form routes (routeType === 'form') have strong confidence with starterKey null.
         if (!result.recommendedTemplateId || (result.routeType === 'wizard' && !result.starterKey)) {
@@ -661,8 +713,10 @@ export default function HomePage() {
             friendlyRisk: result.friendlyRisk,
             suggestedTemplates: result.starterKey ? [result.starterKey] : [result.recommendedTemplateId],
         };
-        saveGovernedStarterHandoff(handoff);
-        setStarterHandoff(handoff);
+        if (accountScope) {
+            saveGovernedStarterHandoff(handoff, accountScope);
+            setStarterHandoff({ accountScope, handoff });
+        }
 
         const wizardState = WIZARD_MAP[result.recommendedTemplateId];
         if (wizardState) {
@@ -675,17 +729,25 @@ export default function HomePage() {
             setCurrentIntent(userInput);
             setWorkflowState('form');
         }
-    }, []);
+    }, [accountScope]);
 
     return (
         <div className="pb-10">
             {workflowState === 'browse' && (
-                <HomeBrowseExperience
+                <HomeSpecComposer
+                    language={language}
+                    providers={providers}
+                    starterGoal={starterHandoff?.userInput}
+                    onStarterGoalImported={handleDismissGovernedStarter}
+                    onStartNewWork={handleStartNewWork}
+                    initialTemplate={getHomeOutcomeByKey(searchParams.get('outcome'))}
+                    selectionRequest={homeSelection}
+                    library={<HomeBrowseExperience
                     language={language as 'vi' | 'en'}
                     t={t}
                     currentFolder={currentFolder}
                     setCurrentFolder={setCurrentFolder}
-                    templates={templates}
+                    templates={homeSpecTemplates}
                     categoryCounts={categoryCounts}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
@@ -700,7 +762,7 @@ export default function HomePage() {
                     statCards={statCards}
                     isIntentFirstEnabled={isIntentFirstEnabled}
                     handleIntentRoute={handleIntentRoute}
-                    starterHandoff={starterHandoff}
+                    starterHandoff={null}
                     handleOpenGovernedStarter={handleOpenGovernedStarter}
                     handleDismissGovernedStarter={handleDismissGovernedStarter}
                     mockAiEnabled={mockAiEnabled}
@@ -709,6 +771,7 @@ export default function HomePage() {
                     handleDismissBanner={handleDismissBanner}
                     handleDemoRun={handleDemoRun}
                     setupConfidence={setupConfidence}
+                    />}
                 />
             )}
 

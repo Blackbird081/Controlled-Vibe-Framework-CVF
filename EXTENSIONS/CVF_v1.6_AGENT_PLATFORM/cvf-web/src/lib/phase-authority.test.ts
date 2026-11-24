@@ -1,88 +1,96 @@
 import { describe, it, expect } from 'vitest';
 import {
-    PHASE_AUTHORITY_MATRIX,
+    buildGovernanceSpecBlock,
+    getAllowedActions,
     isRiskAllowed,
     RISK_OPTIONS,
-    type CVFRiskLevel,
+    type GovernanceState,
 } from './governance-context';
-import {
-    evaluateRiskGate,
-    getRiskSeverityColor,
-} from './risk-check';
+import { getRiskSeverityColor } from './risk-check';
+import { AUTHORITY_MATRIX } from 'cvf-guard-contract/guards/authority-gate.guard';
+import { PHASE_ROLE_MATRIX } from 'cvf-guard-contract/guards/phase-gate.guard';
+import { PHASE_ORDER, RISK_NUMERIC } from 'cvf-guard-contract/types';
+import { GENERATED_GOVERNANCE_MODEL } from './generated/governance-model.generated';
+import { isBuildPhase, normalizeWebPhaseInput } from './governance-model';
+import { buildUnifiedGovernanceState } from './governance-state-contract';
 
-describe('Phase Authority + R4 Support', () => {
-    // Phase Authority Matrix
-    describe('PHASE_AUTHORITY_MATRIX', () => {
-        it('INTAKE cannot approve or override', () => {
-            const a = PHASE_AUTHORITY_MATRIX.INTAKE;
-            expect(a.can_approve).toBe(false);
-            expect(a.can_override).toBe(false);
-            expect(a.max_risk).toBe('R1');
-        });
-
-        it('BUILD can approve but not override', () => {
-            const a = PHASE_AUTHORITY_MATRIX.BUILD;
-            expect(a.can_approve).toBe(true);
-            expect(a.can_override).toBe(false);
-            expect(a.max_risk).toBe('R3');
-        });
-
-        it('FREEZE can approve and override, max R4', () => {
-            const a = PHASE_AUTHORITY_MATRIX.FREEZE;
-            expect(a.can_approve).toBe(true);
-            expect(a.can_override).toBe(true);
-            expect(a.max_risk).toBe('R4');
-        });
+describe('Web role and phase guidance', () => {
+    it('projects the phase, risk, role, and authority declarations from Local', () => {
+        const model = GENERATED_GOVERNANCE_MODEL;
+        expect(model.phaseOrder).toEqual(PHASE_ORDER);
+        expect(model.riskOrder).toEqual(Object.keys(RISK_NUMERIC));
+        expect(model.riskLabels.R0).toBe('Passive');
+        expect(model.roles).toEqual(Object.keys(AUTHORITY_MATRIX));
+        expect(model.authorityMatrix).toEqual(AUTHORITY_MATRIX);
+        expect(model.phaseRoleMatrix).toEqual(PHASE_ROLE_MATRIX);
     });
 
-    // R4 in RISK_OPTIONS
-    describe('RISK_OPTIONS includes R4', () => {
-        it('has R4 option', () => {
-            expect(RISK_OPTIONS.find(o => o.value === 'R4')).toBeDefined();
-            expect(RISK_OPTIONS.find(o => o.value === 'R4')?.labelEn).toBe('Critical');
-        });
+    it('caps the Builder role at R2 in BUILD without adding approval authority', () => {
+        expect(isRiskAllowed('R2', 'BUILD', 'BUILDER')).toBe(true);
+        expect(isRiskAllowed('R3', 'BUILD', 'BUILDER')).toBe(false);
+        expect(getAllowedActions('BUILD', 'BUILDER')).toContain('build');
+        expect(getAllowedActions('BUILD', 'BUILDER')).not.toContain('approve');
     });
 
-    // isRiskAllowed with R4
-    describe('isRiskAllowed with R4', () => {
-        it('R4 is blocked in INTAKE', () => {
-            expect(isRiskAllowed('R4' as CVFRiskLevel, 'INTAKE')).toBe(false);
-        });
-
-        it('R4 is allowed in FREEZE', () => {
-            expect(isRiskAllowed('R4' as CVFRiskLevel, 'FREEZE')).toBe(true);
-        });
-
-        it('R4 is blocked in BUILD', () => {
-            expect(isRiskAllowed('R4' as CVFRiskLevel, 'BUILD')).toBe(false);
-        });
+    it('shows the Governor can override only in REVIEW', () => {
+        expect(getAllowedActions('REVIEW', 'GOVERNOR')).toContain('override');
+        expect(isRiskAllowed('R3', 'REVIEW', 'GOVERNOR')).toBe(true);
+        expect(getAllowedActions('FREEZE', 'GOVERNOR')).toEqual(['lock', 'enforce', 'freeze', 'read']);
+        expect(isRiskAllowed('R3', 'FREEZE', 'GOVERNOR')).toBe(true);
     });
 
-    // Phase-aware risk gate
-    describe('evaluateRiskGate phase-aware R4', () => {
-        it('R4 without phase returns BLOCK', () => {
-            const result = evaluateRiskGate('R4', 'full');
-            expect(result.status).toBe('BLOCK');
-        });
-
-        it('R4 with phase FREEZE returns NEEDS_APPROVAL', () => {
-            const result = evaluateRiskGate('R4', 'full', 'FREEZE');
-            expect(result.status).toBe('NEEDS_APPROVAL');
-            expect(result.reason).toContain('executive approval');
-        });
-
-        it('R4 with phase BUILD returns BLOCK', () => {
-            const result = evaluateRiskGate('R4', 'full', 'BUILD');
-            expect(result.status).toBe('BLOCK');
-        });
+    it('rejects a forbidden phase and role cell even at R0', () => {
+        expect(getAllowedActions('BUILD', 'OBSERVER')).toEqual([]);
+        expect(isRiskAllowed('R0', 'BUILD', 'OBSERVER')).toBe(false);
     });
 
-    // getRiskSeverityColor
-    describe('getRiskSeverityColor', () => {
-        it('returns correct colors', () => {
-            expect(getRiskSeverityColor('R0')).toBe('gray-400');
-            expect(getRiskSeverityColor('R1')).toBe('green-500');
-            expect(getRiskSeverityColor('R4')).toBe('red-900');
+    it('respects the phase allowlist when a role also has an authority cell', () => {
+        expect(AUTHORITY_MATRIX.SERVICE_AGENT.BUILD.allowed).toBe(true);
+        expect(getAllowedActions('BUILD', 'SERVICE_AGENT')).toEqual([]);
+        expect(isRiskAllowed('R0', 'BUILD', 'SERVICE_AGENT')).toBe(false);
+    });
+
+    it('excludes R4 from risk choices and marks a saved R4 value blocked in spec guidance', () => {
+        const state: GovernanceState = {
+            phase: 'FREEZE',
+            role: 'GOVERNOR',
+            riskLevel: 'R4',
+            toolkitEnabled: true,
+        };
+        expect(RISK_OPTIONS.map(option => option.value)).toEqual(['R0', 'R1', 'R2', 'R3']);
+        expect(RISK_OPTIONS.map(option => option.labelEn)).toEqual(['Minimal', 'Controlled', 'Elevated', 'Critical']);
+        expect(isRiskAllowed('R4', 'FREEZE', 'GOVERNOR')).toBe(false);
+        expect(buildGovernanceSpecBlock(state, 'en')).toContain('R4 (Blocked)');
+        expect(buildGovernanceSpecBlock(state, 'vi')).toContain('R4 (B\u1ecb ch\u1eb7n)');
+        expect(getRiskSeverityColor('R4')).toBe('red-900');
+    });
+
+    it.each(['BUILD', '  build  ', 'PHASE C', 'phase c', 'C'])('recognizes the BUILD input %s', input => {
+        expect(isBuildPhase(input)).toBe(true);
+    });
+
+    it('normalizes legacy input without extending the runtime phase order', () => {
+        expect(normalizeWebPhaseInput('Discovery')).toBe('INTAKE');
+        expect(normalizeWebPhaseInput('B')).toBe('DESIGN');
+        expect(normalizeWebPhaseInput(' Phase d ')).toBe('REVIEW');
+        expect(normalizeWebPhaseInput('phase E')).toBe('FREEZE');
+        expect(normalizeWebPhaseInput('WORK ORDER')).toBeUndefined();
+        expect(isBuildPhase({ phase: 'BUILD' })).toBe(false);
+        expect(isBuildPhase('SPEC')).toBe(false);
+    });
+
+    it('preserves authority fields in the legacy execute response snapshot', () => {
+        const snapshot = buildUnifiedGovernanceState({
+            enforcementStatus: 'BLOCK',
+            reasons: [],
+            source: 'client',
+            cvfPhase: 'Phase E',
+            cvfRiskLevel: 'R4',
+        });
+        expect(snapshot).toMatchObject({
+            phase: 'FREEZE',
+            riskLevel: 'R4',
+            authority: { can_approve: true, can_override: true, max_risk: 'R4' },
         });
     });
 });

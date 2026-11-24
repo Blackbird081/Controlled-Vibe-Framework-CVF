@@ -20,16 +20,16 @@ import {
 // ═══════════════════════════════════════════════════════════════════════
 
 describe('getFriendlyRiskLabel', () => {
-  test('R0 shows green safe', () => {
+  test('R0 uses the approved Web label with the dashboard guidance color', () => {
     const r = getFriendlyRiskLabel('R0', 'en');
     expect(r.color).toBe('green');
     expect(r.emoji).toBe('🟢');
-    expect(r.label).toBe('Safe');
+    expect(r.label).toBe('Minimal');
   });
 
   test('R0 Vietnamese', () => {
     const r = getFriendlyRiskLabel('R0', 'vi');
-    expect(r.label).toBe('An toàn');
+    expect(r.label).toBe('R\u1ea5t th\u1ea5p');
   });
 
   test('R1 shows yellow', () => {
@@ -42,6 +42,10 @@ describe('getFriendlyRiskLabel', () => {
 
   test('R3 shows red', () => {
     expect(getFriendlyRiskLabel('R3', 'en').color).toBe('red');
+  });
+
+  test('R4 is shown as blocked', () => {
+    expect(getFriendlyRiskLabel('R4', 'en')).toMatchObject({ label: 'Blocked', color: 'red' });
   });
 
   test('unknown defaults to R0', () => {

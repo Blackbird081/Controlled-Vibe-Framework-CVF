@@ -11,6 +11,17 @@ const enKeys = Object.keys(enJson);
 const viKeys = Object.keys(viJson);
 
 describe('i18n key parity', () => {
+    it.each([
+        ['nav.aiAgent', 'Ask the AI assistant'],
+        ['nav.multiAgent', 'AI assistant team'],
+        ['nav.maoRuns', 'Team run history'],
+        ['governancePage.runs', 'Team run history'],
+        ['nav.governance', 'Oversight'],
+        ['sidebar.governance', 'Oversight'],
+    ] as const)('uses everyday English for %s', (key, label) => {
+        expect(enJson[key]).toBe(label);
+    });
+
     it('en.json and vi.json have the same number of keys', () => {
         expect(enKeys.length).toBe(viKeys.length);
     });

@@ -38,6 +38,7 @@ describe('enforcement — dual-mode', () => {
                 mode: 'simple',
                 content: 'test',
                 budgetOk: true,
+                cvfRiskLevel: 'R1',
             });
             expect(result.source).toBe('client');
             expect(result.status).toBe('ALLOW');
@@ -61,6 +62,7 @@ describe('enforcement — dual-mode', () => {
             mode: 'governance',
             content: 'Test content',
             budgetOk: true,
+            cvfRiskLevel: 'R1',
         };
 
         it('falls back to client-side when engine disabled', async () => {

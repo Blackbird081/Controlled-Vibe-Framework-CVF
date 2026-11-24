@@ -163,9 +163,9 @@ describe('DataAnalysisWizard', () => {
         fireEvent.click(screen.getByText('Chạy live governed path'));
 
         expect(await screen.findByText(/ProcessingScreenMock:Data Analysis Wizard/i)).toBeTruthy();
-        expect(screen.getByText('Phase:BUILD')).toBeTruthy();
+        expect(screen.getByText('Phase:')).toBeTruthy();
         expect(screen.getByText('Risk:R2')).toBeTruthy();
-        expect(screen.getByText(/Skill:NONCODER_REFERENCE_PACKET:analysis-test-data/i)).toBeTruthy();
+        expect(screen.getByText('Skill:')).toBeTruthy();
 
         fireEvent.click(screen.getByText('CompleteProcessingMock'));
 

@@ -4,6 +4,7 @@ const TEXT_FIELDS = [
     'governanceFamily', 'qbsFamily', 'skillPreflightDeclaration',
     'skillPreflightRecordRef', 'knowledgeContext', 'knowledgeCollectionId', 'approvalId',
 ] as const;
+const EXECUTE_REQUEST_MODES = new Set<unknown>(['simple', 'governance', 'full', 'code']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -59,6 +60,9 @@ export function validateExecuteRequestShape(value: unknown): string | undefined 
     if (!isRecord(value)) return 'Execution payload must be a JSON object.';
     for (const field of TEXT_FIELDS) {
         if (value[field] != null && typeof value[field] !== 'string') return `${field} must be a string.`;
+    }
+    if (value.mode != null && !EXECUTE_REQUEST_MODES.has(value.mode)) {
+        return 'mode must be simple, governance or full. Code requires a separate build workflow.';
     }
     if (typeof value.templateName !== 'string' || !value.templateName.trim() ||
         typeof value.intent !== 'string' || !value.intent.trim() || value.inputs === undefined) {

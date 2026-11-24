@@ -13,12 +13,15 @@
   --cvf-control-radius: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* App theme is class-based: src/lib/theme.tsx adds `dark` to <html> for dark mode
+   and removes it for light mode (light has no class of its own). Body colours
+   therefore follow the app theme, NOT the OS prefers-color-scheme. The OS query
+   was removed because it made body text unreadable whenever the OS scheme and
+   the app theme differed (e.g. OS light + app dark gave ~1.2:1 contrast). */
+:root.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 body {
@@ -193,3 +196,217 @@ html {
 /* Neon glow utilities (not expressible in Tailwind arbitrary values) */
 .neon-dot-emerald  { box-shadow: 0 0 6px #34d399, 0 0 12px #34d399; }
 .neon-text-emerald { text-shadow: 0 0 8px #34d399; }
+
+/* Self-contained markdown "prose" styles.
+   @tailwindcss/typography is NOT installed, so the prose / prose-invert utilities
+   are otherwise no-ops and markdown inherits the body colour, which follows the
+   app theme class (.dark on <html>, see :root.dark above), not the OS setting.
+   Light colours are the default; dark colours apply under a .dark ancestor.
+   prose-invert has no rules of its own and is harmless; .dark .prose handles
+   dark text.
+   Modifiers such as prose-lg, prose-sm, prose-blue and prose-*: (used in
+   DocContent, SkillDetailView and SkillLibrary) remain NO-OPS because the plugin
+   is not installed. They are not styled here.
+   Layering: every rule below is inside @layer components and element selectors
+   use :where(). Tailwind utilities live in @layer utilities, which comes later,
+   so a utility class on a child element wins, while plain markdown with no
+   classes still gets these styles. The container colour (.prose, .dark .prose)
+   stays overridable by utilities on the same container.
+   Mobile: the unlayered max-width: 640px block above sets .prose font-size, h1
+   and h2. Unlayered rules beat layered rules, so those mobile sizes win. Desktop
+   h1-h4 sizes sit in a media query that is the exact complement of 640px, and
+   mobile h3/h4 sizes sit in the 640px query, so no two sizes compete. */
+@layer components {
+  .prose {
+    color: #1f2937;
+    line-height: 1.7;
+  }
+
+  .prose > :first-child {
+    margin-top: 0;
+  }
+
+  .prose > :last-child {
+    margin-bottom: 0;
+  }
+
+  .prose :where(h1, h2, h3, h4) {
+    color: #111827;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.25em;
+    margin-bottom: 0.5em;
+  }
+
+  @media not all and (max-width: 640px) {
+    .prose :where(h1) {
+      font-size: 1.875rem;
+    }
+
+    .prose :where(h2) {
+      font-size: 1.5rem;
+    }
+
+    .prose :where(h3) {
+      font-size: 1.25rem;
+    }
+
+    .prose :where(h4) {
+      font-size: 1.0625rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .prose :where(h3) {
+      font-size: 1.0625rem;
+    }
+
+    .prose :where(h4) {
+      font-size: 1rem;
+    }
+  }
+
+  .prose :where(p) {
+    margin: 0.75em 0;
+  }
+
+  .prose :where(ul) {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin: 0.75em 0;
+  }
+
+  .prose :where(ol) {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+    margin: 0.75em 0;
+  }
+
+  .prose :where(ul) :where(ul) {
+    list-style-type: circle;
+  }
+
+  .prose :where(ol) :where(ol) {
+    list-style-type: lower-alpha;
+  }
+
+  .prose :where(li) {
+    margin: 0.25em 0;
+  }
+
+  .prose :where(a) {
+    color: #4338ca;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose :where(strong) {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  .prose :where(code) {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  .prose :where(pre) {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1em 0;
+  }
+
+  .prose :where(pre) :where(code) {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.875em;
+  }
+
+  .prose :where(blockquote) {
+    border-left: 4px solid #9ca3af;
+    color: #374151;
+    padding-left: 1em;
+    margin: 1em 0;
+  }
+
+  .prose :where(hr) {
+    border: 0;
+    border-top: 1px solid #d1d5db;
+    margin: 1.5em 0;
+  }
+
+  .prose :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+
+  .prose :where(th, td) {
+    border: 1px solid #d1d5db;
+    padding: 0.4em 0.6em;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose :where(th) {
+    background-color: #f9fafb;
+    color: #111827;
+    font-weight: 600;
+  }
+
+  /* Dark theme: class-based, follows the app's .dark ancestor (not the OS setting). */
+  .dark .prose {
+    color: #e5e7eb;
+  }
+
+  .dark .prose :where(h1, h2, h3, h4, strong) {
+    color: #f9fafb;
+  }
+
+  .dark .prose :where(a) {
+    color: #a5b4fc;
+  }
+
+  .dark .prose :where(code) {
+    background-color: #111827;
+    color: #e5e7eb;
+  }
+
+  .dark .prose :where(pre) {
+    background-color: #111827;
+    color: #e5e7eb;
+  }
+
+  .dark .prose :where(pre) :where(code) {
+    background: none;
+    color: inherit;
+  }
+
+  .dark .prose :where(blockquote) {
+    border-left-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  .dark .prose :where(hr) {
+    border-top-color: #4b5563;
+  }
+
+  .dark .prose :where(th, td) {
+    border-color: #4b5563;
+  }
+
+  .dark .prose :where(th) {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+}

@@ -1,9 +1,11 @@
 # Hướng dẫn: Dự án CVF Đầu tiên
 
+> Quy trình hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây minh họa các quyết định; hoàn tất đặc tả và giao việc trước khi thực hiện, rồi ghi kết thúc sau kiểm tra. [Vòng đời công việc](lifecycle.md).
+
 **Thời gian:** 30 phút  
 **Cấp độ:** Người mới bắt đầu  
 **Bạn sẽ xây dựng:** Một trình quản lý bookmark CLI bằng Python  
-**Bạn sẽ học:** Quy trình đầy đủ 4 phase của CVF
+**Bạn sẽ học:** Quy trình đầy đủ giai đoạn của CVF
 
 ---
 
@@ -49,7 +51,7 @@ bookmark-manager/
 
 ---
 
-## Bước 2: Phase A — Khám phá
+## Bước 2: INTAKE — Khám phá
 
 Mở `specs/INPUT_SPEC.md` và viết những gì bạn muốn:
 
@@ -142,7 +144,7 @@ Mở `decisions/DECISION_LOG.md`:
 
 ---
 
-## Bước 4: Phase B — Thiết kế
+## Bước 4: DESIGN — Thiết kế
 
 Tạo `specs/DESIGN.md`:
 
@@ -194,7 +196,7 @@ CLI input → argparse → validate → db operation → format output → print
 
 ---
 
-## Bước 5: Phase C — Xây dựng
+## Bước 5: BUILD — Xây dựng
 
 Bây giờ đưa spec cho AI. Đây là prompt:
 
@@ -242,12 +244,12 @@ Output formatted as table with f-strings.
 - None observed
 
 ## Review Status
-- Pending (see Phase D)
+- Pending (see REVIEW)
 ```
 
 ---
 
-## Bước 6: Phase D — Đánh giá
+## Bước 6: REVIEW — Đánh giá
 
 Bây giờ kiểm tra đầu ra so với tiêu chí chấp nhận.
 
@@ -346,7 +348,7 @@ Chúc mừng! Bạn đã hoàn thành một chu kỳ CVF đầy đủ:
 1. **Spec ngăn ngừa làm lại** — 5 phút viết tiết kiệm 30 phút gửi lại prompt
 2. **Decision Log tồn tại cho "bạn trong tương lai"** — Khi bạn quay lại sau 3 tháng, bạn sẽ biết TẠI SAO chọn SQLite
 3. **Trace giúp công việc AI có thể kiểm toán** — Bạn biết AI đã làm gì và có thể tái tạo
-4. **Phase D bắt vấn đề** — Một danh sách kiểm tra nhanh hơn "nó có hoạt động không?"
+4. **REVIEW bắt vấn đề** — Một danh sách kiểm tra nhanh hơn "nó có hoạt động không?"
 
 ---
 
@@ -354,7 +356,7 @@ Chúc mừng! Bạn đã hoàn thành một chu kỳ CVF đầy đủ:
 
 | Tôi muốn... | Đi đến... |
 |-------------|-----------|
-| Tìm hiểu sâu về 4 phase | 4-Phase Process |
+| Tìm hiểu sâu về giai đoạn | Work Lifecycle |
 | Cài đặt Giao diện Web | Hướng dẫn Web UI |
 | Dùng template skill có sẵn | Hướng dẫn Skill Tùy chỉnh |
 | Làm việc với nhóm | Hướng dẫn Thiết lập Nhóm |
@@ -363,3 +365,5 @@ Chúc mừng! Bạn đã hoàn thành một chu kỳ CVF đầy đủ:
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

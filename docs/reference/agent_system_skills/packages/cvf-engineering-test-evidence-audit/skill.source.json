@@ -1,5 +1,6 @@
 {
   "skillId": "cvf-engineering-test-evidence-audit",
+  "license": "CVF_PRIVATE_GOVERNED",
   "originLane": "CVF-NCR-R1-S05",
   "sourceArtifacts": [
     "docs/audits/CVF_NCR_R1_S02_TEST_EVIDENCE_AUDIT_CONTENT_CANDIDATE_2026-09-27.md",

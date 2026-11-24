@@ -12,6 +12,7 @@
  */
 
 import type { AIProvider } from './types';
+import { normalizeRunnableRiskLevel } from '../risk-check';
 
 // --- Contract-aligned types (mirroring ProviderRouterContract) ---
 
@@ -217,16 +218,6 @@ export interface WebProviderRoutingResult {
   selection: ProviderSelection;
 }
 
-function normalizeRisk(raw?: string): RiskLevel {
-  if (!raw) return 'R1';
-  const upper = raw.trim().toUpperCase();
-  if (upper === 'R0' || upper === 'LOW' || upper === 'SAFE') return 'R0';
-  if (upper === 'R1' || upper === 'MEDIUM') return 'R1';
-  if (upper === 'R2' || upper === 'HIGH') return 'R2';
-  if (upper === 'R3' || upper === 'CRITICAL' || upper === 'DANGEROUS') return 'R3';
-  return 'R1';
-}
-
 /**
  * Consult provider governance routing before executing AI.
  * Implements the ProviderRouterContract decision logic locally,
@@ -236,7 +227,7 @@ export function routeWebProvider(input: WebProviderRouterInput): WebProviderRout
   const definitions = buildProviderDefinitions();
   const available = input.configuredProviders ?? (Object.keys(definitions) as AIProvider[]);
   const allowedProviders = available.map(id => definitions[id]).filter(Boolean);
-  const requestRiskLevel = normalizeRisk(input.riskLevel);
+  const requestRiskLevel = normalizeRunnableRiskLevel(input.riskLevel);
 
   const policy: ProviderPolicy = {
     allowedProviders,

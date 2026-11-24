@@ -764,7 +764,7 @@ jobs:
 
   test:
     name: Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       PYTHONPATH: ${{ github.workspace }}/EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT
       PYTHONDONTWRITEBYTECODE: '1'

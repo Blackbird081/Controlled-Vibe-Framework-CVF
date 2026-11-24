@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: the history empty state supports Vietnamese and English.
 
 import { Execution } from '@/types';
 import { useLanguage } from '@/lib/i18n';
@@ -21,16 +22,16 @@ export function HistoryList({ executions, onSelect, onBrowse, onContinue }: Hist
             <div className="text-center py-12">
                 <div className="text-6xl mb-4">📭</div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    {language === 'en' ? 'No execution history yet' : 'Chưa có lịch sử thực thi'}
+                    {language === 'en' ? 'No saved runs yet' : 'Chưa có lượt chạy nào được lưu'}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {language === 'en' ? 'Select a template and submit your first request.' : 'Chọn một mẫu template và gửi yêu cầu đầu tiên.'}
+                    {language === 'en' ? 'Go to Home, choose a template, and send your first request.' : 'Về Trang chủ, chọn một mẫu và gửi yêu cầu đầu tiên.'}
                 </p>
                 <button
                     onClick={onBrowse}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 
                      text-white font-medium rounded-lg transition-colors">
-                    <span>{language === 'en' ? 'Browse Templates' : 'Duyệt Templates'}</span>
+                    <span>{language === 'en' ? 'Go to Home' : 'Về Trang chủ'}</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

@@ -1,9 +1,11 @@
 # Tutorial: Your First CVF Project
 
+> Current workflow: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. The example below illustrates these decisions; complete the specification and work assignment before building and record closure after review. [Work lifecycle](lifecycle.md).
+
 **Time:** 30 minutes  
 **Level:** Beginner  
 **What you'll build:** A CLI bookmark manager using Python  
-**What you'll learn:** The complete CVF 4-phase workflow
+**What you'll learn:** The complete CVF work lifecycle
 
 ---
 
@@ -49,7 +51,7 @@ bookmark-manager/
 
 ---
 
-## Step 2: Phase A — Discovery
+## Step 2: INTAKE
 
 Open `specs/INPUT_SPEC.md` and write what you want:
 
@@ -142,7 +144,7 @@ Open `decisions/DECISION_LOG.md`:
 
 ---
 
-## Step 4: Phase B — Design
+## Step 4: DESIGN
 
 Create `specs/DESIGN.md`:
 
@@ -194,7 +196,7 @@ CLI input → argparse → validate → db operation → format output → print
 
 ---
 
-## Step 5: Phase C — Build
+## Step 5: BUILD
 
 Now give your spec to AI. Here's the prompt:
 
@@ -242,12 +244,12 @@ Output formatted as table with f-strings.
 - None observed
 
 ## Review Status
-- Pending (see Phase D)
+- Pending (see REVIEW)
 ```
 
 ---
 
-## Step 6: Phase D — Review
+## Step 6: REVIEW
 
 Now test the output against your acceptance criteria.
 
@@ -346,7 +348,7 @@ Congratulations! You've completed a full CVF cycle:
 1. **Specs prevent re-work** — 5 minutes of writing saves 30 minutes of re-prompting
 2. **Decisions log exists for "future you"** — When you come back in 3 months, you'll know WHY you chose SQLite
 3. **Traces make AI work auditable** — You know what AI did and can reproduce it
-4. **Phase D catches problems** — A checklist is faster than "does it work?"
+4. **REVIEW catches problems** — A checklist is faster than "does it work?"
 
 ---
 
@@ -354,7 +356,7 @@ Congratulations! You've completed a full CVF cycle:
 
 | I want to... | Go to... |
 |-------------|---------|
-| Learn about the 4 phases in depth | [4-Phase Process](../concepts/4-phase-process.md) |
+| Learn about the work stages in depth | [Work Lifecycle](/docs/lifecycle) |
 | Set up the Web UI | [Web UI Tutorial](web-ui-setup.md) |
 | Use pre-built skill templates | [Custom Skills Tutorial](custom-skills.md) |
 | Work with a team | [Team Setup Guide](../guides/team-setup.md) |
@@ -363,3 +365,5 @@ Congratulations! You've completed a full CVF cycle:
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

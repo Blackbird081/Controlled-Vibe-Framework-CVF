@@ -1,5 +1,7 @@
 # Tutorial: Setting Up the CVF Web UI (v1.6)
 
+> Current Local decisions: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. The examples below do not grant authority. [Work lifecycle](lifecycle.md).
+
 **Time:** 15 minutes  
 **Level:** Beginner  
 **What you'll do:** Install, configure, and run the CVF v1.6 web application  
@@ -132,7 +134,7 @@ You should see the CVF Agent Platform homepage with:
 |------|-------------|
 | **Simple** | Chat only, no scoring |
 | **Rules** | Each response scored 0-100, you accept/reject |
-| **Full CVF** | Phase gates: must complete Phase A checklist before Phase B |
+| **Full CVF** | Phase gates: must complete INTAKE checklist before DESIGN |
 
 ---
 
@@ -254,7 +256,7 @@ Configuration is already in `netlify.toml`.
 
 ### Docker
 
-See the [Hosted Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Docker, self-hosted, and advanced deployment options.
+See the [Setup guide](/help/setup) for Docker, self-hosted, and advanced deployment options.
 
 ---
 
@@ -279,10 +281,12 @@ See the [Hosted Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) for Do
 |-------------|---------|
 | Use multi-agent workflows | [Agent Platform Tutorial](agent-platform.md) |
 | Create custom skills | [Custom Skills Tutorial](custom-skills.md) |
-| Deploy for my team | [Deployment Guide](../CVF_HOSTED_DEPLOYMENT_GUIDE_V1_6.md) |
+| Deploy for my team | [Setup guide](/help/setup) |
 | Understand governance modes | [Governance Model](../concepts/governance-model.md) |
 | Learn CVF from scratch | [First Project Tutorial](first-project.md) |
 
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

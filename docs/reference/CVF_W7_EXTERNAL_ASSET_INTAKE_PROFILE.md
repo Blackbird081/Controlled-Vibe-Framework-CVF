@@ -24,13 +24,13 @@ The goal is to keep external material in an intake posture until CVF itself fill
 
 ## 2. Intake Stages
 
-External material must move through exactly three stages:
+External material entering the W7 asset pipeline must move through exactly three stages:
 
 1. `external_intake_profile`
 2. `w7_normalized_asset_candidate`
 3. `registry_ready_governed_asset`
 
-No candidate may skip a stage.
+No W7 candidate may skip a stage. A task-scoped read-only R0 reference can be recorded with its receiving owner under the Governed Capability Intake Doctrine and the existing proportional routing standard. That use requires no W7 registration. Executable capabilities entering the W7 asset path follow all three stages and the eight-step capability doctrine.
 
 ## 3. Stage 1 — External Intake Profile
 
@@ -153,7 +153,7 @@ This profile extends but does not replace:
 - `governance/skill-library/specs/EXTERNAL_SKILL_INTAKE.md`
 - `governance/toolkit/05_OPERATION/SKILL_INTAKE_GOVERNANCE.md`
 
-Those documents remain the active policy for skill-library intake.
+Those documents govern the applicable skill-library intake route. Form and Template Bridge rules apply to the end-user surface.
 
 This document adds a broader W7 asset intake model for external repo compilation and registry onboarding.
 

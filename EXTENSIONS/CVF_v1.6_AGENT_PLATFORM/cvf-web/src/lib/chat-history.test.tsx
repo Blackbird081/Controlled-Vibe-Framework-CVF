@@ -19,6 +19,25 @@ describe('useChatHistory', () => {
         expect(result.current.activeSessionId).toBe(result.current.sessions[0].id);
     });
 
+    it('isolates saved conversations between signed-in accounts and leaves shared legacy history untouched', () => {
+        const legacy = '{"sessions":[],"activeSessionId":null}';
+        localStorage.setItem('cvf_chat_history', legacy);
+        const first = renderHook(() => useChatHistory('openai', 'account-a'));
+        act(() => first.result.current.updateSession(first.result.current.activeSessionId!, [
+            { id: 'private-a', role: 'user', content: 'Account A message', timestamp: new Date() },
+        ], 'openai'));
+        first.unmount();
+
+        const second = renderHook(() => useChatHistory('openai', 'account-b'));
+        expect(second.result.current.activeSession?.messages).toEqual([]);
+        expect(localStorage.getItem('cvf_chat_history:account-b')).not.toContain('Account A message');
+        expect(localStorage.getItem('cvf_chat_history')).toBe(legacy);
+        second.unmount();
+
+        const returned = renderHook(() => useChatHistory(undefined, 'account-a'));
+        expect(returned.result.current.activeSession?.messages[0].content).toBe('Account A message');
+    });
+
     it('updates session title and metadata', () => {
         const { result } = renderHook(() => useChatHistory());
         let sessionId = '';

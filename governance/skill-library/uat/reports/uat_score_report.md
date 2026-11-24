@@ -1,7 +1,9 @@
 # UAT Score Report
 
+Text Encoding Exception: generated UAT status badges preserve their existing labels.
+
 > **Generated:** 2026-02-07
-> **Total Skills:** 149
+> **Total Skills:** 113
 
 ## Badge Summary
 
@@ -10,21 +12,18 @@
 | ✅ VALIDATED | 0 | UAT passed, version synced |
 | ❌ FAILED | 0 | UAT explicitly failed |
 | ⚠️ NEEDS_UAT | 0 | Spec changed, UAT stale |
-| 🔘 NOT_RUN | 149 | UAT not yet executed |
+| 🔘 NOT_RUN | 113 | UAT not yet executed |
 
 ## Domain Coverage
 
 | Domain | Skills |
 |---|---|
-| AI/ML Evaluation | 6 |
 | Ai Ml Evaluation | 4 |
-| App Development | 50 |
-| Business Analysis | 6 |
-| Content Creation | 4 |
+| App Development | 42 |
+| Business Analysis | 3 |
+| Content Creation | 1 |
 | Finance & Analytics | 9 |
-| Finance Analytics | 2 |
-| HR & Operations | 5 |
-| Legal & Contracts | 5 |
+| Finance Analytics | 3 |
 | Legal Contracts | 2 |
 | Marketing & SEO | 11 |
 | Marketing Seo | 2 |
@@ -33,67 +32,30 @@
 | Product Ux | 6 |
 | Security & Compliance | 6 |
 | Security Compliance | 2 |
-| Technical Review | 3 |
-| Web Development | 11 |
+| Web Development | 7 |
 
 ## Skill Scores
 
 | Skill ID | Domain | Status | Badge | Score | Quality |
 |---|---|---|---|---|---|
-| 01_app_requirements_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 01_budget_analysis | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_code_review | Technical Review | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_contract_review | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_documentation | Content Creation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_job_description | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_landing_page | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_model_selection | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 01_strategy_analysis | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
+| 01_finance_analysis_system | Finance Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 01_vibe_to_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_architecture_review | Technical Review | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_financial_statement_review | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_interview_evaluation | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_nda_template | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_prompt_evaluation | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_report_writing | Content Creation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_risk_assessment | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_saas_app | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 02_tech_stack_selection | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 02_vibe_logic_mapping | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_architecture_design | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_dashboard | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_market_research | Business Analysis | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_non_coder_debug | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_output_quality_check | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_performance_review | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_presentation | Content Creation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 03_roi_calculator_review | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_security_audit | Technical Review | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 03_terms_of_service | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_bias_detection | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_blog_docs | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_compliance_checklist | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_database_schema_design | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_grandma_ux_test | Product UX | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 04_kpi_dashboard_audit | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 04_onboarding_checklist | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 05_api_design_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_auto_documentation_vn | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_cash_flow_analysis | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 05_cost_optimization | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 05_ip_protection | Legal & Contracts | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 05_policy_documentation | HR & Operations | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 05_portfolio | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 06_ai_use_case_fit | AI/ML Evaluation | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 06_chart_data_visualization | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 06_desktop_app_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 06_investment_due_diligence | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 06_portable_packaging | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_cli_tool_spec | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_financial_risk_assessment | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 07_landing_page_pattern | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 07_project_init_checklist | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
-| 08_local_deployment | App Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 08_revenue_forecast_review | Finance & Analytics | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 08_web_aria_keyboard_audit | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |
 | 09_css_animation_performance | Web Development | Not Run | 🔘 NOT_RUN | 0 | Not Ready |

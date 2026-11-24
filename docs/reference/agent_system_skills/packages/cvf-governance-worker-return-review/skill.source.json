@@ -1,5 +1,6 @@
 {
   "skillId": "cvf-governance-worker-return-review",
+  "license": "CVF_PRIVATE_GOVERNED",
   "originLane": "NCR-R1-LOCAL-REVIEW-LEARNING",
   "sourceArtifacts": [
     "docs/reference/review_cost_control/CVF_REVIEW_COST_AND_DIMINISHING_RETURN_CONTROL_STANDARD.md",

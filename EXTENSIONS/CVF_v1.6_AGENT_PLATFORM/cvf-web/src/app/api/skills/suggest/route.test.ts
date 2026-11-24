@@ -15,7 +15,7 @@ afterEach(()=>{for(const directory of directories.splice(0))rmSync(directory,{re
 beforeEach(()=>resetRateLimitStoresForTest());
 const url='http://localhost/api/skills/suggest';
 const cookie='authjs.session-token=synthetic-signed-token-fixture';
-const post=(body:unknown,origin='http://localhost',sessionCookie=cookie)=>new NextRequest(url,{method:'POST',headers:{origin,'sec-fetch-site':'same-origin','Content-Type':'application/json',cookie:sessionCookie},body:JSON.stringify(body)});
+const post=(body:unknown,origin='http://localhost',sessionCookie=cookie)=>new NextRequest(url,{method:'POST',headers:{host:'localhost',origin,'sec-fetch-site':'same-origin','Content-Type':'application/json',cookie:sessionCookie},body:JSON.stringify(body)});
 const get=(suffix='',sessionCookie=cookie)=>new NextRequest(url+suffix,{headers:{cookie:sessionCookie}});
 function fixture(){
   const clock=Date.now();const directory=mkdtempSync(path.join(tmpdir(),'cvf-jev-route-owned-'));directories.push(directory);
@@ -47,7 +47,7 @@ describe('trusted Jev submission/read-only recovery composition',()=>{
     for(const admission of [undefined,{...f.admission,modelId:'other'},{...f.admission,normalizedMethod:'chat'}])expect((await skillSuggestionHandlers({...f.deps,loadAdapterAdmission:()=>admission}).POST(post(body))).status).toBe(503);
     expect((await f.handlers.POST(post({...body,provider:'other'}))).status).toBe(422);
     expect((await f.handlers.POST(post({...body,goal:'short'}))).status).toBe(422);
-    const duplicate=new NextRequest(url,{method:'POST',headers:{origin:'http://localhost','Content-Type':'application/json',cookie},body:'{"goal":"Plan an application","nonce":"nonce_fixture_0001","goal":"Changed application"}'});expect((await f.handlers.POST(duplicate)).status).toBe(422);
+    const duplicate=new NextRequest(url,{method:'POST',headers:{host:'localhost',origin:'http://localhost','Content-Type':'application/json',cookie},body:'{"goal":"Plan an application","nonce":"nonce_fixture_0001","goal":"Changed application"}'});expect((await f.handlers.POST(duplicate)).status).toBe(422);
     expect((await f.handlers.POST(post({...body,goal:'x'.repeat(3000)}))).status).toBe(413);
     expect((await skillSuggestionHandlers({...f.deps,loadAuthorizedJevPolicy:()=>({...f.policy,policyDigest:'bad'})}).POST(post(body))).status).toBe(403);
     expect(f.transport).not.toHaveBeenCalled();

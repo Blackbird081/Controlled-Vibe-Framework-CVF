@@ -62,35 +62,35 @@ export function buildGovernedStarterHandoff(result: QuickStartResult): GovernedS
     };
 }
 
-export function saveGovernedStarterHandoff(handoff: GovernedStarterHandoff) {
+function storageKey(accountScope?: string): string {
+    return accountScope ? `${STARTER_STORAGE_KEY}:${accountScope}` : STARTER_STORAGE_KEY;
+}
+
+export function saveGovernedStarterHandoff(handoff: GovernedStarterHandoff, accountScope?: string) {
     if (typeof window === 'undefined') {
         return;
     }
 
-    window.sessionStorage.setItem(STARTER_STORAGE_KEY, JSON.stringify(handoff));
+    window.sessionStorage.setItem(storageKey(accountScope), JSON.stringify(handoff));
 }
 
-export function readGovernedStarterHandoff(): GovernedStarterHandoff | null {
+export function readGovernedStarterHandoff(accountScope?: string): GovernedStarterHandoff | null {
     if (typeof window === 'undefined') {
         return null;
     }
 
-    const raw = window.sessionStorage.getItem(STARTER_STORAGE_KEY);
-    if (!raw) {
-        return null;
-    }
-
     try {
-        return JSON.parse(raw) as GovernedStarterHandoff;
+        const raw = window.sessionStorage.getItem(storageKey(accountScope));
+        return raw ? JSON.parse(raw) as GovernedStarterHandoff : null;
     } catch {
         return null;
     }
 }
 
-export function clearGovernedStarterHandoff() {
+export function clearGovernedStarterHandoff(accountScope?: string) {
     if (typeof window === 'undefined') {
         return;
     }
 
-    window.sessionStorage.removeItem(STARTER_STORAGE_KEY);
+    window.sessionStorage.removeItem(storageKey(accountScope));
 }

@@ -21,6 +21,7 @@
   ],
   "uatState": "PASSED",
   "upstreamCommit": "aba7c4e9695c363e65cb59effe926c7f1d1abe3d",
+  "license": "MIT",
   "upstreamMcpDependency": "upstream skill requires chrome-devtools MCP server; this is a source fact only, not a CVF runtime authority grant; MCP adapter requires separate ASSF adapter work order",
   "upstreamRepository": "https://github.com/addyosmani/agent-skills.git",
   "upstreamSlug": "browser-testing-with-devtools",

@@ -14,7 +14,7 @@
 │  CVF Gốc (v1.0–v1.6)  — HUMAN PROCESS LAYER             │
 │  4-Phase: Discovery → Design → Build → Review            │
 │  Risk: R0–R3                                             │
-│  Skills: 124 skills across 12 domains                    │
+│  Skills: end-user form sources                          │
 │  Governance: Phase gates + checklists                    │
 └──────────────┬─────────────────────────────┬────────────┘
                │ maps to                     │ maps to
@@ -80,7 +80,7 @@ const role = getPrimaryRoleForPhase("C")  // → AgentRole.BUILD
 
 ## 4. Skill System Mapping
 
-CVF gốc có **124 skills** trong `CVF_SKILL_LIBRARY/`. Extension registry phục vụ việc lookup skill theo tên và phase:
+[Danh mục biểu mẫu người dùng](../../governance/skill-library/registry/user-skills/INDEX.md) cho biết các biểu mẫu hiện hành. Registry của extension tra cứu các kỹ năng đã đăng ký với nó theo tên và giai đoạn:
 
 ```ts
 import { registerSkill, getSkillsByPhase } from "./core/registry/skill.registry"
@@ -131,3 +131,5 @@ Tất cả tạo ra relative to `process.cwd()` — khuyến nghị đặt trong
 ---
 
 > **Extension là công cụ của CVF, không phải thay thế CVF.**
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

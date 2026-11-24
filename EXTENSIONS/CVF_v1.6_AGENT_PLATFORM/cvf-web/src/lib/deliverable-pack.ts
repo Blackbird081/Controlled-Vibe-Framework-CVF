@@ -13,7 +13,12 @@
  */
 
 import type { Execution, Category } from '@/types';
+import { checkDocumentationConstraints, type ContentConstraintCheck } from '@/lib/pack-content-constraints';
 import type { GovernanceEvidenceReceipt } from '@/lib/ai';
+import type { GovernanceRolePlanSummary } from '@/lib/ai/types';
+import { finalReviewDetail, finalRolePlanReview, isReviewDiagnostic } from './role-plan-review-status';
+import { unwrapWholeMarkdownFence } from '@/lib/markdown-output-normalize';
+import { buildAgentHandoffSpec, serializeAgentHandoffSpec, type AgentHandoffSpec } from '@/lib/agent-handoff-spec';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -30,12 +35,24 @@ export interface DeliverablePack {
   mainOutput: string;
   governanceEvidence: PackGovernanceEvidence;
   artifactVerification: PackArtifactVerification;
+  contentConstraints?: ContentConstraintCheck[];
   scopeBoundary: string;
   recommendedNextActions: string[];
   handoffNotes: string;
+  agentHandoffSpec: AgentHandoffSpec;
+  /** Present only when the receipt carries a role-plan summary; absent otherwise. */
+  rolePlanReview?: PackRolePlanReview;
   generatedAt: string;
   sourceExecutionId: string;
 }
+
+/** Reviewer-model verdicts of the bounded role plan; they are not human approval. */
+export interface PackRolePlanReview {
+  summary: GovernanceRolePlanSummary;
+  label: string;
+}
+
+export const ROLE_PLAN_REVIEW_LABEL = 'Reviewer-model verdicts from the same provider as the drafting model; not human approval.';
 
 export interface PackGovernanceEvidence {
   decision: string;
@@ -195,12 +212,12 @@ function buildGovernanceEvidence(
 ): PackGovernanceEvidence {
   if (!receipt) {
     return {
-      decision: 'ALLOWED',
+      decision: 'UNKNOWN',
       receiptAvailable: false,
     };
   }
   return {
-    decision: receipt.decision ?? 'ALLOWED',
+    decision: receipt.decision ?? 'UNKNOWN',
     provider: receipt.provider,
     model: receipt.model,
     policySnapshot: receipt.policySnapshotId,
@@ -282,16 +299,18 @@ function buildArtifactVerification(
 }
 
 function buildHeadline(execution: Execution, packType: PackType): string {
-  const templateLabel = execution.templateName ?? execution.templateId;
+  const safeTitle = (value: string | undefined) => (value ?? '').split(/[\r\n]/, 1)[0]
+    .replace(/[\\`*_{}\[\]<>#!|]/g, '').replace(/\s+/g, ' ').trim().slice(0, 100).trim();
+  const templateLabel = safeTitle(execution.input?.subject) || safeTitle(execution.templateName) || safeTitle(execution.templateId) || 'Untitled';
   switch (packType) {
     case 'app_planning':
-      return `App Planning: ${execution.intent ?? templateLabel}`;
+      return `App Planning: ${templateLabel}`;
     case 'business_decision':
-      return `Business Analysis: ${execution.intent ?? templateLabel}`;
+      return `Business Analysis: ${templateLabel}`;
     case 'review_findings':
-      return `Review Findings: ${execution.intent ?? templateLabel}`;
+      return `Review Findings: ${templateLabel}`;
     case 'documentation_handoff':
-      return `Documentation: ${execution.intent ?? templateLabel}`;
+      return `Documentation: ${templateLabel}`;
   }
 }
 
@@ -300,9 +319,12 @@ function buildExecutiveSummary(
   packType: PackType
 ): string {
   const output = execution.output ?? '';
-  const firstParagraph = output.split('\n').find(l => l.trim().length > 40) ?? '';
+  // Strip a leading list, checkbox, quote or heading marker so the summary reads as prose.
+  const firstParagraph = output.split('\n')
+    .map(l => l.trim().replace(/^(?:#{1,6}\s+|>\s*|[-*+]\s+(?:\[[ xX]\]\s+)?|\d+[.)]\s+)/, ''))
+    .find(l => l.length > 40) ?? '';
   if (firstParagraph) {
-    return firstParagraph.trim().slice(0, 300);
+    return firstParagraph.slice(0, 300);
   }
   const fallbacks: Record<PackType, string> = {
     app_planning:
@@ -312,9 +334,21 @@ function buildExecutiveSummary(
     review_findings:
       'This pack contains governed review findings ready for triage and remediation.',
     documentation_handoff:
-      'This pack contains governed documentation ready for expert review and publication.',
+      'This pack contains a documentation draft requiring expert review before publication.',
   };
   return fallbacks[packType];
+}
+
+const yesNo = (value: boolean | null) => (value === null ? 'not applicable' : value ? 'yes' : 'no');
+
+function buildRolePlanReview(receipt?: GovernanceEvidenceReceipt): PackRolePlanReview | undefined {
+  return receipt?.rolePlan ? { summary: { ...receipt.rolePlan }, label: ROLE_PLAN_REVIEW_LABEL } : undefined;
+}
+
+/** The single Agent Handoff Spec evidence line of the role-plan review. */
+function rolePlanEvidenceLine(review: PackRolePlanReview): string {
+  const r = review.summary;
+  return `Role plan review (reviewer-model verdicts, not human approval): reviewer ${r.reviewerVerdict}, revision applied ${yesNo(r.revisionApplied)}, revision re-reviewed ${yesNo(r.revisionReviewed)}, recheck ${r.recheckVerdict ?? 'not run'}, stopped early ${r.stoppedEarly ?? 'no'}, ${r.stepCount} steps`;
 }
 
 /**
@@ -328,6 +362,22 @@ export function generateDeliverablePack(
   const packType = inferPackType(execution.templateId, execution.category);
   const defaults = PACK_DEFAULTS[packType];
   const generatedAt = new Date().toISOString();
+  const artifactVerification = buildArtifactVerification(execution, generatedAt, evidenceReceipt);
+  const contentConstraints = packType === 'documentation_handoff' ? checkDocumentationConstraints(execution) : undefined;
+  const rolePlanReview = buildRolePlanReview(evidenceReceipt);
+  const baseSpec = buildAgentHandoffSpec({
+    execution,
+    packType,
+    scopeBoundary: defaults.scopeBoundary,
+    verificationStatus: artifactVerification.status,
+    failedBlockingChecks: artifactVerification.checks
+      .filter(check => check.severity === 'blocking' && !check.passed)
+      .map(check => check.label),
+    contentConstraints,
+    evidenceReceipt,
+    recommendedNextActions: defaults.recommendedNextActions,
+    generatedAt,
+  });
 
   return {
     packType,
@@ -335,10 +385,13 @@ export function generateDeliverablePack(
     executiveSummary: buildExecutiveSummary(execution, packType),
     mainOutput: execution.output ?? '',
     governanceEvidence: buildGovernanceEvidence(evidenceReceipt),
-    artifactVerification: buildArtifactVerification(execution, generatedAt, evidenceReceipt),
+    artifactVerification,
+    contentConstraints,
     scopeBoundary: defaults.scopeBoundary,
     recommendedNextActions: defaults.recommendedNextActions,
     handoffNotes: defaults.handoffNotes,
+    agentHandoffSpec: rolePlanReview ? { ...baseSpec, evidence: [...baseSpec.evidence, rolePlanEvidenceLine(rolePlanReview)] } : baseSpec,
+    ...(rolePlanReview ? { rolePlanReview } : {}),
     generatedAt,
     sourceExecutionId: execution.id,
   };
@@ -367,7 +420,7 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
       ]
         .filter(Boolean)
         .join('\n')
-    : '- Decision: ALLOWED (no receipt recorded)';
+    : '- Decision: UNKNOWN (no receipt recorded)';
 
   const verificationChecks = pack.artifactVerification.checks
     .map((check) => {
@@ -379,6 +432,7 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
   const provenance = pack.artifactVerification.provenance;
   const artifactVerificationSection = [
     `- **Status**: ${pack.artifactVerification.status}`,
+    '- **Scope**: Structural checks only; this is not content approval or proof of business accuracy.',
     `- **Renderer policy**: ${provenance.rendererPolicy}`,
     `- **CVF root authority**: ${provenance.cvfRootAuthority}`,
     `- **Source execution**: ${provenance.sourceExecutionId}`,
@@ -402,7 +456,7 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
     '',
     '## Main Output',
     '',
-    pack.mainOutput,
+    unwrapWholeMarkdownFence(pack.mainOutput),
     '',
     '## Scope Boundary',
     '',
@@ -416,6 +470,32 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
     '',
     artifactVerificationSection,
     '',
+    ...(pack.rolePlanReview ? [
+      '## Role Plan Review',
+      '',
+      pack.rolePlanReview.label,
+      '',
+      `- **Reviewer verdict (draft)**: ${pack.rolePlanReview.summary.reviewerVerdict}`,
+      `- **Revision applied**: ${yesNo(pack.rolePlanReview.summary.revisionApplied)}`,
+      `- **Revision re-reviewed**: ${yesNo(pack.rolePlanReview.summary.revisionReviewed)}`,
+      `- **Recheck verdict**: ${pack.rolePlanReview.summary.recheckVerdict ?? 'not run'}`,
+      `- **Stopped early**: ${pack.rolePlanReview.summary.stoppedEarly ?? 'no'}`,
+      `- **Steps run**: ${pack.rolePlanReview.summary.stepCount}`,
+      `- **Prompt contract**: ${pack.rolePlanReview.summary.promptContract || 'unknown'}`,
+      `- **Final model review**: ${finalRolePlanReview(pack.rolePlanReview.summary).confirmed ? 'PASS (not human approval)' : 'UNCONFIRMED'}`,
+      ...(!finalRolePlanReview(pack.rolePlanReview.summary).confirmed ? [`- **Final review detail**: ${finalReviewDetail(pack.rolePlanReview.summary, false)}`] : []),
+      ...(isReviewDiagnostic(pack.rolePlanReview.summary.reviewerDiagnostic) ? [`- **Review diagnostic**: ${pack.rolePlanReview.summary.reviewerDiagnostic}`] : []),
+      ...(isReviewDiagnostic(pack.rolePlanReview.summary.recheckDiagnostic) ? [`- **Recheck diagnostic**: ${pack.rolePlanReview.summary.recheckDiagnostic}`] : []),
+      '',
+    ] : []),
+    ...(pack.contentConstraints ? [
+      '## Content Constraints (Mechanical Readout)',
+      '',
+      'These observations do not establish semantic quality or approval. Human review is required.',
+      '',
+      ...pack.contentConstraints.map(check => `- **${check.status}** ${check.label}: ${check.detail}`),
+      '',
+    ] : []),
     '## Recommended Next Actions',
     '',
     nextActions,
@@ -423,6 +503,8 @@ export function serializePackToMarkdown(pack: DeliverablePack): string {
     '## Handoff Notes',
     '',
     pack.handoffNotes,
+    '',
+    serializeAgentHandoffSpec(pack.agentHandoffSpec),
     '',
     '---',
     '',

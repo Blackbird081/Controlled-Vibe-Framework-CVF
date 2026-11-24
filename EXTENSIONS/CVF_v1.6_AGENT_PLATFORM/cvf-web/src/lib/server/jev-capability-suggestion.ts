@@ -1,8 +1,10 @@
 // Text Encoding Exception: the catalog parser and returned user copy contain necessary Vietnamese text.
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { ASSF_PACKAGE_CATEGORY } from '@/lib/assf-template-recommendations';
+import webAssfRoster from './jev-web-assf-roster.json';
+import legacyRoster from './jev-s1-pinned-roster.json';
 import type { CredentialBoundary, CredentialReference, ProviderExecutionAdapter, ProviderExecutionAdapterInput } from 'cvf-model-gateway';
 import { jevDigest, jevStageKey, JEV_RECIPE_REVISION } from './jev-suggestion-custody';
+import { awaitJevAgentTransport, decodeJevAgentAdvisory, JEV_AGENT_STAGE_SCHEMA, JevAgentTransportUnavailable, prepareJevAgentAdvisoryStage, type JevAgentAdvisoryStage } from './jev-agent-advisory-stage';
 
 const ENDPOINT = 'https://api.typesafe.ai/v1/systemone';
 const MODEL = 'jev-latest';
@@ -20,6 +22,7 @@ export function jevReportedUsdMicrounits(value: unknown): number | null {
 }
 const MAX_RESPONSE_BYTES = 128_000;
 const MAX_ROSTER = 100;
+const LEGACY_S1_ROSTER_DIGEST = '2f8fcce9e5c4865c8530535422332f3345e3713206f8deaea542a2c0b631e03c';
 /** Must stay identical to the stored-result catalogSkillId check in jev-suggestion-custody.ts. */
 const SAFE_ROUTE_ID = /^[a-z0-9_]+$/;
 
@@ -55,19 +58,19 @@ function tokens(value: unknown): number | null {
   return Number.isSafeInteger(value) && (value as number) >= 0 ? value as number : null;
 }
 
-const PURPOSE_HEADING = /^#{1,4}[^\n]*Mục đích[^\n]*$/im;
+const LEGACY_PURPOSE_HEADING = /^#{1,4}[^\n]*Mục đích[^\n]*$/im;
 const WHEN_LABEL = /^(?:Khi nào(?: nên)? dùng(?: skill này)?|When to use(?: this skill)?)$/i;
 const AVOID_LABEL = /^(?:Không phù hợp(?: khi)?|Not suitable(?: when)?)$/i;
 const LABEL_LINE = /^\*\*([^*\n]{1,60}?)\s*:\*\*\s*$/;
 const clean = (value: string, max: number) => value.replace(/\s+/g, ' ').trim().slice(0, max);
 
 /**
- * Reads the skill's own "Mục đích" section: lead text, when-to-use and not-suitable lists.
+ * Reads the skill's own Purpose section: lead text, when-to-use and not-suitable lists.
  * Catalog files use several label spellings and CRLF; an unrecognized layout yields empty text.
  */
 function skillSummary(content: string): { use: string; avoid: string } {
   const text = content.replace(/\r\n?/g, '\n');
-  const heading = PURPOSE_HEADING.exec(text);
+  const heading = LEGACY_PURPOSE_HEADING.exec(text);
   if (!heading) return { use: '', avoid: '' };
   const section = text.slice(heading.index + heading[0].length).split(/\n(?:---|#{1,4} )/)[0];
   const lead: string[] = []; const when: string[] = []; const avoid: string[] = [];
@@ -120,12 +123,27 @@ export function parseVisibleSkills(value: unknown): SkillCandidate[] {
 }
 
 export async function loadVisibleSkills(): Promise<SkillCandidate[]> {
-  try {
-    const bytes = await readFile(path.join(process.cwd(), 'public', 'data', 'skills-index.json'), 'utf8');
-    return parseVisibleSkills(JSON.parse(bytes));
-  } catch {
+  // Legacy Jev consumers use the exact candidate projection admitted for S1.
+  if (visibleRosterDigest(legacyRoster) !== LEGACY_S1_ROSTER_DIGEST) {
     throw new JevAdapterError('ROSTER_UNAVAILABLE');
   }
+  return legacyRoster.map((candidate) => ({ ...candidate }));
+}
+
+/** Current Web candidates have an independent, versioned digest. */
+export function loadWebSkillRoster(): { roster: SkillCandidate[]; digest: string } {
+  const domain = 'Agent System Skills';
+  const roster = webAssfRoster.packages.map(({ id, title, purpose, triggers }, index) => ({
+    key: `s${index}`,
+    title,
+    domain,
+    domainId: ASSF_PACKAGE_CATEGORY,
+    skillId: id,
+    description: clean(`${title}. ${purpose}`, 320),
+    detail: clean(`${title}. ${purpose} Typical task signals: ${triggers.join(', ')}.`, 950),
+  }));
+  if (!roster.length || roster.length > MAX_ROSTER) throw new JevAdapterError('ROSTER_UNAVAILABLE');
+  return { roster, digest: jevDigest(JSON.stringify(webAssfRoster)) };
 }
 
 export type JevNativeStageV1 = {
@@ -161,7 +179,7 @@ export function validateJevNativeStage(value:unknown):JevNativeStageV1 {
 }
 /** Runtime secret resolution stays inside this one fixed native transport. */
 export function createJevNativeAdapter(options:{credential:CredentialBoundary;reference:CredentialReference;
-  expectedStage:()=>JevNativeStageV1|JevNativeStageV2|undefined;reportedModels:readonly string[];transport?:typeof fetch;
+  expectedStage:()=>JevNativeStageV1|JevNativeStageV2|JevAgentAdvisoryStage|undefined;reportedModels:readonly string[];transport?:typeof fetch;
   connection?: 'typesafe'|'openrouter-systemone';
   observe?:(state:'HTTP_NOT_STARTED'|'HTTP_POSSIBLE'|'RESPONSE_OBSERVED',status:number|null)=>void}):ProviderExecutionAdapter {
   const openrouter=options.connection==='openrouter-systemone';
@@ -171,15 +189,22 @@ export function createJevNativeAdapter(options:{credential:CredentialBoundary;re
   const env=openrouter?'OPENROUTER_API_KEY':'TYPESAFE_API_KEY';
   if(openrouter && (options.reportedModels.length!==1 || options.reportedModels[0]!==OPENROUTER_REPORTED)) throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');
   return {providerId,async execute(input:ProviderExecutionAdapterInput){
-    let stage:JevNativeStageV1;
+    let execution: { kind: 'web'; stage: JevNativeStageV1 }
+      | { kind: 'agent'; stage: JevAgentAdvisoryStage; wireBody: string; transport: typeof fetch };
     try{const raw=JSON.parse(input.prompt) as Record<string,unknown>;
-      if(openrouter){if(!exactKeys(raw,['schema','transport','trialId','caseId','method','stageId','runId','canonicalExecutionId','stageExecutionKey','inputDigest','rosterDigest','recipeRevision','state','questions'])||raw.schema!=='cvf.jevNativeStage.v2'||raw.transport!=='openrouter-systemone'||typeof raw.trialId!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(raw.trialId)||typeof raw.caseId!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(raw.caseId))throw Error('stage');
-        const {transport,trialId,caseId,...rest}=raw;void transport;void trialId;void caseId; stage=validateJevNativeStage({...rest,schema:'cvf.jevNativeStage.v1'});
-      } else stage=validateJevNativeStage(raw);
+      if (raw?.schema === JEV_AGENT_STAGE_SCHEMA) {
+        const transport = options.transport;
+        if (!openrouter || typeof transport !== 'function') throw Error('agent stage');
+        execution = { kind: 'agent', ...prepareJevAgentAdvisoryStage(raw, model), transport };
+      } else if(openrouter){if(!exactKeys(raw,['schema','transport','trialId','caseId','method','stageId','runId','canonicalExecutionId','stageExecutionKey','inputDigest','rosterDigest','recipeRevision','state','questions'])||raw.schema!=='cvf.jevNativeStage.v2'||raw.transport!=='openrouter-systemone'||typeof raw.trialId!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(raw.trialId)||typeof raw.caseId!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(raw.caseId))throw Error('stage');
+        const {transport,trialId,caseId,...rest}=raw;void transport;void trialId;void caseId; execution={kind:'web',stage:validateJevNativeStage({...rest,schema:'cvf.jevNativeStage.v1'})};
+      } else execution={kind:'web',stage:validateJevNativeStage(raw)};
     }catch{throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');}
+    const { stage } = execution;
     const expected=options.expectedStage();
     if(!expected||JSON.stringify(expected)!==input.prompt||input.providerId!==providerId||input.modelId!==model||input.traceId!==stage.canonicalExecutionId
       ||options.reference.providerId!==providerId||options.reference.envNames.join(',')!==env)throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');
+    if (execution.kind === 'agent' && input.signal?.aborted) throw new JevAdapterError('PROVIDER_UNAVAILABLE');
     options.observe?.('HTTP_NOT_STARTED',null);
     const key=options.credential.resolveSecretForRuntime(options.reference);
     if(!key||input.signal?.aborted)throw new JevAdapterError('PROVIDER_UNAVAILABLE');
@@ -188,17 +213,36 @@ export function createJevNativeAdapter(options:{credential:CredentialBoundary;re
     const timer=setTimeout(abort,12000);
     try{
       options.observe?.('HTTP_POSSIBLE',null);
-      const response=await (options.transport??fetch)(endpoint,{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model,state:stage.state,questions:stage.questions}),signal:controller.signal,cache:'no-store',...(openrouter?{redirect:'error' as const}:{})});
+      const send = (transport: typeof fetch, body: string) => transport(endpoint, {method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json',Accept:'application/json'},body,signal:controller.signal,cache:'no-store',...(openrouter?{redirect:'error' as const}:{})});
+      const response = execution.kind === 'agent'
+        ? await awaitJevAgentTransport(() => send(execution.transport, execution.wireBody), controller.signal)
+        : await send(options.transport ?? fetch, JSON.stringify({model,state:execution.stage.state,questions:execution.stage.questions}));
       options.observe?.('RESPONSE_OBSERVED',response.status);
       if(!response.ok)throw new JevAdapterError('PROVIDER_UNAVAILABLE');
       const size=Number(response.headers.get('content-length'));
       if(Number.isFinite(size)&&size>MAX_RESPONSE_BYTES)throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');
       const reader=response.body?.getReader();if(!reader)throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');
+      const cancelReader = () => {
+        const cancelled = reader.cancel();
+        if (execution.kind === 'web') return cancelled;
+        void cancelled.catch(() => {});
+      };
+      const readAgentChunk = () => awaitJevAgentTransport(() => reader.read(), controller.signal).catch(error => {
+        cancelReader();
+        throw error;
+      });
       const chunks:Uint8Array[]=[];let total=0;
-      for(;;){if(controller.signal.aborted){await reader.cancel();throw new JevAdapterError('PROVIDER_UNAVAILABLE');}const {done,value}=await reader.read();if(controller.signal.aborted){await reader.cancel();throw new JevAdapterError('PROVIDER_UNAVAILABLE');}if(done)break;total+=value.byteLength;if(total>MAX_RESPONSE_BYTES){await reader.cancel();throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');}chunks.push(value);}
+      for(;;){if(controller.signal.aborted){await cancelReader();throw new JevAdapterError('PROVIDER_UNAVAILABLE');}const {done,value}=execution.kind === 'agent' ? await readAgentChunk() : await reader.read();if(controller.signal.aborted){await cancelReader();throw new JevAdapterError('PROVIDER_UNAVAILABLE');}if(done)break;total+=value.byteLength;if(total>MAX_RESPONSE_BYTES){await cancelReader();throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');}chunks.push(value);}
       const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
       const parsed:unknown=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
       if(!record(parsed)||!record(parsed.answers)||typeof parsed.model!=='string'||!options.reportedModels.includes(parsed.model))throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');
+      if (stage.schema === JEV_AGENT_STAGE_SCHEMA) {
+        const advisory = decodeJevAgentAdvisory(parsed, stage);
+        const use = usage(parsed);
+        const cost = record(parsed.usage) ? jevReportedUsdMicrounits(parsed.usage.cost) : null;
+        const projection = { model: parsed.model, advisory, usage: { input_tokens: use.inputTokens, output_tokens: use.outputTokens, costMicrounits: cost } };
+        return { text: JSON.stringify(projection), ...(use.inputTokens !== null && use.outputTokens !== null ? { usage: { inputTokens: use.inputTokens, outputTokens: use.outputTokens } } : {}) };
+      }
       const ids=new Set(Object.keys((stage.questions.which as {criteria:Record<string,string>}).criteria));
       const picked=choice(parsed,ids);
       const answers:Record<string,unknown>={which:{type:'choice',choice:picked.selected,probabilities:(parsed.answers.which as Record<string,unknown>).probabilities}};
@@ -206,7 +250,7 @@ export function createJevNativeAdapter(options:{credential:CredentialBoundary;re
       const use=usage(parsed);const cost = openrouter && record(parsed.usage) ? jevReportedUsdMicrounits(parsed.usage.cost) : null;
       const projection={model:parsed.model,answers,usage:{input_tokens:use.inputTokens,output_tokens:use.outputTokens,...(openrouter?{costMicrounits:cost}:{})}};
       return {text:JSON.stringify(projection),...(use.inputTokens!==null&&use.outputTokens!==null?{usage:{inputTokens:use.inputTokens,outputTokens:use.outputTokens}}:{})};
-    }catch(error){if(error instanceof JevAdapterError)throw error;throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');}
+    }catch(error){if(error instanceof JevAdapterError)throw error;if(error instanceof JevAgentTransportUnavailable)throw new JevAdapterError('PROVIDER_UNAVAILABLE');throw new JevAdapterError('PROVIDER_RESPONSE_INVALID');}
     finally{clearTimeout(timer);input.signal?.removeEventListener('abort',abort);}
   }};
 }
@@ -240,7 +284,13 @@ function usage(response: Record<string, unknown>): { inputTokens: number | null;
   return { inputTokens: tokens(value.input_tokens), outputTokens: tokens(value.output_tokens) };
 }
 
-export async function suggestJevSkill(goal: string, roster: SkillCandidate[], executeStage: JevStageExecutor): Promise<SkillSuggestion> {
+export async function suggestJevSkill(
+  goal: string,
+  roster: SkillCandidate[],
+  executeStage: JevStageExecutor,
+  audience: 'agent' | 'user' = 'user',
+): Promise<SkillSuggestion> {
+  const receivingAgent = audience === 'agent';
   const text = goal.trim();
   if (text.length < 8 || text.length > 1000 || roster.length < 1 || roster.length > MAX_ROSTER) {
     throw new JevAdapterError('ROSTER_UNAVAILABLE');
@@ -250,7 +300,9 @@ export async function suggestJevSkill(goal: string, roster: SkillCandidate[], ex
   const criteria = Object.fromEntries(roster.map(skill => [skill.key, skill.description]));
   const state = { request: text };
   const wide = await executeStage('wide', { state, questions: {
-    which: { type: 'choice', instructions: 'Which listed CVF skill, if any, would help perform the user request?', criteria },
+    which: { type: 'choice', instructions: receivingAgent
+      ? 'Which listed ASSF package, if any, provides a procedure that would help the agent receiving this task?'
+      : 'Which listed CVF skill, if any, would help perform the user request?', criteria },
     needs_workflow: { type: 'noul', instructions: 'Does the user request an actual task or deliverable for which a documented skill procedure would help?' },
     prose_suffices: { type: 'noul', instructions: 'Can this request be fully satisfied by a short general explanation without using a specific skill procedure?' },
   } });
@@ -260,10 +312,14 @@ export async function suggestJevSkill(goal: string, roster: SkillCandidate[], ex
   const shortlist = ranked.slice(0, 3);
   const detailCriteria = Object.fromEntries(shortlist.map(id => [id, byKey.get(id)!.detail]));
   const questions: Record<string, unknown> = {
-    which: { type: 'choice', instructions: 'Which one of these CVF skills best fits the specific user request? Select the actual task fit, not a similar name.', criteria: detailCriteria },
+    which: { type: 'choice', instructions: receivingAgent
+      ? 'Which package has the most useful reusable procedure for the agent receiving this task? Judge the actual work, not a similar name.'
+      : 'Which one of these CVF skills best fits the specific user request? Select the actual task fit, not a similar name.', criteria: detailCriteria },
   };
   for (const id of shortlist) {
-    questions[`fits_${id}`] = { type: 'noul', instructions: `Does the CVF skill described here actually perform the specific task requested by the user? ${byKey.get(id)!.detail}` };
+    questions[`fits_${id}`] = { type: 'noul', instructions: receivingAgent
+      ? `Would this package give the receiving agent a relevant, reusable procedure for the requested work? Judge fit within the request. ${byKey.get(id)!.detail}`
+      : `Does the CVF skill described here actually perform the specific task requested by the user? ${byKey.get(id)!.detail}` };
   }
   const narrow = await executeStage('narrow', { state, questions });
   const winner = choice(narrow, new Set(shortlist)).selected;

@@ -1011,5 +1011,45 @@ class AuditOnlyIndexRegressionTests(unittest.TestCase):
             self.assertEqual(diagnostics[0].path, chk.EVIDENCE_READINESS_AUDIT_INDEX_PATH)
 
 
+class ReturnEndpointRoutingTests(unittest.TestCase):
+    def test_active_return_uses_shared_endpoint_and_propagates_drift(self):
+        from unittest.mock import patch
+        wo_path = "docs/work_orders/order.md"
+        ret_path = "docs/reviews/return.md"
+        wo = (f"Worker return path: `{ret_path}`\nworkerReturnPath: `{ret_path}`\n"
+              '```acceptance-ledger-json\n{}\n```')
+        ret = ('```acceptance-evidence-json\n{"executionBaseHead":"abcdef0"}\n```')
+        end = "a" * 40
+        with patch.object(chk, "_read", side_effect=lambda p: wo if p == wo_path else ret), \
+             patch.object(chk, "diagnose", return_value=chk.Diagnostic(ret_path, True, ())), \
+             patch.object(chk, "_dispatch_work_order_path", return_value=wo_path), \
+             patch.object(chk, "_detached_receipt_issues", return_value=[]), \
+             patch.object(chk, "check_return_acceptance", return_value=["endpoint drift"]) as observe:
+            result = chk.diagnose_active_work_order(wo_path, return_endpoint=end)
+        observe.assert_called_once_with(wo_path, ret_path, wo, ret, end)
+        self.assertIn("endpoint drift", result.issues)
+
+    def test_endpoint_requires_active_work_order_before_discovery(self):
+        from unittest.mock import patch
+        with patch.object(chk, "get_changed_paths") as discover:
+            with self.assertRaises(ValueError):
+                chk.run(None, None, return_endpoint="a" * 40)
+        discover.assert_not_called()
+        with self.assertRaises(SystemExit) as exc:
+            chk.main(["--return-endpoint", "a" * 40])
+        self.assertEqual(exc.exception.code, 2)
+
+    def test_run_forwards_endpoint_without_changing_current_discovery(self):
+        from unittest.mock import patch
+        with patch.object(chk, "get_changed_paths", return_value={}) as discover, \
+             patch.object(chk, "_evidence_readiness_audit_index_integrity", return_value=None), \
+             patch.object(chk, "_audit_only_drift_paths", return_value=set()), \
+             patch.object(chk, "_load_evidence_readiness_audit_index_safe", return_value=({}, None)), \
+             patch.object(chk, "diagnose_active_work_order", return_value=chk.Diagnostic("r.md", True, ())) as diagnose:
+            chk.run("base", "HEAD", "order.md", return_endpoint="a" * 40)
+        discover.assert_called_once_with("base", "HEAD")
+        self.assertEqual(diagnose.call_args.kwargs["return_endpoint"], "a" * 40)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { authorizeRouteGovernanceProof, getRouteGovernanceProofConfig } from '@/lib/route-governance-proof';
 import { requireAdminApiSession } from '@/lib/admin-session';
+import { isSameBrowserOrigin } from '@/lib/server/browser-origin';
 import { normalPrincipal } from '@/lib/server/html-draft-recovery-api';
 import { resolveHtmlJobSyntheticProfile } from '@/lib/server/html-job-synthetic-profile';
 import { fetchGovernanceReceipt, type GovernanceReceipt } from './proof';
@@ -299,9 +300,7 @@ export async function POST(request: NextRequest) {
   let selectedPrincipal = false;
   let principal: DraftPrincipal | null = null;
   if (selectedJobProfile || controlledProfile || boundProfile) {
-    const origin = request.headers.get('origin');
-    const site = request.headers.get('sec-fetch-site');
-    if (!origin || origin !== new URL(request.url).origin || (site && site !== 'same-origin')) {
+    if (!isSameBrowserOrigin(request)) {
       return NextResponse.json({ success: false, error: 'ORIGIN_REFUSED' }, { status: 403, headers: { 'Cache-Control': 'no-store' } });
     }
     const session = await requireAdminApiSession(request, '/api/artifacts/export', { allowBreakGlass: false });
@@ -438,8 +437,7 @@ async function pilotExport(request: NextRequest): Promise<NextResponse> {
     { status, headers: { 'Cache-Control': 'no-store' } });
   const profile = await loadHtmlPilotRuntimeProfile();
   if (!profile) return fail(503, 'PILOT_PROFILE_UNAVAILABLE');
-  const origin = request.headers.get('origin');
-  if (origin !== new URL(request.url).origin || !['same-origin', null].includes(request.headers.get('sec-fetch-site'))) return fail(403, 'ORIGIN_REFUSED');
+  if (!isSameBrowserOrigin(request)) return fail(403, 'ORIGIN_REFUSED');
   const selected = await requireHtmlPilotOwner(request);
   if (selected instanceof NextResponse) return selected;
   if (!htmlPilotSameOwner(selected, profile.owner)) return fail(403, 'PILOT_OWNER_REFUSED');

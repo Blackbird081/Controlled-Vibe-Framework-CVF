@@ -1,5 +1,7 @@
 // Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
+import viCopy from '@/lib/i18n/vi.json';
+import enCopy from '@/lib/i18n/en.json';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -29,6 +31,7 @@ let mockLang = 'vi';
 vi.mock('@/lib/i18n', () => ({
     useLanguage: () => ({
         language: mockLang,
+        t: (key: string) => ((mockLang === 'vi' ? viCopy : enCopy) as Record<string, string>)[key] ?? key,
         setLanguage: vi.fn(),
     }),
 }));
@@ -45,14 +48,14 @@ describe('ArtifactsPage', () => {
 
     it('renders Vietnamese content correctly', () => {
         render(<ArtifactsPage />);
-        expect(screen.getByText('Đóng gói')).toBeTruthy();
+        expect(screen.getByText(viCopy['nav.artifacts'])).toBeTruthy();
         expect(screen.getByText('Biến phần đã duyệt thành gói HTML để rà soát')).toBeTruthy();
     });
 
     it('renders English content correctly', () => {
         mockLang = 'en';
         render(<ArtifactsPage />);
-        expect(screen.getByText('Review Packet Export')).toBeTruthy();
+        expect(screen.getByText(enCopy['nav.artifacts'])).toBeTruthy();
         expect(screen.getByText('Turn approved work into an HTML review packet')).toBeTruthy();
     });
 });

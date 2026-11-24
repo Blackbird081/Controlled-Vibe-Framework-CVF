@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MaoDelegationAdapter, createMaoDelegationAdapter } from "../src/mao/delegation.adapter.contract";
+import { MaoDelegationAdapter, createMaoDelegationAdapter, validateMaoInvocationRequest } from "../src/mao/delegation.adapter.contract";
 import type { MaoAdmissionReceiptLike, MaoCapabilityDeclaration, MaoInvocationRequest } from "../src/mao/delegation.adapter.contract";
 import { compileTaskGraph } from "../src/mao/task.graph.contract";
 import type { MaoAuthorityEnvelopeInput, MaoTaskDefinitionInput, MaoTaskGraph } from "../src/mao/task.graph.contract";
@@ -294,4 +294,11 @@ describe("MaoDelegationAdapter provider-neutrality and secret safety", () => {
       expect(result.detail).not.toContain("SECRET_API_KEY");
     }
   });
+});
+
+it('pure preflight returns a rejection without producing a fake receipt', () => {
+  const graph=compileGraph(); const req=requestFor(graph,{capability:capability({offeredCapabilities:[]})});
+  expect(validateMaoInvocationRequest(req)).toMatchObject({ok:false,reason:'REJECTED_MISSING_CAPABILITY'});
+  const adapter=createMaoDelegationAdapter(); expect(adapter.getReceiptByIdempotencyKey(req.idempotencyKey)).toBeNull();
+  expect(validateMaoInvocationRequest(requestFor(graph))).toBeNull();
 });

@@ -50,7 +50,7 @@ CVF has 5 distinct layers (not a monolith):
 │     v1.3, governance/      — Python scripts, CI/CD       │
 ├─────────────────────────────────────────────────────────┤
 │  📖 CORE (Layer 1) ← This IS CVF                        │
-│     v1.0, v1.1, v1.2       — Rules + 62 Active Skills    │
+│     v1.0, v1.1, v1.2       — Rules + End-user Forms     │
 │     → Always needed. Start here.                          │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -61,7 +61,7 @@ CVF has 5 distinct layers (not a monolith):
 - **Canonical loop:** INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE
 - **Current runtime projection:** some surfaces use INTAKE -> DESIGN -> BUILD -> REVIEW -> FREEZE; SPEC and WORK ORDER remain governance boundaries unless an accepted adoption artifact makes them runtime states
 - **Risk Model:** R0 (Auto) → R1 (Audit) → R2 (Review) → R3 (Manual)
-- **Skill Library:** 62 active skills across 12 domains
+- **Skill Library:** [end-user forms](../../governance/skill-library/registry/user-skills/INDEX.md) and a separate [agent package catalog](../../docs/reference/agent_system_skills/generated/skill-index.json)
 
 ### Layer 2: Tools (Optional)
 
@@ -124,7 +124,7 @@ CVF has 5 distinct layers (not a monolith):
 |---------|-----|------|------|----------------|
 | AI governance | ✅ Core focus | ❌ | ❌ | ❌ |
 | Risk-based phases | ✅ R0-R3 | ❌ | ✅ | ❌ |
-| Skill library | ✅ 62 active skills | ❌ | ❌ | Partial |
+| Skill library | ✅ End-user forms | ❌ | ❌ | Partial |
 | Agent-agnostic | ✅ | N/A | N/A | ❌ Usually locked |
 | Quality scoring | ✅ | ✅ Metrics | ✅ Metrics | ❌ |
 | AI Safety Runtime | ✅ v1.7.x | ❌ | ❌ | ❌ |
@@ -145,14 +145,12 @@ Statements to avoid until further roadmap closure:
 
 ---
 
-## 6. Tagline Options
+## 6. Tagline
 
-Use one of these taglines when introducing CVF:
+**Controlled vibe coding. Safe and governable, with speed and cost in mind.**
 
-1. **"Governance framework for AI-assisted development"** ← Most accurate
-2. **"Control quality when working with AI"** ← Simple
-3. **"Rules, not code. Process, not product."** ← Clear distinction
-4. **"Make AI work YOUR way"** ← Marketing-friendly
+The user sets the boundaries and accepts the result. Agents choose the method
+and check the evidence within those boundaries.
 
 ---
 
@@ -178,3 +176,5 @@ Use one of these taglines when introducing CVF:
 ---
 
 *Updated: June 2026*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

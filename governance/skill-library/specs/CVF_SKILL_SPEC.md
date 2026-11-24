@@ -1,9 +1,10 @@
 # CVF SKILL SPECIFICATION
 
-Canonical Definition of a CVF Skill
-
+> Catalog status: `NOT_ACTIVE` for agent package discovery. These records are retained for legacy interpretation. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../../docs/reference/agent_system_skills/generated/skill-index.json).
+Format for legacy skill-library registry records
+>
 > **Version:** 1.1.0  
-> **Status:** Active  
+> **Status:** Active for legacy record validation
 > **Related:** [v1.2 SKILL_CONTRACT_SPEC](../../../EXTENSIONS/CVF_v1.2_CAPABILITY_EXTENSION/SKILL_CONTRACT_SPEC.md)
 
 ## 1. Overview
@@ -14,7 +15,7 @@ for any skill inside the Controlled Vibe Framework (CVF).
 If a capability cannot be expressed using this spec,
 it cannot exist as a CVF skill.
 
-📁 **Example:** See [SK-001_CODE_REVIEW_ASSISTANT](./examples/SK-001_CODE_REVIEW_ASSISTANT.md)
+📁 **Example:** See [SK-001_CODE_REVIEW_ASSISTANT](../examples/SK-001_CODE_REVIEW_ASSISTANT.md)
 
 ---
 
@@ -109,3 +110,5 @@ is considered a **governance failure**, not a technical error.
 |---------|------|---------|
 | 1.0.0 | 2026-02-07 | Initial specification |
 | 1.1.0 | 2026-02-07 | Add autonomous extension requirement |
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

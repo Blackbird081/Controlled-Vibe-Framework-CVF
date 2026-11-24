@@ -239,7 +239,6 @@ function buildBusinessStrategyGovernedPacket(data: WizardData) {
             `Validate the recommendation for "${strategicQuestion}" with decision stakeholders`,
             'Open a separate follow-up batch for implementation work outside this strategy packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:strategy-${slug}`,
         inputs: {
             strategicQuestion: data.strategicQuestion || '',
             businessContext: data.businessContext || '',
@@ -492,9 +491,7 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -720,7 +717,6 @@ export function BusinessStrategyWizard({ onBack }: BusinessStrategyWizardProps) 
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

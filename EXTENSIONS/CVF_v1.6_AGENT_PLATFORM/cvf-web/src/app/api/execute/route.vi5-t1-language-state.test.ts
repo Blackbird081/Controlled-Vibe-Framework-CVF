@@ -3,7 +3,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -11,7 +11,6 @@ const appendAuditEventMock = vi.hoisted(() => vi.fn());
 let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -21,6 +20,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
@@ -39,6 +39,7 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 describe('/api/execute VI5-T1 language state deterministic route readout', () => {
   const originalEnv = { ...process.env };
@@ -47,7 +48,7 @@ describe('/api/execute VI5-T1 language state deterministic route readout', () =>
 
   beforeEach(async () => {
     tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-vi5-route-'));
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
@@ -68,7 +69,7 @@ describe('/api/execute VI5-T1 language state deterministic route readout', () =>
   });
 
   it('returns languageState, guidedStepState, and specBoundary for Vietnamese Strategy requests', async () => {
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -141,4 +142,7 @@ describe('/api/execute VI5-T1 language state deterministic route readout', () =>
     });
     expect(data.specBoundary.frozen).toBe(true);
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

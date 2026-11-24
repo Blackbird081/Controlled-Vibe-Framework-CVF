@@ -1,4 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -20,7 +21,7 @@ vi.mock('@/lib/server/receipt-operation-profile', async importOriginal => {
   return { ...actual, resolveReceiptOperation: vi.fn(() => state.operation) };
 });
 
-const WORKER = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker');
+const WORKER = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-authority-repair-'));
 const ROOTS = path.join(WORKER, 'roots');
 const ENGINE_DIR = path.resolve(process.cwd(), '..', '..', 'CVF_v1.6.1_GOVERNANCE_ENGINE', 'ai_governance_core');
 const PEER = path.join(ENGINE_DIR, 'tests', 'artifact_receipt_peer.py');
@@ -89,6 +90,7 @@ class Bridge {
 }
 
 let bridge: Bridge;
+let childTmp = '';
 let measured: { instanceId: string; storeBindingId: string };
 const configInput = (): BoundConfigInput => ({ policyRevision: 'peer-policy-r1', transformRevision: 'peer-transform-1', endpointId: 'peer-endpoint', storeId: 'peer-store',
   authReference: 'peer-bundle-1', authScope: 'two-hop-peer', webOrigin: 'http://web.invalid:3000', engineOrigin: 'http://engine.invalid:8100',
@@ -98,7 +100,7 @@ const keyBundle = (engineKey: Uint8Array = ENGINE_KEY) => ({ authReference: 'pee
 
 beforeAll(async () => {
   const bridgeRoot = await newRoot('bridge-db');
-  const childTmp = await fs.mkdtemp(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-bridge-'));
+  childTmp = await fs.mkdtemp(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-bridge-'));
   const child = spawn('python', [PEER, 'bridge', bridgeRoot], { cwd: ENGINE_DIR,
     env: { ...process.env, PYTHONPATH: ENGINE_DIR, CVF_GOVERNANCE_LEDGER_PATH: path.join(bridgeRoot, 'default-ledger.json'),
       TMP: childTmp, TEMP: childTmp, TMPDIR: childTmp }, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -111,7 +113,14 @@ beforeAll(async () => {
   bridge.send({ kind: 'CONFIGURE', config: probe.config, keyReference: 'peer-engine-key-1', keyHex: ENGINE_KEY.toString('hex'), challengeCapacity: 64 });
   expect((await bridge.next()).kind).toBe('READY');
 }, 120_000);
-afterAll(async () => { if (bridge) expect(await bridge.close()).toBe(0); }, 60_000);
+afterAll(async () => {
+  try {
+    if (bridge) expect(await bridge.close()).toBe(0);
+  } finally {
+    await fs.rm(WORKER, { recursive: true, force: true });
+    if (childTmp) await fs.rm(childTmp, { recursive: true, force: true });
+  }
+}, 60_000);
 
 async function newRoot(label: string) {
   await fs.mkdir(ROOTS, { recursive: true });
@@ -142,7 +151,7 @@ async function job(store: HtmlDraftSnapshotStore, body = BODY) {
   return { jobId, sourceRecordId };
 }
 const exportPost = (selector: { jobId: string; sourceRecordId: string }, extra: Record<string, string> = {}, body: unknown = BODY, origin = 'http://localhost') =>
-  POST(new NextRequest('http://localhost/api/artifacts/export', { method: 'POST', headers: { origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin',
+  POST(new NextRequest('http://localhost/api/artifacts/export', { method: 'POST', headers: { host: 'localhost', origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin',
     'X-CVF-Job-Id': selector.jobId, 'X-CVF-Source-Record-Id': selector.sourceRecordId, ...extra }, body: JSON.stringify(body) }));
 type Body = { success: boolean; error?: string; reason?: string; data?: Record<string, unknown>; operation?: Record<string, unknown> };
 const json = async (response: Response) => await response.json() as Body;
@@ -291,7 +300,7 @@ describe('actual export POST -> Web handler -> Python handler -> bound SQLite', 
     expect((await exportPost(selector)).status).toBe(401);
     state.session = goodSession();
     expect((await exportPost(selector, {}, { ...BODY, boundConfig: { engineOrigin: 'http://evil.invalid' } })).status).toBe(400);
-    const missing = POST(new NextRequest('http://localhost/api/artifacts/export', { method: 'POST', headers: { origin: 'http://localhost', 'Content-Type': 'application/json',
+    const missing = POST(new NextRequest('http://localhost/api/artifacts/export', { method: 'POST', headers: { host: 'localhost', origin: 'http://localhost', 'Content-Type': 'application/json',
       'sec-fetch-site': 'same-origin' }, body: JSON.stringify(BODY) }));
     expect((await missing).status).toBe(400);
     expect(profile.counters).toEqual(zero);

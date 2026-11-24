@@ -29,8 +29,9 @@ export interface SidebarNavItemProps {
 }
 
 const COMMON_ROW_CLASSES = clsx(
-    'w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-[13px] font-normal',
-    'transition-colors duration-150 select-none group',
+    'flex min-h-11 w-full scroll-my-2 items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] font-normal md:min-h-8',
+    'cursor-pointer select-none transition-colors duration-150',
+    'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-indigo-300',
 );
 
 const STATE_CLASSES = {

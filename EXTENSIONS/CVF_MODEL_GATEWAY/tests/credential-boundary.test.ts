@@ -66,3 +66,8 @@ describe("CredentialBoundary", () => {
     expect(boundary.resolveSecretForRuntime(reference)).toBe(original);
   });
 });
+
+it('native subscription reference is distinct from env credential metadata', () => {
+  const native: import('../src/credential-boundary').BridgeCredentialMetadata = {source:'native_subscription',providerId:'claude',available:true,executionSurface:'claude_cli_subscription'};
+  expect(native).not.toHaveProperty('keyId');expect(native).not.toHaveProperty('fingerprint');expect(native).not.toHaveProperty('redactedValue');
+});

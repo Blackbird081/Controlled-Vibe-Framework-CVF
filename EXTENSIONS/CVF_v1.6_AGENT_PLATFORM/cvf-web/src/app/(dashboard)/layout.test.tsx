@@ -10,6 +10,8 @@ const replaceMock = vi.fn();
 const closeAllModalsMock = vi.fn();
 
 let mockOpenParam: string | null = null;
+let sessionReady = true;
+let languageReady = true;
 
 vi.mock('next/navigation', () => ({
     usePathname: () => '/help',
@@ -24,7 +26,9 @@ vi.mock('@/lib/hooks/useAuth', () => ({
     useAuth: () => ({
         userRole: 'admin',
         userName: 'Test User',
+        sessionReady,
         permissions: {
+            canUseAgent: true,
             canUseSettings: true,
             canUseAIUsage: true,
             canUseContext: true,
@@ -70,6 +74,7 @@ vi.mock('@/components/Settings', () => ({
 vi.mock('@/lib/i18n', () => ({
     useLanguage: () => ({
         language: 'en',
+        mounted: languageReady,
         t: (key: string) => key,
     }),
 }));
@@ -105,13 +110,42 @@ vi.mock('@/components', () => ({
 vi.mock('@/components/CompactHeader', () => ({
     default: () => <div>CompactHeader</div>,
 }));
+vi.mock('@/components/WebAdmissionControl', () => ({
+    default: () => <section aria-label="Web admission control">Web admission control</section>,
+}));
 
 describe('DashboardLayout', () => {
     beforeEach(() => {
         mockOpenParam = null;
+        sessionReady = true;
+        languageReady = true;
         pushMock.mockReset();
         replaceMock.mockReset();
         closeAllModalsMock.mockReset();
+    });
+
+    it('keeps the interactive shell out of the first frame until locale and account are ready', () => {
+        sessionReady = false;
+        languageReady = false;
+        const content = <DashboardLayout><button type="button">Edit my specification</button></DashboardLayout>;
+        const { rerender } = render(content);
+
+        expect(screen.queryByRole('button', { name: 'Edit my specification' })).toBeNull();
+        languageReady = true;
+        rerender(<DashboardLayout><button type="button">Edit my specification</button></DashboardLayout>);
+        expect(screen.queryByRole('button', { name: 'Edit my specification' })).toBeNull();
+
+        sessionReady = true;
+        rerender(<DashboardLayout><button type="button">Edit my specification</button></DashboardLayout>);
+        expect(screen.getByRole('button', { name: 'Edit my specification' })).toBeTruthy();
+    });
+
+    it('keeps the admission control mounted beside the header across modal navigation', async () => {
+        render(<DashboardLayout><div>Dashboard Child</div></DashboardLayout>);
+        expect(screen.getByRole('region', { name: 'Web admission control' })).toBeTruthy();
+        window.dispatchEvent(new CustomEvent('cvf:openAgent'));
+        await waitFor(() => expect(screen.getByText('Agent Chat Modal')).toBeTruthy());
+        expect(screen.getByRole('region', { name: 'Web admission control' })).toBeTruthy();
     });
 
     it('opens the agent modal when open=agent appears after client-side navigation', async () => {

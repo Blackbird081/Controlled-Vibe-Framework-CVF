@@ -116,6 +116,7 @@ export interface RuntimeTelemetryReceipt {
     schemaVersion: 'cvf.runtimeTelemetry.v1';
     providerLatencyMs?: number;
     routeElapsedMs: number;
+    tokenUsageProvenance?: 'estimated_or_mixed';
     tokenUsage?: {
         inputTokens: number;
         outputTokens: number;
@@ -182,7 +183,22 @@ export interface GovernanceEvidenceReceipt {
     runtimeTelemetry?: RuntimeTelemetryReceipt;
     providerAttemptReconciliation?: ProviderAttemptReconciliationReceipt;
     receiptIntegrity?: ReceiptIntegrityAnchor;
+    /** Compact reviewer-model verdict summary of the bounded role plan; reviewer-model verdicts, not human approval. Attached client-side from the role-plan evidence. */
+    rolePlan?: GovernanceRolePlanSummary;
     generatedAt: string;
+}
+
+/** Compact summary of the bounded role plan carried in the receipt (O6). These are reviewer-model verdicts, not human approval. */
+export interface GovernanceRolePlanSummary {
+    reviewerDiagnostic?: import('../role-plan-review-status').ReviewDiagnostic;
+    recheckDiagnostic?: import('../role-plan-review-status').ReviewDiagnostic;
+    reviewerVerdict: 'PASS' | 'REVISE' | 'UNPARSEABLE' | 'NOT_RUN';
+    revisionApplied: boolean;
+    revisionReviewed: boolean | null;
+    recheckVerdict: 'PASS' | 'REVISE' | 'UNPARSEABLE' | 'NOT_RUN' | null;
+    stoppedEarly: MaoRolePlanEvidence['stoppedEarly'];
+    promptContract: string;
+    stepCount: number;
 }
 
 export interface ProviderAttemptReconciliationReceipt {
@@ -198,7 +214,111 @@ export interface ProviderAttemptReconciliationReceipt {
     claimBoundary: 'summary_counts_only_no_secret_provider_payload_or_raw_body';
 }
 
+export interface CanonicalGatewayEvidence {
+    executionSurface?: 'claude_cli_subscription';
+    observedModelId?: string;
+    nativeProcessState?: 'not_started' | 'started' | 'unknown';
+    canonicalExecutionId: string;
+    receipt: import('cvf-model-gateway').GatewayReceipt;
+    materialContextManifest?: import('cvf-model-gateway').MaterialContextManifest;
+    materialContextManifestDisposition: import('cvf-model-gateway').GatewayMaterialContextManifestDisposition;
+    attemptOutcome: import('cvf-model-gateway').CanonicalExecutionPortResult['attemptOutcome'];
+    providerDiagnostic?: import('cvf-model-gateway').GatewayProviderDiagnostic;
+    actualUsage?: import('cvf-model-gateway').GatewayProviderUsage;
+    usageProvenance: 'provider_reported_partial_or_complete' | 'unknown';
+}
+
+/**
+ * T3 attempt-lineage view of one journal ordinal. Only allowlisted, bounded fields (the journal projection) are carried;
+ * never prompt text, model output or raw errors. `durable` is true only when the entry was read back from a committed
+ * journal record; entries observed in memory after a journal failure are `durable: false`.
+ */
+export interface CanonicalLineageHistoryEntry {
+    ordinal: number;
+    state: 'PORT_PENDING' | 'SETTLED';
+    durable: boolean;
+    reservedAt?: string;
+    settledAt?: string | null;
+    join?: 'NOT_CHECKED' | 'MATCHED' | 'NOT_PRESENT' | 'DISCREPANT';
+    observation: import('@/lib/server/canonical-web-lineage').LineageObservation | null;
+}
+
+/** Additive ordered lineage of every returned port result for one canonical id; `canonicalGateway` stays the latest result. */
+export interface CanonicalLineageEvidence {
+    canonicalId: string;
+    recordingStatus: 'RECORDED' | 'UNCONFIRMED';
+    automaticRetryAllowed: false;
+    history: CanonicalLineageHistoryEntry[];
+    /** False when the entries are in-memory observations that could not be confirmed against the journal. */
+    durable?: boolean;
+    notice?: string;
+}
+
+/** Body of the HTTP 503 returned when settling or finalizing the journal fails after possible provider contact. */
+export interface CanonicalLineageSettlementUncertainResponse {
+    success: false;
+    code: 'JOURNAL_SETTLEMENT_UNCERTAIN';
+    error: string;
+    recordingStatus: 'UNCONFIRMED';
+    providerContact: 'POSSIBLE_OR_OBSERVED';
+    automaticRetryAllowed: false;
+    canonicalId: string;
+    canonicalLineage: CanonicalLineageEvidence;
+}
+
+export interface MaoExecutionEvidence {
+    taskGraphId: string;
+    taskId: string;
+    invocationId: string;
+    attemptId: string;
+    canonicalExecutionId: string;
+    state: 'succeeded';
+}
+
+/** Provider-reported token counts of one canonical call; a component is null when the provider did not report it. */
+export interface MaoRolePlanUsage { inputTokens: number | null; outputTokens: number | null; totalTokens: number | null }
+
+/** Safe evidence of the bounded draft, review, revise and recheck role plan (closed fields and bounded reviewer findings only). */
+export interface MaoRolePlanEvidence {
+    /** Content-free parser/screening reason, present only for an UNPARSEABLE verdict. */
+    reviewerDiagnostic?: import('../role-plan-review-status').ReviewDiagnostic;
+    recheckDiagnostic?: import('../role-plan-review-status').ReviewDiagnostic;
+    taskGraphId: string;
+    steps: Array<{ step: 'draft' | 'review' | 'revise' | 'recheck'; role: 'worker' | 'reviewer'; taskId: string; ordinal: number; state: 'succeeded'; invocationId: string; usage: MaoRolePlanUsage }>;
+    /** Sum over executed steps; a component is null when any executed step lacks it. */
+    totalUsage: MaoRolePlanUsage;
+    /** NOT_RUN: no review call was made (deadline or empty draft); see stoppedEarly. */
+    reviewerVerdict: 'PASS' | 'REVISE' | 'UNPARSEABLE' | 'NOT_RUN';
+    findings: Array<{ criterion: string; problem: string; fix: string }>;
+    revisionApplied: boolean;
+    /** true when the revision was re-reviewed (recheck ran and settled); false when a revision ran but the recheck did not run; null when no revision ran. */
+    revisionReviewed: boolean | null;
+    /** Verdict of the single bounded re-review of the revision; null when no revision ran, NOT_RUN when the recheck could not start. */
+    recheckVerdict: 'PASS' | 'REVISE' | 'UNPARSEABLE' | 'NOT_RUN' | null;
+    /** Findings of the recheck (screened like the review findings); empty when there are none. */
+    recheckFindings: Array<{ criterion: string; problem: string; fix: string }>;
+    /** DEADLINE: the cumulative wall clock was reached before a step; EMPTY_DRAFT: the draft was empty so review was skipped;
+     * ATTEMPT_DENIED: a later provider attempt was denied before any provider call (the settled output is returned); FAILED: only on
+     * failure outcomes (partial evidence of the steps settled so far); null otherwise. */
+    stoppedEarly: 'DEADLINE' | 'EMPTY_DRAFT' | 'ATTEMPT_DENIED' | 'FAILED' | null;
+    /** Prompt contract that built the reviewer and revision prompts; constant 'role-plan-review-v4' on every ok outcome. */
+    promptContract: 'role-plan-review-v4';
+}
+
+/** Latest settled role-plan output kept on a failure response; it is an unreviewed draft, never a completed result. */
+export interface MaoRolePlanPartialOutput {
+    text: string;
+    fromStep: 'draft' | 'revise';
+    reviewed: false;
+}
+
 export interface ExecutionResponse {
+    maoExecution?: MaoExecutionEvidence;
+    maoRolePlan?: MaoRolePlanEvidence;
+    /** Failure responses only: the latest settled role-plan output as an unreviewed draft (O5). */
+    partialOutput?: MaoRolePlanPartialOutput;
+    canonicalGateway?: CanonicalGatewayEvidence;
+    canonicalLineage?: CanonicalLineageEvidence;
     success: boolean;
     output?: string;
     error?: string;
@@ -227,7 +347,11 @@ export interface ProviderStatus {
     /** Name of the env source when configured; never contains the key value. */
     keySourceName?: string | null;
     /** Secret-free readiness summary for non-coder setup confidence. */
-    readiness?: 'live_task_ready' | 'not_configured';
+    readiness?: 'live_task_ready' | 'not_configured' | 'unavailable' | 'unknown';
+    executionSurface?: 'claude_cli_subscription';
+    nativeAuthState?: 'available' | 'unavailable' | 'unknown';
+    checkedAt?: string;
+    modelKind?: 'alias';
 }
 
 // Default models per provider (should match AVAILABLE_MODELS in Settings.tsx)
@@ -239,6 +363,13 @@ export const DEFAULT_MODELS: Record<AIProvider, string> = {
     openrouter: 'meta-llama/llama-4-maverick',
     deepseek: 'deepseek-chat',
 };
+
+// Shared by the governed execution prompt and the assistant's localized prompts.
+export const CVF_FACTUAL_SAFETY_INSTRUCTION = `## Factual accuracy and equipment safety
+- Never invent phone numbers, addresses, sources, citations, or links. Use only verifiable contact details and sources. If you cannot verify them, say so and direct the user to the official website, product manual, or official support channel.
+- Preserve whether the user wants to ask a question or give a notice when writing a message, email, or announcement. Do not add reasons, names, numbers, or facts the user did not provide. For a detail needed in the text, use a placeholder like [name] or [t\u00ean] in the user's language.
+- For suspected hazards involving electrical, gas, or water equipment, put personal safety first. Avoid instructions to dismantle, repair, or bypass safety features on hazardous equipment. Recommend the manufacturer's official support or a qualified technician. If there is immediate danger, lead with getting to safety and contacting the appropriate local emergency service through an official contact route.
+- These instructions take precedence over general guidance to make assumptions, avoid placeholders, or act immediately.`;
 
 // Lean governed system prompt for live provider execution.
 export const CVF_SYSTEM_PROMPT = `You are CVF Agent, a governed assistant inside the Controlled Vibe Framework.
@@ -256,6 +387,8 @@ export const CVF_SYSTEM_PROMPT = `You are CVF Agent, a governed assistant inside
 - Prefer concrete tables, checklists, criteria, timelines, tradeoffs, and acceptance checks when they help the user act.
 - Do not describe your internal process or the governance workflow.
 - Do not use placeholders when a reasonable assumption can be made.
+
+${CVF_FACTUAL_SAFETY_INSTRUCTION}
 
 ## Language
 - Trả lời bằng cùng ngôn ngữ chính của yêu cầu và dữ liệu đầu vào.

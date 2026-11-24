@@ -43,7 +43,7 @@ async function candidate(answer = 'Synthetic reporting') {
     return createSpecConfirmationCandidate(acknowledgeIntentSpecReview(review), 'en', 'Fixture reviewer');
 }
 const post = (body: unknown, headers: Record<string, string> = {}, raw = false) => new Request('http://localhost/api/intent-spec/reviews', {
-    method: 'POST', headers: { origin: 'http://localhost', 'content-type': 'application/json', ...headers },
+    method: 'POST', headers: { host: 'localhost', origin: 'http://localhost', 'content-type': 'application/json', ...headers },
     body: raw ? body as string : JSON.stringify(body),
 });
 const get = (id: string) => new Request(`http://localhost/api/intent-spec/reviews/${id}`);
@@ -110,7 +110,7 @@ describe('POST /api/intent-spec/reviews', () => {
         expect((await handleSaveReview(post(JSON.stringify(good), { 'content-length': String(SAVE_BODY_LIMIT + 1) }, true))).status).toBe(413);
         const big = new Uint8Array(SAVE_BODY_LIMIT + 10).fill(97);
         const streamed = new Request('http://localhost/api/intent-spec/reviews', {
-            method: 'POST', headers: { origin: 'http://localhost', 'content-type': 'application/json' }, body: big, duplex: 'half',
+            method: 'POST', headers: { host: 'localhost', origin: 'http://localhost', 'content-type': 'application/json' }, body: big, duplex: 'half',
         } as RequestInit);
         expect((await handleSaveReview(streamed)).status).toBe(413);
         expect(await namespaceFiles()).toEqual([]);

@@ -1,3 +1,4 @@
+import { ProviderExecutionError, sanitizeGatewayProviderUsage } from "../src/unified-gateway-interface-contract";
 import { describe, expect, it } from "vitest";
 import type {
   GatewayEmbeddingRequest,
@@ -272,5 +273,50 @@ describe("UnifiedGatewayInterfaceContract is implementable", () => {
 describe("UNIFIED_GATEWAY_INTERFACE_CONTRACT_VERSION", () => {
   it("exports the version constant", () => {
     expect(UNIFIED_GATEWAY_INTERFACE_CONTRACT_VERSION).toBe("cvf.unifiedGatewayInterface.v1");
+  });
+});
+
+
+describe("safe provider failure and partial-usage contract", () => {
+  it("preserves legacy envelopes without a provider diagnostic", () => {
+    const error: GatewayErrorEnvelope = { errorClass: "internal_error", traceId: "legacy", message: "fixed", credentialShielded: true, retryable: true };
+    expect(error.providerDiagnostic).toBeUndefined();
+  });
+  it("supports unknown and total-only actual usage without fabricated splits", () => {
+    const response: GatewayExecuteResponse = { traceId: "partial", text: "answer", providerUsage: { totalTokens: 7 } };
+    expect(response.usage).toBeUndefined(); expect(response.providerUsage).toEqual({ totalTokens: 7 });
+  });
+  it("copies only finite nonnegative counters", () => {
+    expect(sanitizeGatewayProviderUsage({ inputTokens: 0, outputTokens: 2, totalTokens: 2, secret: "forbidden" })).toEqual({ inputTokens: 0, outputTokens: 2, totalTokens: 2 });
+    expect(sanitizeGatewayProviderUsage({ inputTokens: NaN, outputTokens: -2, totalTokens: Infinity })).toBeUndefined();
+    expect(sanitizeGatewayProviderUsage({ totalTokens: "3" })).toBeUndefined();
+  });
+  it("reconstructs a fixed safe diagnostic despite arbitrary Error properties", () => {
+    const error = new ProviderExecutionError("provider_http_error", { httpStatus: 401, usage: { inputTokens: 2, totalTokens: 4 } });
+    error.message = "sensitive raw body"; (error as any).cause = "sensitive raw body";
+    const envelope = error.toGatewayEnvelope("trace-safe");
+    expect(envelope.providerDiagnostic).toEqual({ code: "provider_http_error", httpStatus: 401, usage: { inputTokens: 2, totalTokens: 4 } });
+    expect(envelope.retryable).toBe(false); expect(JSON.stringify(envelope)).not.toContain("sensitive");
+  });
+  it("drops invalid status and coerces unrecognized code to a fixed unknown failure", () => {
+    const envelope = new ProviderExecutionError("raw secret" as any, { httpStatus: 900, usage: { inputTokens: -3 } }).toGatewayEnvelope("trace");
+    expect(envelope.providerDiagnostic).toEqual({ code: "unknown_error" }); expect(envelope.retryable).toBe(false);
+    expect(JSON.stringify(envelope)).not.toContain("raw secret");
+  });
+  it.each(["request_cancelled", "provider_timeout", "output_incomplete", "network_error", "unknown_error"] as const)("keeps %s terminal without replay advice", code => {
+    expect(new ProviderExecutionError(code).toGatewayEnvelope("trace").retryable).toBe(false);
+  });
+});
+
+
+describe("invocation fingerprint diagnostic boundary", () => {
+  it("retains exactly a lowercase twelve-hex invocation fingerprint", () => {
+    const diagnostic = new ProviderExecutionError("provider_http_error", { httpStatus: 401, credentialFingerprint: "012345abcdef" }).toGatewayEnvelope("trace").providerDiagnostic;
+    expect(diagnostic).toEqual({ code: "provider_http_error", httpStatus: 401, credentialFingerprint: "012345abcdef" });
+  });
+  it.each(["raw-secret-value", "012345ABCDEF", "012345abcdef0", "012345abcde", "012345abcdef\n", "", 123, null])("strips malformed fingerprint %j", credentialFingerprint => {
+    const error = new ProviderExecutionError("provider_timeout", { credentialFingerprint: credentialFingerprint as any });
+    expect(error.diagnostic).toEqual({ code: "provider_timeout" });
+    expect(error.toGatewayEnvelope("trace").providerDiagnostic).toEqual({ code: "provider_timeout" });
   });
 });

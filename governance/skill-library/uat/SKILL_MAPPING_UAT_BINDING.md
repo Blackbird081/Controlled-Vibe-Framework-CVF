@@ -1,5 +1,7 @@
 # Mapping: SKILL_MAPPING_RECORD ↔ AGENT_AI_UAT_CVF_TEMPLATE
 
+> Catalog status: `NOT_ACTIVE` for current discovery. Retained as the mapping and acceptance record format. See the [Web skill catalog](../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md).
+>
 > **Version:** 1.0.1  
 > **Purpose:** Define how UAT binds to Skill Mapping Records
 

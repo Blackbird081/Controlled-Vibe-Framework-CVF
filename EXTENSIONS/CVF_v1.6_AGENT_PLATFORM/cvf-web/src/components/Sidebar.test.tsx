@@ -1,13 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import en from '@/lib/i18n/en.json';
 import Sidebar from './Sidebar';
 
+let pathname = '/home';
 vi.mock('next/navigation', () => ({
-    usePathname: () => '/home',
+    usePathname: () => pathname,
 }));
 
 vi.mock('@/lib/i18n', () => ({
@@ -46,22 +47,71 @@ function renderSidebar(overrides: Partial<Parameters<typeof Sidebar>[0]> = {}) {
     return render(<Sidebar {...props} />);
 }
 
-describe('Sidebar task-first navigation groups', () => {
-    it('renders exactly five task-oriented navigation groups with translated labels', () => {
+describe('Sidebar task-first navigation', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        pathname = '/home';
+    });
+
+    it('renders the seven main destinations and an expanded developer group for an owner', () => {
         renderSidebar();
 
         const nav = screen.getByLabelText('Main navigation', { selector: 'nav' });
-        const groups = nav.querySelectorAll('[data-sidebar-group]');
-        expect(groups).toHaveLength(5);
-
-        const groupTitles = Array.from(groups).map((group) => group.querySelector('button')?.textContent ?? '');
-        expect(groupTitles).toEqual([
-            en['sidebar.home'],
-            en['sidebar.aiWork'],
-            en['sidebar.knowledgeReview'],
-            en['sidebar.advancedOperations'],
-            en['sidebar.account'],
+        const main = nav.querySelector('[data-sidebar-group="main"]') as HTMLElement;
+        const mainLabels = Array.from(main.querySelectorAll(':scope > button, :scope > a, :scope > [data-sidebar-group="account"] > button'))
+            .map(item => item.textContent);
+        expect(mainLabels).toEqual([
+            en['nav.home'], en['nav.aiAgent'], en['nav.skills'], en['nav.workspace'],
+            en['nav.help'], en['nav.landing'], en['sidebar.account'],
         ]);
+        expect(within(nav).getByRole('button', { name: en['sidebar.developer'] }).getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('opens the legacy starter from the Developer group', () => {
+        const onNavigate = vi.fn();
+        renderSidebar({ onNavigate });
+        const group = document.querySelector('[data-sidebar-group="developer"]') as HTMLElement;
+        const starter = within(group).getByRole('button', { name: 'Governed starter path' });
+        fireEvent.click(starter);
+        expect(onNavigate).toHaveBeenCalledWith('quickStart');
+    });
+
+    it('remembers the developer disclosure across mounts without changing admin defaults', () => {
+        const developer = renderSidebar({ userRole: 'developer' });
+        const toggle = () => screen.getByRole('button', { name: en['sidebar.developer'] });
+        expect(toggle().getAttribute('aria-expanded')).toBe('false');
+        fireEvent.click(toggle());
+        expect(toggle().getAttribute('aria-expanded')).toBe('true');
+        developer.unmount();
+
+        const admin = renderSidebar({ userRole: 'admin' });
+        expect(toggle().getAttribute('aria-expanded')).toBe('true');
+        fireEvent.click(toggle());
+        admin.unmount();
+
+        renderSidebar({ userRole: 'developer' });
+        expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('keeps the existing account actions reachable from the main area', () => {
+        const onShowSettings = vi.fn();
+        const onShowAIUsage = vi.fn();
+        const onShowUserContext = vi.fn();
+        renderSidebar({ onShowSettings, onShowAIUsage, onShowUserContext });
+        fireEvent.click(screen.getByRole('button', { name: en['sidebar.account'] }));
+        fireEvent.click(screen.getByRole('button', { name: en['nav.settings'] }));
+        fireEvent.click(screen.getByRole('button', { name: en['nav.aiUsage'] }));
+        fireEvent.click(screen.getByRole('button', { name: en['nav.context'] }));
+        expect(onShowSettings).toHaveBeenCalledTimes(1);
+        expect(onShowAIUsage).toHaveBeenCalledTimes(1);
+        expect(onShowUserContext).toHaveBeenCalledTimes(1);
+    });
+
+    it('marks only the actual route current when the shell uses Home as its fallback state', () => {
+        pathname = '/artifacts';
+        renderSidebar({ appState: 'home' });
+        expect(screen.getByRole('button', { name: en['nav.home'] }).hasAttribute('aria-current')).toBe(false);
+        expect(screen.getByRole('link', { name: en['nav.artifacts'] }).getAttribute('aria-current')).toBe('page');
     });
 
     it('preserves every existing route href for an owner role', () => {
@@ -70,6 +120,7 @@ describe('Sidebar task-first navigation groups', () => {
         const expectedHrefs = [
             '/workspace',
             '/governance/knowledge',
+            '/governance/mao-runs',
             '/knowledge/intake',
             '/artifacts',
             '/work-transfer',
@@ -146,6 +197,7 @@ describe('Sidebar task-first navigation groups', () => {
             },
         });
 
+        fireEvent.click(screen.getByRole('button', { name: en['sidebar.developer'] }));
         expect(screen.queryByText(en['nav.aiAgent'])).toBeNull();
         expect(screen.queryByText(en['nav.multiAgent'])).toBeNull();
         expect(screen.queryByText(en['nav.tools'])).toBeNull();
@@ -159,11 +211,22 @@ describe('Sidebar task-first navigation groups', () => {
 
         // AI Safety and CVF Workspace remain unconditional for every role.
         expect(screen.getByText(en['nav.safety'])).toBeTruthy();
-        expect(screen.getByText('CVF Workspace')).toBeTruthy();
+        expect(screen.getByText(en['nav.workspace'])).toBeTruthy();
+    });
+
+    it('does not display admin or privileged links without a verified role', () => {
+        renderSidebar({ userRole: null, permissions: {
+            canUseAgent: false, canUseMultiAgent: false, canUseTools: false,
+            canUseSettings: false, canUseAIUsage: false, canUseContext: false,
+        } });
+        expect(screen.queryByText('admin')).toBeNull();
+        expect(screen.queryByText(en['nav.enterprise'])).toBeNull();
+        expect(screen.queryByText(en['nav.history'])).toBeNull();
     });
 
     it('shows Enterprise only for admin/owner roles', () => {
         renderSidebar({ userRole: 'developer' });
+        fireEvent.click(screen.getByRole('button', { name: en['sidebar.developer'] }));
         expect(screen.queryByText(en['nav.enterprise'])).toBeNull();
     });
 });

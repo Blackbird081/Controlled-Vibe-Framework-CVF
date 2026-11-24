@@ -1,14 +1,17 @@
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 import type { AdminSession } from '@/lib/admin-session';
 import { boundDisclosureOf, makeBoundConfig, type BoundDisclosure } from '@/lib/artifacts-bound-receipt-contract';
 import { createBoundReceiptFixtureProfile } from './bound-receipt-profile';
 import { jobRouteHandlers } from './html-job-api';
 
 vi.mock('@/lib/admin-session', () => ({ requireAdminApiSession: vi.fn() }));
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots');
+const ROOTS = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-authority-repair-'));
+afterAll(async () => { await fs.rm(ROOTS, { recursive: true, force: true }); });
 const now = Date.parse('2026-10-19T01:00:00.000Z');
 const session: Extract<AdminSession, { authMode: 'session' }> = { authMode: 'session', expiresAt: now + 60_000, userId: 'u1', orgId: 'o1', teamId: 't1', role: 'owner', user: 'fixture' };
 const config = makeBoundConfig({ policyRevision: 'policy-r1', transformRevision: 'transform-1', endpointId: 'fixture-endpoint', storeId: 'fixture-store', authReference: 'bundle-1',
@@ -66,7 +69,7 @@ describe('capability disclosure comes only from explicit injection (BC09/BC10)',
     expect((await route.GET(capabilities('&effectBoundary=BOUND_ENGINE_RECEIPT'))).status).toBe(422);
     const headed = await data(await route.GET(capabilities('', { 'x-cvf-bound-disclosure': JSON.stringify(disclosure), 'x-cvf-effect-boundary': 'BOUND_ENGINE_RECEIPT' })));
     expect(headed.data).toEqual({ jobDecisions: true, effectBoundary: 'LOCAL_SYNTHETIC' });
-    const post = new NextRequest(url, { method: 'POST', headers: { origin: 'http://localhost', 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' },
+    const post = new NextRequest(url, { method: 'POST', headers: { host: 'localhost', origin: 'http://localhost', 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' },
       body: JSON.stringify({ action: 'CREATE_JOB', boundDisclosure: disclosure }) });
     expect((await route.POST(post)).status).toBe(422);
   });
@@ -99,7 +102,7 @@ describe('capability disclosure comes only from explicit injection (BC09/BC10)',
     const create = { action: 'CREATE_JOB', jobId: '123e4567-e89b-42d3-a456-426614174001', sourceRecordId: 'ncr-synthetic-api', goal: 'Review',
       criteria: [{ criterionId: 'c1', text: 'Heading' }], expectedOutput: 'HTML', allowedEffects: ['LOCAL_HTML_BUILD', 'LOCAL_DRAFT_SAVE', 'LOCAL_SYNTHETIC_REVIEW'],
       request: { title: 't', sourcePath: 'p', sourceContent: 's', memoryClass: 'FULL_RECORD', status: 'DRAFT', claimBoundary: 'local', receiptAnchor: 'r' } };
-    const post = (body: unknown) => new NextRequest(url, { method: 'POST', headers: { origin: 'http://localhost', 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' },
+    const post = (body: unknown) => new NextRequest(url, { method: 'POST', headers: { host: 'localhost', origin: 'http://localhost', 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' },
       body: JSON.stringify(body) });
     expect((await route.POST(post(create))).status).toBe(201);
     expect((await route.POST(post(create))).status).toBe(409);

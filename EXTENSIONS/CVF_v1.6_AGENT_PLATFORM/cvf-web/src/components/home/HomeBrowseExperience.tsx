@@ -16,6 +16,8 @@ import {
     TemplateCard
 } from '@/components';
 import { OutcomeQuickActions } from '@/components/OutcomeQuickActions';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
+import { homeSpecOutcomeTitle } from '@/lib/home-spec-jev-catalog';
 
 interface HomeBrowseExperienceProps {
     language: string | 'vi' | 'en';
@@ -188,11 +190,21 @@ export function HomeBrowseExperience(props: HomeBrowseExperienceProps) {
                             </div>
                         </div>
 
+                        {filteredTemplates.length === 0 && (
+                            <div role="status" className="mb-4 text-sm">
+                                <p>{language === 'vi' ? 'Không tìm thấy mẫu phù hợp.' : 'No templates found.'}</p>
+                                <button type="button" onClick={() => { setSearchQuery(''); setSelectedCategory('all'); setCurrentFolder(null); }} className="mt-2 underline">
+                                    {language === 'vi' ? 'Xóa bộ lọc và xem tất cả mẫu' : 'Clear filters and show all templates'}
+                                </button>
+                            </div>
+                        )}
+
                         <div id="tour-template-grid" className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                             {filteredTemplates.map((template, index) => (
                                 <div key={template.id} id={index === 0 ? 'tour-template-card' : undefined}>
                                     <TemplateCard
                                         template={template}
+                                        displayName={homeSpecOutcomeTitle(template.id, language === 'vi' ? 'vi' : 'en') || undefined}
                                         onClick={() => handleSelectTemplate(template)}
                                         onPreview={(e) => { e.stopPropagation(); setPreviewTemplate(template); }}
                                         onTry={QUICK_TRY_CONFIGS[template.id]
@@ -379,21 +391,16 @@ export function HomeBrowseExperience(props: HomeBrowseExperienceProps) {
                                     {language === 'vi' ? 'Trạng thái lần chạy đầu' : 'First-run confidence'}
                                 </div>
                                 <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
-                                    {setupConfidence.label}
+                                    {setupConfidence.liveTaskReady
+                                        ? (language === 'vi' ? 'Sẵn sàng cho tác vụ' : 'Ready for a task')
+                                        : (language === 'vi' ? 'Cần hoàn tất thiết lập' : 'Setup needs attention')}
                                 </h3>
-                                <p className="mt-2 text-sm leading-6 opacity-80">
-                                    {setupConfidence.description}
-                                </p>
+                                <TechnicalDetails className="mt-3" label={language === 'vi' ? 'Chi tiết kỹ thuật' : 'Technical details'}>
+                                    <p>{setupConfidence.label}</p>
+                                    <p>{setupConfidence.description}</p>
+                                </TechnicalDetails>
                             </div>
                             <div className="grid gap-2 text-sm">
-                                <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
-                                    <span>{language === 'vi' ? 'Live task' : 'Live task'}</span>
-                                    <span className="font-semibold">{setupConfidence.liveTaskReady ? 'READY' : 'NEEDS KEY'}</span>
-                                </div>
-                                <div className="flex items-center justify-between rounded-2xl border border-current/15 bg-white/55 px-4 py-3 dark:bg-white/[0.04]">
-                                    <span>{language === 'vi' ? 'Workspace enforcement' : 'Workspace enforcement'}</span>
-                                    <span className="font-semibold">ARTIFACT READY</span>
-                                </div>
                                 <button
                                     type="button"
                                     onClick={() => setupConfidence.liveTaskReady

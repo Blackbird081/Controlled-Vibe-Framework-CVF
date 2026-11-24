@@ -1,5 +1,7 @@
 # CVF cho Lập trình viên Cá nhân
 
+> Quy trình hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây minh họa các quyết định; hoàn tất đặc tả và giao việc trước khi thực hiện, rồi ghi kết thúc sau kiểm tra. [Vòng đời công việc](lifecycle.md).
+
 **Đối tượng:** Lập trình viên cá nhân sử dụng AI để viết code  
 **Thời gian đọc:** 10 phút  
 **Phiên bản CVF:** v1.0 (lõi) — tùy chọn v1.6 (giao diện web)
@@ -12,13 +14,13 @@ Khi bạn code với AI (ChatGPT, Claude, Copilot, Cursor), những vấn đề 
 
 | Vấn đề | Điều gì xảy ra | CVF khắc phục |
 |---------|----------------|---------------|
-| **Phình phạm vi** | AI thêm tính năng bạn không yêu cầu | Phase A đóng băng ý định |
-| **Mất ngữ cảnh** | Sau 10 prompt, AI quên mục tiêu của bạn | Tài liệu thiết kế Phase B duy trì ngữ cảnh |
-| **Lỗi ẩn** | Code AI trông đúng nhưng hỏng ở các trường hợp biên | Danh sách kiểm tra Phase D |
+| **Phình phạm vi** | AI thêm tính năng bạn không yêu cầu | INTAKE đóng băng ý định |
+| **Mất ngữ cảnh** | Sau 10 prompt, AI quên mục tiêu của bạn | Tài liệu thiết kế DESIGN duy trì ngữ cảnh |
+| **Lỗi ẩn** | Code AI trông đúng nhưng hỏng ở các trường hợp biên | Danh sách kiểm tra REVIEW |
 | **Nợ kỹ thuật** | "Nó chạy được" trở thành "Tôi không bảo trì nổi" | Cấu trúc governance |
 | **Lãng phí thời gian** | Giải thích lại cùng một thứ cho AI | File spec giữ ngữ cảnh |
 
-CVF khắc phục những vấn đề này bằng **cấu trúc mà không tạo gánh nặng**. Bạn không cần team, không cần quản lý, cũng không cần công cụ đặc biệt. Chỉ cần 4 phase và vài file markdown.
+CVF khắc phục những vấn đề này bằng **cấu trúc mà không tạo gánh nặng**. Bạn không cần team, không cần quản lý, cũng không cần công cụ đặc biệt. Chỉ cần giai đoạn và vài file markdown.
 
 ---
 
@@ -87,20 +89,20 @@ npm run dev
 
 Mở <http://localhost:3000> → Chọn template → Điền form → Xuất → Đưa cho AI.
 
-Giao diện web sẽ hướng dẫn bạn qua 4 phase một cách tự động.
+Giao diện web sẽ hướng dẫn bạn qua giai đoạn một cách tự động.
 
 > **Lưu ý:** Bạn cần ít nhất một API key AI (OpenAI, Anthropic, hoặc Google AI). Sao chép `.env.example` thành `.env.local` và thêm key của bạn.
 
 ---
 
-## Quy trình 4 Phase cho Lập trình viên Cá nhân
+## Quy trình vòng đời cho Lập trình viên Cá nhân
 
-### Phase A — KHÁM PHÁ (5 phút)
+### INTAKE — KHÁM PHÁ (5 phút)
 
 **Bạn làm gì:** Viết ra những gì bạn muốn. Cụ thể nhất có thể.
 
 ```markdown
-## Phase A: Discovery
+## INTAKE
 
 **Intent:** I want a CLI tool that converts CSV files to JSON.
 
@@ -125,12 +127,12 @@ Giao diện web sẽ hướng dẫn bạn qua 4 phase một cách tự động.
 
 ---
 
-### Phase B — THIẾT KẾ (10 phút)
+### DESIGN — THIẾT KẾ (10 phút)
 
 **Bạn làm gì:** Phác thảo cách tiếp cận giải pháp trước khi code.
 
 ```markdown
-## Phase B: Design
+## DESIGN
 
 **Approach:** 
 - Use Python's built-in `csv` module for parsing
@@ -156,19 +158,19 @@ CLI input → validate path → read CSV → convert to dicts → write JSON →
 
 ---
 
-### Phase C — XÂY DỰNG (AI thực hiện)
+### BUILD — XÂY DỰNG (AI thực hiện)
 
-**Bạn làm gì:** Đưa tài liệu Phase A + Phase B cho AI và để AI code.
+**Bạn làm gì:** Đưa tài liệu INTAKE + DESIGN cho AI và để AI code.
 
 ```
 You are an Execution agent. Follow the design exactly.
 
-Read the attached Phase A (Discovery) and Phase B (Design) docs.
+Read the attached INTAKE and DESIGN docs.
 Implement the solution as designed.
 
 Rules:
 - Do NOT add features not in the spec
-- Do NOT change the approach from Phase B
+- Do NOT change the approach from DESIGN
 - If the design is not feasible, STOP and tell me why
 - Do NOT optimize unless I ask
 
@@ -179,14 +181,14 @@ Create: src/csv_to_json.py
 
 ---
 
-### Phase D — ĐÁNH GIÁ (5 phút)
+### REVIEW — ĐÁNH GIÁ (5 phút)
 
-**Bạn làm gì:** Kiểm tra đầu ra so với ý định Phase A.
+**Bạn làm gì:** Kiểm tra đầu ra so với ý định INTAKE.
 
 **Danh sách kiểm tra:**
 
 ```markdown
-## Phase D: Review
+## REVIEW: Review
 
 - [ ] Does it take a CSV path as input? → YES
 - [ ] Does it output JSON in same directory? → YES
@@ -199,7 +201,7 @@ Create: src/csv_to_json.py
 **Verdict:** ✅ ACCEPT (after testing quoted fields)
 ```
 
-**Nếu có gì đó không đạt:** Đừng sửa trong Phase D. Quay lại Phase B (điều chỉnh thiết kế) hoặc Phase C (thực thi lại).
+**Nếu có gì đó không đạt:** Đừng sửa trong REVIEW. Quay lại DESIGN (điều chỉnh thiết kế) hoặc BUILD (thực thi lại).
 
 ---
 
@@ -207,7 +209,7 @@ Create: src/csv_to_json.py
 
 ### 1. Bắt đầu Đơn giản
 
-Đừng dùng tất cả tính năng CVF cùng lúc. Bắt đầu chỉ với `INPUT_SPEC.md` và danh sách kiểm tra Phase D. Thêm cấu trúc khi bạn cần.
+Đừng dùng tất cả tính năng CVF cùng lúc. Bắt đầu chỉ với `INPUT_SPEC.md` và danh sách kiểm tra REVIEW. Thêm cấu trúc khi bạn cần.
 
 ### 2. Sử dụng Quy tắc 2 Giờ
 
@@ -235,7 +237,7 @@ Sau mỗi phiên AI, lưu một bản trace nhanh:
 ## AU-001: Implement CSV parser
 
 **Command:** CVF:EXECUTE
-**Input:** Phase A + Phase B specs
+**Input:** INTAKE + DESIGN specs
 **AI Used:** Claude 3.5
 **Output:** src/csv_to_json.py (87 lines)
 **Review:** ACCEPT — all criteria met
@@ -254,28 +256,28 @@ AI luôn gợi ý "cải tiến". Câu trả lời của bạn:
 
 | Tín hiệu | Hành động |
 |-----------|-----------|
-| Dự án mất hơn 1 ngày | Thêm Phase B (thiết kế bài bản) |
+| Dự án mất hơn 1 ngày | Thêm DESIGN (thiết kế bài bản) |
 | Đầu ra AI ngày càng sai | Thêm INPUT_SPEC (ngữ cảnh rõ hơn) |
 | Không nhớ tại sao xây dựng mọi thứ | Thêm Decision Log |
 | Làm việc với 1-2 người khác | Chuyển sang Hướng dẫn cho Nhóm |
 | Cần quản lý rủi ro | Đọc về Risk Model |
-| Muốn template có sẵn | Duyệt Skill Library |
+| Muốn template có sẵn | [Xem các mẫu kết quả trên Trang chủ](/home) |
 
 ---
 
 ## Câu hỏi Thường gặp
 
 **H: CVF có quá mức cần thiết cho dự án nhỏ không?**  
-Đ: Không. CVF tối thiểu chỉ là viết ra ý định (Phase A) và kiểm tra kết quả (Phase D). Đó là 10 phút overhead giúp tiết kiệm hàng giờ làm lại.
+Đ: Không. CVF tối thiểu chỉ là viết ra ý định (INTAKE) và kiểm tra kết quả (REVIEW). Đó là 10 phút overhead giúp tiết kiệm hàng giờ làm lại.
 
 **H: Tôi có cần giao diện web không?**  
 Đ: Không. CVF lõi chỉ cần file Markdown. Giao diện web chỉ giúp điền form và quản lý template dễ hơn.
 
 **H: Tôi có thể dùng CVF với Cursor / Windsurf / Cline không?**  
-Đ: Có. CVF không phụ thuộc editor. Tài liệu Phase A + Phase B trở thành ngữ cảnh cho bất kỳ công cụ AI nào.
+Đ: Có. CVF không phụ thuộc editor. Tài liệu INTAKE + DESIGN trở thành ngữ cảnh cho bất kỳ công cụ AI nào.
 
 **H: Nếu tôi quên một phase thì sao?**  
-Đ: Bắt đầu chỉ với Phase A và Phase D. Thêm B và C khi bạn cảm thấy cần. Framework thích ứng với quy trình của bạn.
+Đ: Bắt đầu chỉ với INTAKE và REVIEW. Thêm B và C khi bạn cảm thấy cần. Framework thích ứng với quy trình của bạn.
 
 **H: Cái này khác gì so với chỉ viết prompt?**  
 Đ: Prompt là dùng một lần. CVF cung cấp ngữ cảnh bền vững (spec), lịch sử quyết định, và quy trình đánh giá. Khi dự án phức tạp, prompt thất bại — spec thì không.
@@ -284,12 +286,14 @@ AI luôn gợi ý "cải tiến". Câu trả lời của bạn:
 
 ## Bước tiếp theo
 
-- 📖 Tìm hiểu 4 Phase
+- 📖 Tìm hiểu vòng đời
 - 🧪 Thử Dự án CVF Đầu tiên (Hướng dẫn)
-- 📚 Duyệt 114 Skill
+- 📚 [Mở thư viện kỹ năng dành cho agent](/skills)
 - 🖥️ Cài đặt Giao diện Web
 - 👥 Sẵn sàng cho nhóm? → Hướng dẫn cho Nhóm
 
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

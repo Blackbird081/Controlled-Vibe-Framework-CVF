@@ -93,6 +93,10 @@ export function routeIntent(userInput: string): IntentRouteResult | null {
     return null;
   }
 
+  return routeHomeSpecKeywords(userInput);
+}
+
+export function routeHomeSpecKeywords(userInput: string): IntentRouteResult {
   const intentRoutedAt = new Date().toISOString();
 
   // Empty input — weak: no target, suggest user provides description.

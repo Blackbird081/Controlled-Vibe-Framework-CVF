@@ -16,7 +16,7 @@ Chọn đường đi phù hợp với bạn:
 
 Bạn muốn học CVF<br>cho dự án cá nhân
 
-**[→ Bắt đầu](#-solo-developer---5-phút)**
+**[→ Bắt đầu](#solo-developer---5-phút)**
 
 </td>
 <td width="25%" align="center">
@@ -25,7 +25,7 @@ Bạn muốn học CVF<br>cho dự án cá nhân
 
 Team 2-5 người<br>cần collaboration
 
-**[→ Team Setup](#-small-team---15-phút)**
+**[→ Team Setup](#small-team---15-phút)**
 
 </td>
 <td width="25%" align="center">
@@ -34,7 +34,7 @@ Team 2-5 người<br>cần collaboration
 
 Production deployment<br>với governance đầy đủ
 
-**[→ Enterprise](#-enterprise---30-phút)**
+**[→ Enterprise](#enterprise---30-phút)**
 
 </td>
 <td width="25%" align="center">
@@ -43,7 +43,7 @@ Production deployment<br>với governance đầy đủ
 
 Muốn contribute<br>vào CVF
 
-**[→ Dev Guide](#%EF%B8%8F-contributors)**
+**[→ Dev Guide](#contributors)**
 
 </td>
 </tr>
@@ -51,7 +51,7 @@ Muốn contribute<br>vào CVF
 
 ---
 
-## 👤 Solo Developer - 5 Phút
+## Solo Developer - 5 Phút
 
 ### Step 1: Hiểu CVF Là Gì (2 phút đọc)
 
@@ -67,16 +67,9 @@ Khi bạn dùng AI (ChatGPT/Claude/Copilot) để code:
 - ❌ Không có documentation
 - ❌ Technical debt tích tụ
 
-#### CVF Solution: 4-Phase Process
+#### Quy trình CVF
 
-```
-Phase A (Discovery)  →  Phase B (Design)  →  Phase C (Build)  →  Phase D (Review)
-      ↓                       ↓                    ↓                    ↓
- Requirements            Architecture          AI Codes           You Validate
- YOU decide              YOU decide          AI executes         YOU approve/reject
-```
-
-**Nguyên tắc vàng:** AI là executor, BẠN là decision maker.
+Hiểu việc → Lập kế hoạch → Thực hiện → Kiểm tra → Kết thúc. Lập kế hoạch gồm DESIGN, SPEC và WORK ORDER. Xem [vòng đời công việc](lifecycle.md).
 
 ### Step 2: Chạy Ví Dụ Đầu Tiên (3 phút)
 
@@ -99,7 +92,7 @@ npm run dev
 
 1. Click "Templates" → Chọn "Simple Todo App"
 2. Fill form → Click "Generate"
-3. See 4-phase breakdown
+3. Review the specification
 4. Export prompt to use with AI
 
 #### Option B: Manual (Core CVF)
@@ -120,7 +113,7 @@ Sau khi chạy được ví dụ đầu tiên:
 
 ---
 
-## 👥 Small Team - 15 Phút
+## Small Team - 15 Phút
 
 ### Prerequisites
 
@@ -152,10 +145,10 @@ npm run dev
 **Share với team:**
 
 1. **Roles trong CVF:**
-   - 🎯 **Project Owner:** Quyết định requirements (Phase A)
-   - 🎨 **Architect:** Design solution (Phase B)
-   - 🤖 **AI Executor:** Generate code (Phase C)
-   - ✅ **Reviewer:** Validate quality (Phase D)
+   - 🎯 **Project Owner:** Quyết định requirements (INTAKE)
+   - 🎨 **Architect:** Design solution (DESIGN)
+   - 🤖 **AI Executor:** Generate code (BUILD)
+   - ✅ **Reviewer:** Validate quality (REVIEW)
 
 2. **Workflow:**
 
@@ -166,7 +159,7 @@ npm run dev
 3. **Tools:**
    - Web UI: Templates & Skills
    - Governance Toolkit: Phase gates, risk control
-   - Skill Library: 124 reusable skills
+   - [Thư viện kỹ năng dành cho agent](/skills)
 
 ### Step 3: First Team Project (5 phút)
 
@@ -188,7 +181,7 @@ npm run dev
 
 ---
 
-## 🏢 Enterprise - 30 Phút
+## Enterprise - 30 Phút
 
 ### Phase 1: Assessment (10 phút)
 
@@ -256,7 +249,7 @@ npm run dev
 
 ---
 
-## 🛠️ Contributors
+## Contributors
 
 ### Want to Contribute?
 
@@ -307,7 +300,7 @@ git push origin feature/your-feature-name
 ### Path 1: Core Concepts (1-2 hours)
 
 1. [Core Philosophy](concepts/core-philosophy.md) - 15 mins
-2. [4-Phase Process](concepts/4-phase-process.md) - 20 mins
+2. [Work lifecycle](lifecycle.md) - 20 mins
 3. [Governance Model](concepts/governance-model.md) - 25 mins
 4. [Skill System](concepts/skill-system.md) - 20 mins
 
@@ -321,9 +314,9 @@ git push origin feature/your-feature-name
 ### Path 3: Deep Dives (ongoing)
 
 - Governance Toolkit - Comprehensive
-- Skill Library - 124 skills
+- [Thư viện kỹ năng dành cho agent](/skills)
 - [Version History](concepts/version-evolution.md) - Evolution
-- [Architecture](CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
+- [Architecture](/docs/core-philosophy) - Technical specs
 
 ---
 
@@ -345,7 +338,7 @@ git push origin feature/your-feature-name
 
 ### Support Channels
 
-1. 🔍 [Search Documentation](GET_STARTED.md)
+1. 🔍 [Search Documentation](/docs/getting-started)
 2. 📚 [Troubleshooting](cheatsheets/troubleshooting.md)
 3. 🐛 [Browse Issues](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/issues)
 4. 💬 [Ask on Discord](https://discord.gg/cvf)
@@ -365,7 +358,7 @@ git push origin feature/your-feature-name
 |----------|------|
 | **Guides** | [Solo Dev](guides/solo-developer.md) · [Team](guides/team-setup.md) · [Enterprise](guides/enterprise.md) |
 | **Tutorials** | [First Project](tutorials/first-project.md) · [Web UI](tutorials/web-ui-setup.md) · [Agent](tutorials/agent-platform.md) |
-| **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Phases](concepts/4-phase-process.md) · [Governance](concepts/governance-model.md) |
+| **Concepts** | [Philosophy](concepts/core-philosophy.md) · [Phases](lifecycle.md) · [Governance](concepts/governance-model.md) |
 | **Reference** | [Skills](concepts/skill-system.md) · [Risk Model](concepts/risk-model.md) · [Version History](concepts/version-evolution.md) |
 | **Cheatsheets** | [Versions](cheatsheets/version-picker.md) · [Troubleshoot](cheatsheets/troubleshooting.md) |
 

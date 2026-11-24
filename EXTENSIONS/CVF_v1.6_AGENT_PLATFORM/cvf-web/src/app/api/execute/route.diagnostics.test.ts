@@ -3,7 +3,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
@@ -12,7 +12,6 @@ const appendCostEventMock = vi.hoisted(() => vi.fn());
 let auditEventSequence = 0;
 
 vi.mock('@/lib/ai', () => ({
-    executeAI: executeAIMock,
     CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -22,6 +21,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
     verifySessionCookie: verifySessionCookieMock,
+    resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
     withSessionAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
@@ -40,6 +40,7 @@ vi.mock('@/lib/control-plane-events', async () => {
 });
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 describe('/api/execute diagnostics', () => {
     const originalEnv = { ...process.env };
@@ -47,7 +48,7 @@ describe('/api/execute diagnostics', () => {
 
     beforeEach(async () => {
         tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-route-diagnostics-'));
-        executeAIMock.mockReset();
+        providerSpy.mockReset();
         evaluateEnforcementMock.mockReset();
         verifySessionCookieMock.mockReset();
         checkTeamQuotaMock.mockReset();
@@ -67,6 +68,7 @@ describe('/api/execute diagnostics', () => {
         });
         process.env = { ...originalEnv };
         delete process.env.OPENAI_API_KEY;
+        delete process.env.CVF_OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
         delete process.env.GOOGLE_AI_API_KEY;
         delete process.env.ALIBABA_API_KEY;
@@ -107,10 +109,13 @@ describe('/api/execute diagnostics', () => {
     });
 
     it('returns V3 diagnostic when provider routing denies execution', async () => {
+        // Canonical path: a configured provider is denied by the governance router when its risk cap excludes the request (no silent fallback).
+        process.env.OPENAI_API_KEY = 'test-key';
+        process.env.CVF_PROVIDER_RISK_CAP_OPENAI = 'R0';
         const res = await POST(new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
-                templateName: 'Strategy',
+                templateId: 'meeting_notes', templateName: 'Strategy',
                 intent: 'Analyze',
                 inputs: { goal: 'Test' },
                 provider: 'openai',
@@ -127,33 +132,18 @@ describe('/api/execute diagnostics', () => {
             userAction: 'lower_risk_or_change_provider',
             retryable: false,
         });
-        expect(executeAIMock).not.toHaveBeenCalled();
+        expect(providerSpy).not.toHaveBeenCalled();
     });
 
     it('preserves provider diagnostics on failed execution responses', async () => {
         process.env.OPENAI_API_KEY = 'test-key';
-        executeAIMock.mockResolvedValue({
-            success: false,
-            error: 'timeout',
-            provider: 'openai',
-            model: 'gpt-4o',
-            diagnostic: {
-                contractVersion: 'cvf.executionDiagnostic.v1',
-                stage: 'provider',
-                class: 'provider_timeout',
-                retryable: true,
-                userAction: 'wait_and_retry',
-                safeMessage: 'The provider call exceeded the configured timeout.',
-                provider: 'openai',
-                model: 'gpt-4o',
-                latencyMs: 60001,
-            },
-        });
+        // Scripted transport failure: the Gateway adapter maps HTTP 500 to a closed, secret-safe provider diagnostic.
+        providerSpy.mockResolvedValue({ success: false });
 
         const res = await POST(new Request('http://localhost/api/execute', {
             method: 'POST',
             body: JSON.stringify({
-                templateName: 'Strategy',
+                templateId: 'meeting_notes', templateName: 'Strategy',
                 intent: 'Analyze',
                 inputs: { goal: 'Test' },
                 provider: 'openai',
@@ -164,10 +154,36 @@ describe('/api/execute diagnostics', () => {
         expect(data.success).toBe(false);
         expect(data.diagnostic).toMatchObject({
             stage: 'provider',
-            class: 'provider_timeout',
+            class: 'provider_http_error',
+            retryable: true,
             userAction: 'wait_and_retry',
+            httpStatus: 500,
             receiptId: data.governanceEvidenceReceipt.receiptId,
             traceId: data.governanceEvidenceReceipt.envelopeId,
         });
+        expect(data.canonicalGateway.providerDiagnostic).toMatchObject({ code: 'provider_http_error', httpStatus: 500 });
+        expect(JSON.stringify(data)).not.toContain('test-key');
     });
+
+    it('reports a provider deadline as a retryable provider_timeout', async () => {
+        process.env.OPENAI_API_KEY = 'test-key';
+        process.env.CVF_AI_PROVIDER_TIMEOUT_MS = '1000';
+        // The transport double never answers; the Gateway deadline (the 1s minimum) aborts the call.
+        providerSpy.mockImplementation((_provider, _key, _prompt, options: { signal?: AbortSignal }) => new Promise((_resolve, reject) => {
+            options.signal?.addEventListener('abort', () => reject(new TypeError('aborted')));
+        }));
+
+        const res = await POST(new Request('http://localhost/api/execute', {
+            method: 'POST',
+            body: JSON.stringify({ templateId: 'meeting_notes', templateName: 'Strategy', intent: 'Analyze', inputs: { goal: 'Test' }, provider: 'openai' }),
+        }) as never);
+        const data = await res.json();
+        expect(data.success).toBe(false);
+        expect(data.canonicalGateway.providerDiagnostic.code).toBe('provider_timeout');
+        expect(data.diagnostic).toMatchObject({ stage: 'provider', class: 'provider_timeout', retryable: true, userAction: 'wait_and_retry' });
+        expect(providerSpy).toHaveBeenCalledTimes(1);
+    }, 15000);
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

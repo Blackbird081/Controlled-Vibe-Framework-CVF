@@ -473,7 +473,7 @@ describe('buildWebGuardContext', () => {
   test('provides sensible defaults for empty input', () => {
     const c = buildWebGuardContext({});
     expect(c.phase).toBe('INTAKE');
-    expect(c.riskLevel).toBe('R0');
+    expect(c.riskLevel).toBe('R3');
     expect(c.role).toBe('HUMAN');
     expect(c.action).toBe('execute_template');
     expect(c.requestId).toMatch(/^web-/);
@@ -494,6 +494,10 @@ describe('buildWebGuardContext', () => {
     expect(buildWebGuardContext({ riskLevel: 'elevated' }).riskLevel).toBe('R2');
     expect(buildWebGuardContext({ riskLevel: 'critical' }).riskLevel).toBe('R3');
     expect(buildWebGuardContext({ riskLevel: 'R1' }).riskLevel).toBe('R1');
+  });
+
+  test('rejects blocked risk before passing it to the guard runtime', () => {
+    expect(() => buildWebGuardContext({ riskLevel: 'R4' })).toThrow(/blocked by policy/i);
   });
 
   test('normalizes role aliases', () => {

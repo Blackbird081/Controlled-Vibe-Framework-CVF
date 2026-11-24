@@ -43,7 +43,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
     vi: {
         header: {
             title: '🎯 Hướng dẫn sử dụng Tri thức',
-            subtitle: 'Quy trình 5 bước từ thu thập đến bàn giao',
+            subtitle: 'Năm giai đoạn công việc, nối với vòng đời Local',
             cta: 'Bắt đầu sử dụng →',
         },
         roleLabels: {
@@ -51,51 +51,11 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             system: 'CVF System',
         },
         steps: [
-            {
-                number: 1,
-                title: '📖 Tìm hiểu',
-                role: 'user',
-                content: 'Đọc hướng dẫn và làm quen với quy trình quản lý tri thức của hệ thống.',
-                example: {
-                    correct: 'Đọc kỹ tài liệu hướng dẫn (Learn)',
-                    wrong: 'Bỏ qua bước tìm hiểu và làm bừa',
-                },
-            },
-            {
-                number: 2,
-                title: '📥 Thu thập',
-                role: 'user',
-                content: 'Đưa dữ liệu thô vào hệ thống qua form thu thập.',
-                categories: ['Văn bản', 'Hình ảnh', 'Mã nguồn', 'Tài liệu'],
-            },
-            {
-                number: 3,
-                title: '🛡️ Kiểm duyệt',
-                role: 'system',
-                content: 'Quá trình đánh giá và phê duyệt dữ liệu (Governance).',
-                fields: ['Chờ duyệt (Pending)', 'Chấp nhận (Approved)', 'Từ chối (Rejected)'],
-            },
-            {
-                number: 4,
-                title: '📦 Đóng gói',
-                role: 'system',
-                content: 'Xuất dữ liệu đã kiểm duyệt thành các gói tin chuẩn (Artifacts).',
-                steps: [
-                    'Kiểm tra định dạng chuẩn',
-                    'Đóng gói thành Artifact',
-                    'Chuẩn bị dữ liệu để bàn giao',
-                ],
-            },
-            {
-                number: 5,
-                title: '🚀 Bàn giao',
-                role: 'user',
-                content: 'Gửi gói dữ liệu sang hệ thống khác hoặc bàn giao cho agent (Handoff).',
-                responses: [
-                    { icon: '✅', label: 'Thành công', desc: 'Bàn giao hoàn tất' },
-                    { icon: '❌', label: 'Thất bại', desc: 'Lỗi trong quá trình bàn giao' },
-                ],
-            },
+            { number: 1, title: 'Hiểu việc', role: 'user', content: 'Nêu mục tiêu, phạm vi, giới hạn và điều kiện dừng (INTAKE).' },
+            { number: 2, title: 'Lập kế hoạch', role: 'system', content: 'Làm rõ hướng làm, đặc tả và giao việc (DESIGN, SPEC, WORK ORDER).' },
+            { number: 3, title: 'Thực hiện', role: 'system', content: 'Agent thực hiện công việc đã được phép trong giới hạn đã thống nhất (BUILD).' },
+            { number: 4, title: 'Kiểm tra', role: 'system', content: 'Đánh giá kết quả, bằng chứng, vấn đề và phần việc còn lại (REVIEW).' },
+            { number: 5, title: 'Kết thúc', role: 'user', content: 'Chấp nhận kết quả và ghi trạng thái cùng người phụ trách phần việc còn lại (FREEZE).' },
         ],
         features: [
             {
@@ -117,10 +77,10 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             },
             {
                 icon: '📚',
-                title: 'Skill Library',
-                desc: 'Thư viện skill front-door đã sync theo GC-044: chỉ surfacing trusted/review subset. Legacy/reject bị quarantine khỏi explorer mặc định.',
+                title: 'Thư viện kỹ năng dành cho agent',
+                desc: 'Xem các gói dành cho agent và giới hạn sử dụng. Để mô tả kết quả bạn muốn, hãy chọn mẫu trên Trang chủ.',
                 link: '/skills',
-                linkText: 'Xem Skill Library',
+                linkText: 'Mở thư viện kỹ năng',
             },
             {
                 icon: '🔗',
@@ -187,7 +147,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
     en: {
         header: {
             title: '🎯 CVF User Guide',
-            subtitle: 'A 5-step workflow + advanced features to use CVF effectively',
+            subtitle: 'Five work stages connected to the Local lifecycle',
             cta: 'Start using CVF →',
         },
         roleLabels: {
@@ -195,51 +155,11 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             system: 'CVF System',
         },
         steps: [
-            {
-                number: 1,
-                title: '📖 Learn',
-                role: 'user',
-                content: 'Read guides and familiarize yourself with the knowledge management workflow.',
-                example: {
-                    correct: 'Read the documentation carefully',
-                    wrong: 'Skip the guide and guess',
-                },
-            },
-            {
-                number: 2,
-                title: '📥 Intake',
-                role: 'user',
-                content: 'Input raw data into the system via the intake form.',
-                categories: ['Text', 'Images', 'Code', 'Documents'],
-            },
-            {
-                number: 3,
-                title: '🛡️ Govern',
-                role: 'system',
-                content: 'Evaluate and approve knowledge data (Governance).',
-                fields: ['Pending', 'Approved', 'Rejected'],
-            },
-            {
-                number: 4,
-                title: '📦 Export',
-                role: 'system',
-                content: 'Export governed data into standard packets (Artifacts).',
-                steps: [
-                    'Check standard format',
-                    'Pack into Artifact',
-                    'Prepare for handoff',
-                ],
-            },
-            {
-                number: 5,
-                title: '🚀 Handoff',
-                role: 'user',
-                content: 'Transfer the data packet to another system or agent (Handoff).',
-                responses: [
-                    { icon: '✅', label: 'Success', desc: 'Handoff completed' },
-                    { icon: '❌', label: 'Failure', desc: 'Error during handoff' },
-                ],
-            },
+            { number: 1, title: 'Understand', role: 'user', content: 'State the goal, scope, limits and stop conditions (INTAKE).' },
+            { number: 2, title: 'Plan', role: 'system', content: 'Clarify the approach, specification and work assignment (DESIGN, SPEC, WORK ORDER).' },
+            { number: 3, title: 'Build', role: 'system', content: 'The agent carries out admitted work within the agreed limits (BUILD).' },
+            { number: 4, title: 'Check', role: 'system', content: 'Assess the result, evidence, issues and remaining work (REVIEW).' },
+            { number: 5, title: 'Close', role: 'user', content: 'Accept the result and record the state and owner of any remaining work (FREEZE).' },
         ],
         features: [
             {
@@ -262,7 +182,7 @@ export const HELP_CONTENT: Record<Lang, HelpContent> = {
             {
                 icon: '📚',
                 title: 'Skill Library',
-                desc: 'The front-door skill library is now synced to GC-044: only trusted/review subset surfaces are shown. Legacy/rejected items stay quarantined from the default explorer.',
+                desc: 'Explore packages for agents and their usage limits. Choose a template on Home to describe the result you want.',
                 link: '/skills',
                 linkText: 'View Skill Library',
             },

@@ -3,6 +3,10 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSettings } from './Settings';
+import HeldExecutionNotice from './HeldExecutionNotice';
+import { statusLabel } from '@/lib/presentation-labels';
+import { isBuildPhase } from '@/lib/governance-model';
+import { selectExecutionProviderModel, resolveClaudeReadinessModel, nativeModelReadout } from '@/lib/hooks/useExecute';
 import { useLanguage } from '@/lib/i18n';
 import { logEnforcementDecision } from '@/lib/enforcement-log';
 import { trackEvent } from '@/lib/analytics';
@@ -10,7 +14,13 @@ import { getSafetyStatus } from '@/lib/safety-status';
 import type { SafetyRiskLevel } from '@/lib/safety-status';
 import type { ExecutionRequest, GovernanceEvidenceReceipt } from '@/lib/ai';
 import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { readWordLimitRefusal, wordLimitRefusalMessage } from '@/lib/output-validation-refusal';
+import { rateLimitRefusalMessage, readRetryAfterSeconds } from '@/lib/rate-limit-refusal';
+import type { GovernanceRolePlanSummary, MaoRolePlanPartialOutput } from '@/lib/ai/types';
+import { PartialOutputPanel, readPartialOutput, summarizeRolePlan } from './ProcessingScreen.partial-output';
 import { HtmlPilotEffectDisclosure, useHtmlPilotPublicDisclosure } from './ReceiptEffectDisclosure';
+import { generateMockOutput } from './ProcessingScreen.mock-output';
+import { serverProviderKeyHelp } from '@/lib/non-coder-language';
 
 export interface ProcessingExecutionOverrides {
     mode?: ExecutionRequest['mode'];
@@ -37,6 +47,8 @@ interface ProcessingScreenProps {
 export interface GovernanceEvidenceState {
     provider?: string;
     model?: string;
+    executionSurface?: string;
+    observedModelId?: string;
     decision?: string;
     riskLevel?: string;
     providerDecision?: string;
@@ -54,27 +66,14 @@ export interface GovernanceEvidenceState {
 
 type FalsePositiveReportState = 'idle' | 'submitting' | 'submitted' | 'error';
 
-function mapSettingsProviderToExecutionProvider(provider?: string): ExecutionRequest['provider'] | undefined {
-    if (!provider) {
-        return undefined;
-    }
-
-    if (provider === 'anthropic') {
-        return 'claude';
-    }
-
-    return provider as ExecutionRequest['provider'];
-}
-
 function resolveTemplateGuardAction(overrides?: ProcessingExecutionOverrides): string {
-    const phase = overrides?.cvfPhase?.trim().toUpperCase();
     const hasBuildPreflight =
         Boolean(overrides?.skillPreflightDeclaration) ||
         Boolean(overrides?.skillPreflightRecordRef) ||
         Boolean(overrides?.skillIds?.length) ||
         Boolean(overrides?.fileScope?.length);
 
-    if (phase === 'BUILD' || phase === 'PHASE C' || phase === 'C' || hasBuildPreflight) {
+    if (isBuildPhase(overrides?.cvfPhase) || hasBuildPreflight) {
         return 'build template execution request';
     }
 
@@ -178,6 +177,8 @@ export function ProcessingScreen({
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState(isVi ? 'Đang khởi tạo...' : 'Initializing...');
     const [error, setError] = useState<string | null>(null);
+    const [phase, setPhase] = useState<'active' | 'failed' | 'approval' | 'complete'>('active');
+    const [signInRequired, setSignInRequired] = useState(false);
     const [guidedResponse, setGuidedResponse] = useState<string | null>(null);
     const [isRealExecution] = useState(() => Boolean(inputs && intent && Object.keys(inputs).length > 0));
     const { pilotDisclosure, pilotDisclosureError } = useHtmlPilotPublicDisclosure(htmlPilotIntent);
@@ -193,12 +194,16 @@ export function ProcessingScreen({
     // W114-T1 CP5: user-visible governance evidence from the live execute route
     const [governanceEvidence, setGovernanceEvidence] = useState<GovernanceEvidenceState | null>(null);
     const [executionDiagnostic, setExecutionDiagnostic] = useState<ExecutionDiagnostic | null>(null);
+    // Unreviewed role-plan draft of a failed run: shown beside the error with a copy action, never delivered as a completed result.
+    const [partialOutput, setPartialOutput] = useState<MaoRolePlanPartialOutput | null>(null);
+    const [partialRolePlan, setPartialRolePlan] = useState<GovernanceRolePlanSummary | null>(null);
     // W96-T1: Completion state — set when success+riskLevel; suppresses 300ms path
-    const [completion, setCompletion] = useState<{ attempt: Attempt; output: string; receipt?: GovernanceEvidenceReceipt } | null>(null);
-    const executionProvider = mapSettingsProviderToExecutionProvider(settings.preferences?.defaultProvider);
-    const selectedModel = settings.preferences?.defaultProvider
-        ? settings.providers?.[settings.preferences.defaultProvider]?.selectedModel
-        : undefined;
+    const [completion, setCompletion] = useState<{
+        attempt: Attempt;
+        output: string;
+        receipt?: GovernanceEvidenceReceipt;
+    } | null>(null);
+    const { executionProvider, selectedModel } = selectExecutionProviderModel(settings);
 
     // Callbacks and presentation are read at use time so their identity never restarts a task.
     const currentView = {
@@ -229,9 +234,14 @@ export function ProcessingScreen({
         const { request, isVi } = latest.current;
         const { templateId, templateName, inputs, intent, executionOverrides, mode, executionProvider, selectedModel, htmlPilotIntent } = request;
         if (!inputs || !intent) return false;
+        const requireSignIn = () => {
+            setPhase('failed');
+            setSignInRequired(true);
+            setError(isVi ? 'Phiên đăng nhập đã hết hạn hoặc chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.' : 'Your session has expired or you are not signed in. Please sign in to continue.');
+        };
 
         try {
-            setStatus(isVi ? 'Đang kết nối AI...' : 'Connecting to AI provider...');
+            setStatus(isVi ? 'Đang chuẩn bị yêu cầu...' : 'Preparing request...');
             setProgress(10);
             const aiCommit = executionOverrides?.aiCommit || {
                 commitId: `web-ui-${templateId || templateName}-${Date.now()}`,
@@ -241,6 +251,24 @@ export function ProcessingScreen({
             };
             const action = resolveTemplateGuardAction(executionOverrides);
 
+            let executionModel = selectedModel;
+            if (executionProvider === 'claude') {
+                const statusResponse = await fetch('/api/providers', { cache: 'no-store', signal: attempt.controller.signal });
+                if (!attempt.active) return false;
+                if (statusResponse.status === 401) {
+                    requireSignIn();
+                    return true;
+                }
+                if (!statusResponse.ok) throw new Error('Claude readiness is unavailable. Inspect native sign-in before another run.');
+                const status = await statusResponse.json();
+                executionModel = resolveClaudeReadinessModel(status, selectedModel);
+                if (!attempt.active) return false;
+            }
+            // Name the provider and model that are actually sent (the same conditions as the request body); fall back to the plain text when neither is known.
+            const sentProvider = !htmlPilotIntent && executionProvider ? executionProvider : '';
+            const sentModel = !htmlPilotIntent && executionModel ? executionModel : '';
+            const sentTarget = [sentProvider, sentModel].filter(Boolean).join(' / ');
+            setStatus(isVi ? `Đã gửi yêu cầu${sentTarget ? ` (${sentTarget})` : ''}, đang chờ phản hồi...` : `Request sent${sentTarget ? ` (${sentTarget})` : ''}, waiting for a response...`);
             const response = await fetch('/api/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -253,7 +281,7 @@ export function ProcessingScreen({
                     mode,
                     action,
                     ...(!htmlPilotIntent && executionProvider ? { provider: executionProvider } : {}),
-                    ...(!htmlPilotIntent && selectedModel ? { model: selectedModel } : {}),
+                    ...(!htmlPilotIntent && executionModel ? { model: executionModel } : {}),
                     ...(htmlPilotIntent ? { htmlPilotIntent } : {}),
                     ...executionOverrides,
                     aiCommit,
@@ -261,18 +289,28 @@ export function ProcessingScreen({
             });
 
             if (!attempt.active) return false;
+            if (response.status === 401) {
+                requireSignIn();
+                return true;
+            }
             setProgress(50);
             setStatus(isVi ? 'Đang xử lý phản hồi...' : 'Processing response...');
 
             const data = await response.json();
             if (!attempt.active) return false;
             const enforcement = data.enforcement;
-            const receipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
+            const rolePlan = summarizeRolePlan(data.maoRolePlan);
+            const baseReceipt = data.governanceEvidenceReceipt as GovernanceEvidenceReceipt | undefined;
+            const receipt = baseReceipt && rolePlan ? { ...baseReceipt, rolePlan } : baseReceipt;
+            setPartialOutput(data.success ? null : readPartialOutput(data.partialOutput));
+            setPartialRolePlan(data.success ? null : rolePlan ?? null);
             const diagnostic = data.diagnostic as ExecutionDiagnostic | undefined;
             setExecutionDiagnostic(diagnostic ?? null);
             setFalsePositiveReportState('idle');
-            setGovernanceEvidence({
+            const evidence: GovernanceEvidenceState = {
                 provider: receipt?.provider || data.provider,
+                executionSurface: data.canonicalGateway?.executionSurface,
+                observedModelId: data.canonicalGateway?.observedModelId,
                 model: receipt?.model || data.model,
                 decision: receipt?.decision || enforcement?.status,
                 riskLevel: receipt?.riskLevel || enforcement?.riskGate?.riskLevel,
@@ -287,7 +325,8 @@ export function ProcessingScreen({
                 knowledgeChunkCount: receipt?.knowledgeChunkCount ?? data.knowledgeInjection?.chunkCount,
                 validationHint: receipt?.validationHint || data.outputValidation?.qualityHint,
                 approvalId: receipt?.approvalId || data.approvalId,
-            });
+            };
+            setGovernanceEvidence(evidence.decision || evidence.receiptId || evidence.policySnapshotId || evidence.envelopeId || evidence.approvalId ? evidence : null);
             // W94-T1: Extract risk level for badge (R4 → R3 cap for safety-status.ts compat)
             const rawRisk = enforcement?.riskGate?.riskLevel as string | undefined;
             const badgeLevel: SafetyRiskLevel | null =
@@ -308,10 +347,8 @@ export function ProcessingScreen({
                 });
             }
 
-            setProgress(90);
-            setStatus(isVi ? 'Đang hoàn tất...' : 'Finalizing...');
-
             if (data.success && data.output) {
+                setPhase('complete');
                 setProgress(100);
                 if (badgeLevel) {
                     // W96-T1: persist badge — completion-banner + useEffect auto-advance
@@ -322,6 +359,7 @@ export function ProcessingScreen({
                 return true;
             }
 
+            setPhase(enforcement?.status === 'NEEDS_APPROVAL' ? 'approval' : 'failed');
             if (enforcement?.status === 'CLARIFY') {
                 const missing = enforcement.specGate?.missing
                     ?.map((field: { label?: string }) => field.label || 'field')
@@ -355,8 +393,14 @@ export function ProcessingScreen({
 
             // If real execution fails, render the classified failure truthfully.
             if (diagnostic) {
-                const nextAction = diagnostic.userAction.replaceAll('_', ' ');
-                setError(isVi
+                const nextAction = diagnostic.userAction === 'do_not_retry_without_new_evidence'
+                    ? (isVi ? 'Kiểm tra lần chạy đã ghi và bằng chứng mới trước khi chạy lại' : 'Inspect the recorded attempt and new evidence before another run')
+                    : diagnostic.userAction.replaceAll('_', ' ');
+                // A word-limit refusal states the server-measured count and limit instead of the generic validation text.
+                const wordLimitRefusal = readWordLimitRefusal(data.outputValidation);
+                // A rate-limit refusal states, in the user's language, that the call was not sent and how long the server asks to wait.
+                const retryAfter = readRetryAfterSeconds(response.headers?.get?.('Retry-After'), data.retryAfterSeconds);
+                setError(wordLimitRefusal ? wordLimitRefusalMessage(wordLimitRefusal, isVi) : diagnostic.class === 'rate_limited' ? rateLimitRefusalMessage(retryAfter, isVi) : isVi
                     ? `${diagnostic.safeMessage} Bước tiếp theo: ${nextAction}.`
                     : `${diagnostic.safeMessage} Next action: ${nextAction}.`);
                 trackEvent('task_recovery_prompted', {
@@ -369,6 +413,10 @@ export function ProcessingScreen({
                 return true;
             }
 
+            if (response.status === 400 && data.model === 'not configured' && typeof data.provider === 'string') {
+                setError(serverProviderKeyHelp(data.provider, isVi ? 'vi' : 'en'));
+                return true;
+            }
             setError(data.error || (isVi
                 ? 'Thực thi API thất bại. Không tạo kết quả mẫu thay thế.'
                 : 'API execution failed. No mock output was generated.'));
@@ -376,6 +424,8 @@ export function ProcessingScreen({
         } catch (err) {
             if (!attempt.active) return false;
             setExecutionDiagnostic(null);
+            setPartialOutput(null);
+            setPhase('failed');
             const message = err instanceof Error ? err.message : 'Network error';
             setError(isVi
                 ? `${message}. Không tạo kết quả mẫu thay thế.`
@@ -508,6 +558,7 @@ export function ProcessingScreen({
             setStatus(statuses[Math.min(Math.floor(value / 25), statuses.length - 1)]);
 
             if (value >= 100) {
+                setPhase('complete');
                 clearInterval(interval);
                 attempt.intervals.delete(interval);
                 scheduleInAttempt(attempt, () => deliverOnce(attempt, latest.current.onComplete, [generateMockOutput(request.templateName)]), 500);
@@ -538,6 +589,8 @@ export function ProcessingScreen({
             // A replaced attempt must not leave its results visible as the current attempt's UI.
             const { request } = latest.current;
             setProgress(0);
+            setPhase('active');
+            setSignInRequired(false);
             setError(null);
             setGuidedResponse(null);
             setApprovalRequestId(null);
@@ -548,6 +601,7 @@ export function ProcessingScreen({
             setExecutionRiskLevel(null);
             setGovernanceEvidence(null);
             setExecutionDiagnostic(null);
+            setPartialOutput(null);
             setCompletion(null);
 
             // Try real execution first if we have the required data
@@ -576,8 +630,11 @@ export function ProcessingScreen({
         latest.current.onCancel();
     }, []);
 
+    const nativeModelLabel = nativeModelReadout(governanceEvidence, isVi);
+
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
+            <HeldExecutionNotice active={phase === 'failed'} language={language} />
             {htmlPilotIntent && !pilotConfirmed && <div className="mx-auto mb-6 max-w-xl">
                 {pilotDisclosure && <><HtmlPilotEffectDisclosure disclosure={pilotDisclosure} language={isVi ? 'vi' : 'en'} />
                     <button type="button" data-testid="html-pilot-confirm-effect" onClick={() => setPilotConfirmed(true)}
@@ -589,7 +646,7 @@ export function ProcessingScreen({
                 <div className="w-20 h-20 mx-auto mb-8 relative">
                     <div className="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700" />
                     <div
-                        className="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"
+                        className={`absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent ${phase === 'active' ? 'animate-spin' : ''}`}
                     />
                     <div className="absolute inset-0 flex items-center justify-center text-3xl">
                         {isRealExecution ? '🤖' : '⏳'}
@@ -597,26 +654,25 @@ export function ProcessingScreen({
                 </div>
 
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {isRealExecution
-                        ? (isVi ? 'AI Đang xử lý...' : 'AI Processing...')
+                    {phase === 'failed' ? (isVi ? 'Không thể hoàn tất' : 'Unable to complete')
+                        : phase === 'approval' ? (isVi ? 'Cần phê duyệt' : 'Approval required')
+                        : phase === 'complete' ? (isVi ? 'Đã hoàn tất' : 'Complete')
                         : (isVi ? 'Đang xử lý...' : 'Processing...')}
                 </h2>
 
                 <p className="text-gray-600 dark:text-gray-400 mb-2" aria-live="polite">
-                    {status}
+                    {phase === 'active' ? status : phase === 'complete' ? (isVi ? 'Đã nhận kết quả.' : 'Result received.') : phase === 'approval' ? (isVi ? 'Đang chờ phê duyệt.' : 'Awaiting approval.') : (isVi ? 'Yêu cầu chưa hoàn tất.' : 'The request did not complete.')}
                 </p>
 
-                {isRealExecution && (
-                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mb-4">
-                        🔗 {isVi ? 'Đã kết nối AI' : 'Connected to AI Provider'}
-                    </p>
-                )}
+                {signInRequired && <a href="/login?from=/home" className="mb-4 inline-block text-sm text-blue-700 underline dark:text-blue-300">{isVi ? 'Đăng nhập' : 'Sign in'}</a>}
 
                 {error && !guidedResponse && (
                     <p className="text-sm text-amber-600 dark:text-amber-400 mb-4" role="alert" aria-live="assertive">
                         ⚠️ {error}{!isRealExecution ? ` — ${isVi ? 'Đang dùng chế độ demo' : 'Using demo mode'}` : ''}
                     </p>
                 )}
+
+                {partialOutput && <PartialOutputPanel partialOutput={partialOutput} rolePlan={partialRolePlan} isVi={isVi} />}
 
                 {guidedResponse && (
                     <div
@@ -656,7 +712,7 @@ export function ProcessingScreen({
                             <p><span className="font-medium">Stage:</span> {executionDiagnostic.stage}</p>
                             <p><span className="font-medium">Class:</span> {executionDiagnostic.class}</p>
                             <p><span className="font-medium">{isVi ? 'Retry:' : 'Retry:'}</span> {executionDiagnostic.retryable ? (isVi ? 'có thể' : 'possible') : (isVi ? 'không nên' : 'not advised')}</p>
-                            <p><span className="font-medium">{isVi ? 'Next:' : 'Next:'}</span> {executionDiagnostic.userAction}</p>
+                            <p><span className="font-medium">{isVi ? 'Next:' : 'Next:'}</span> {executionDiagnostic.userAction === 'do_not_retry_without_new_evidence' ? (isVi ? 'Kiểm tra lần chạy và bằng chứng mới trước khi chạy lại' : 'Inspect the attempt and new evidence before another run') : executionDiagnostic.userAction}</p>
                         </div>
                         {(executionDiagnostic.receiptId || executionDiagnostic.traceId) && (
                             <div className="mt-3 space-y-1 text-[11px] text-amber-700 dark:text-amber-300">
@@ -806,11 +862,11 @@ export function ProcessingScreen({
                             dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950 p-3 text-left"
                     >
                         <p className="text-xs font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
-                            {isVi ? 'CVF đã kiểm soát lượt chạy này' : 'CVF governed this run'}
+                            {isVi ? 'Thông tin kiểm soát CVF' : 'CVF governance details'}
                         </p>
                         <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-emerald-700 dark:text-emerald-300">
                             {governanceEvidence.decision && (
-                                <p><span className="font-medium">{isVi ? 'Quyết định:' : 'Decision:'}</span> {governanceEvidence.decision}</p>
+                                <p><span className="font-medium">{isVi ? 'Quyết định:' : 'Decision:'}</span> {statusLabel(governanceEvidence.decision, language)}</p>
                             )}
                             {governanceEvidence.riskLevel && (
                                 <p><span className="font-medium">{isVi ? 'Rủi ro:' : 'Risk:'}</span> {governanceEvidence.riskLevel}</p>
@@ -821,8 +877,9 @@ export function ProcessingScreen({
                             {governanceEvidence.model && (
                                 <p><span className="font-medium">{isVi ? 'Model:' : 'Model:'}</span> {governanceEvidence.model}</p>
                             )}
+                            {nativeModelLabel && <p>{nativeModelLabel}</p>}
                             {governanceEvidence.providerDecision && (
-                                <p><span className="font-medium">{isVi ? 'Routing:' : 'Routing:'}</span> {governanceEvidence.providerDecision}</p>
+                                <p><span className="font-medium">{isVi ? 'Routing:' : 'Routing:'}</span> {statusLabel(governanceEvidence.providerDecision, language)}</p>
                             )}
                             {governanceEvidence.knowledgeSource && governanceEvidence.knowledgeSource !== 'none' && (
                                 <p><span className="font-medium">{isVi ? 'Knowledge:' : 'Knowledge:'}</span> {governanceEvidence.knowledgeSource}</p>
@@ -857,7 +914,7 @@ export function ProcessingScreen({
                 )}
 
                 {/* Progress bar */}
-                <div className="w-80 mx-auto">
+                {(phase === 'active' || phase === 'complete') && <div className="w-80 mx-auto">
                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
                             className={`h-full rounded-full transition-all duration-300 ${isRealExecution
@@ -870,9 +927,9 @@ export function ProcessingScreen({
                     <p className="mt-2 text-sm text-gray-500">
                         {Math.round(progress)}%
                     </p>
-                </div>
+                </div>}
 
-                {!isRealExecution && (
+                {!isRealExecution && phase === 'active' && (
                     <p className="mt-4 text-sm text-gray-500">
                         {isVi ? 'Ước tính:' : 'Estimated:'} {Math.max(1, Math.round((100 - progress) / 10))} {isVi ? 'giây' : 'seconds'}
                     </p>
@@ -890,78 +947,4 @@ export function ProcessingScreen({
             </div>
         </div>
     );
-}
-
-function generateMockOutput(templateName: string): string {
-    return `# ${templateName} Analysis
-
-## Executive Summary
-
-Based on the provided context and requirements, this analysis presents a comprehensive evaluation with actionable recommendations.
-
-## Key Findings
-
-### Strengths
-- Clear strategic direction aligned with market opportunities
-- Strong foundation for growth initiatives
-- Competitive advantages in key areas
-
-### Areas for Improvement
-- Consider diversifying market approach
-- Strengthen risk mitigation strategies
-- Enhance stakeholder communication
-
-## Detailed Analysis
-
-### Option A: Organic Growth
-| Aspect | Assessment |
-|--------|------------|
-| Risk Level | Low |
-| Investment | Moderate |
-| Timeline | 12-18 months |
-| ROI Potential | 25-40% |
-
-### Option B: Strategic Partnership
-| Aspect | Assessment |
-|--------|------------|
-| Risk Level | Medium |
-| Investment | Low |
-| Timeline | 6-12 months |
-| ROI Potential | 30-50% |
-
-## Risk Assessment
-
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| Market volatility | Medium | High | Diversification strategy |
-| Execution delays | Low | Medium | Milestone tracking |
-| Resource constraints | Medium | Medium | Phased approach |
-
-## Recommendations
-
-1. **Short-term (0-6 months)**
-   - Conduct detailed market analysis
-   - Establish key partnerships
-   - Set up monitoring framework
-
-2. **Medium-term (6-12 months)**
-   - Execute pilot programs
-   - Measure and iterate
-   - Scale successful initiatives
-
-3. **Long-term (12+ months)**
-   - Full market expansion
-   - Continuous optimization
-   - Strategic review and adjustment
-
-## Next Steps
-
-- [ ] Schedule stakeholder alignment meeting
-- [ ] Develop detailed implementation roadmap
-- [ ] Identify resource requirements
-- [ ] Establish success metrics
-
----
-*Generated by CVF v1.5 UX Platform*
-`;
 }

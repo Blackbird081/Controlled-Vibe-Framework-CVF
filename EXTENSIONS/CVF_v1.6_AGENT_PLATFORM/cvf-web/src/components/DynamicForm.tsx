@@ -7,7 +7,7 @@ import { Template, TemplateField } from '@/types';
 import { generateIntent } from '@/lib/templates';
 import { SpecExport } from './SpecExport';
 import { useLanguage } from '@/lib/i18n';
-import { getSkillForTemplate } from '@/lib/skill-template-map';
+import { getRecommendedAssfPackage } from '@/lib/assf-template-recommendations';
 import {
     getTemplateDescription,
     getTemplateFieldChrome,
@@ -90,7 +90,8 @@ function pickDraftValues(template: Template, initialValues?: Record<string, stri
 }
 
 export function DynamicForm({ template, onSubmit, onBack, onSendToAgent, initialValues }: DynamicFormProps) {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
+    const recommendedPackage = getRecommendedAssfPackage(template.id);
     const [draftValues] = useState(() => pickDraftValues(template, initialValues));
     const [showAdvanced, setShowAdvanced] = useState(() => Boolean(draftValues
         && template.fields.some(field => field.section === 'advanced' && draftValues[field.id])));
@@ -170,19 +171,14 @@ export function DynamicForm({ template, onSubmit, onBack, onSendToAgent, initial
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
                         <p className="text-gray-600 dark:text-gray-400">{localizedTemplate.description}</p>
-                        {(() => {
-                            const skillRef = getSkillForTemplate(template.id);
-                            if (!skillRef) return null;
-                            return (
-                                <a
-                                    href={`/skills/${skillRef.domain}/${skillRef.skillId}`}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full hover:bg-emerald-200 transition-colors whitespace-nowrap"
-                                    title={t('skills.viewRelatedSkill')}
-                                >
-                                    {t('skills.viewSkill')}
-                                </a>
-                            );
-                        })()}
+                        {recommendedPackage && (
+                            <a
+                                href={recommendedPackage.href}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-emerald-100 text-emerald-800 rounded-full hover:bg-emerald-200 transition-colors whitespace-nowrap"
+                            >
+                                {language === 'vi' ? 'Gói gợi ý cho agent' : 'Suggested agent package'}
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>

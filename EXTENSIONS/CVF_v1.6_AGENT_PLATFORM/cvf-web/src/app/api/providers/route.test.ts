@@ -1,4 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+const session = vi.hoisted(() => vi.fn());
+const nativeStatus = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/middleware-auth', () => ({ verifySessionCookie: session }));
+vi.mock('@/lib/server/claude-cli-profile', () => ({ isClaudeSubscriptionMode: () => process.env.CVF_CLAUDE_EXECUTION_MODE === 'subscription_cli', claudeSubscriptionReadiness: nativeStatus }));
+import { NextRequest } from 'next/server';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { GET } from './route';
 
 describe('/api/providers', () => {
@@ -6,6 +11,8 @@ describe('/api/providers', () => {
 
     beforeEach(() => {
         process.env = { ...originalEnv };
+        delete process.env.CVF_CLAUDE_EXECUTION_MODE;
+        session.mockReset().mockResolvedValue(null); nativeStatus.mockReset();
         delete process.env.OPENAI_API_KEY;
         delete process.env.CVF_OPENAI_API_KEY;
         delete process.env.ANTHROPIC_API_KEY;
@@ -26,7 +33,7 @@ describe('/api/providers', () => {
     });
 
     it('returns not configured when no API keys are set', async () => {
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         expect(data.anyConfigured).toBe(false);
         expect(data.defaultProvider).toBe('openai');
@@ -37,7 +44,7 @@ describe('/api/providers', () => {
         process.env.OPENAI_API_KEY = 'ok';
         process.env.DEFAULT_AI_PROVIDER = 'gemini';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         expect(data.anyConfigured).toBe(true);
         expect(data.defaultProvider).toBe('gemini');
@@ -48,7 +55,7 @@ describe('/api/providers', () => {
     it('treats OpenAI compatibility aliases as configured without exposing key values', async () => {
         process.env.CVF_OPENAI_API_KEY = 'openai-alias-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const openai = data.providers.find((p: { provider: string }) => p.provider === 'openai');
 
@@ -63,7 +70,7 @@ describe('/api/providers', () => {
     it('treats Alibaba compatibility aliases as configured', async () => {
         process.env.CVF_BENCHMARK_ALIBABA_KEY = 'ali-benchmark-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const alibaba = data.providers.find((p: { provider: string }) => p.provider === 'alibaba');
 
@@ -77,7 +84,7 @@ describe('/api/providers', () => {
     it('reports DeepSeek as configured when its API key is present', async () => {
         process.env.DEEPSEEK_API_KEY = 'sk-deepseek-test-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
 
@@ -88,7 +95,7 @@ describe('/api/providers', () => {
     });
 
     it('returns UNCONFIGURED lane status when no key is present', async () => {
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         for (const p of data.providers) {
             expect(p.laneStatus).toBe('UNCONFIGURED');
@@ -100,7 +107,7 @@ describe('/api/providers', () => {
     it('returns EXPERIMENTAL lane status for Alibaba when configured (fresh live proof pending, not certified)', async () => {
         process.env.ALIBABA_API_KEY = 'ali-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const alibaba = data.providers.find((p: { provider: string }) => p.provider === 'alibaba');
 
@@ -110,7 +117,7 @@ describe('/api/providers', () => {
     it('returns CERTIFIED lane status for DeepSeek when configured', async () => {
         process.env.DEEPSEEK_API_KEY = 'ds-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const deepseek = data.providers.find((p: { provider: string }) => p.provider === 'deepseek');
 
@@ -120,7 +127,7 @@ describe('/api/providers', () => {
     it('returns EXPERIMENTAL lane status for OpenAI when configured (historical receipts do not reverse R65 Option B)', async () => {
         process.env.OPENAI_API_KEY = 'openai-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
         const openai = data.providers.find((p: { provider: string }) => p.provider === 'openai');
 
@@ -135,7 +142,7 @@ describe('/api/providers', () => {
         process.env.ANTHROPIC_API_KEY = 'claude-key';
         process.env.OPENROUTER_API_KEY = 'openrouter-key';
 
-        const res = await GET();
+        const res = await GET(new NextRequest('http://localhost/api/providers'));
         const data = await res.json();
 
         for (const p of data.providers as Array<{ provider: string; configured: boolean; laneStatus: string; readiness: string }>) {
@@ -151,5 +158,21 @@ describe('/api/providers', () => {
 
         const openrouter = data.providers.find((p: { provider: string }) => p.provider === 'openrouter');
         expect(openrouter.laneStatus).toBe('EXPERIMENTAL');
+    });
+});
+
+describe('session protected native readiness', () => {
+    afterEach(() => { delete process.env.CVF_CLAUDE_EXECUTION_MODE; });
+    it('unauthorized performs no native probe and reveals no status', async () => {
+        process.env.CVF_CLAUDE_EXECUTION_MODE = 'subscription_cli'; session.mockResolvedValue(null);
+        nativeStatus.mockClear(); const response = await GET(new NextRequest('http://localhost/api/providers'));
+        expect(response.status).toBe(401); expect(nativeStatus).not.toHaveBeenCalled(); expect(await response.json()).toEqual({ error: 'Unauthorized' });
+    });
+    it.each(['available', 'unavailable', 'unknown'])('only fresh selected native %s maps to readiness', async state => {
+        process.env.CVF_CLAUDE_EXECUTION_MODE = 'subscription_cli'; process.env.ANTHROPIC_API_KEY = 'must-not-be-native-source';
+        session.mockResolvedValue({ userId: 'verified' }); nativeStatus.mockResolvedValue({ state, checkedAt: '2026-11-13T00:00:00Z' });
+        const response = await GET(new NextRequest('http://localhost/api/providers')); const data = await response.json(); const lane = data.providers.find((p: { provider: string }) => p.provider === 'claude');
+        expect(lane).toMatchObject({ configured: state === 'available', nativeAuthState: state, executionSurface: 'claude_cli_subscription', model: 'sonnet', modelKind: 'alias', keySourceName: null });
+        expect(JSON.stringify(data)).not.toContain('must-not-be-native-source');
     });
 });

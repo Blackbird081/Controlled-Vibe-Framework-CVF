@@ -8,13 +8,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import type { Execution } from '@/types';
 
 const navigation = vi.hoisted(() => ({ params: new URLSearchParams() }));
 const mockSettings = vi.hoisted(() => ({
-    settings: { providers: {}, preferences: { defaultExportMode: 'governance' } },
+    settings: { providers: { anthropic: { selectedModel: 'claude-sonnet-4-20250514' } }, preferences: { defaultExportMode: 'governance', defaultProvider: undefined as string | undefined } },
     isLoaded: true,
 }));
 const downloadBoundary = vi.hoisted(() => ({
@@ -33,7 +38,8 @@ vi.mock('@/lib/i18n', () => ({
 vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));
 vi.mock('@/lib/enforcement-log', () => ({ logEnforcementDecision: vi.fn() }));
 vi.mock('@/components/Settings', () => ({ useSettings: () => mockSettings }));
-vi.mock('@/lib/hooks/useExecute', () => ({
+vi.mock('@/lib/hooks/useExecute', async () => ({
+    ...await vi.importActual<typeof import('@/lib/hooks/useExecute')>('@/lib/hooks/useExecute'),
     useProviders: () => ({ providers: [], anyConfigured: false, fetchProviders: vi.fn() }),
 }));
 vi.mock('@/components/SpecExport', () => ({ SpecExport: () => null }));
@@ -134,6 +140,7 @@ function newestExecution(): Execution {
 }
 
 beforeEach(() => {
+    mockSettings.settings.preferences.defaultProvider = undefined;
     localStorage.clear();
     sessionStorage.clear();
     navigation.params = new URLSearchParams();
@@ -159,6 +166,7 @@ beforeEach(() => {
     fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
         const url = String(input);
         requestedUrls.push(url);
+        if (url === '/api/providers' && mockSettings.settings.preferences.defaultProvider === 'anthropic') return Promise.resolve(Response.json({ providers: [{ provider: 'claude', executionSurface: 'claude_cli_subscription', nativeAuthState: 'available', readiness: 'live_task_ready', model: 'sonnet' }] }));
         if (url !== '/api/execute') {
             return Promise.reject(new Error(`UNEXPECTED_TEST_FETCH:${url}`));
         }
@@ -177,7 +185,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    expect(requestedUrls.every(url => url === '/api/execute')).toBe(true);
+    expect(requestedUrls.every(url => url === '/api/execute' || (url === '/api/providers' && mockSettings.settings.preferences.defaultProvider === 'anthropic'))).toBe(true);
     expect(vi.mocked(navigator.clipboard.writeText)).not.toHaveBeenCalled();
     expect(downloadBoundary.createObjectURL).not.toHaveBeenCalled();
     expect(downloadBoundary.revokeObjectURL).not.toHaveBeenCalled();
@@ -205,7 +213,7 @@ describe('offline Home parent-child journey', () => {
 
         await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Generate result' })); });
         await waitFor(() => expect(calls).toHaveLength(1));
-        expect(screen.getByText('AI Processing...')).toBeTruthy();
+        expect(screen.getByText('Processing...')).toBeTruthy();
 
         const parent = newestExecution();
         expect(parent.templateId).toBe(documentation.id);
@@ -224,7 +232,7 @@ describe('offline Home parent-child journey', () => {
         expect(useExecutionStore.getState().executions.find(item => item.id === parent.id)?.output).toBe(parentOutput);
         expect(screen.getByTestId('deliverable-pack-preview')).toBeTruthy();
         expect(screen.getByTestId('deliverable-pack-preview').textContent)
-            .toContain(`Documentation: ${expectedIntent}`);
+            .toContain(`Documentation: ${parentValues.subject}`);
 
         fireEvent.change(screen.getByTestId('followup-input'), { target: { value: followUpText } });
         fireEvent.click(screen.getByTestId('followup-submit-btn'));
@@ -248,8 +256,20 @@ describe('offline Home parent-child journey', () => {
         expect(useExecutionStore.getState().executions.find(item => item.id === child.id)?.output).toBe(childOutput);
         expect(useExecutionStore.getState().executions.find(item => item.id === parent.id)?.output).toBe(parentOutput);
         expect(screen.getByTestId('deliverable-pack-preview').textContent)
-            .toContain(`Documentation: ${followUpText}`);
+            .toContain(`Documentation: ${parentValues.subject}`);
         expect(screen.queryByText(parentOutput)).toBeNull();
         expect(requestedUrls).toEqual(['/api/execute', '/api/execute']);
+    });
+});
+
+describe('actual documentation form selected Claude journey', () => {
+    it('carries actual form values to one selected subscription alias POST', async () => {
+        mockSettings.settings.preferences.defaultProvider = 'anthropic'; render(<HomePage />);
+        fireEvent.click(screen.getByRole('button', { name: 'pick-documentation' }));
+        updateField('subject', parentValues.subject); updateField('currentNotes', parentValues.currentNotes); updateField('readerGoal', parentValues.readerGoal);
+        await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Generate result' })); });
+        await waitFor(() => expect(calls).toHaveLength(1));
+        expect(calls[0].payload).toMatchObject({ templateId: 'documentation', inputs: parentValues, provider: 'claude', model: 'sonnet' });
+        await act(async () => { calls[0].respond('Selected subscription fixture output'); });
     });
 });

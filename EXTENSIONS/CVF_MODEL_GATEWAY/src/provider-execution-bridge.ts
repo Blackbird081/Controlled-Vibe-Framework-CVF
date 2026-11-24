@@ -1,3 +1,4 @@
+import { ProviderExecutionError, sanitizeGatewayProviderUsage, sanitizeProviderCredentialFingerprint } from "./unified-gateway-interface-contract";
 /**
  * Provider Execution Bridge
  *
@@ -13,12 +14,14 @@ import type {
   GatewayExecuteResponse,
   GatewayErrorEnvelope,
   GatewayErrorClass,
+  GatewayProviderUsage,
   GatewayMaterialContextManifestDisposition,
+  NativeInferenceProcessState,
 } from "./unified-gateway-interface-contract";
 import type { AdapterAdmissionRecord } from "./provider-adapter-admission";
 import { checkBridgeAdmission } from "./provider-bridge-admission-guard";
 import type { RoutingRequest, RoutingDecision } from "./routing-policy";
-import type { CredentialReference, CredentialMetadata } from "./credential-boundary";
+import type { BridgeCredentialReference, BridgeCredentialMetadata, NativeSubscriptionCredentialResolver } from "./credential-boundary";
 import type { GatewayReceipt, GatewayReceiptInput } from "./gateway-receipt";
 import { RoutingPolicyEngine } from "./routing-policy";
 import { CredentialBoundary } from "./credential-boundary";
@@ -37,6 +40,12 @@ export interface ProviderExecutionAdapterInput {
   signal?: AbortSignal;
 }
 export interface ProviderExecutionAdapterResult {
+  executionSurface?: "claude_cli_subscription";
+  observedModelId?: string;
+  nativeProcessState?: NativeInferenceProcessState;
+  /** Actual invocation credential fingerprint; omitted by legacy adapters. */
+  credentialFingerprint?: string;
+  providerUsage?: GatewayProviderUsage;
   text: string;
   usage?: { inputTokens: number; outputTokens: number };
 }
@@ -50,7 +59,8 @@ export interface ProviderExecutionBridgeOptions {
   health: ProviderHealthMonitor;
   quota: QuotaLedger;
   receipt: GatewayReceiptBuilder;
-  credentialRefs: Map<string, CredentialReference>;
+  credentialRefs: Map<string, BridgeCredentialReference>;
+  nativeSubscriptionResolver?: NativeSubscriptionCredentialResolver;
   adapters: Map<string, ProviderExecutionAdapter>;
   admissionRecords?: Map<string, AdapterAdmissionRecord>;
 }
@@ -126,7 +136,8 @@ export class ProviderExecutionBridge {
   private readonly health: ProviderHealthMonitor;
   private readonly quota: QuotaLedger;
   private readonly receipt: GatewayReceiptBuilder;
-  private readonly credentialRefs: Map<string, CredentialReference>;
+  private readonly credentialRefs: Map<string, BridgeCredentialReference>;
+  private readonly nativeSubscriptionResolver?: NativeSubscriptionCredentialResolver;
   private readonly adapters: Map<string, ProviderExecutionAdapter>;
   private readonly admissionRecords?: Map<string, AdapterAdmissionRecord>;
   constructor(options: ProviderExecutionBridgeOptions) {
@@ -136,6 +147,7 @@ export class ProviderExecutionBridge {
     this.quota = options.quota;
     this.receipt = options.receipt;
     this.credentialRefs = options.credentialRefs;
+    this.nativeSubscriptionResolver = options.nativeSubscriptionResolver;
     this.adapters = options.adapters;
     this.admissionRecords = options.admissionRecords;
   }
@@ -190,7 +202,22 @@ export class ProviderExecutionBridge {
         attemptOutcomeApplicable,
       );
     }
-    const credentialMeta: CredentialMetadata = this.credential.resolveMetadata(credentialRef);
+    let credentialMeta: BridgeCredentialMetadata;
+    if ('source' in credentialRef && credentialRef.source === 'native_subscription') {
+      if (providerId !== 'claude' || credentialRef.providerId !== 'claude' || !this.nativeSubscriptionResolver || options.signal?.aborted) {
+        return this.buildShieldedErrorResult(traceId, canonicalExecutionId, 'credential_shielded', 'Native subscription unavailable', providerId, modelId, false, attemptOutcomeApplicable);
+      }
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const nativeDeadline = performance.now() + 5000;
+      try {
+        credentialMeta = await Promise.race([this.nativeSubscriptionResolver(credentialRef, {signal:options.signal,timeoutMs:5000}), new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('timeout')), 5000); })]);
+      } catch {
+        return this.buildShieldedErrorResult(traceId, canonicalExecutionId, 'credential_shielded', 'Native subscription unavailable', providerId, modelId, false, attemptOutcomeApplicable);
+      } finally { if (timer) clearTimeout(timer); }
+      if (options.signal?.aborted || performance.now() >= nativeDeadline || !credentialMeta || typeof credentialMeta !== 'object' || credentialMeta.source !== 'native_subscription' || credentialMeta.providerId !== 'claude' || credentialMeta.executionSurface !== 'claude_cli_subscription' || credentialMeta.available !== true) {
+        return this.buildShieldedErrorResult(traceId, canonicalExecutionId, 'credential_shielded', 'Native subscription unavailable', providerId, modelId, false, attemptOutcomeApplicable);
+      }
+    } else { credentialMeta = this.credential.resolveMetadata(credentialRef as import('./credential-boundary').CredentialReference); }
     if (!credentialMeta.available) {
       return this.buildShieldedErrorResult(
         traceId,
@@ -343,16 +370,19 @@ export class ProviderExecutionBridge {
         policy: request.policy,
         healthState: "healthy",
         quotaAllowed: true,
-        credentialKeyId: credentialMeta.keyId,
-        credentialFingerprint: credentialMeta.fingerprint,
+        credentialKeyId: credentialMeta.source === "env" ? credentialMeta.keyId : undefined,
+        credentialFingerprint: credentialMeta.source === "env" ? (adapterResult.credentialFingerprint === undefined ? credentialMeta.fingerprint : sanitizeProviderCredentialFingerprint(adapterResult.credentialFingerprint)) : undefined,
         validationState: "passed",
-        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest },
+        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest,
+          ...(credentialMeta.source === 'native_subscription' && adapterResult.executionSurface === 'claude_cli_subscription' ? {executionSurface:'claude_cli_subscription',nativeProcessState: typeof adapterResult.nativeProcessState === 'string' && ['not_started','started','unknown'].includes(adapterResult.nativeProcessState) ? adapterResult.nativeProcessState : 'unknown', ...(typeof adapterResult.observedModelId === 'string' && /^[A-Za-z0-9._:-]{1,120}$/.test(adapterResult.observedModelId) ? {observedModelId:adapterResult.observedModelId} : {})} : {}) },
       });
       const response: GatewayExecuteResponse = {
         traceId,
         text: adapterResult.text,
         usage: adapterResult.usage,
+        ...(sanitizeGatewayProviderUsage(adapterResult.providerUsage) ? { providerUsage: sanitizeGatewayProviderUsage(adapterResult.providerUsage) } : {}),
         model: { providerId, modelId },
+        ...(credentialMeta.source === 'native_subscription' && adapterResult.executionSurface === 'claude_cli_subscription' ? {executionSurface:'claude_cli_subscription' as const, nativeProcessState: typeof adapterResult.nativeProcessState === 'string' && ['not_started','started','unknown'].includes(adapterResult.nativeProcessState) ? adapterResult.nativeProcessState : 'unknown', ...(typeof adapterResult.observedModelId === 'string' && /^[A-Za-z0-9._:-]{1,120}$/.test(adapterResult.observedModelId) ? {observedModelId:adapterResult.observedModelId} : {})} : {}),
       };
       return {
         response,
@@ -362,6 +392,7 @@ export class ProviderExecutionBridge {
         ...(attemptOutcomeApplicable ? { attemptOutcome: "invoked" as const } : {}),
       };
     } catch (caught: unknown) {
+      const typedError = caught instanceof ProviderExecutionError ? (credentialMeta.source === 'native_subscription' ? new ProviderExecutionError(caught.diagnostic.code, { executionSurface: 'claude_cli_subscription', nativeProcessState: caught.diagnostic.nativeProcessState ?? 'unknown' }).toGatewayEnvelope(traceId) : caught.toGatewayEnvelope(traceId)) : undefined;
       this.health.recordFailure(providerId, undefined, "adapter_execution_error");
       const receipt = this.receipt.build({
         traceId,
@@ -373,12 +404,12 @@ export class ProviderExecutionBridge {
         policy: request.policy,
         healthState: "degraded",
         quotaAllowed: true,
-        credentialKeyId: credentialMeta.keyId,
-        credentialFingerprint: credentialMeta.fingerprint,
+        credentialKeyId: credentialMeta.source === "env" ? credentialMeta.keyId : undefined,
+        credentialFingerprint: credentialMeta.source === "env" ? (typedError ? sanitizeProviderCredentialFingerprint(typedError.providerDiagnostic?.credentialFingerprint) : credentialMeta.fingerprint) : undefined,
         validationState: "failed",
-        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest },
+        metadata: { materialContextManifestDigest: materialContextManifest.manifestDigest, ...(credentialMeta.source === 'native_subscription' ? {executionSurface:'claude_cli_subscription',nativeProcessState:typedError?.providerDiagnostic?.nativeProcessState ?? 'unknown'} : {}) },
       });
-      const error: GatewayErrorEnvelope = {
+      const error: GatewayErrorEnvelope = typedError ?? {
         errorClass: "internal_error",
         traceId,
         message: "Provider adapter execution failed",
@@ -399,7 +430,7 @@ export class ProviderExecutionBridge {
     canonicalExecutionId: string | undefined,
     providerId: string,
     modelId: string,
-    credentialMeta: CredentialMetadata,
+    credentialMeta: BridgeCredentialMetadata,
     attemptOutcome: Extract<CanonicalExecutionAttemptOutcomeSummary, "denied" | "callback_error">,
     reason: string,
   ): ProviderExecutionBridgeResult {
@@ -426,8 +457,8 @@ export class ProviderExecutionBridge {
       reason,
       healthState: "degraded",
       quotaAllowed: true,
-      credentialKeyId: credentialMeta.keyId,
-      credentialFingerprint: credentialMeta.fingerprint,
+      credentialKeyId: credentialMeta.source === "env" ? credentialMeta.keyId : undefined,
+      credentialFingerprint: (credentialMeta.source === "env" ? credentialMeta.fingerprint : undefined),
       validationState: "failed",
       metadata: { materialContextManifestDisposition: "not_built_precondition_stopped" },
     });
@@ -443,7 +474,7 @@ export class ProviderExecutionBridge {
     canonicalExecutionId: string | undefined,
     providerId: string,
     modelId: string,
-    credentialMeta: CredentialMetadata,
+    credentialMeta: BridgeCredentialMetadata,
     attemptOutcomeApplicable: boolean,
   ): ProviderExecutionBridgeResult {
     const error: GatewayErrorEnvelope = {
@@ -462,8 +493,8 @@ export class ProviderExecutionBridge {
       reason: "material_context_manifest_invalid",
       healthState: "degraded",
       quotaAllowed: true,
-      credentialKeyId: credentialMeta.keyId,
-      credentialFingerprint: credentialMeta.fingerprint,
+      credentialKeyId: credentialMeta.source === "env" ? credentialMeta.keyId : undefined,
+      credentialFingerprint: (credentialMeta.source === "env" ? credentialMeta.fingerprint : undefined),
       validationState: "failed",
       metadata: { materialContextManifestDisposition: "invalid" },
     });

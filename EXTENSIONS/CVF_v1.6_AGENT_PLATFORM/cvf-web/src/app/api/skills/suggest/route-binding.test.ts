@@ -30,7 +30,7 @@ describe('actual exported Jev route binding', () => {
         effectAuthorizationRef: policy.effectAuthorizationRef, inputDigest: jevDigest('Approved goal'),
         rosterDigest: jevDigest('other roster') } });
     const request = new NextRequest('http://localhost/api/skills/suggest', { method: 'POST',
-      headers: { origin: 'http://localhost', 'sec-fetch-site': 'same-origin',
+      headers: { host: 'localhost', origin: 'http://localhost', 'sec-fetch-site': 'same-origin',
         'Content-Type': 'application/json', cookie: 'authjs.session-token=synthetic-signed-cookie' },
       body: JSON.stringify({ goal: 'Unapproved goal content', nonce: 'synthetic_nonce_001' }) });
     const response = await POST(request);
@@ -44,6 +44,6 @@ describe('actual exported Jev route binding', () => {
 it('rejects a goal outside a v2 case manifest before custody or provider',async()=>{
  const now=Date.now();vi.mocked(requireAdminApiSession).mockResolvedValue({authMode:'session',role:'owner',userId:'fixture',orgId:'org',teamId:'team',expiresAt:now+600000} as never);
  vi.mocked(loadJevAuthorizedRuntime).mockResolvedValue({schema:'cvf.jevTrialRuntime.v2',directory:'unused',trialSpec:{manifest:{one:jevDigest('Approved goal')}},roster:[],admission:{}} as never);
- const request=new NextRequest('http://localhost/api/skills/suggest',{method:'POST',headers:{origin:'http://localhost','sec-fetch-site':'same-origin','Content-Type':'application/json',cookie:'authjs.session-token=synthetic-signed-cookie'},body:JSON.stringify({goal:'Unapproved goal content',nonce:'synthetic_nonce_001'})});
+ const request=new NextRequest('http://localhost/api/skills/suggest',{method:'POST',headers:{host:'localhost',origin:'http://localhost','sec-fetch-site':'same-origin','Content-Type':'application/json',cookie:'authjs.session-token=synthetic-signed-cookie'},body:JSON.stringify({goal:'Unapproved goal content',nonce:'synthetic_nonce_001'})});
  expect((await POST(request)).status).toBe(403);
 });

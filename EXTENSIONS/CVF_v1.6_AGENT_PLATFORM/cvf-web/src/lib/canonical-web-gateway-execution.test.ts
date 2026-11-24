@@ -1,3 +1,8 @@
+const nativeProbe = vi.hoisted(() => vi.fn());
+vi.mock('cvf-model-gateway', async () => {
+    const actual = await vi.importActual<typeof import('cvf-model-gateway')>('cvf-model-gateway');
+    return { ...actual, probeClaudeCliSubscription: nativeProbe, createClaudeCliExecutionAdapter: () => ({ providerId: 'claude', execute: async () => ({ text: 'fixture native inference', executionSurface: 'claude_cli_subscription', nativeProcessState: 'started', observedModelId: 'fixture-observed' }) }) };
+});
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -10,6 +15,7 @@ import {
     type CredentialReference,
     RoutingPolicyEngine,
     CredentialBoundary,
+    fingerprintSecret,
     ProviderHealthMonitor,
     QuotaLedger,
     ProviderRegistry,
@@ -415,4 +421,200 @@ it('binds structural admission and attempt to the OpenRouter v2 tuple',async()=>
  const admission={...jevRecord,providerId:'openrouter',modelId:'typesafe/jev-1.14'};expect(()=>assertJevAdmission(admission,'openrouter-systemone')).not.toThrow();expect(()=>assertJevAdmission(jevRecord,'openrouter-systemone')).toThrow();
  const ledger=createProviderAttemptLedger({identityKind:'session',identityHash:'openrouter-fixture',providerModel:'openrouter/typesafe/jev-1.14'});const commit=vi.fn();const boundary=buildJevCanonicalAttemptBoundary({connection:'openrouter-systemone',canonicalExecutionId:'env-jev-test',stageId:'wide',ledger,admission,verifyAndCommitStart:commit,onRetainedReservation:vi.fn()});
  expect(await boundary({canonicalExecutionId:'env-jev-test',traceId:'env-jev-test',providerId:'typesafe',modelId:'jev-latest'})).toMatchObject({decision:'deny'});expect(commit).not.toHaveBeenCalled();
+});
+
+
+describe('Alibaba canonical candidate', () => {
+    it('uses the port selection and fails closed on the direct assertion', async () => {
+        const canonicalModule = await import('./canonical-web-gateway-execution');
+        expect(canonicalModule.NON_VISION_EXECUTION_PATH_SELECTION).toBe('port');
+        expect(() => canonicalModule.assertNonVisionExecutionPathIsDirect()).toThrow();
+    });
+
+    it('runs initial and retry through the actual port and one fixture adapter, joining identities and preserving partial usage', async () => {
+        const { createAlibabaCanonicalWebExecutor, canonicalWebExecutionResponse } = await import('./canonical-web-gateway-execution');
+        resetRateLimitStoresForTest();
+        const adapter = { providerId: 'alibaba', execute: vi.fn().mockResolvedValue({ text: 'fixture output', providerUsage: { inputTokens: 7 } }) };
+        const executor = createAlibabaCanonicalWebExecutor({ model: 'qwen-plus-character', env: { ALIBABA_API_KEY: 'fixture-secret' }, adapter });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'candidate-initial-retry', providerModel: 'alibaba:qwen-plus-character' });
+        const params = { canonicalExecutionId: 'candidate-trace-1', prompt: 'fixture prompt', policy: { traceId: 'candidate-trace-1', policyResult: 'allow' as const, allowedProviderIds: ['alibaba'] }, preferredProviderId: 'alibaba', routing: { requestedModelId: 'qwen-plus-character' }, ledger };
+        const first = await executor.execute({ ...params, purpose: 'initial' });
+        const second = await executor.execute({ ...params, purpose: 'retry' });
+        expect(adapter.execute).toHaveBeenCalledTimes(2);
+        expect(ledger.attempts.map(attempt => attempt.purpose)).toEqual(['initial', 'retry']);
+        expect(ledger.providerCallCount).toBe(2);
+        for (const result of [first, second]) {
+            expect(result.attemptOutcome).toBe('invoked');
+            expect(result.receipt.canonicalExecutionId).toBe(params.canonicalExecutionId);
+            expect(result.materialContextManifest?.canonicalExecutionId).toBe(params.canonicalExecutionId);
+            expect(canonicalWebExecutionResponse(result, 'fallback', Date.now())).toMatchObject({ usage: { inputTokens: 7 }, canonicalGateway: { actualUsage: { inputTokens: 7 }, usageProvenance: 'provider_reported_partial_or_complete' } });
+            expect(JSON.stringify(result)).not.toContain('fixture-secret');
+            expect(JSON.stringify(result)).not.toContain('fixture prompt');
+        }
+    });
+
+    it('rejects excluded request profiles without mutating their selectors', async () => {
+        const { canonicalWebProfileDenied } = await import('./canonical-web-gateway-execution');
+        const body = { provider: 'alibaba' as const, imageUrl: ' https://example.invalid/image ' };
+        expect(canonicalWebProfileDenied(body, undefined)).toBe(true);
+        expect(body.imageUrl).toBe(' https://example.invalid/image ');
+        expect(canonicalWebProfileDenied({ provider: 'alibaba', templateId: 'web_build_handoff' }, undefined)).toBe(true);
+        expect(canonicalWebProfileDenied({ provider: 'alibaba', htmlPilotIntent: { operationKey: 'x' } }, undefined)).toBe(true);
+        // No provider falls back to the OpenAI default, which is a canonical provider but still excludes the vision/HTML profiles.
+        expect(canonicalWebProfileDenied({}, undefined)).toBe(false);
+        expect(canonicalWebProfileDenied({ imageUrl: 'https://example.invalid/image' }, undefined)).toBe(true);
+        expect(canonicalWebProfileDenied({ provider: 'alibaba' }, undefined)).toBe(false);
+    });
+
+    it('admits OpenAI text requests and still denies every other provider and the excluded profiles', async () => {
+        const { canonicalWebProfileDenied } = await import('./canonical-web-gateway-execution');
+        expect(canonicalWebProfileDenied({ provider: 'openai' }, undefined)).toBe(false);
+        expect(canonicalWebProfileDenied({}, 'openai')).toBe(false);
+        for (const provider of ['gemini', 'deepseek', 'openrouter'] as const) {
+            expect(canonicalWebProfileDenied({ provider }, undefined)).toBe(true);
+            expect(canonicalWebProfileDenied({}, provider)).toBe(true);
+        }
+        expect(canonicalWebProfileDenied({ provider: 'openai', imageBase64: 'eA==' }, undefined)).toBe(true);
+        expect(canonicalWebProfileDenied({ provider: 'openai', mimeType: 'image/png' }, undefined)).toBe(true);
+        expect(canonicalWebProfileDenied({ provider: 'openai', templateId: 'web_build_handoff' }, undefined)).toBe(true);
+        expect(canonicalWebProfileDenied({ provider: 'openai', htmlPilotIntent: { operationKey: 'x' } }, undefined)).toBe(true);
+        // Claude stays subscription-only: not admitted without the native subscription mode.
+        expect(canonicalWebProfileDenied({ provider: 'claude' }, undefined)).toBe(true);
+    });
+});
+
+describe('OpenAI canonical candidate', () => {
+    it('allowlists exactly the OpenAI models offered in Settings, never a reasoning model, plus server-side extensions only', async () => {
+        const { isOpenAiModelAllowed } = await import('./canonical-web-gateway-execution');
+        const { AVAILABLE_MODELS } = await import('@/components/Settings');
+        for (const model of AVAILABLE_MODELS.openai) expect(isOpenAiModelAllowed(model.id, {})).toBe(true);
+        for (const model of ['o1', 'o3-mini', 'o4-mini', 'gpt-5', 'text-davinci-003', '']) expect(isOpenAiModelAllowed(model, {})).toBe(false);
+        expect(isOpenAiModelAllowed('gpt-5-mini', { CVF_OPENAI_ALLOWED_MODELS: 'gpt-5-mini' })).toBe(true);
+        expect(isOpenAiModelAllowed('evil model', { CVF_OPENAI_ALLOWED_MODELS: 'evil model' })).toBe(false);
+    });
+
+    afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+    const params = (ledger: ReturnType<typeof createProviderAttemptLedger>, purpose: 'initial' | 'retry' = 'initial') => ({
+        canonicalExecutionId: 'openai-trace-1', prompt: 'fixture prompt',
+        policy: { traceId: 'openai-trace-1', policyResult: 'allow' as const, allowedProviderIds: ['openai'] },
+        preferredProviderId: 'openai', routing: { requestedModelId: 'gpt-4o-mini' }, ledger, purpose,
+    });
+
+    it('runs through the actual port and one fixture adapter, joining identities and reporting provider usage only', async () => {
+        const { createOpenAiCanonicalWebExecutor, canonicalWebExecutionResponse, CANONICAL_WEB_OPENAI_DEFAULT_MODEL } = await import('./canonical-web-gateway-execution');
+        expect(CANONICAL_WEB_OPENAI_DEFAULT_MODEL).toBe('gpt-4o-mini');
+        resetRateLimitStoresForTest();
+        const adapter = { providerId: 'openai', execute: vi.fn().mockResolvedValue({ text: 'fixture output', providerUsage: { inputTokens: 5, outputTokens: 6, totalTokens: 11 } }) };
+        const executor = createOpenAiCanonicalWebExecutor({ env: { OPENAI_API_KEY: 'fixture-openai-secret' }, adapter });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-candidate', providerModel: 'openai:gpt-4o-mini' });
+        const result = await executor.execute(params(ledger));
+        expect(adapter.execute).toHaveBeenCalledTimes(1);
+        expect(ledger.providerCallCount).toBe(1);
+        expect(result.attemptOutcome).toBe('invoked');
+        expect(result.receipt.canonicalExecutionId).toBe('openai-trace-1');
+        expect(result.receipt.providerId).toBe('openai');
+        const response = canonicalWebExecutionResponse(result, 'fallback', Date.now(), 'openai');
+        expect(response).toMatchObject({ provider: 'openai', usage: { inputTokens: 5, outputTokens: 6, totalTokens: 11 }, canonicalGateway: { usageProvenance: 'provider_reported_partial_or_complete' } });
+        expect(JSON.stringify(result)).not.toContain('fixture-openai-secret');
+        expect(JSON.stringify(result)).not.toContain('fixture prompt');
+    });
+
+    it('calls only the admitted OpenAI endpoint with the server key refreshed at invocation, and never leaks it', async () => {
+        const { createOpenAiCanonicalWebExecutor } = await import('./canonical-web-gateway-execution');
+        resetRateLimitStoresForTest();
+        const env: Record<string, string | undefined> = { OPENAI_API_KEY: 'fixture-old' };
+        const fetch = vi.fn().mockImplementation(async () => new Response(JSON.stringify({ choices: [{ message: { content: 'valid output' }, finish_reason: 'stop' }] }), { status: 200 }));
+        vi.stubGlobal('fetch', fetch);
+        const executor = createOpenAiCanonicalWebExecutor({ env, maxTokens: 321 });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-refresh', providerModel: 'openai:gpt-4o-mini' });
+        env.OPENAI_API_KEY = 'fixture-new';
+        const result = await executor.execute(params(ledger));
+        expect(result.response?.text).toBe('valid output');
+        const [url, init] = fetch.mock.calls[0];
+        expect(url).toBe('https://api.openai.com/v1/chat/completions');
+        expect(init.headers.Authorization).toBe('Bearer fixture-new');
+        expect(JSON.parse(String(init.body))).toMatchObject({ model: 'gpt-4o-mini', max_tokens: 321 });
+        expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret('fixture-new'));
+        expect(result.response?.providerUsage).toBeUndefined();
+        expect(JSON.stringify(result)).not.toContain('fixture-new');
+        expect(JSON.stringify(result)).not.toContain('fixture-old');
+    });
+
+    it('fails closed without a key: no network call, shielded credential error', async () => {
+        const { createOpenAiCanonicalWebExecutor } = await import('./canonical-web-gateway-execution');
+        resetRateLimitStoresForTest();
+        const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
+        const executor = createOpenAiCanonicalWebExecutor({ env: {} });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-nokey', providerModel: 'openai:gpt-4o-mini' });
+        const result = await executor.execute(params(ledger));
+        expect(fetch).not.toHaveBeenCalled();
+        expect(result.response).toBeUndefined();
+        // The Gateway bridge shields a missing credential before the adapter is ever reached.
+        expect(result.error).toMatchObject({ errorClass: 'credential_shielded', credentialShielded: true });
+    });
+
+    it('denies an OPENAI_BASE_URL outside the admitted provider host before any network call', async () => {
+        const { createOpenAiCanonicalWebExecutor } = await import('./canonical-web-gateway-execution');
+        resetRateLimitStoresForTest();
+        const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
+        const executor = createOpenAiCanonicalWebExecutor({ env: { OPENAI_API_KEY: 'fixture-key', OPENAI_BASE_URL: 'https://attacker.example/v1' } });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-baseurl', providerModel: 'openai:gpt-4o-mini' });
+        const result = await executor.execute(params(ledger));
+        expect(fetch).not.toHaveBeenCalled();
+        expect(result.error?.providerDiagnostic?.code).toBe('destination_denied');
+    });
+});
+
+
+describe('Alibaba canonical invocation-time credentials', () => {
+    afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+
+    it.each(['rotate', 'remove'] as const)('refreshes credential changes during admission: %s', async change => {
+        const { createAlibabaCanonicalWebExecutor } = await import('./canonical-web-gateway-execution');
+        const rateModule = await import('./rate-limit');
+        resetRateLimitStoresForTest();
+        const env: Record<string, string | undefined> = { ALIBABA_API_KEY: 'fixture-old', CVF_ALIBABA_QUOTA_SCOPE_CONFIRMED: '1' };
+        const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ choices: [{ message: { content: 'valid output' }, finish_reason: 'stop' }] }), { status: 200 }));
+        vi.stubGlobal('fetch', fetch);
+        const limiter = rateModule.getRateLimiter();
+        const original = limiter.consumeProviderAttempt.bind(limiter);
+        const admission = vi.fn(async (...args: Parameters<typeof original>) => {
+            const result = await original(...args);
+            if (change === 'rotate') env.ALIBABA_API_KEY = 'fixture-new';
+            else delete env.ALIBABA_API_KEY;
+            return result;
+        });
+        vi.spyOn(rateModule, 'getRateLimiter').mockReturnValue({ ...limiter, consumeProviderAttempt: admission });
+        const executor = createAlibabaCanonicalWebExecutor({ model: 'qwen-plus-character', env });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'rotation-' + change, providerModel: 'alibaba:qwen-plus-character' });
+        const result = await executor.execute({ canonicalExecutionId: 'rotation-trace', prompt: 'fixture', policy: { traceId: 'rotation-trace', policyResult: 'allow', allowedProviderIds: ['alibaba'] }, preferredProviderId: 'alibaba', routing: { requestedModelId: 'qwen-plus-character' }, ledger, purpose: 'initial' });
+        if (change === 'rotate') {
+            expect(result.response?.text).toBe('valid output');
+            expect(fetch).toHaveBeenCalledTimes(1);
+            expect(fetch.mock.calls[0][1].headers.Authorization).toBe('Bearer fixture-new');
+            expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret('fixture-new'));
+        } else {
+            expect(fetch).not.toHaveBeenCalled();
+            expect(result.error?.providerDiagnostic?.code).toBe('credential_unavailable');
+            expect(result.receipt.credentialFingerprint).toBeUndefined();
+        }
+        expect(admission).toHaveBeenCalledOnce();
+        expect(ledger.providerCallCount).toBe(1);
+        expect(JSON.stringify(result)).not.toContain('fixture-new');
+        expect(JSON.stringify(result)).not.toContain('fixture-old');
+    });
+});
+
+describe('native sole-provider canonical factory', () => {
+    it('keeps API model IDs out and projects actual provider with alias distinct observed model', async () => {
+        const { canonicalWebExecutionResponse, canonicalWebProfileDenied } = await import('./canonical-web-gateway-execution');
+        const previous = process.env.CVF_CLAUDE_EXECUTION_MODE;
+        process.env.CVF_CLAUDE_EXECUTION_MODE = 'subscription_cli';
+        try {
+            expect(canonicalWebProfileDenied({ provider: 'claude' }, undefined)).toBe(false);
+            expect(canonicalWebProfileDenied({ provider: 'claude', imageUrl: 'image' }, undefined)).toBe(true);
+            const response = canonicalWebExecutionResponse({ canonicalExecutionId: 'fixture', response: { text: 'actual', model: { modelId: 'sonnet' }, executionSurface: 'claude_cli_subscription', observedModelId: 'observed', nativeProcessState: 'started' }, receipt: {}, materialContextManifestDisposition: 'not_present' } as never, 'sonnet', Date.now(), 'claude');
+            expect(response.provider).toBe('claude'); expect(response.model).toBe('sonnet'); expect(response.canonicalGateway).toMatchObject({ executionSurface: 'claude_cli_subscription', observedModelId: 'observed', usageProvenance: 'unknown' });
+        } finally { if (previous === undefined) delete process.env.CVF_CLAUDE_EXECUTION_MODE; else process.env.CVF_CLAUDE_EXECUTION_MODE = previous; }
+    });
 });

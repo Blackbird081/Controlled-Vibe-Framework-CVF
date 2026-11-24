@@ -3,7 +3,7 @@
 Memory class: POINTER_RECORD
 Status: ACTIVE_REFERENCE
 docType: reference
-Last structurally verified: 2026-11-04
+Last structurally verified: 2026-11-15
 
 ## Purpose
 

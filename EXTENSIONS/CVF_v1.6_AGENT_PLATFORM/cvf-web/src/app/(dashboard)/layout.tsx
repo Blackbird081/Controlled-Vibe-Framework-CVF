@@ -4,6 +4,7 @@
 import { useState, useEffect, startTransition, Suspense } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { HomeSpecAccountScope } from '@/lib/hooks/useHomeSpecInput';
 import { useModals } from '@/lib/hooks/useModals';
 import { useExecutionStore } from '@/lib/store';
 import { useSettings } from '@/components/Settings';
@@ -20,6 +21,7 @@ import {
     ToolsPage,
 } from '@/components';
 import CompactHeader from '@/components/CompactHeader';
+import WebAdmissionControl from '@/components/WebAdmissionControl';
 import { useLanguage } from '@/lib/i18n';
 import {
     buildGovernedStarterHandoff,
@@ -33,6 +35,14 @@ function resolveOpenModal(openParam: string | null): 'agent' | 'multi-agent' | n
     return null;
 }
 
+function DashboardLoadingFrame() {
+    return (
+        <div aria-busy="true" role="status" className="min-h-screen bg-gray-50 px-6 py-8 dark:bg-gray-900">
+            <div aria-hidden="true" className="h-1 w-16 rounded-full bg-indigo-600 motion-safe:animate-pulse" />
+        </div>
+    );
+}
+
 /**
  * Inner layout component — uses useSearchParams which requires Suspense.
  */
@@ -40,10 +50,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { t, language } = useLanguage();
+    const { t, language, mounted } = useLanguage();
     const mockAiEnabled = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1';
 
-    const { userRole, userName, permissions, handleLogout, impersonation, endImpersonation } = useAuth();
+    const { sessionReady, userRole, userName, accountScope, permissions, handleLogout, impersonation, endImpersonation } = useAuth();
     const { settings, updateProvider, updatePreferences } = useSettings();
     const modals = useModals(permissions);
     const { executions } = useExecutionStore();
@@ -52,6 +62,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [agentPrompt, setAgentPrompt] = useState<string | undefined>();
+    const [agentDraft, setAgentDraft] = useState<string | undefined>();
     // Each explicit prompt-bearing cvf:openAgent event gets a fresh identity so the
     // chat wrapper binds that prompt to its own new session. Minimize/restore and
     // unrelated rerenders keep the identity, so a delivered prompt is never replayed.
@@ -73,10 +84,11 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const handleOpenAgent = (event: Event) => {
-            const detail = (event as CustomEvent<{ prompt?: string }>).detail;
+            const detail = (event as CustomEvent<{ prompt?: string; draft?: string }>).detail;
             modals.closeAllModals();
             setAgentPrompt(detail?.prompt);
-            if (detail?.prompt) setAgentHandoffId(id => id + 1);
+            setAgentDraft(detail?.draft);
+            if (detail?.prompt || detail?.draft) setAgentHandoffId(id => id + 1);
             setActiveModal('agent');
             setIsAgentMinimized(false);
         };
@@ -168,6 +180,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const handleNavigate = (state: string) => {
         modals.closeAllModals();
         switch (state) {
+            case 'quickStart': openShellModal('quickStart'); break;
             case 'home': router.push('/home'); setActiveModal(null); break;
             case 'landing': router.push('/landing'); setActiveModal(null); break;
             case 'history': router.push('/history'); setActiveModal(null); break;
@@ -192,7 +205,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     };
 
     const handleQuickStartComplete = (result: QuickStartResult) => {
-        saveGovernedStarterHandoff(buildGovernedStarterHandoff(result));
+        if (accountScope) saveGovernedStarterHandoff(buildGovernedStarterHandoff(result), accountScope);
         modals.closeModal('quickStart');
 
         if (!pathname.startsWith('/home')) {
@@ -202,6 +215,8 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
 
         window.dispatchEvent(new CustomEvent('cvf:starterHandoffReady'));
     };
+
+    if (!mounted || !sessionReady) return <DashboardLoadingFrame />;
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -238,6 +253,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                 onLogoClick={() => { router.push('/home'); setActiveModal(null); }}
                 mockAiEnabled={mockAiEnabled}
             />
+            <WebAdmissionControl />
 
             {/* Sidebar */}
             <Sidebar
@@ -278,7 +294,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                         </div>
                     </div>
                 )}
-                {children}
+                <HomeSpecAccountScope.Provider value={{ accountScope, canUseSettings: permissions.canUseSettings }}>{children}</HomeSpecAccountScope.Provider>
 
                 {/* Footer */}
                 <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-800">
@@ -306,7 +322,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             )}
 
             {modals.showSettings && (
-                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-3 md:p-4">
+                <div className="fixed inset-0 z-[70] bg-black/50 flex items-center justify-center p-3 md:p-4">
                     <div className="w-full h-full md:h-auto md:max-w-2xl max-h-[90vh] overflow-y-auto safe-area-pt safe-area-pb">
                         <SettingsPage onClose={() => modals.closeModal('settings')} />
                     </div>
@@ -338,15 +354,19 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             {/* Agent Chat */}
             {/* Stays mounted while minimized (hidden, not unmounted) so the session,
                 draft and already-delivered prompt survive restore. */}
-            {visibleModal === 'agent' && (
+            {visibleModal === 'agent' && permissions.canUseAgent && (
                 <div
                     hidden={isAgentMinimized}
                     className={isAgentMinimized ? 'hidden' : 'fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-0 md:p-4'}
                 >
                     <div className="w-full h-full md:h-[85vh] md:max-w-5xl rounded-none md:rounded-xl overflow-hidden shadow-2xl">
                         <AgentChatWithHistory
-                            key={agentHandoffId}
+                            key={JSON.stringify([agentHandoffId, accountScope])}
+                            accountScope={accountScope}
+                            language={language}
+                            canUseConfiguredKeys={permissions.canUseSettings && !impersonation}
                             initialPrompt={agentPrompt}
+                            initialDraft={agentDraft}
                             onClose={closeActiveModal}
                             onComplete={closeActiveModal}
                             onMinimize={() => setIsAgentMinimized(true)}
@@ -364,7 +384,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                     onClick={() => setIsAgentMinimized(false)}
                 >
                     <span className="text-xl">🤖</span>
-                    <span className="font-medium">CVF Agent</span>
+                    <span className="font-medium">{language === 'vi' ? 'Trợ lý AI' : 'AI assistant'}</span>
                     <span className="text-xs bg-white/20 px-2 py-0.5 rounded">{t('agent.restoreHint')}</span>
                 </div>
             )}
@@ -399,7 +419,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
  */
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <Suspense>
+        <Suspense fallback={<DashboardLoadingFrame />}>
             <DashboardLayoutInner>{children}</DashboardLayoutInner>
         </Suspense>
     );

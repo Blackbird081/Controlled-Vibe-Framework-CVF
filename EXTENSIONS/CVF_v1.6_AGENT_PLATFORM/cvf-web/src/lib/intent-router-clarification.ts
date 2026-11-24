@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese clarification questions require UTF-8.
 /**
  * CVF Intent Router — Clarification Extension
  * ============================================
@@ -31,8 +32,12 @@ export interface ClarificationTurn {
   answer?: string;
 }
 
+export type ClarificationLanguage = 'en' | 'vi';
+
 export interface ClarificationState {
   originalInput: string;
+  /** Language of the questions shown to the user (the language they typed); English when absent. */
+  language?: ClarificationLanguage;
   depth: number;
   history: ClarificationTurn[];
 }
@@ -68,6 +73,26 @@ const SCOPE_OPTIONS = [
   'Customers or external stakeholders (higher impact, needs care)',
   'A live product or public system (production-level quality needed)',
 ];
+
+/**
+ * Vietnamese versions shown when the user typed Vietnamese. Same number and ORDER of options as the English ones: answers are
+ * mapped back to routing keywords by option index, so routing is identical for both languages.
+ */
+const PHASE_QUESTION_VI = 'Hiện tại bạn đang muốn làm việc gì nhất?';
+const PHASE_OPTIONS_VI = [
+  'Tìm hiểu hoặc nghiên cứu một chủ đề (tìm thông tin, so sánh các lựa chọn)',
+  'Lên kế hoạch hoặc thiết kế (dàn ý, chiến lược, kiến trúc)',
+  'Xây dựng hoặc tạo ra một thứ gì đó (viết nội dung, mã hoặc tài liệu)',
+  'Rà soát hoặc kiểm tra (kiểm tra chất lượng, rà soát bảo mật)',
+];
+const SCOPE_QUESTION_VI = 'Ai sẽ dùng kết quả của công việc này?';
+const SCOPE_OPTIONS_VI = [
+  'Chỉ mình tôi hoặc nhóm nội bộ (ít rủi ro, mang tính thử nghiệm)',
+  'Khách hàng hoặc các bên liên quan bên ngoài (ảnh hưởng lớn hơn, cần cẩn thận)',
+  'Sản phẩm đang chạy thật hoặc hệ thống công khai (cần chất lượng ở mức vận hành thật)',
+];
+const BROWSE_NO_QUESTION_VI = 'Không thể tạo câu hỏi làm rõ. Vui lòng duyệt thư viện kỹ năng.';
+const BROWSE_NO_MATCH_VI = 'CVF chưa xác định chắc chắn đường đi phù hợp cho mục tiêu của bạn sau khi hỏi thêm. Hãy duyệt thư viện kỹ năng để tìm lựa chọn gần nhất, hoặc thử mô tả mục tiêu theo cách khác.';
 
 /**
  * Map a user's phase answer back to searchable keywords for re-routing.
@@ -130,9 +155,10 @@ export function buildEnrichedInput(state: ClarificationState): string {
  * Generate the next clarification question given the current depth.
  * Returns null when depth limit is reached.
  */
-export function buildNextQuestion(depth: number): { question: string; options: string[] } | null {
-  if (depth === 0) return { question: PHASE_QUESTION, options: PHASE_OPTIONS };
-  if (depth === 1) return { question: SCOPE_QUESTION, options: SCOPE_OPTIONS };
+export function buildNextQuestion(depth: number, language: ClarificationLanguage = 'en'): { question: string; options: string[] } | null {
+  const vi = language === 'vi';
+  if (depth === 0) return vi ? { question: PHASE_QUESTION_VI, options: PHASE_OPTIONS_VI } : { question: PHASE_QUESTION, options: PHASE_OPTIONS };
+  if (depth === 1) return vi ? { question: SCOPE_QUESTION_VI, options: SCOPE_OPTIONS_VI } : { question: SCOPE_QUESTION, options: SCOPE_OPTIONS };
   return null;
 }
 
@@ -143,7 +169,8 @@ export function buildNextQuestion(depth: number): { question: string; options: s
  * Call this when routeIntent() returns confidence === 'weak'.
  */
 export function startClarification(
-  weakResult: IntentRouteResult
+  weakResult: IntentRouteResult,
+  language: ClarificationLanguage = 'en'
 ): ClarificationResult {
   if (!weakResult.fallback) {
     return {
@@ -164,11 +191,11 @@ export function startClarification(
     };
   }
 
-  const next = buildNextQuestion(0);
+  const next = buildNextQuestion(0, language);
   if (!next) {
     return {
       recoveryMode: 'browse',
-      browseReason: 'Could not generate a clarification question. Please browse the skill library.',
+      browseReason: language === 'vi' ? BROWSE_NO_QUESTION_VI : 'Could not generate a clarification question. Please browse the skill library.',
       depth: 0,
     };
   }
@@ -218,7 +245,7 @@ export function submitClarificationAnswer(
 
   // Still weak — ask next question if depth allows
   if (newDepth < CLARIFICATION_DEPTH_LIMIT) {
-    const next = buildNextQuestion(newDepth);
+    const next = buildNextQuestion(newDepth, state.language);
     if (next) {
       return {
         recoveryMode: 'clarify',
@@ -232,8 +259,8 @@ export function submitClarificationAnswer(
   // Depth limit reached or no question available — guided browse
   return {
     recoveryMode: 'browse',
-    browseReason:
-      'CVF could not confidently match your goal to a governed starter path after clarification. Browse the skill library to find the closest fit, or try describing your goal differently.',
+    browseReason: state.language === 'vi' ? BROWSE_NO_MATCH_VI
+      : 'CVF could not confidently match your goal to a governed starter path after clarification. Browse the skill library to find the closest fit, or try describing your goal differently.',
     depth: newDepth,
   };
 }
@@ -241,12 +268,14 @@ export function submitClarificationAnswer(
 /**
  * Build a fresh ClarificationState for a new session.
  */
-export function buildClarificationState(originalInput: string): ClarificationState {
+export function buildClarificationState(originalInput: string, language: ClarificationLanguage = 'en'): ClarificationState {
+  const first = buildNextQuestion(0, language)!;
   return {
     originalInput,
+    language,
     depth: 0,
     history: [
-      { question: PHASE_QUESTION, options: PHASE_OPTIONS },
+      { question: first.question, options: first.options },
     ],
   };
 }
@@ -263,7 +292,7 @@ export function advanceClarificationState(
     i === state.depth ? { ...turn, answer } : turn
   );
   const nextDepth = state.depth + 1;
-  const nextQuestion = buildNextQuestion(nextDepth);
+  const nextQuestion = buildNextQuestion(nextDepth, state.language);
   const nextHistory =
     nextQuestion && nextDepth < CLARIFICATION_DEPTH_LIMIT
       ? [...updatedHistory, { question: nextQuestion.question, options: nextQuestion.options }]

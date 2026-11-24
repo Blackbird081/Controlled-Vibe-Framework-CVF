@@ -1,24 +1,20 @@
+// Text Encoding Exception: Vietnamese status-line fixtures of the provider transparency cases require UTF-8.
 /**
  * @vitest-environment jsdom
  */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ProcessingScreen } from './ProcessingScreen';
+import { partialVerdictLine, summarizeRolePlan } from './ProcessingScreen.partial-output';
 
-vi.mock('./Settings', () => ({
-  useSettings: () => ({
-    settings: {
-      preferences: {
-        defaultExportMode: 'governance',
-      },
-    },
-    isLoaded: true,
-  }),
-}));
+const selectedSettings = vi.hoisted(() => ({ preferences: { defaultExportMode: 'governance', defaultProvider: undefined as string | undefined }, providers: { anthropic: { selectedModel: 'claude-sonnet-4-20250514' } } }));
+vi.mock('./Settings', () => ({ useSettings: () => ({ settings: selectedSettings, isLoaded: true }) }));
+beforeEach(() => { selectedSettings.preferences.defaultProvider = undefined; });
 
+const statusLanguage = vi.hoisted(() => ({ value: 'en' as 'en' | 'vi' }));
 vi.mock('@/lib/i18n', () => ({
   useLanguage: () => ({
-    language: 'en',
+    language: statusLanguage.value,
   }),
 }));
 
@@ -247,7 +243,7 @@ describe('ProcessingScreen — guided response (W88-T1)', () => {
     expect(screen.getByTestId('execution-diagnostic-panel').textContent).toContain('revise_request');
     expect(screen.getByTestId('execution-diagnostic-panel').textContent).toContain('output_validation_failed');
     expect(onComplete).not.toHaveBeenCalled();
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock.mock.calls.filter(call => call[0] === '/api/execute')).toHaveLength(1);
   });
 
   it('renders unclassified live failure without falling back to mock output', async () => {
@@ -308,7 +304,7 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
 
     const badge = screen.getByTestId('risk-badge');
     expect(badge.textContent).toContain('R0');
-    expect(badge.textContent).toContain('Safe');
+    expect(badge.textContent).toContain('Minimal');
   });
 
   it('renders risk-badge with R1 level when enforcement riskGate returns R1', async () => {
@@ -330,7 +326,7 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
 
     const badge = screen.getByTestId('risk-badge');
     expect(badge.textContent).toContain('R1');
-    expect(badge.textContent).toContain('Attention');
+    expect(badge.textContent).toContain('Controlled');
   });
 
   it('renders risk-badge with R3 when enforcement riskGate returns R3', async () => {
@@ -356,7 +352,7 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
 
     const badge = screen.getByTestId('risk-badge');
     expect(badge.textContent).toContain('R3');
-    expect(badge.textContent).toContain('Dangerous');
+    expect(badge.textContent).toContain('Critical');
   });
 
   it('does not render risk-badge when enforcement has no riskGate', async () => {
@@ -396,7 +392,7 @@ describe('ProcessingScreen — risk badge (W94-T1)', () => {
 
     const badge = screen.getByTestId('risk-badge');
     expect(badge.textContent).toContain('R2');
-    expect(badge.textContent).toContain('Review Required');
+    expect(badge.textContent).toContain('Elevated');
     // Description must be non-empty
     expect(badge.textContent!.length).toBeGreaterThan(20);
   });
@@ -452,8 +448,9 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
     });
 
     const panel = screen.getByTestId('governance-evidence-panel');
-    expect(panel.textContent).toContain('CVF governed this run');
-    expect(panel.textContent).toContain('ALLOW');
+    expect(panel.textContent).toContain('CVF governance details');
+    expect(panel.textContent).toContain('Decision: Allowed');
+    expect(panel.textContent).toContain('Routing: Allowed');
     expect(panel.textContent).toContain('alibaba');
     expect(panel.textContent).toContain('qwen-flash');
     expect(panel.textContent).toContain('retrieval');
@@ -520,6 +517,7 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
           },
         }),
       })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, control: { revision: 0, execution: null } }) })
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({
@@ -543,9 +541,11 @@ describe('ProcessingScreen — governance evidence visibility (W114-T1 CP5)', ()
       expect(screen.getByTestId('report-false-positive-btn').textContent).toContain('Report recorded');
     });
 
-    const [, init] = fetchMock.mock.calls[1];
+    const reportCall = fetchMock.mock.calls.find(call => call[0] === '/api/governance/false-positive-report');
+    expect(reportCall).toBeDefined();
+    const [, init] = reportCall!;
     const body = JSON.parse(String(init?.body));
-    expect(fetchMock.mock.calls[1][0]).toBe('/api/governance/false-positive-report');
+    expect(reportCall![0]).toBe('/api/governance/false-positive-report');
     expect(body).toMatchObject({
       receiptId: 'rcpt-block-001',
       envelopeId: 'env-block-001',
@@ -823,5 +823,170 @@ describe('ProcessingScreen — W96-T1 completion state', () => {
     });
 
     expect(queryByTestId('completion-banner')).toBeNull();
+  });
+});
+
+describe('subscription ProcessingScreen selection', () => {
+  it('selects advertised sonnet alias explicitly and sends exactly one execute POST despite stale stored API model', async () => {
+    selectedSettings.preferences.defaultProvider = 'anthropic';
+    const fetch = vi.fn().mockResolvedValueOnce({ ok: true, json: async () => ({ providers: [{ provider: 'claude', executionSurface: 'claude_cli_subscription', nativeAuthState: 'available', readiness: 'live_task_ready', model: 'sonnet' }] }) })
+      .mockResolvedValueOnce({ json: async () => ({ success: true, output: 'native fixture response', provider: 'claude', model: 'sonnet' }) });
+    vi.stubGlobal('fetch', fetch); const done = vi.fn();
+    render(<ProcessingScreen templateName="Documentation" inputs={{ subject: 'fixture' }} intent="Write fixture" onComplete={done} onCancel={vi.fn()} />);
+    await waitFor(() => expect(done).toHaveBeenCalled());
+    expect(fetch.mock.calls[0][0]).toBe('/api/providers'); const calls = fetch.mock.calls.filter(c => c[0] === '/api/execute');
+    expect(calls).toHaveLength(1); expect(JSON.parse(calls[0][1].body)).toMatchObject({ provider: 'claude', model: 'sonnet' });
+  });
+  it.each(['unknown', 'unavailable'])('selected native %s never posts execute', async nativeAuthState => {
+    selectedSettings.preferences.defaultProvider = 'anthropic'; const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ providers: [{ provider: 'claude', executionSurface: 'claude_cli_subscription', nativeAuthState, readiness: nativeAuthState, model: 'sonnet' }] }) });
+    vi.stubGlobal('fetch', fetch);
+    render(<ProcessingScreen templateName="Documentation" inputs={{ subject: 'fixture' }} intent="Write fixture" onComplete={vi.fn()} onCancel={vi.fn()} />);
+    await waitFor(() => expect(screen.getByText(/subscription is not ready/i)).toBeTruthy());
+    expect(fetch.mock.calls.filter(c => c[0] === '/api/execute')).toHaveLength(0);
+  });
+  it('renders friendly no-resend guidance instead of exposing a raw native action token', async () => {
+    const fetch = vi.fn().mockResolvedValue({ json: async () => ({ success: false, error: 'Native subscription execution is unconfirmed.', diagnostic: { stage: 'provider', class: 'provider_timeout', retryable: false, userAction: 'do_not_retry_without_new_evidence', safeMessage: 'Native subscription execution is unconfirmed.' } }) });
+    vi.stubGlobal('fetch', fetch);
+    render(<ProcessingScreen templateName="Documentation" inputs={{ subject: 'fixture' }} intent="Write fixture" onComplete={vi.fn()} onCancel={vi.fn()} />);
+    await waitFor(() => expect(screen.getByText(/Inspect the attempt and new evidence before another run/)).toBeTruthy());
+    expect(screen.queryByText('do_not_retry_without_new_evidence')).toBeNull(); expect(fetch.mock.calls.filter(call => call[0] === '/api/execute')).toHaveLength(1);
+  });
+});
+
+describe('ProcessingScreen - request-sent status names the provider and model', () => {
+  const props = { templateName: 'Documentation', inputs: { subject: 'fixture' }, intent: 'Write fixture', onComplete: vi.fn(), onCancel: vi.fn() };
+  const providers = selectedSettings.providers as Record<string, { selectedModel?: string }>;
+  beforeEach(() => {
+    vi.restoreAllMocks(); statusLanguage.value = 'en';
+    providers.openai = { selectedModel: 'gpt-fixture' }; providers.alibaba = {};
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => undefined)));
+  });
+  const afterEachCleanup = () => { delete providers.openai; delete providers.alibaba; statusLanguage.value = 'en'; };
+
+  it('names the provider and the model actually sent (English)', async () => {
+    selectedSettings.preferences.defaultProvider = 'openai';
+    render(<ProcessingScreen {...props} />);
+    expect(await screen.findByText('Request sent (openai / gpt-fixture), waiting for a response...')).toBeTruthy();
+    const body = JSON.parse(String((vi.mocked(fetch).mock.calls[0][1] as RequestInit).body));
+    expect(body.provider).toBe('openai'); expect(body.model).toBe('gpt-fixture');
+    afterEachCleanup();
+  });
+  it('names the provider and the model actually sent (Vietnamese)', async () => {
+    statusLanguage.value = 'vi'; selectedSettings.preferences.defaultProvider = 'openai';
+    render(<ProcessingScreen {...props} />);
+    expect(await screen.findByText('Đã gửi yêu cầu (openai / gpt-fixture), đang chờ phản hồi...')).toBeTruthy();
+    afterEachCleanup();
+  });
+  it('names only the provider when no model is known', async () => {
+    selectedSettings.preferences.defaultProvider = 'alibaba';
+    render(<ProcessingScreen {...props} />);
+    expect(await screen.findByText('Request sent (alibaba), waiting for a response...')).toBeTruthy();
+    afterEachCleanup();
+  });
+  it('falls back to the plain status text when neither provider nor model is known', async () => {
+    selectedSettings.preferences.defaultProvider = undefined;
+    const english = render(<ProcessingScreen {...props} />);
+    expect(await screen.findByText('Request sent, waiting for a response...')).toBeTruthy();
+    english.unmount(); statusLanguage.value = 'vi';
+    render(<ProcessingScreen {...props} />);
+    expect(await screen.findByText('Đã gửi yêu cầu, đang chờ phản hồi...')).toBeTruthy();
+    afterEachCleanup();
+  });
+});
+
+describe('ProcessingScreen - role-plan verdicts and unreviewed partial output (outcome fidelity O5, O6)', () => {
+  const props = { templateName: 'Documentation', inputs: { subject: 'fixture' }, intent: 'Write fixture', onCancel: vi.fn() };
+  const planEvidence = { taskGraphId: 'graph-1', steps: [{ ordinal: 1 }, { ordinal: 2 }, { ordinal: 3 }, { ordinal: 4 }], reviewerVerdict: 'REVISE', revisionApplied: true, revisionReviewed: true, recheckVerdict: 'PASS', findings: [], recheckFindings: [], stoppedEarly: null, promptContract: 'role-plan-review-v3' };
+  const receipt = { receiptId: 'receipt-1', evidenceMode: 'live', routeId: '/api/execute', generatedAt: '2026-11-16T00:00:00Z' };
+  beforeEach(() => { vi.restoreAllMocks(); statusLanguage.value = 'en'; selectedSettings.preferences.defaultProvider = undefined; });
+
+  it('attaches a compact rolePlan summary to the receipt passed to onComplete', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: true, output: 'Final text', provider: 'alibaba', model: 'qwen-plus-character', governanceEvidenceReceipt: receipt, maoRolePlan: planEvidence }) }));
+    const onComplete = vi.fn(); render(<ProcessingScreen {...props} onComplete={onComplete} />);
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1), { timeout: 4000 });
+    expect(onComplete.mock.calls[0][0]).toBe('Final text');
+    expect(onComplete.mock.calls[0][1]).toMatchObject({ receiptId: 'receipt-1', rolePlan: { reviewerVerdict: 'REVISE', revisionApplied: true, revisionReviewed: true, recheckVerdict: 'PASS', stoppedEarly: null, promptContract: 'role-plan-review-v3', stepCount: 4 } });
+    expect(Object.keys(onComplete.mock.calls[0][1].rolePlan).sort()).toEqual(['promptContract', 'recheckVerdict', 'reviewerVerdict', 'revisionApplied', 'revisionReviewed', 'stepCount', 'stoppedEarly']);
+  });
+  it('carries a denied-recheck summary (stoppedEarly ATTEMPT_DENIED, recheck NOT_RUN) and leaves a receipt without role-plan evidence untouched', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: true, output: 'Final text', governanceEvidenceReceipt: receipt, maoRolePlan: { ...planEvidence, steps: [{}, {}, {}], revisionReviewed: false, recheckVerdict: 'NOT_RUN', stoppedEarly: 'ATTEMPT_DENIED' } }) }));
+    const first = vi.fn(); const view = render(<ProcessingScreen {...props} onComplete={first} />);
+    await waitFor(() => expect(first).toHaveBeenCalled(), { timeout: 4000 });
+    expect(first.mock.calls[0][1].rolePlan).toMatchObject({ revisionReviewed: false, recheckVerdict: 'NOT_RUN', stoppedEarly: 'ATTEMPT_DENIED', stepCount: 3 });
+    view.unmount();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: true, output: 'Plain text', governanceEvidenceReceipt: receipt }) }));
+    const second = vi.fn(); render(<ProcessingScreen {...props} onComplete={second} />);
+    await waitFor(() => expect(second).toHaveBeenCalled(), { timeout: 4000 });
+    expect(second.mock.calls[0][1]).toEqual(receipt); expect('rolePlan' in second.mock.calls[0][1]).toBe(false);
+  });
+  it('shows an unreviewed partial output under the error with the bilingual label and a copy action, and never completes', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined); Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: false, error: 'MAO execution is unavailable or unconfirmed. Do not resend automatically.', partialOutput: { text: 'DRAFT BODY LINE', fromStep: 'draft', reviewed: false }, maoRolePlan: { ...planEvidence, stoppedEarly: 'FAILED' } }) }));
+    const onComplete = vi.fn(); render(<ProcessingScreen {...props} onComplete={onComplete} />);
+    expect(await screen.findByText('Kết quả chưa hoàn tất, chưa qua bước rà soát cuối / Incomplete result, not finally reviewed')).toBeTruthy();
+    expect(screen.getByText(/MAO execution is unavailable/)).toBeTruthy(); expect(screen.getByTestId('partial-output-text').textContent).toBe('DRAFT BODY LINE');
+    fireEvent.click(screen.getByTestId('partial-output-copy')); await waitFor(() => expect(writeText).toHaveBeenCalledWith('DRAFT BODY LINE'));
+    await screen.findByText('Copied'); await new Promise(resolve => setTimeout(resolve, 700));
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+  it('shows the partial-output label in Vietnamese mode too, with the Vietnamese explanation', async () => {
+    statusLanguage.value = 'vi';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: false, error: 'Lỗi', partialOutput: { text: 'NHAP', fromStep: 'revise', reviewed: false } }) }));
+    render(<ProcessingScreen {...props} onComplete={vi.fn()} />);
+    expect(await screen.findByText('Kết quả chưa hoàn tất, chưa qua bước rà soát cuối / Incomplete result, not finally reviewed')).toBeTruthy(); expect(screen.getByText(/không phải kết quả hoàn tất/)).toBeTruthy();
+    statusLanguage.value = 'en';
+  });
+  it('F7: shows the reviewer-model verdict beside the partial output when the failure evidence carries one, without claiming it was never reviewed', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ success: false, error: 'e', partialOutput: { text: 'DRAFT BODY LINE', fromStep: 'draft', reviewed: false }, maoRolePlan: { ...planEvidence, recheckVerdict: 'NOT_RUN', stoppedEarly: 'FAILED' } }) }));
+    render(<ProcessingScreen {...props} onComplete={vi.fn()} />);
+    expect((await screen.findByTestId('partial-output-verdict')).textContent).toBe('Reviewer model verdict - Review: REVISE');
+    expect(screen.getByTestId('partial-output-panel').textContent).not.toMatch(/has not been reviewed|never reviewed/i);
+    expect(screen.getByText(/has not been approved by a person/)).toBeTruthy();
+  });
+  it('F7: no verdict line when the failure evidence has no reviewer verdict, and the helper formats review and recheck in both languages', () => {
+    const diagnosed = summarizeRolePlan({ ...planEvidence, reviewerVerdict: 'UNPARSEABLE', reviewerDiagnostic: 'INVALID_JSON', recheckVerdict: 'UNPARSEABLE', recheckDiagnostic: 'FINDINGS_FILTERED' });
+    expect(diagnosed).toMatchObject({ reviewerDiagnostic: 'INVALID_JSON', recheckDiagnostic: 'FINDINGS_FILTERED' });
+    expect(summarizeRolePlan({ ...planEvidence, reviewerDiagnostic: 'RAW-TEXT', recheckDiagnostic: 'INVALID_JSON' })).not.toHaveProperty('reviewerDiagnostic');
+    expect(summarizeRolePlan({ ...planEvidence, recheckDiagnostic: 'INVALID_JSON' })).not.toHaveProperty('recheckDiagnostic');
+    expect(partialVerdictLine(undefined, false)).toBeNull();
+    expect(partialVerdictLine(summarizeRolePlan({ ...planEvidence, reviewerVerdict: 'NOT_RUN', recheckVerdict: null }), false)).toBeNull();
+    expect(partialVerdictLine(summarizeRolePlan(planEvidence), false)).toBe('Reviewer model verdict - Review: REVISE, Recheck: PASS');
+    expect(partialVerdictLine(summarizeRolePlan(planEvidence), true)).toBe('Kết luận của mô hình rà soát - Rà soát: REVISE, Rà soát lại: PASS');
+  });
+  it.each([
+    ['a successful response', { success: true, output: 'Done text', partialOutput: { text: 'X', fromStep: 'draft', reviewed: false } }],
+    ['a draft marked reviewed', { success: false, error: 'e', partialOutput: { text: 'X', fromStep: 'draft', reviewed: true } }],
+    ['an empty text', { success: false, error: 'e', partialOutput: { text: '  ', fromStep: 'draft', reviewed: false } }],
+    ['an unknown step', { success: false, error: 'e', partialOutput: { text: 'X', fromStep: 'review', reviewed: false } }],
+    ['a non-object value', { success: false, error: 'e', partialOutput: 'X' }],
+  ])('does not show a partial output for %s', async (_name, response) => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: async () => ({ ...response, governanceEvidenceReceipt: receipt }) }));
+    render(<ProcessingScreen {...props} onComplete={vi.fn()} />);
+    await waitFor(() => expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1)); await new Promise(resolve => setTimeout(resolve, 400));
+    expect(screen.queryByTestId('partial-output-panel')).toBeNull();
+  });
+});
+
+
+describe('ProcessingScreen held execution status', () => {
+  it.each([{ active: true, shown: true }, { active: false, shown: false }])('queries status on failed run: active=$active', async ({ active, shown }) => {
+    const fetchMock = vi.fn().mockImplementation(async (url: string) => url === '/api/execute/control'
+      ? { ok: true, json: async () => ({ success: true, control: { revision: 1, execution: { active, canonicalId: 'held-id' } } }) }
+      : { json: async () => ({ success: false, error: 'Failed' }) });
+    vi.stubGlobal('fetch', fetchMock);
+    const view = render(<ProcessingScreen {...baseProps} />);
+    await waitFor(() => expect(fetchMock.mock.calls.some(call => call[0] === '/api/execute/control')).toBe(true));
+    if (shown) expect(await screen.findByText(/Previous request outcome unknown/)).toBeTruthy();
+    else expect(screen.queryByText(/Previous request outcome unknown/)).toBeNull();
+    view.unmount(); vi.unstubAllGlobals();
+  });
+  it('does not query status on a successful run', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ json: async () => ({ success: true, output: 'done' }) });
+    vi.stubGlobal('fetch', fetchMock);
+    const view = render(<ProcessingScreen {...baseProps} />);
+    await waitFor(() => expect(screen.getByText('Complete')).toBeTruthy());
+    expect(fetchMock.mock.calls.some(call => call[0] === '/api/execute/control')).toBe(false);
+    expect(screen.queryByText(/Previous request outcome unknown/)).toBeNull();
+    view.unmount(); vi.unstubAllGlobals();
   });
 });

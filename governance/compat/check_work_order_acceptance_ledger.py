@@ -208,7 +208,9 @@ def validate_return(work_order_text: str, return_text: str, observed_paths: set[
     return issues
 
 
-def git_observed_paths(base: str) -> set[str]:
+def git_observed_paths(base: str, end: str | None = None) -> set[str]:
+    if end is not None:
+        return _git_paths("diff", "--name-only", "-z", base, end)
     commands = [
         ["git", "diff", "--name-only", base],
         ["git", "ls-files", "--others", "--exclude-standard"],
@@ -222,20 +224,129 @@ def git_observed_paths(base: str) -> set[str]:
     return paths
 
 
+def _git_bytes(*args: str) -> bytes:
+    proc = subprocess.run(["git", "--literal-pathspecs", *args], cwd=ROOT,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode:
+        raise ValueError(proc.stderr.decode("utf-8", errors="replace").strip() or "Git observation failed")
+    return proc.stdout
+
+
+def _git_paths(*args: str) -> set[str]:
+    return {p for p in _git_bytes(*args).decode("utf-8").split("\0") if p}
+
+
+def _bound_file_bytes(commit: str, path: str) -> tuple[bytes, bytes]:
+    entry = _git_bytes("ls-tree", "-z", commit, "--", path).split(b"\0")
+    if len(entry) != 2 or not entry[0]:
+        raise ValueError(f"bound file missing at {commit}: {path}")
+    meta, actual = entry[0].split(b"\t", 1)
+    mode, kind, oid = meta.split()
+    if actual.decode("utf-8") != path or mode not in (b"100644", b"100755") or kind != b"blob":
+        raise ValueError(f"bound path is not a regular Git file: {path}")
+    return mode, _git_bytes("cat-file", "blob", oid.decode("ascii"))
+
+
+def observe_return_endpoint(
+    base: str, endpoint: str, work_order_path: str, return_path: str,
+    work_order_text: str, return_text: str,
+) -> tuple[set[str], list[str]]:
+    """Option A: bound path interval, current raw bytes, explicit scope/drift.
+
+    This does not validate raw proof pins or assign post-return paths to an actor.
+    Both active-return consumers use this guard; default observation is untouched.
+    """
+    try:
+        if not isinstance(base, str) or not re.fullmatch(r"[0-9a-f]{7,40}", base):
+            raise ValueError("executionBaseHead must be a Git SHA")
+        if not re.fullmatch(r"[0-9a-f]{40}", endpoint):
+            raise ValueError("return endpoint must be a full 40-character lowercase commit SHA")
+        end = _git_bytes("rev-parse", "--verify", endpoint + "^{commit}").decode().strip()
+        head = _git_bytes("rev-parse", "HEAD").decode().strip()
+        _git_bytes("merge-base", "--is-ancestor", base, end)
+        _git_bytes("merge-base", "--is-ancestor", end, head)
+        ledger, issues = validate_work_order(work_order_text)
+        if issues or ledger is None:
+            return set(), issues or ["missing acceptance ledger"]
+        bound = {work_order_path, return_path}
+        bound.update(p for row in ledger["requirements"] for p in row["expectedArtifacts"])
+        # Validate before passing any caller-provided path to Git or the filesystem.
+        for path in bound:
+            if (_path(path) != path or re.match(r"^[A-Za-z]:", path)
+                    or ".git" in PurePosixPath(path).parts):
+                raise ValueError(f"invalid bound path: {path}")
+            target = ROOT / path
+            target.resolve().relative_to(ROOT.resolve())
+            if not target.is_file() or any(p.is_symlink() for p in (target, *target.parents) if p != ROOT.parent):
+                raise ValueError(f"bound working path is not a regular contained file: {path}")
+        derived = _git_bytes("log", "-1", "--format=%H", f"{base}..{head}", "--", return_path).decode().strip()
+        if end != derived:
+            raise ValueError(f"return endpoint differs from last bound-return commit: {derived or 'none'}")
+        print(f"Scope: return interval {base}..{end}; working-copy raw pins retain existing validation")
+        post = sorted(_git_paths("diff", "--name-only", "-z", end, head))
+        pending = sorted(_git_paths("diff", "--name-only", "-z", "HEAD") |
+                         _git_paths("diff", "--cached", "--name-only", "-z") |
+                         _git_paths("ls-files", "--others", "--exclude-standard", "-z"))
+        print("Post-return net committed paths (outside fulfillment; reviewer adjudication, not event history): " + json.dumps(post))
+        print("Current Git-observed pending paths (outside historical interval): " + json.dumps(pending))
+        staged = _git_paths("diff", "--cached", "--name-only", "-z", "HEAD", "--", *sorted(bound))
+        if staged:
+            raise ValueError("staged bound-file drift: " + ", ".join(sorted(staged)))
+        for path in sorted(bound):
+            original_mode, original = _bound_file_bytes(end, path)
+            if _bound_file_bytes(head, path) != (original_mode, original):
+                raise ValueError(f"committed bound-file drift since return: {path}")
+            raw = (ROOT / path).read_bytes()  # Do not trust index stat-cache cleanliness.
+            if raw != original:
+                try:
+                    eol_only = b"\0" not in raw + original and (
+                        raw.decode("utf-8").replace("\r\n", "\n") ==
+                        original.decode("utf-8").replace("\r\n", "\n"))
+                except UnicodeError:
+                    eol_only = False
+                if not eol_only:
+                    raise ValueError(f"working-copy bound-file drift since return: {path}")
+                print(f"EOL_ONLY_GIT_CONTENT_EQUIVALENCE: {path}; raw bytes differ, no raw-pin match asserted")
+            expected_text = work_order_text if path == work_order_path else return_text if path == return_path else None
+            if expected_text is not None and raw.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n") != expected_text:
+                raise ValueError(f"bound text changed during read: {path}")
+        return git_observed_paths(base, end), []
+    except (OSError, UnicodeError, ValueError) as exc:
+        return set(), [f"return endpoint: {exc}"]
+
+
+def check_return_acceptance(
+    work_order_path: str, return_path: str, work_order_text: str,
+    return_text: str, endpoint: str | None = None,
+) -> list[str]:
+    """Shared active-return observation and reduction for CLI and quality gate."""
+    evidence, issues = _json_block(return_text, EVIDENCE_RE, "acceptance-evidence-json")
+    if issues:
+        return issues
+    base = evidence.get("executionBaseHead") if evidence else None
+    if endpoint:
+        observed, issues = observe_return_endpoint(
+            base, endpoint, work_order_path, return_path, work_order_text, return_text)
+    else:
+        observed = git_observed_paths(base) if isinstance(base, str) and re.fullmatch(r"[0-9a-f]{7,40}", base) else set()
+    return issues + validate_return(work_order_text, return_text, observed)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--work-order", required=True)
     parser.add_argument("--return", dest="return_path")
+    parser.add_argument("--return-endpoint", help="Full commit SHA of the bound return; historical path interval only")
     parser.add_argument("--enforce", action="store_true")
     args = parser.parse_args()
+    if args.return_endpoint and not args.return_path:
+        parser.error("--return-endpoint requires --return")
     work_order_text = (ROOT / args.work_order).read_text(encoding="utf-8")
     ledger, issues = validate_work_order(work_order_text)
     if args.return_path:
         return_text = (ROOT / args.return_path).read_text(encoding="utf-8")
-        evidence, parse_issues = _json_block(return_text, EVIDENCE_RE, "acceptance-evidence-json")
-        base = evidence.get("executionBaseHead") if evidence else None
-        observed = git_observed_paths(base) if isinstance(base, str) and re.fullmatch(r"[0-9a-f]{7,40}", base) else set()
-        issues = validate_return(work_order_text, return_text, observed)
+        issues = check_return_acceptance(args.work_order, args.return_path,
+                                         work_order_text, return_text, args.return_endpoint)
     print("=== CVF Work Order Acceptance Ledger Gate ===")
     for issue in issues:
         print(f"- {issue}")

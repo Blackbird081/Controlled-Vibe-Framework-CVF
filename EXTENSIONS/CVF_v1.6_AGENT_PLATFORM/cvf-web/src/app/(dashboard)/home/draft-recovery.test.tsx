@@ -15,9 +15,19 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';
 import type { Execution } from '@/types';
+
+// The held-execution notice (held-release slice 8223fe6aa) makes its own control status call whenever a run fails; it is
+// covered by ProcessingScreen.test.tsx and HeldExecutionNotice.test.tsx. Here it is isolated so this suite's fetch counts and
+// queued responses only describe the execute and provider calls under test.
+vi.mock('@/components/HeldExecutionNotice', () => ({ default: () => null }));
 
 // Captured before any spy: this is the shared setup provider-denial guard.
 const guardedFetch = globalThis.fetch;
@@ -39,10 +49,13 @@ vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));
 vi.mock('@/components/Settings', () => ({ useSettings: () => mockSettings }));
 vi.mock('@/components/SpecExport', () => ({ SpecExport: () => null }));
 vi.mock('@/lib/skill-template-map', () => ({ getSkillForTemplate: () => null }));
-vi.mock('@/lib/hooks/useExecute', () => {
+vi.mock('@/lib/hooks/useExecute', async (importOriginal) => {
     const providers: never[] = [];
     const fetchProviders = () => undefined;
-    return { useProviders: () => ({ providers, anyConfigured: false, fetchProviders }) };
+    return {
+        ...(await importOriginal<typeof import('@/lib/hooks/useExecute')>()),
+        useProviders: () => ({ providers, anyConfigured: false, fetchProviders }),
+    };
 });
 
 vi.mock('@/components', async () => {

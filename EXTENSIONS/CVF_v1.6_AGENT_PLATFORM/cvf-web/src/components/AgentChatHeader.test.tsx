@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: Vietnamese assistant status assertions use UTF-8.
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentChatHeader } from './AgentChatHeader';
@@ -36,7 +37,9 @@ describe('AgentChatHeader', () => {
 
         expect(screen.getByText(/Gemini/i)).toBeTruthy();
         expect(screen.getByTestId('export-menu')).toBeTruthy();
-        expect(screen.getByText('Streaming...')).toBeTruthy();
+        expect(screen.getByRole('heading', { name: 'Trợ lý AI' })).toBeTruthy();
+        expect(screen.getByRole('status').textContent).toBe('Đang trả lời…');
+        expect(screen.queryByText('Streaming...')).toBeNull();
 
         fireEvent.click(screen.getByTitle('Decision log'));
         fireEvent.click(screen.getByTitle('Export chat'));
@@ -75,7 +78,7 @@ describe('AgentChatHeader', () => {
 
         expect(screen.queryByTestId('export-menu')).toBeNull();
         expect(screen.queryByTitle('Đóng')).toBeNull();
-        expect(screen.getByText(/GPT-4/i)).toBeTruthy();
+        expect(screen.getByText('OpenAI')).toBeTruthy();
     });
 
     it('renders anthropic provider label', () => {

@@ -115,13 +115,15 @@ describe("package.json test-script live-test extension boundary (EAFR-R1A)", () 
     expect([...extensions].sort()).toEqual(["ts", "tsx"]);
   });
 
-  it("current tracked live-test counts match the post-EAFR-R1D baseline (34 .ts + 1 .tsx)", () => {
+  // Baseline 34 .ts after EAFR-R1D; +1 when 2d449cb96 (Web v1 follow-up A6) renamed the provider-calling
+  // pvv.nc.benchmark.test.ts to pvv.nc.benchmark.live.test.ts so default runs exclude it.
+  it("current tracked live-test counts match the baseline (35 .ts + 1 .tsx)", () => {
     const liveTestPaths = enumerateLiveTestFilenames(SRC_ROOT);
     const tsCount = liveTestPaths.filter((p) => extensionOf(p) === "ts").length;
     const tsxCount = liveTestPaths.filter((p) => extensionOf(p) === "tsx").length;
 
-    expect(tsCount).toBe(34);
+    expect(tsCount).toBe(35);
     expect(tsxCount).toBe(1);
-    expect(liveTestPaths.length).toBe(35);
+    expect(liveTestPaths.length).toBe(36);
   });
 });

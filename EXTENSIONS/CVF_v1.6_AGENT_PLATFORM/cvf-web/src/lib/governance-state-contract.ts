@@ -1,12 +1,28 @@
 import {
     DEFAULT_GOVERNANCE_STATE,
-    PHASE_AUTHORITY_MATRIX,
     type CVFPhaseToolkit,
     type CVFRiskLevel,
     type GovernanceState,
-    type PhaseAuthority,
 } from './governance-context';
+import { normalizeWebPhaseInput } from './governance-model';
+import { normalizeRiskLevel } from './risk-check';
 import type { GovernanceEvaluateResult } from '@/types/governance-engine';
+
+interface PhaseAuthority {
+    can_approve: boolean;
+    can_override: boolean;
+    max_risk: CVFRiskLevel;
+}
+
+// Preserve the legacy /api/execute response values until the wire contract can
+// be revised. UI guidance uses the role-bound Local projection.
+const LEGACY_SNAPSHOT_AUTHORITY: Record<CVFPhaseToolkit, PhaseAuthority> = {
+    INTAKE: { can_approve: false, can_override: false, max_risk: 'R1' },
+    DESIGN: { can_approve: false, can_override: false, max_risk: 'R2' },
+    BUILD: { can_approve: true, can_override: false, max_risk: 'R3' },
+    REVIEW: { can_approve: true, can_override: true, max_risk: 'R3' },
+    FREEZE: { can_approve: true, can_override: true, max_risk: 'R4' },
+};
 
 export type GovernanceSnapshotSource = 'client' | 'server';
 export type ApprovalSnapshotStatus = 'NOT_REQUIRED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'BLOCKED';
@@ -85,48 +101,6 @@ export interface BuildUnifiedGovernanceStateInput {
     registryBinding?: GovernanceRegistryBindingInput;
     uatBinding?: GovernanceUatBindingInput;
     serverResult?: GovernanceEvaluateResult;
-}
-
-function normalizePhase(value?: string): CVFPhaseToolkit {
-    const normalized = value?.trim().toUpperCase();
-    switch (normalized) {
-        case 'A':
-        case 'PHASE A':
-        case 'INTAKE':
-            return 'INTAKE';
-        case 'B':
-        case 'PHASE B':
-        case 'DESIGN':
-            return 'DESIGN';
-        case 'C':
-        case 'PHASE C':
-        case 'BUILD':
-            return 'BUILD';
-        case 'D':
-        case 'PHASE D':
-        case 'REVIEW':
-            return 'REVIEW';
-        case 'E':
-        case 'PHASE E':
-        case 'FREEZE':
-            return 'FREEZE';
-        default:
-            return DEFAULT_GOVERNANCE_STATE.phase;
-    }
-}
-
-function normalizeRiskLevel(value?: string): CVFRiskLevel {
-    const normalized = value?.trim().toUpperCase();
-    switch (normalized) {
-        case 'R0':
-        case 'R1':
-        case 'R2':
-        case 'R3':
-        case 'R4':
-            return normalized;
-        default:
-            return DEFAULT_GOVERNANCE_STATE.riskLevel;
-    }
 }
 
 function deriveApprovalState(input: {
@@ -272,11 +246,11 @@ function normalizeUatBinding(
 export function buildUnifiedGovernanceState(
     input: BuildUnifiedGovernanceStateInput
 ): UnifiedGovernanceState {
-    const phase = normalizePhase(
+    const phaseInput =
         input.serverResult?.report?.cvf_enforcement?.phase_authority?.phase
         ?? input.governanceState?.phase
-        ?? input.cvfPhase
-    );
+        ?? input.cvfPhase;
+    const phase = normalizeWebPhaseInput(phaseInput?.trim()) ?? DEFAULT_GOVERNANCE_STATE.phase;
     const riskLevel = normalizeRiskLevel(
         input.serverResult?.report?.cvf_risk_level
         ?? input.governanceState?.riskLevel
@@ -288,7 +262,7 @@ export function buildUnifiedGovernanceState(
         role: input.governanceState?.role ?? DEFAULT_GOVERNANCE_STATE.role,
         riskLevel,
         toolkitEnabled: input.governanceState?.toolkitEnabled ?? DEFAULT_GOVERNANCE_STATE.toolkitEnabled,
-        authority: PHASE_AUTHORITY_MATRIX[phase],
+        authority: LEGACY_SNAPSHOT_AUTHORITY[phase],
         approval: deriveApprovalState({
             enforcementStatus: input.enforcementStatus,
             reasons: input.reasons,

@@ -131,41 +131,8 @@ function missingCapabilities(capability: MaoCapabilityDeclaration): string[] {
   return capability.requiredCapabilities.filter((required) => !capability.offeredCapabilities.includes(required));
 }
 
-/**
- * Fake/local, provider-neutral delegation adapter. Holds an in-memory
- * idempotency store only (per the contract's Storage And Retention
- * Decision, this is not a durable runtime claim); no network, provider
- * SDK, or secret material is referenced anywhere in this class.
- *
- * Every `invoke` call fails closed before any fake "execution" happens:
- * the task must exist in the compiled graph, the admission receipt must
- * be bound to the same taskGraphId, the admission decision must not be
- * REJECTED and must not be an unapproved OPERATOR_APPROVAL_REQUIRED, the
- * graph's authority envelope must still verify, the capability declaration
- * must offer every required capability, and the input manifest must be
- * non-empty. Only after all of that does the adapter emit a deterministic
- * fake invocation receipt.
- */
-export class MaoDelegationAdapter {
-  private readonly adapterId: string;
-  private readonly receiptsByIdempotencyKey = new Map<string, MaoInvocationReceipt>();
-  private readonly attemptSequenceByTask = new Map<string, number>();
-  private readonly requestFingerprintByIdempotencyKey = new Map<string, string>();
-
-  constructor(adapterId: string = DEFAULT_ADAPTER_ID) {
-    this.adapterId = adapterId;
-  }
-
-  /**
-   * Attempt a fake/local invocation. Returns the existing receipt with
-   * `replayed: true` when the same idempotencyKey was already used for the
-   * same task and authority hash (duplicate-submission protection per the
-   * contract's Idempotency, Retry, Cancel, And Recovery section). A
-   * conflicting reuse of the same idempotencyKey for a different task or
-   * authority hash is rejected rather than silently returning the wrong
-   * receipt.
-   */
-  invoke(request: MaoInvocationRequest): MaoInvocationResult {
+/** Validate the shared authority/capability boundary without invoking or creating a receipt. */
+export function validateMaoInvocationRequest(request: MaoInvocationRequest): MaoInvocationFailure | null {
     const reject = (reason: MaoInvocationRejectionReason, detail: string, diagnosticClass: MaoDiagnosticClass): MaoInvocationFailure => ({
       ok: false, reason, detail, diagnosticClass,
     });
@@ -206,6 +173,55 @@ export class MaoDelegationAdapter {
     if (missing.length > 0) {
       return reject("REJECTED_MISSING_CAPABILITY", `adapter lacks required capability count ${missing.length}`, "NON_RETRYABLE_SCOPE_BREACH");
     }
+
+    return null;
+}
+
+/** Deterministic identity only; this does not assert that an invocation occurred. */
+export function createMaoInvocationIdentity(request: MaoInvocationRequest, attemptSequence = 1): { invocationId: string; attemptId: string; inputManifestHash: string } {
+  return { invocationId: computeInvocationId(request.taskId, attemptSequence, request.graph.authorityEnvelope.authorityHash, request.idempotencyKey),
+    attemptId: computeAttemptId(request.taskId, attemptSequence, request.idempotencyKey), inputManifestHash: computeInputManifestHash(request.inputManifest) };
+}
+
+/**
+ * Fake/local, provider-neutral delegation adapter. Holds an in-memory
+ * idempotency store only (per the contract's Storage And Retention
+ * Decision, this is not a durable runtime claim); no network, provider
+ * SDK, or secret material is referenced anywhere in this class.
+ *
+ * Every `invoke` call fails closed before any fake "execution" happens:
+ * the task must exist in the compiled graph, the admission receipt must
+ * be bound to the same taskGraphId, the admission decision must not be
+ * REJECTED and must not be an unapproved OPERATOR_APPROVAL_REQUIRED, the
+ * graph's authority envelope must still verify, the capability declaration
+ * must offer every required capability, and the input manifest must be
+ * non-empty. Only after all of that does the adapter emit a deterministic
+ * fake invocation receipt.
+ */
+export class MaoDelegationAdapter {
+  private readonly adapterId: string;
+  private readonly receiptsByIdempotencyKey = new Map<string, MaoInvocationReceipt>();
+  private readonly attemptSequenceByTask = new Map<string, number>();
+  private readonly requestFingerprintByIdempotencyKey = new Map<string, string>();
+
+  constructor(adapterId: string = DEFAULT_ADAPTER_ID) {
+    this.adapterId = adapterId;
+  }
+
+  /**
+   * Attempt a fake/local invocation. Returns the existing receipt with
+   * `replayed: true` when the same idempotencyKey was already used for the
+   * same task and authority hash (duplicate-submission protection per the
+   * contract's Idempotency, Retry, Cancel, And Recovery section). A
+   * conflicting reuse of the same idempotencyKey for a different task or
+   * authority hash is rejected rather than silently returning the wrong
+   * receipt.
+   */
+  invoke(request: MaoInvocationRequest): MaoInvocationResult {
+    const validation = validateMaoInvocationRequest(request);
+    if (validation) return validation;
+    const task = request.graph.tasks.find((t) => t.taskId === request.taskId)!;
+    const reject = (reason: MaoInvocationRejectionReason, detail: string, diagnosticClass: MaoDiagnosticClass): MaoInvocationFailure => ({ ok: false, reason, detail, diagnosticClass });
 
     const authorityHash = request.graph.authorityEnvelope.authorityHash;
     const requestFingerprint = computeDeterministicHash(

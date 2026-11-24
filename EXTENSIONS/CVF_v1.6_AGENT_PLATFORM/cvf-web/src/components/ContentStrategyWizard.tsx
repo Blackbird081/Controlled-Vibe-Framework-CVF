@@ -253,7 +253,6 @@ function buildContentStrategyGovernedPacket(data: WizardData) {
             `Validate the content pillars and distribution plan for "${brandName}" with the content owner`,
             'Open a separate follow-up batch for content production work outside this strategy packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:content-${slug}`,
         inputs: {
             brandName: data.brandName || '',
             brandVoice: data.brandVoice || '',
@@ -446,9 +445,7 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -618,7 +615,6 @@ export function ContentStrategyWizard({ onBack }: ContentStrategyWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

@@ -1,0 +1,255 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Home specification without a writing provider > preserves the existing SpecExport caller byte snapshot 1`] = `
+"---
+# CVF Brief Packet
+**Ngày tạo:** 2031-04-15
+**Template:** Bàn giao Web cho Agent
+**Danh mục:** product
+**Chế độ:** Brief
+---
+
+## 📋 Bối cảnh
+
+**Template:** Bàn giao Web cho Agent
+
+Template cực ngắn cho non-coder: chỉ mô tả website bằng ngôn ngữ thường ngày, CVF sẽ tự đóng gói thành packet build cho agent
+
+---
+
+## 🤝 Mục đích packet
+
+- Packet này được viết cho AI/agent khác đọc và tiếp tục thực thi.
+- Người dùng cuối không cần hiểu framework, stack, hay implementation details ẩn phía sau.
+- Agent nhận packet phải tự chuyển brief thành quyết định implementation phù hợp trong phạm vi guardrails.
+
+---
+
+## 📝 Thông tin đầu vào
+
+- **Ai sẽ dùng website?:** Weekend customers
+
+---
+
+## 👤 User Context
+
+A bakery preorder site
+
+
+
+---
+
+## ✅ Độ đầy đủ đầu vào
+
+| Field | Provided |
+| --- | --- |
+| Website này để làm gì? | ❌ |
+| Ai sẽ dùng website? | ✅ |
+| Người dùng phải làm được những việc nào? | ❌ |
+| Cần những trang / popup nào? | ❌ |
+| Những gì phải giữ nguyên | ❌ |
+| Bạn muốn giao diện mang cảm giác gì? | ❌ |
+
+
+**Thiếu input bắt buộc:** Website này để làm gì?, Người dùng phải làm được những việc nào?, Cần những trang / popup nào?, Những gì phải giữ nguyên, Bạn muốn giao diện mang cảm giác gì?
+
+
+
+---
+
+## 🎯 Nhiệm vụ
+
+INTENT:
+Tôi là non-coder và muốn CVF biến brief này thành packet bàn giao để agent khác xây website.
+
+WEBSITE GOAL:
+N/A
+
+TARGET USERS:
+Weekend customers
+
+USERS MUST BE ABLE TO:
+N/A
+
+REQUIRED PAGES / MODALS:
+N/A
+
+MUST PRESERVE:
+N/A
+
+LOOK AND FEEL:
+N/A
+
+REFERENCES / NOTES:
+N/A
+
+OUTPUT REQUIREMENTS:
+- Ask only for plain-language product intent, not hidden technical choices
+- Translate the brief into a clear agent-ready web build packet
+- Use the CVF Web Redesign DNA automatically: professional command workspace, dark-primary layered shell by default, strong page hierarchy, KPI/stat strips where useful, pill filters, compact cards/tables, meaningful empty/loading/error states, and restrained hover/motion
+- Preserve existing logic, integrations, data contracts, and protected flows
+- Give page structure, UX priorities, and acceptance checklist
+- Keep the result simple enough for a non-coder to review before handoff
+
+OUTPUT FORMAT:
+- Website Goal → Target Users → Required Pages and Flows → CVF Web Redesign DNA → UX / Visual Direction → Protected Constraints → Agent Build Instructions → Acceptance Checklist
+
+SUCCESS CRITERIA:
+- Non-coder can read and approve the packet without technical knowledge
+- Agent has all information needed to build without asking the user for framework or stack choices
+
+---
+
+## 📤 Định dạng kết quả mong muốn
+
+- Website Goal & Audience
+- Page / Flow List
+- UX Direction
+- Protected Constraints
+- Agent Build Packet
+- Acceptance Checklist
+
+
+---
+
+## 📐 Template đầu ra
+
+\`\`\`markdown
+# Web Build Handoff Packet
+
+## 1. Website Goal
+- Business goal
+- Primary user promise
+
+## 2. Target Users
+- Main audiences
+- What they need to accomplish
+
+## 3. Required Pages and Flows
+- Pages
+- Modals / forms
+- Primary user journey
+
+## 4. CVF Web Redesign DNA
+- Experience tone and shell pattern
+- Color, typography, component, and motion rules
+- Anti-patterns to avoid
+
+## 5. UX / Visual Direction
+- Tone and feel
+- Content density
+- CTA hierarchy
+- Mobile behavior
+
+## 6. Protected Constraints
+- Logic to preserve
+- APIs / integrations to preserve
+- Data / auth / routes that must not change
+
+## 7. Agent Build Instructions
+- What to build
+- What can be redesigned
+- What must remain unchanged
+
+## 8. Acceptance Checklist
+- Desktop + mobile
+- Empty / loading / error states
+- Clear CTA and readable content
+- Accessibility basics
+\`\`\`
+
+
+---
+
+## CVF Web Redesign DNA
+
+Apply this UI/UX DNA when the request is about building or redesigning a website, dashboard, admin surface, docs surface, landing page, or product shell.
+
+- Canonical source: use the root CVF DESIGN.md as the visual contract. External references and Claude Design prototypes are learning material only.
+- Runtime independence: do not require Claude Design at build time. Treat Claude Design prototypes as historical source material only.
+- Experience tone: professional command workspace; premium, structured, calm, precise, operational.
+- Layout: fixed left navigation for apps/dashboards; topbar/action strip; scrollable content; max-width content lanes for reading surfaces; no marketing hero unless the user explicitly asks for a landing page.
+- Rhythm: 24-32px page padding, 16-20px grid gaps, compact dense cards for operational data, clear section separation.
+- Color: dark-primary shell, layered panels, thin alpha borders, one primary accent by default. Prefer indigo #5b5cf6 unless domain branding gives a better accent. Use semantic colors only for status.
+- Typography: strong 24-26px page headings, compact 13-14px section titles, 12-13.5px body/table text, uppercase 9-11px metadata labels, bold KPI numerals.
+- Components: stat strips/KPI cards, pill filters, grouped action buttons, badge status, split-pane docs/search layouts, tables with sticky context, meaningful empty/loading/error states.
+- Effects: subtle hover lift, alpha borders, restrained shadows, 120-180ms transitions. Avoid random gradient blobs, generic AI glows, nested cards, over-rounded pills, or one-off decorative surfaces.
+- Build guardrail: preserve existing routes, auth, API payloads, data contracts, state stores, parsers, and integrations unless the user explicitly approves runtime changes.
+
+For a web handoff packet, use these headings exactly:
+1. Website Goal
+2. Target Users
+3. Required Pages and Flows
+4. CVF Web Redesign DNA
+5. UX / Visual Direction
+6. Protected Constraints
+7. Agent Build Instructions
+8. Acceptance Checklist
+
+Do not invent concrete route names, endpoint paths, payload fields, database schemas, auth mechanisms, or integration details that the user did not provide. If the user only says "preserve the existing API/auth/routes", repeat that constraint as protected scope instead of fabricating examples.
+
+---
+
+
+
+
+## ⛔ Ràng buộc thực thi
+- Không tự bịa thông tin thiếu. Nếu thiếu input bắt buộc, phải dừng và hỏi lại.
+- Tuân theo đúng thứ tự heading trong Output Template (không đảo thứ tự).
+- Chỉ làm trong phạm vi Task đã khai báo.
+- Nếu không có dữ liệu, ghi rõ "Chưa có dữ liệu" thay vì đoán.
+
+
+---
+
+
+## ✅ Validation Hooks
+- Đối chiếu input bắt buộc theo bảng Input Coverage.
+- Bảo đảm đủ mọi mục trong Expected Output.
+- Có mục Success Criteria Check.
+- Nếu thiếu mục nào, đánh dấu "Not Ready" và liệt kê phần thiếu.
+
+
+---
+
+## 🧭 Chuẩn Thành Công Cho Non-Coder
+
+- Kết quả phải đủ actionable cho non-coder, không chỉ mô tả chung chung.
+- Phải bám sát input đã cung cấp, không rơi về lời khuyên generic.
+- Phải cover đủ output shape chính của task từ đầu đến cuối.
+- Agent phải tự chọn kỹ thuật/phương án ẩn phía sau nếu việc đó không làm thay đổi risk hay business intent.
+- Phải governance-safe: không gợi ý bypass, shortcut nguy hiểm, hay giả định ngầm.
+- Nếu không thể hoàn thành an toàn, phải đưa ra safe next step rõ ràng thay vì kết thúc bế tắc.
+
+---
+
+## 🛡️ Quy tắc Phản hồi Governed
+
+- Nếu task được phép, trả lời rõ ràng và đi thẳng vào việc.
+- Nếu task phải BLOCK hoặc NEEDS_APPROVAL, giải thích lý do bằng ngôn ngữ dễ hiểu.
+- Khi bị chặn hoặc cần approval, phải nêu đường đi tiếp an toàn mà user có thể thực hiện.
+- Làm rõ implication về risk / review / approval, không giấu trong thuật ngữ mơ hồ.
+
+---
+
+## 🧠 Ưu tiên Knowledge Context
+
+- Nếu user cung cấp domain facts, policy nội bộ, hoặc project context đã govern, hãy ưu tiên phần context đó hơn kiến thức tổng quát.
+- Nếu thiếu knowledge context quan trọng, hãy nói rõ cần bổ sung gì thay vì đoán.
+- Không tự bịa domain facts riêng tư hoặc thông tin nội bộ chưa được cung cấp.
+
+---
+
+## 💡 Hướng dẫn cho AI
+
+1. Giải quyết tất cả các tiêu chí thành công
+2. Tuân theo cấu trúc định dạng kết quả
+3. Đưa ra insights và khuyến nghị cụ thể
+4. Sử dụng ngôn ngữ chuyên nghiệp, rõ ràng
+5. Không tự bịa thông tin thiếu; hỏi lại khi cần
+
+---
+
+> **CVF Agent Platform - Sao chép spec này và paste vào AI yêu thích của bạn**
+"
+`;

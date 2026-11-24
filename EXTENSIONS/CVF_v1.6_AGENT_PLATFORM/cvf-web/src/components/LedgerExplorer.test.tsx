@@ -1,3 +1,5 @@
+import enLabels from '@/lib/i18n/en.json';
+import viLabels from '@/lib/i18n/vi.json';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LedgerExplorer } from './LedgerExplorer';
@@ -5,7 +7,7 @@ import { LedgerExplorer } from './LedgerExplorer';
 // Mock i18n — default to English, override per test via mockLanguage
 let mockLanguage: 'vi' | 'en' = 'en';
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: mockLanguage }),
+    useLanguage: () => ({ language: mockLanguage, t: (key: string) => ((mockLanguage === 'vi' ? viLabels : enLabels) as Record<string, string>)[key] ?? key }),
 }));
 
 // Mock fetch
@@ -47,7 +49,7 @@ describe('LedgerExplorer', () => {
 
         render(<LedgerExplorer />);
         await vi.waitFor(() => {
-            expect(screen.getByText('Governance Engine disconnected')).toBeTruthy();
+            expect(screen.getByText('Could not connect to the activity log')).toBeTruthy();
         });
     });
 
@@ -80,8 +82,8 @@ describe('LedgerExplorer', () => {
 
         render(<LedgerExplorer />);
         await vi.waitFor(() => {
-            expect(screen.getByText('Total blocks: 2')).toBeTruthy();
-            expect(screen.getByText(/Chain valid/)).toBeTruthy();
+            expect(screen.getByText('Total records: 2')).toBeTruthy();
+            expect(screen.getByText(/Log integrity verified/)).toBeTruthy();
         });
     });
 
@@ -114,8 +116,8 @@ describe('LedgerExplorer', () => {
 
         render(<LedgerExplorer />);
         await vi.waitFor(() => {
-            expect(screen.getAllByText(/Chain broken/).length).toBeGreaterThanOrEqual(1);
-            expect(screen.getByText(/Tamper detected at block/)).toBeTruthy();
+            expect(screen.getAllByText(/Log integrity check failed/).length).toBeGreaterThanOrEqual(1);
+            expect(screen.getByText(/Change detected in record/)).toBeTruthy();
         });
     });
 

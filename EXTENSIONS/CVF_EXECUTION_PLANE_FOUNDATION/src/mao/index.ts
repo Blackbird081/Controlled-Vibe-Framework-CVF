@@ -443,3 +443,7 @@ export {
 export * from './atomic.sqlite.record.store';
 export * from './nonweb.canonical.custody';
 export * from './nonweb.canonical.execution';
+
+export { createMaoInvocationIdentity, validateMaoInvocationRequest } from "./delegation.adapter.contract";
+export { createRealClock } from "./lifecycle.controller.contract";
+export type { MaoAsyncInferencePort, MaoAsyncLaunchResult } from "./operational.worker.launcher.async";

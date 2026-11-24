@@ -1,5 +1,7 @@
 # Version Evolution
 
+> Historical version comparisons below describe earlier releases. For current practice use the [work lifecycle](lifecycle.md) and [risk model](risk-model.md).
+
 CVF has evolved through 6 versions, each adding a layer of capability while preserving backward compatibility. All versions prior to v1.6 are **frozen** — meaning their specifications are final and will not change.
 
 ---
@@ -148,14 +150,14 @@ v1.6  Agent Platform      ██████████████████
 **What it added:**
 
 - End-user orientation (v1.5.1): guides for non-developers
-- Skill Library for End Users (v1.5.2): 131 skills across 12 domains
+- Skill Library for End Users (v1.5.2): reusable forms for end users
 - User-facing documentation and tutorials
 
 **Key files:**
 
 - `EXTENSIONS/CVF_v1.5_UX_PLATFORM/` — Platform specs
 - `EXTENSIONS/CVF_v1.5.1_END_USER_ORIENTATION/` — End-user guides
-- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Full skill library
+- `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/` — Source library for end-user forms
 
 **Ideal for:** Teams onboarding non-technical members to CVF workflows.
 
@@ -215,7 +217,7 @@ v1.6  Agent Platform      ██████████████████
 | Python SDK/CLI | — | — | — | ✅ | ✅ | ✅ |
 | CI/CD Integration | — | — | — | ✅ | ✅ | ✅ |
 | End-User Guides | — | — | — | — | ✅ | ✅ |
-| Skill Library (114) | — | — | — | — | ✅ | ✅ |
+| Skill Library | — | — | — | — | ✅ | ✅ |
 | Web UI | — | — | — | — | — | ✅ |
 | Multi-Agent Chat | — | — | — | — | — | ✅ |
 | Governance Modes | — | — | — | — | — | ✅ |
@@ -235,8 +237,8 @@ v1.6  Agent Platform      ██████████████████
 
 ### Quick Recommendation
 
-- **New to CVF?** → Start with [START_HERE.md](../../START_HERE.md) and the v1.6 web UI
-- **Want to understand the philosophy?** → Read the [v1.0 Manifesto](../../v1.0/CVF_MANIFESTO.md)
+- **New to CVF?** → Start with [START_HERE.md](/docs/getting-started) and the v1.6 web UI
+- **Want to understand the philosophy?** → Read the [v1.0 Manifesto](/docs/core-philosophy)
 - **Need formal governance?** → Study v1.1 governance model
 - **Need risk controls?** → Study v1.2 risk model + [Risk Model concept](risk-model.md)
 - **Want tools?** → Use v1.3 CLI/SDK
@@ -278,8 +280,10 @@ Frozen doesn't mean obsolete — it means stable and reliable. The v1.0 manifest
 - [Governance Model](governance-model.md) — How roles evolved from v1.1
 - [Risk Model](risk-model.md) — Risk framework from v1.2
 - [Skill System](skill-system.md) — Skills from v1.2/v1.5
-- [Version Comparison tables](../VERSION_COMPARISON.md) — Detailed feature comparison
+- [Version Comparison tables](/docs/version-picker) — Detailed feature comparison
 
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

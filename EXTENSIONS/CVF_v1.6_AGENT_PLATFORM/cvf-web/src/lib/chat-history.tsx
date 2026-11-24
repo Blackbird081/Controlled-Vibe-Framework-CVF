@@ -27,13 +27,13 @@ const STORAGE_KEY = 'cvf_chat_history';
 const MAX_SESSIONS = 50;
 
 // Load from localStorage
-function loadHistory(): ChatHistoryState {
-    if (typeof window === 'undefined') {
+function loadHistory(storageKey: string | null): ChatHistoryState {
+    if (typeof window === 'undefined' || !storageKey) {
         return { sessions: [], activeSessionId: null };
     }
 
     try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+        const saved = localStorage.getItem(storageKey);
         if (saved) {
             const data = JSON.parse(saved);
             data.sessions = data.sessions.map((s: ChatSession) => ({
@@ -55,11 +55,11 @@ function loadHistory(): ChatHistoryState {
 }
 
 // Save to localStorage
-function saveHistory(state: ChatHistoryState): void {
-    if (typeof window === 'undefined') return;
+function saveHistory(storageKey: string | null, state: ChatHistoryState): void {
+    if (typeof window === 'undefined' || !storageKey) return;
 
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        localStorage.setItem(storageKey, JSON.stringify(state));
     } catch (error) {
         console.error('Failed to save chat history:', error);
     }
@@ -84,9 +84,11 @@ function emptySession(provider: ProviderKey): ChatSession {
     };
 }
 
-export function useChatHistory(initialProvider?: ProviderKey) {
+export function useChatHistory(initialProvider?: ProviderKey, accountScope?: string | null) {
+    // Dashboard remounts the chat whenever the verified principal changes.
+    const storageKey = accountScope === null ? null : accountScope ? `${STORAGE_KEY}:${accountScope}` : STORAGE_KEY;
     const [state, setState] = useState<ChatHistoryState>(() => {
-        const history = loadHistory();
+        const history = loadHistory(storageKey);
         if (!initialProvider) return history;
         const session = emptySession(initialProvider);
         return { sessions: [session, ...history.sessions].slice(0, MAX_SESSIONS), activeSessionId: session.id };
@@ -94,8 +96,8 @@ export function useChatHistory(initialProvider?: ProviderKey) {
     const [isLoaded] = useState(true);
 
     useEffect(() => {
-        saveHistory(state);
-    }, [state]);
+        saveHistory(storageKey, state);
+    }, [state, storageKey]);
 
     const createSession = useCallback((provider: ProviderKey): string => {
         const newSession = emptySession(provider);
@@ -108,7 +110,7 @@ export function useChatHistory(initialProvider?: ProviderKey) {
         return newSession.id;
     }, []);
 
-    const updateSession = useCallback((sessionId: string, messages: ChatMessage[]) => {
+    const updateSession = useCallback((sessionId: string, messages: ChatMessage[], firstProvider?: ProviderKey) => {
         setState(prev => ({
             ...prev,
             sessions: prev.sessions.map(s =>
@@ -117,6 +119,8 @@ export function useChatHistory(initialProvider?: ProviderKey) {
                     : {
                         ...s,
                         messages,
+                        provider: firstProvider && !s.messages.some(message => message.role !== 'system')
+                            && messages.some(message => message.role === 'user') ? firstProvider : s.provider,
                         // Generate title only if current title is default and we have user messages
                         title: (s.title === 'New Chat' || s.title.startsWith('Chat ')) && messages.some(m => m.role === 'user')
                             ? generateTitle(messages)

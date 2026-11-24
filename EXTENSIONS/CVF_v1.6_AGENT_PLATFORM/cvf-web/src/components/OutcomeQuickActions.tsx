@@ -9,7 +9,8 @@ import {
     LayoutTemplate,
     MessageSquareText,
 } from 'lucide-react';
-import { OUTCOME_WORKFLOW_REGISTRY, type OutcomeKey } from '@/lib/workflow-composition';
+import { homeSpecOutcomeTitle, homeQuickActions } from '@/lib/home-spec-jev-catalog';
+import { type OutcomeKey } from '@/lib/workflow-composition';
 
 type OutcomeQuickActionsLang = 'vi' | 'en';
 
@@ -97,7 +98,7 @@ export function OutcomeQuickActions({ lang, onSelectTemplate, id }: OutcomeQuick
                 </div>
             </div>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
-                {OUTCOME_WORKFLOW_REGISTRY.map((action) => {
+                {homeQuickActions.map((action) => {
                     const Icon = iconByOutcome[action.outcomeKey] ?? ClipboardCheck;
                     const styles = toneStyles[action.tone];
 
@@ -107,13 +108,13 @@ export function OutcomeQuickActions({ lang, onSelectTemplate, id }: OutcomeQuick
                             type="button"
                             onClick={() => onSelectTemplate(action.templateId)}
                             className={`group flex min-h-[132px] items-start gap-4 rounded-[18px] border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-500/15 ${styles.border}`}
-                            aria-label={action.title[lang]}
+                            aria-label={homeSpecOutcomeTitle(action.templateId, lang)}
                         >
                             <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}>
                                 <Icon size={18} aria-hidden="true" />
                             </span>
                             <span className="min-w-0">
-                                <span className={`block text-sm font-semibold ${styles.label}`}>{action.title[lang]}</span>
+                                <span className={`block text-sm font-semibold ${styles.label}`}>{homeSpecOutcomeTitle(action.templateId, lang)}</span>
                                 <span className="mt-1 block text-xs leading-5 text-slate-600 dark:text-white/50">
                                     {action.description[lang]}
                                 </span>

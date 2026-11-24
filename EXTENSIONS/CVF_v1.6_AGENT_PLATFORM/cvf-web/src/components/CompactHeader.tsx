@@ -86,6 +86,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                 density: 'Mật độ',
                 normal: 'Thường',
                 compact: 'Gọn',
+                sampleAnswers: 'Câu trả lời AI là câu mẫu',
             }
             : {
                 preferences: 'Preferences',
@@ -97,6 +98,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                 density: 'Density',
                 normal: 'Normal',
                 compact: 'Compact',
+                sampleAnswers: 'AI answers are samples',
             }
     ), [language]);
 
@@ -126,6 +128,12 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
         </span>
     );
 
+    const sampleBadge = mockAiEnabled && (
+        <span className="rounded border border-amber-500/20 bg-amber-500/20 px-2 py-0.5 text-xs font-semibold text-amber-300">
+            {labels.sampleAnswers}
+        </span>
+    );
+
     return (
         <div className="relative w-full">
             {/* Mobile Header */}
@@ -140,11 +148,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
                                 </div>
                                 <span className="text-white font-bold text-[15px] leading-none tracking-tight">CVF</span>
                             </Link>
-                            {mockAiEnabled && (
-                                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] rounded bg-amber-500/20 text-amber-300 border border-amber-500/20">
-                                    Demo
-                                </span>
-                            )}
+                            {sampleBadge}
                         </div>
                         <div className="flex items-center gap-2">
                             <div id="tour-lang-switch">
@@ -158,11 +162,7 @@ export default function CompactHeader({ onSidebarOpen, onLogoClick, mockAiEnable
 
             {/* Desktop Top Bar */}
             <div className="hidden md:flex items-center justify-end gap-3 px-6 py-[11px] bg-[#0d0f1a] border-b border-white/[0.06] w-full overflow-hidden">
-                {mockAiEnabled && (
-                    <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] rounded bg-amber-500/20 text-amber-300 border border-amber-500/20">
-                        Demo
-                    </span>
-                )}
+                {sampleBadge}
                 <div id="tour-lang-switch">
                     <LanguageToggle />
                 </div>

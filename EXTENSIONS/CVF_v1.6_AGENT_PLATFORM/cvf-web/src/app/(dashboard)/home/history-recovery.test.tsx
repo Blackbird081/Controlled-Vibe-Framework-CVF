@@ -10,6 +10,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useSyncExternalStore } from 'react';
 import { render, screen, fireEvent, act, within } from '@testing-library/react';
 import HomePage from './page';
+
+// These tests exercise the existing template journey behind the library.
+vi.mock('@/components/home/HomeSpecComposer', () => ({
+    HomeSpecComposer: ({ library }: { library: React.ReactNode }) => library,
+}));
 import HistoryPage from '../history/page';
 import { templates } from '@/lib/templates';
 import { useExecutionStore } from '@/lib/store';

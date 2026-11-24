@@ -1,7 +1,9 @@
 import { createHash } from 'node:crypto';
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   attemptIdFor, buildEnvelope, makeOperationConfig, operationKey, type ControlledEvaluateRequest, type ControlledInvoker, type OperationConfig,
 } from '@/lib/artifacts-receipt-operation-contract';
@@ -11,7 +13,8 @@ import {
   runControlledReceipt, type ControlledReceiptOptions, type ReceiptOperationStore,
 } from './proof';
 
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-binding-repair-20261019', 'worker', 'roots');
+const ROOTS = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-binding-repair-'));
+afterAll(async () => { await fs.rm(ROOTS, { recursive: true, force: true }); });
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const hex = (text: string) => createHash('sha256').update(text).digest('hex');
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

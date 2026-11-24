@@ -1,4 +1,5 @@
 import { isTrustedFormTemplateId } from '@/lib/form-routing';
+import { isBuildPhase } from '@/lib/governance-model';
 import type { GuardPipelineResult } from '@/lib/guard-runtime-adapter';
 import {
   getRolePermissionProfile,
@@ -35,12 +36,6 @@ export function detectBypassInOutput(output: string): { detected: boolean; match
   return { detected: false };
 }
 
-function isBuildPhase(phase?: string): boolean {
-  if (!phase) return false;
-  const normalized = phase.trim().toUpperCase();
-  return normalized === 'BUILD' || normalized === 'PHASE C' || normalized === 'C';
-}
-
 function isBuildLikeIntent(intent?: string): boolean {
   if (!intent) return false;
   const reviewOnlyCodeIntent = /\b(code review|review code|check code|code audit|code quality|đánh giá code|kiểm tra chất lượng code|danh gia code|kiem tra chat luong code|review code)\b/i.test(intent);
@@ -66,14 +61,13 @@ export function resolveGuardAction(rawBody: Record<string, unknown>): string {
     return explicitAction.trim();
   }
 
-  const phase = typeof rawBody.cvfPhase === 'string' ? rawBody.cvfPhase.trim().toUpperCase() : '';
   const hasBuildPreflight =
     typeof rawBody.skillPreflightDeclaration === 'string' ||
     typeof rawBody.skillPreflightRecordRef === 'string' ||
     Array.isArray(rawBody.skillIds) ||
     Array.isArray(rawBody.fileScope);
 
-  if (phase === 'BUILD' || phase === 'PHASE C' || phase === 'C' || hasBuildPreflight) {
+  if (isBuildPhase(rawBody.cvfPhase) || hasBuildPreflight) {
     return DEFAULT_BUILD_TEMPLATE_GUARD_ACTION;
   }
 

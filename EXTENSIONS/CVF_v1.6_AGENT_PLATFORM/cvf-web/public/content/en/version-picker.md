@@ -1,5 +1,7 @@
 # CVF Version Picker — Choose the Right Version
 
+> Historical version comparisons below describe earlier releases. For current practice use the [work lifecycle](lifecycle.md) and [risk model](risk-model.md).
+>
 > **🎯 Goal:** Help you choose the right CVF version in 2 minutes
 
 ---
@@ -36,7 +38,7 @@
 
 | Feature | v1.0 | v1.1 | v1.2 | v1.3 | v1.5 | v1.6 |
 |---------|:----:|:----:|:----:|:----:|:----:|:----:|
-| **4-Phase Process** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Historical four-stage guide** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Governance Basics** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Input/Output Specs** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Agent Archetypes** | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -83,7 +85,7 @@ cat CVF_MANIFESTO.md
 **Next Steps:**
 
 1. Read CVF_MANIFESTO.md
-2. Follow 4-Phase Process
+2. Follow the current work lifecycle
 3. Use Checklists
 4. Build 1-2 small projects
 5. Upgrade to v1.1 when needed
@@ -163,10 +165,10 @@ cat QUICK_START.md
 
 **Team Roles:**
 
-- 🎯 Owner: Phase A (requirements)
-- 🎨 Architect: Phase B (design)
-- 🤖 AI/Developer: Phase C (build)
-- ✅ Reviewer: Phase D (validate)
+- 🎯 Owner: INTAKE (requirements)
+- 🎨 Architect: DESIGN (design)
+- 🤖 AI/Developer: BUILD (build)
+- ✅ Reviewer: REVIEW (validate)
 
 ---
 
@@ -349,7 +351,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 ### v1.0 Learning Path (2-3 hours)
 
 1. Read Manifesto - 15 mins
-2. Understand 4 Phases - 30 mins
+2. Understand the current work lifecycle - 30 mins
 3. Study Governance - 30 mins
 4. Practice with 1 small project - 60 mins
 
@@ -488,7 +490,7 @@ cd ../../../EXTENSIONS/CVF_v1.3_IMPLEMENTATION_TOOLKIT/ci-cd
 Before deciding, ask yourself:
 
 - [ ] Have you read the Core Philosophy?
-- [ ] Do you understand the 4-Phase Process?
+- [ ] Do you understand the current work lifecycle?
 - [ ] Do you know your team size & project complexity?
 - [ ] Do you have time for setup?
 - [ ] Do you need governance?
@@ -501,3 +503,5 @@ Before deciding, ask yourself:
 ---
 
 **Remember:** You can start simple and upgrade later!
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

@@ -3,13 +3,12 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -19,6 +18,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (_session: unknown, payload?: Record<string, unknown>) => payload,
 }));
 
@@ -34,6 +34,7 @@ vi.mock('@/lib/guard-engine-singleton', () => ({
 }));
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 import { resetRateLimitStoresForTest } from '@/lib/rate-limit';
 
 describe('/api/execute durable memory route wiring', () => {
@@ -53,6 +54,10 @@ describe('/api/execute durable memory route wiring', () => {
     process.env.CVF_PROVIDER_QUOTA_PER_MIN = '30';
     process.env.OPENAI_API_KEY = 'openai-test-key';
     process.env.CVF_DURABLE_MEMORY_STORE_PATH = storePath;
+    // Hermetic: every file the route writes lives in the temp dir (a read-only checkout or masked .env.local must not matter).
+    process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
+    process.env.CVF_FALSE_POSITIVE_REPORTS_PATH = path.join(tempDir, 'false-positive-events.jsonl');
+    delete process.env.CVF_OPENAI_API_KEY;
     delete process.env.ANTHROPIC_API_KEY;
     delete process.env.GOOGLE_AI_API_KEY;
     delete process.env.ALIBABA_API_KEY;
@@ -62,12 +67,12 @@ describe('/api/execute durable memory route wiring', () => {
     delete process.env.OPENROUTER_API_KEY;
     delete process.env.DEEPSEEK_API_KEY;
 
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
 
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -141,7 +146,7 @@ describe('/api/execute durable memory route wiring', () => {
     }) as never);
 
     const data = await res.json();
-    const options = executeAIMock.mock.calls[0][3] as { systemPrompt?: string };
+    const options = providerSpy.mock.calls[0][3] as { systemPrompt?: string };
 
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
@@ -182,7 +187,7 @@ describe('/api/execute durable memory route wiring', () => {
     }) as never);
 
     const data = await res.json();
-    const options = executeAIMock.mock.calls[0][3] as { systemPrompt?: string };
+    const options = providerSpy.mock.calls[0][3] as { systemPrompt?: string };
 
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
@@ -217,7 +222,7 @@ describe('/api/execute durable memory route wiring', () => {
     }) as never);
 
     const data = await res.json();
-    const options = executeAIMock.mock.calls[0][3] as { systemPrompt?: string };
+    const options = providerSpy.mock.calls[0][3] as { systemPrompt?: string };
 
     expect(res.status).toBe(200);
     expect(options.systemPrompt ?? '').not.toContain('r2-skill-safe');
@@ -274,7 +279,7 @@ describe('/api/execute durable memory route wiring', () => {
   });
 
   it('reads a summary written by a previous governed execution request', async () => {
-    executeAIMock
+    providerSpy
       .mockResolvedValueOnce({
         success: true,
         output: 'MLW-RT1 durable chain anchor: preserve governed summary-only continuity.',
@@ -338,8 +343,8 @@ describe('/api/execute durable memory route wiring', () => {
     }) as never);
     const readData = await readRes.json();
     expect(readRes.status).toBe(200);
-    expect(executeAIMock).toHaveBeenCalledTimes(2);
-    const secondCallOptions = executeAIMock.mock.calls[1][3] as { systemPrompt?: string };
+    expect(providerSpy).toHaveBeenCalledTimes(2);
+    const secondCallOptions = providerSpy.mock.calls[1][3] as { systemPrompt?: string };
 
     expect(readData.durableMemoryRead).toMatchObject({
       operation: 'read',
@@ -438,4 +443,7 @@ describe('/api/execute durable memory route wiring', () => {
     expect(data.governanceEvidenceReceipt.durableMemoryWriteReceipt).toBeUndefined();
     await expect(readFile(storePath, 'utf8')).rejects.toThrow();
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

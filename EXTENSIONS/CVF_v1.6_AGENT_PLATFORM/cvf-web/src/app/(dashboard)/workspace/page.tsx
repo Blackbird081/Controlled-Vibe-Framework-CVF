@@ -4,7 +4,6 @@ import {
     Activity,
     ArrowUpRight,
     CheckCircle2,
-    ChevronDown,
     FileCheck2,
     GitBranch,
     Layers3,
@@ -12,6 +11,9 @@ import {
     ShieldCheck,
 } from 'lucide-react';
 import { getCvfWorkspaceReadModel, type WorkspaceLaneSummary, type WorkspaceLink, type WorkspaceSourceStatus } from '@/lib/server/cvf-workspace-read-model';
+import { OperatorStatusText } from '@/components/OperatorStatusText';
+import { TranslatedText } from '@/components/TranslatedText';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +28,7 @@ function StatusBadge({ status }: { status: string }) {
     return (
         <span className={`inline-flex max-w-full items-center gap-1 rounded-md px-2 py-1 text-left text-xs font-semibold leading-5 ${tone}`}>
             <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span className="min-w-0 break-all">{status}</span>
+            <span className="min-w-0 break-all"><OperatorStatusText value={status} /></span>
         </span>
     );
 }
@@ -77,12 +79,12 @@ function LaneSummaryCard({ summary }: { summary: WorkspaceLaneSummary }) {
                 {summary.recentItems.map((item) => (
                     <div key={item.workspaceItemId} className="border-t border-gray-100 px-4 py-3 text-xs leading-5 first:border-t-0 dark:border-white/[0.06]">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="break-all font-mono font-semibold text-gray-950 dark:text-white">{item.workspaceItemId}</span>
-                            <span className="text-gray-500 dark:text-gray-400">{item.itemKind}</span>
+                            <span className="break-all font-mono font-semibold text-gray-950 dark:text-white"><OperatorStatusText value={item.workspaceItemId} /></span>
+                            <span className="text-gray-500 dark:text-gray-400"><OperatorStatusText value={item.itemKind} /></span>
                         </div>
                         <div className="mt-2 grid gap-2 text-gray-600 dark:text-gray-300">
                             <div className="break-all">
-                                <span className="font-semibold text-gray-800 dark:text-gray-100">Owner:</span> {item.ownerRole}
+                                <span className="font-semibold text-gray-800 dark:text-gray-100">Owner:</span> <OperatorStatusText value={item.ownerRole} />
                             </div>
                             <div className="break-all">
                                 <span className="font-semibold text-gray-800 dark:text-gray-100">Source:</span> {item.sourceWorkOrder}
@@ -134,7 +136,7 @@ export default function WorkspacePage() {
                     <ShieldCheck className="h-4 w-4" aria-hidden="true" />
                     CVF Web Workspace
                 </div>
-                <h1 className="text-2xl font-bold text-gray-950 dark:text-white">Trạng thái làm việc của bạn</h1>
+                <h1 className="text-2xl font-bold text-gray-950 dark:text-white"><TranslatedText translationKey="nav.workspace" /></h1>
                 <p className="max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">
                     Tóm tắt dễ hiểu về việc CVF đang làm, việc cần làm tiếp theo, và cách khôi phục nếu có sự cố.
                 </p>
@@ -164,16 +166,12 @@ export default function WorkspacePage() {
                 )}
             </section>
 
-            <details data-testid="advanced-detail" className="group rounded-lg border border-gray-200 bg-white dark:border-white/[0.08] dark:bg-[#151827]">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-gray-950 dark:text-white">
-                    <span className="flex items-center gap-2">
-                        <LockKeyhole className="h-4 w-4 text-indigo-500" aria-hidden="true" />
-                        Chi tiết kỹ thuật nâng cao (mode, handoff, dispatch, lanes, nguồn)
-                    </span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-gray-400 transition-transform group-open:rotate-180" aria-hidden="true" />
-                </summary>
-
-                <div className="space-y-6 border-t border-gray-200 p-4 dark:border-white/[0.08]">
+            <TechnicalDetails
+                testId="advanced-detail"
+                label={<TranslatedText translationKey="common.technicalDetails" />}
+                className="bg-white dark:bg-[#151827]"
+                contentClassName="space-y-6 border-t border-gray-200 p-4 dark:border-white/[0.08]"
+            >
                     <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-200">
                         <div className="font-bold uppercase tracking-wide">Boundary</div>
                         <div className="mt-1 max-w-xl">{model.boundary}</div>
@@ -185,8 +183,8 @@ export default function WorkspacePage() {
                                 <Activity className="h-4 w-4 text-indigo-500" aria-hidden="true" />
                                 Active Mode
                             </div>
-                            <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white">{model.activeSessionMode}</div>
-                            <div className="mt-3 break-all text-xs leading-5 text-gray-500 dark:text-gray-400">Previous: {model.previousMode}</div>
+                            <div className="mt-3 break-all font-mono text-sm font-semibold leading-6 text-gray-950 dark:text-white"><OperatorStatusText value={model.activeSessionMode} /></div>
+                            <div className="mt-3 break-all text-xs leading-5 text-gray-500 dark:text-gray-400">Previous: <OperatorStatusText value={model.previousMode} /></div>
                         </div>
                         <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.08] dark:bg-[#151827]">
                             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -203,7 +201,7 @@ export default function WorkspacePage() {
                             </div>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                                 <StatusBadge status={model.dispatch.status} />
-                                <span className="font-mono text-xs text-gray-500 dark:text-gray-400">{model.dispatch.materialCommit}</span>
+                                <span className="font-mono text-xs text-gray-500 dark:text-gray-400"><OperatorStatusText value={model.dispatch.materialCommit} /></span>
                             </div>
                             <div className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400">{model.generatedAt}</div>
                         </div>
@@ -280,8 +278,7 @@ export default function WorkspacePage() {
                             {model.sources.map((source) => <SourceRow key={source.path} source={source} />)}
                         </div>
                     </section>
-                </div>
-            </details>
+            </TechnicalDetails>
         </div>
     );
 }

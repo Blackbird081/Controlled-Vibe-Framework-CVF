@@ -1,5 +1,7 @@
 # Agent Skills Registry Index
 
+> Catalog status: `NOT_ACTIVE` for agent package discovery. These records are retained for legacy interpretation. See the [Web skill catalog](../../../../EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/public/content/en/agent-skills-catalog.md) and the [agent package index](../../../../docs/reference/agent_system_skills/generated/skill-index.json).
+>
 > Generated from v1.6 AGENT_PLATFORM
 >
 > Total Skills: 34
@@ -10,7 +12,7 @@
 
 This registry contains governance metadata for all agent skills (tools) defined in the CVF v1.6 AGENT_PLATFORM.
 
-### Risk Distribution
+### Legacy AGT risk distribution
 
 | Risk Level | Count | Skills |
 |------------|-------|--------|

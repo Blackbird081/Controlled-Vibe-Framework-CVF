@@ -1,12 +1,15 @@
 import { createHash } from 'node:crypto';
+import { mkdtempSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 import { boundAttemptIdFor, boundOperationKey, boundRecordBytes, buildBoundEnvelope, makeBoundConfig, type BoundEnvelope, type BoundReceipt } from '../artifacts-bound-receipt-contract';
 import { attemptIdFor, buildEnvelope, makeOperationConfig, operationKey, type OperationEnvelope } from '../artifacts-receipt-operation-contract';
 import { HtmlDraftSnapshotStore, type BoundAdmitResult } from './html-draft-snapshot-store';
 
-const ROOTS = path.resolve(process.cwd(), '..', '..', '..', '.cvf', 'runtime', 'ncr-r2-w05-bound-authority-repair-20261020', 'worker', 'roots');
+const ROOTS = mkdtempSync(path.join(os.tmpdir(), 'cvf-ncr-r2-w05-bound-authority-repair-'));
+afterAll(async () => { await fs.rm(ROOTS, { recursive: true, force: true }); });
 const T0 = Date.parse('2026-10-19T01:00:00.000Z');
 const owner = { userId: 'u1', orgId: 'o1', teamId: 't1' };
 const hex = (text: string) => createHash('sha256').update(text).digest('hex');

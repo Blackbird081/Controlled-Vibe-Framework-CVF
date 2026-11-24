@@ -1,7 +1,7 @@
 /**
- * CVF Guard Contract â€” Barrel Export
+ * CVF Guard Contract — Barrel Export
  * ===================================
- * SINGLE SOURCE OF TRUTH â€” import everything from here.
+ * SINGLE SOURCE OF TRUTH — import everything from here.
  *
  * Usage:
  *   import { GuardRuntimeEngine, createGuardEngine, type GuardRequestContext } from 'cvf-guard-contract';
@@ -165,7 +165,7 @@ import { BuildAuthorityGuard } from './guards/build-authority.guard';
 
 /**
  * Creates a GuardRuntimeEngine pre-loaded with the hardened default guard stack.
- * Ready to use â€” just call engine.evaluate(context).
+ * Ready to use — just call engine.evaluate(context).
  *
  * This factory is the RECOMMENDED way to create an engine.
  * Both Web UI and MCP Server should use this.

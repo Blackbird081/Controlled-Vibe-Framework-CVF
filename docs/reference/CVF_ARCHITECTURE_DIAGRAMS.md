@@ -41,7 +41,7 @@ flowchart TB
 
     subgraph "Layer 1: Core (v1.0/v1.1/v1.2)"
         PHASES["Phase A→D"]
-        SKILLS["141 Skills"]
+        SKILLS["Skill Definitions"]
         RISKM["Risk Model R0-R3"]
         REGISTRY["Skill Registry"]
     end

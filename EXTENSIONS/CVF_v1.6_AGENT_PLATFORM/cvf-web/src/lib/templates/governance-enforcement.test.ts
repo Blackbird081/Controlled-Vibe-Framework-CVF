@@ -6,10 +6,18 @@
  * These tests are CI gate — a failure here blocks merge.
  */
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { templates } from './index';
-import skillTemplateMapRaw from '@/data/skill-template-map.json';
+import { getHomeRecommendedAssfPackage, homeOnlyAssfRecommendations, homeSpecTemplates } from '@/lib/home-spec-jev-catalog';
+import jevAssfRoster from '@/lib/server/jev-web-assf-roster.json';
+import {
+    ASSF_PACKAGE_CATEGORY,
+    getRecommendedAssfPackage,
+    getTemplatesForAssfPackage,
+    templateAssfPackageIds,
+} from '@/lib/assf-template-recommendations';
 
 // ─── Wizard and folder IDs (exempt from form-template rules) ───────────────
 const WIZARD_TEMPLATE_IDS = new Set([
@@ -34,21 +42,6 @@ function isFormTemplate(id: string): boolean {
     return !WIZARD_TEMPLATE_IDS.has(id) && !FOLDER_TEMPLATE_IDS.has(id);
 }
 
-function loadActiveSkillIds(): Set<string> {
-    const raw = readFileSync(join(process.cwd(), 'public/data/skills-index.json'), 'utf-8');
-    const data = JSON.parse(raw);
-    const ids = new Set<string>();
-    for (const cat of data.categories ?? []) {
-        for (const skill of cat.skills ?? []) {
-            const sid = skill.id ?? skill.slug;
-            if (sid) ids.add(sid as string);
-        }
-    }
-    return ids;
-}
-
-const skillMap = skillTemplateMapRaw.templateToSkillMap as Record<string, { domain: string; skillId: string }>;
-const mappedTemplateIds = new Set(Object.keys(skillMap));
 const formTemplates = templates.filter(t => isFormTemplate(t.id));
 
 const WIZARD_COMPONENT_FILES: Record<string, string> = {
@@ -66,26 +59,65 @@ const WIZARD_COMPONENT_FILES: Record<string, string> = {
 // ─── Tests ─────────────────────────────────────────────────────────────────
 describe('CVF Template Governance Enforcement', () => {
 
-    // RULE-T4 / RULE-T5: All map entries reference a real template
-    it('RULE-T4: every skill-template-map entry has a matching template ID', () => {
-        const allTemplateIds = new Set(templates.map(t => t.id));
-        const orphanMapEntries = Object.keys(skillMap).filter(id => !allTemplateIds.has(id));
-        expect(orphanMapEntries, `Map entries with no template: ${orphanMapEntries.join(', ')}`).toHaveLength(0);
+    it('RULE-T4: each current form and wizard has one package recommendation or an explicit no-match', () => {
+        const expectedIds = templates.map(template => template.id).filter(id => !FOLDER_TEMPLATE_IDS.has(id));
+        expect(Object.keys(templateAssfPackageIds).sort()).toEqual(expectedIds.sort());
+        expect(getRecommendedAssfPackage('strategy_analysis')).toBeNull();
+        expect(getRecommendedAssfPackage('unknown-template')).toBeNull();
+        for (const { id } of homeSpecTemplates) {
+            expect(Object.hasOwn(templateAssfPackageIds, id) || Object.hasOwn(homeOnlyAssfRecommendations, id)).toBe(true);
+            expect(getHomeRecommendedAssfPackage(id)).toEqual(getRecommendedAssfPackage(id));
+        }
     });
 
-    // RULE-T5: All skillIds in the map are live in the active skill library
-    it('RULE-T5: every skillId in skill-template-map exists in active skill library', () => {
-        const activeSkillIds = loadActiveSkillIds();
-        const deadRefs = Object.entries(skillMap).filter(([, v]) => !activeSkillIds.has(v.skillId));
-        const report = deadRefs.map(([tid, v]) => `${tid} → ${v.skillId}`).join(', ');
-        expect(deadRefs, `Dead skill references: ${report}`).toHaveLength(0);
-    });
-
-    // RULE-T4: All non-wizard, non-folder form templates have a skill mapping
-    it('RULE-T4: all form templates are present in skill-template-map.json', () => {
-        const unmapped = formTemplates.filter(t => !mappedTemplateIds.has(t.id));
-        const report = unmapped.map(t => t.id).join(', ');
-        expect(unmapped, `Unmapped form templates: ${report}`).toHaveLength(0);
+    it('RULE-T5: mapped packages are certified in Local, accessible on Web and eligible for Jev', () => {
+        const source = JSON.parse(readFileSync(
+            join(process.cwd(), '../../../docs/reference/agent_system_skills/generated/skill-index.json'), 'utf8',
+        )) as { skills: Array<{
+            skillId: string;
+            canonicalRoot: string;
+            status: string;
+            certificationState: string;
+            uatState: string;
+        }> };
+        const eligible = new Map(source.skills.filter(row =>
+            row.status === 'ACTIVE' && row.certificationState === 'CERTIFIED' && row.uatState === 'PASSED'
+            && row.canonicalRoot === `docs/reference/agent_system_skills/packages/${row.skillId}/SKILL.md`,
+        ).map(row => [row.skillId, row.canonicalRoot]));
+        const web = JSON.parse(readFileSync(join(process.cwd(), 'public/data/skills-index.json'), 'utf8')) as {
+            categories: Array<{ id: string; skills: Array<{
+                id: string;
+                canonicalRoot?: string;
+                frontDoorVisible?: boolean;
+                assfProjectionClass?: string;
+            }> }>;
+        };
+        const webPackageIds = new Set(web.categories.find(category => category.id === ASSF_PACKAGE_CATEGORY)?.skills
+            .filter(row => row.frontDoorVisible && row.assfProjectionClass === 'CERTIFIED_PACKAGE_PROJECTION'
+                && Boolean(row.canonicalRoot) && eligible.get(row.id) === row.canonicalRoot)
+            .map(row => row.id) ?? []);
+        const jevPackageIds = new Set(jevAssfRoster.packages.map(pack => pack.id));
+        expect(jevPackageIds).toEqual(new Set(eligible.keys()));
+        expect(jevPackageIds).toEqual(webPackageIds);
+        for (const pack of jevAssfRoster.packages) {
+            const canonicalRoot = eligible.get(pack.id)!;
+            const sourcePath = canonicalRoot.replace(/SKILL\.md$/, 'skill.source.json');
+            const raw = readFileSync(join(process.cwd(), '../../..', sourcePath), 'utf8').replace(/\r\n/g, '\n');
+            const sourceFile = JSON.parse(raw);
+            expect(pack.source).toEqual({
+                license: sourceFile.license,
+                upstreamCommit: sourceFile.upstreamCommit ?? null,
+                sourceSha256: createHash('sha256').update(raw).digest('hex'),
+            });
+        }
+        const invalidReferences = Object.entries(templateAssfPackageIds)
+            .filter(([, skillId]) => skillId !== null && !jevPackageIds.has(skillId));
+        expect(invalidReferences).toEqual([]);
+        for (const [templateId, skillId] of Object.entries(templateAssfPackageIds)) {
+            if (skillId === null) continue;
+            expect(getRecommendedAssfPackage(templateId)?.href).toBe(`/skills/${ASSF_PACKAGE_CATEGORY}/${skillId}`);
+            expect(getTemplatesForAssfPackage(skillId)).toContain(templateId);
+        }
     });
 
     // RULE-T1: Form templates must have ≥ 3 fields
@@ -151,18 +183,6 @@ describe('CVF Template Governance — Phase 2 (Silver → Gold upgrade)', () => 
         const missing = scope.filter(t => !t.outputTemplate || t.outputTemplate.trim().length === 0);
         const report = missing.map(t => t.id).join(', ');
         expect(missing, `Templates missing outputTemplate: ${report}`).toHaveLength(0);
-    });
-
-    // Wizard integrity: all wizard templates are present in the map
-    it('RULE-T4(wizard): all wizard templates have a valid skill mapping', () => {
-        const activeSkillIds = loadActiveSkillIds();
-        const wizardTemplates = templates.filter(t => WIZARD_TEMPLATE_IDS.has(t.id));
-        const broken = wizardTemplates.filter(t => {
-            const entry = skillMap[t.id];
-            return !entry || !activeSkillIds.has(entry.skillId);
-        });
-        const report = broken.map(t => t.id).join(', ');
-        expect(broken, `Wizard templates with broken skill mapping: ${report}`).toHaveLength(0);
     });
 
     it('RULE-T7(wizard): all wizard components expose the governed non-coder live execution wrapper', () => {

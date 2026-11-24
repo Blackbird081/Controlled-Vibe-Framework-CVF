@@ -1,12 +1,18 @@
-import { describe, it, expect, vi } from 'vitest';
+// Text Encoding Exception: tests assert the exact Vietnamese and English trend labels.
+import enLabels from '@/lib/i18n/en.json';
+import viLabels from '@/lib/i18n/vi.json';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { GovernanceMetrics } from './GovernanceMetrics';
 import { RiskTrendChart, computeTrend, type RiskTrendPoint } from './RiskTrendChart';
 
 // Mock i18n
+const locale = vi.hoisted(() => ({ language: 'en' as 'en' | 'vi' }));
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language: 'en' }),
+    useLanguage: () => ({ language: locale.language, t: (key: string) => ((locale.language === 'vi' ? viLabels : enLabels) as Record<string, string>)[key] ?? key }),
 }));
+
+beforeEach(() => { locale.language = 'en'; });
 
 describe('GovernanceMetrics', () => {
     const mockData = {
@@ -28,7 +34,7 @@ describe('GovernanceMetrics', () => {
         render(<GovernanceMetrics data={mockData} />);
         expect(screen.getByText(/Risk Index/)).toBeDefined();
         expect(screen.getByText(/Approval Efficiency/)).toBeDefined();
-        expect(screen.getByText(/Governance Stability/)).toBeDefined();
+        expect(screen.getByText(/Stability of checks/)).toBeDefined();
         expect(screen.getByText(/Compliance Integrity/)).toBeDefined();
     });
 
@@ -70,11 +76,32 @@ describe('RiskTrendChart', () => {
         // Data has increasing trend
         expect(screen.getByText(/Increasing|Stable|Decreasing/)).toBeDefined();
     });
+
+    describe.each([
+        { language: 'en', stable: '→ Stable' },
+        { language: 'vi', stable: '→ Ổn định' },
+    ] as const)('shows the stable label only with enough data in $language', ({ language, stable }) => {
+        it.each([0, 1])('hides the stable label with %i points', (count) => {
+            locale.language = language;
+            render(<RiskTrendChart data={mockData.slice(0, count)} />);
+            expect(screen.queryByText(stable)).toBeNull();
+        });
+
+        it('shows the existing yellow stable label with two equal scores', () => {
+            locale.language = language;
+            render(<RiskTrendChart data={[
+                { date: '2026-01-01', riskScore: 0.5 },
+                { date: '2026-01-02', riskScore: 0.5 },
+            ]} />);
+            expect(screen.getByText(stable).classList.contains('text-yellow-500')).toBe(true);
+        });
+    });
 });
 
 describe('computeTrend', () => {
-    it('returns stable for single point', () => {
-        expect(computeTrend([{ date: '2026-01-01', riskScore: 0.5 }])).toBe('stable');
+    it('returns insufficient for zero or one point', () => {
+        expect(computeTrend([])).toBe('insufficient');
+        expect(computeTrend([{ date: '2026-01-01', riskScore: 0.5 }])).toBe('insufficient');
     });
 
     it('returns increasing for rising scores', () => {

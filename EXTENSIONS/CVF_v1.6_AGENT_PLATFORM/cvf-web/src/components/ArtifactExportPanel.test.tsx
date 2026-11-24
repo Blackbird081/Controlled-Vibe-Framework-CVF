@@ -244,7 +244,7 @@ describe('ArtifactExportPanel', () => {
     render(<ArtifactExportPanel />);
     fireEvent.click(screen.getByText('Build HTML'));
     await waitFor(() => expect(screen.getByTestId('governance-receipt-evaluated-note').textContent)
-      .toMatch(/not artifact approval/i));
+      .toMatch(/stays a draft until someone approves it/i));
     expect(screen.queryByTestId('governance-receipt-denied-note')).toBeNull();
     expect(screen.queryByTestId('governance-receipt-badge')).toBeNull();
   });
@@ -578,7 +578,7 @@ describe('ArtifactExportPanel', () => {
       await waitFor(() => expect(screen.getByTestId('governance-receipt-evaluated-note')).toBeTruthy());
       fireEvent.change(screen.getByLabelText('Title'), { target: { value: 'Synthetic B' } });
       expect(noticeState()).toBe('stale');
-      expect(screen.getByTestId('governance-receipt-evaluated-note').textContent).toMatch(/not artifact approval/i);
+      expect(screen.getByTestId('governance-receipt-evaluated-note').textContent).toMatch(/stays a draft until someone approves it/i);
       expect(screen.queryByTestId('governance-receipt-badge')).toBeNull();
       expect(screen.getByTestId('artifact-draft-state').textContent).toMatch(/DRAFT \/ UNACCEPTED/);
     });

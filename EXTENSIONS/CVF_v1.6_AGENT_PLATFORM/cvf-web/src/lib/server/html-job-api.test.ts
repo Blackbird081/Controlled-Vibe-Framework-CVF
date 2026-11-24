@@ -18,7 +18,7 @@ const sourceRecordId = 'ncr-synthetic-api';
 const request = { title: 't', sourcePath: 'p', sourceContent: 's', memoryClass: 'FULL_RECORD' as const, status: 'DRAFT', claimBoundary: 'local', receiptAnchor: 'r' };
 const url = 'http://localhost/api/artifacts/jobs';
 const post = (body: unknown, origin = 'http://localhost') => new NextRequest(url, { method: 'POST',
-  headers: { origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body) });
+  headers: { host: 'localhost', origin, 'Content-Type': 'application/json', 'sec-fetch-site': 'same-origin' }, body: JSON.stringify(body) });
 async function cleanup(root: string) { for (const ns of await fs.readdir(root)) { const dir = path.join(root, ns);
   for (const file of await fs.readdir(dir)) await fs.unlink(path.join(dir, file)); await fs.rmdir(dir); } await fs.rmdir(root); }
 describe('one job route', () => {

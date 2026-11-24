@@ -147,8 +147,9 @@ function toCsv(events: AnalyticsEvent[]) {
 }
 
 export function useAnalyticsEvents() {
-    const [events, setEvents] = useState<AnalyticsEvent[]>(() => readEvents());
-    const [enabled, setEnabled] = useState<boolean>(() => isAnalyticsEnabled());
+    // Match the server render during hydration, then read browser-local data.
+    const [events, setEvents] = useState<AnalyticsEvent[]>([]);
+    const [enabled, setEnabled] = useState(true);
 
     useEffect(() => {
         const handler = () => {
@@ -157,6 +158,7 @@ export function useAnalyticsEvents() {
         };
         window.addEventListener(UPDATE_EVENT, handler);
         window.addEventListener('storage', handler);
+        handler();
         return () => {
             window.removeEventListener(UPDATE_EVENT, handler);
             window.removeEventListener('storage', handler);

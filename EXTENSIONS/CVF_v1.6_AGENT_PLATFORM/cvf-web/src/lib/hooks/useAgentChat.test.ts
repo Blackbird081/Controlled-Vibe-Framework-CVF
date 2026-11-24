@@ -1,10 +1,12 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: Vietnamese assistant rate-limit fixtures use UTF-8.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { StrictMode, createElement } from 'react';
 import { useAgentChat } from './useAgentChat';
+import { AssistantRateLimitError } from '@/lib/assistant-rate-limit';
 
 let apiKey = '';
 const chatMock = vi.fn();
@@ -131,6 +133,111 @@ describe('useAgentChat', () => {
 
     afterEach(() => {
         vi.useRealTimers();
+    });
+
+    describe('assistant rate limits', () => {
+        const settings = { ...baseSettings, providers: { ...baseSettings.providers,
+            gemini: { apiKey: 'fixture-key', selectedModel: 'gemini-2.5-flash' } } };
+
+        function rateLimit(retryAfter: string | null) {
+            return new AssistantRateLimitError(retryAfter);
+        }
+
+        it.each([
+            ['en', 'Too many requests.', 'Please wait a moment and try again.'],
+            ['vi', 'Có quá nhiều yêu cầu.', 'Vui lòng chờ một lát rồi thử lại.'],
+        ] as const)('retries once after the provider wait and reports the outcome in %s', async (language, busy, later) => {
+            vi.useFakeTimers();
+            chatMock.mockRejectedValueOnce(rateLimit('3')).mockRejectedValueOnce(rateLimit(null));
+            const { result } = renderHook(() => useAgentChat({ language, settings, labels: baseLabels }));
+
+            let send!: Promise<void>;
+            await act(async () => { send = result.current.handleSendMessage('fixture request'); });
+            const reply = () => result.current.messages.find(m => m.role === 'assistant');
+            expect(reply()?.content).toContain(busy);
+            expect(result.current.isLoading).toBe(true);
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            await act(async () => { await vi.advanceTimersByTimeAsync(2999); });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            await act(async () => { await vi.advanceTimersByTimeAsync(1); await send; });
+            expect(chatMock).toHaveBeenCalledTimes(2);
+            expect(chatMock.mock.calls[0][0]).toEqual(chatMock.mock.calls[1][0]);
+            expect(result.current.messages.filter(m => m.role === 'user')).toHaveLength(1);
+            expect(reply()).toMatchObject({ status: 'error' });
+            expect(reply()?.content).toContain(later);
+            expect(reply()?.content).not.toContain('hidden provider text');
+        });
+
+        it('retries a 429 with no wait time after two seconds and accepts the reply', async () => {
+            vi.useFakeTimers();
+            chatMock.mockRejectedValueOnce(rateLimit(null)).mockResolvedValueOnce({ text: 'fixture reply' });
+            const { result } = renderHook(() => useAgentChat({ language: 'en', settings, labels: baseLabels }));
+
+            let send!: Promise<void>;
+            await act(async () => { send = result.current.handleSendMessage('fixture request'); });
+            await act(async () => { await vi.advanceTimersByTimeAsync(1999); });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            await act(async () => { await vi.advanceTimersByTimeAsync(1); await send; });
+            expect(chatMock).toHaveBeenCalledTimes(2);
+            expect(result.current.messages.find(m => m.role === 'assistant'))
+                .toMatchObject({ status: 'complete', content: 'fixture reply' });
+        });
+
+        it('checks the current budget after re-verifying the session and before retrying', async () => {
+            vi.useFakeTimers();
+            chatMock.mockRejectedValueOnce(rateLimit('2')).mockResolvedValueOnce({ text: 'should not be sent' });
+            const verifySession = vi.fn().mockResolvedValueOnce(true).mockImplementationOnce(async () => {
+                checkBudgetMock.mockReturnValue({ ok: false, warning: true, remaining: { daily: 0, monthly: 1 } });
+                return true;
+            });
+            const { result } = renderHook(() => useAgentChat({ language: 'en', settings, labels: baseLabels, verifySession }));
+
+            let send!: Promise<void>;
+            await act(async () => { send = result.current.handleSendMessage('fixture request'); });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            await act(async () => { await vi.advanceTimersByTimeAsync(2000); await send; });
+
+            expect(verifySession).toHaveBeenCalledTimes(2);
+            expect(checkBudgetMock).toHaveBeenCalledTimes(2);
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            expect(result.current.messages.find(m => m.role === 'assistant'))
+                .toMatchObject({ status: 'error', content: expect.stringContaining('Budget exceeded.') });
+            expect(result.current.isLoading).toBe(false);
+        });
+
+        it('keeps a provider-requested longer wait for a manual retry', async () => {
+            chatMock.mockRejectedValueOnce(rateLimit('120'));
+            const { result } = renderHook(() => useAgentChat({ language: 'en', settings, labels: baseLabels }));
+            await act(async () => { await result.current.handleSendMessage('fixture request'); });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            expect(result.current.messages.find(m => m.role === 'assistant')?.content)
+                .toContain('Please wait at least 120 seconds and try again.');
+        });
+
+        it('does not retry once a reply has started', async () => {
+            vi.useFakeTimers();
+            chatMock.mockImplementation(async (_messages, onStream) => {
+                onStream({ text: 'partial reply', isComplete: false });
+                throw rateLimit('1');
+            });
+            const { result } = renderHook(() => useAgentChat({ language: 'en', settings, labels: baseLabels }));
+            await act(async () => { await result.current.handleSendMessage('fixture request'); });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+            expect(result.current.messages.find(m => m.role === 'assistant')?.content)
+                .toContain('The reply was interrupted.');
+        });
+
+        it('cancels a pending retry when the chat closes', async () => {
+            vi.useFakeTimers();
+            chatMock.mockRejectedValueOnce(rateLimit(null));
+            const hook = renderHook(() => useAgentChat({ language: 'en', settings, labels: baseLabels }));
+            let send!: Promise<void>;
+            await act(async () => { send = hook.result.current.handleSendMessage('fixture request'); });
+            expect(hook.result.current.isLoading).toBe(true);
+            hook.unmount();
+            await act(async () => { await vi.runAllTimersAsync(); await send; });
+            expect(chatMock).toHaveBeenCalledTimes(1);
+        });
     });
 
     it('adds system message when API key is missing', async () => {
@@ -681,6 +788,80 @@ describe('useAgentChat', () => {
         expect(sysMsg).toBeTruthy();
     });
 
+    it('does not fall back to the configured OpenAI key for a personal model', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: { ...baseSettings.providers, openai: { apiKey: 'fixture-old', selectedModel: 'gpt-4o-mini' } },
+        };
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings,
+            labels: baseLabels,
+            modelSelection: { provider: 'deepseek', model: 'deepseek-flash' },
+        }));
+        await act(async () => { await result.current.handleSendMessage('Example question'); });
+        expect(chatMock).not.toHaveBeenCalled();
+        expect(result.current.messages.some(message => message.content.includes('selected model'))).toBe(true);
+    });
+
+    it('makes no provider request when the authenticated account changed', async () => {
+        const verifySession = vi.fn(async () => false);
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings: baseSettings,
+            labels: baseLabels,
+            modelSelection: { provider: 'openai', model: 'gpt-6-luna' },
+            selectedModelKey: 'fixture-personal',
+            usesPersonalKey: true,
+            verifySession,
+        }));
+        await act(async () => { await result.current.handleSendMessage('Example question'); });
+        expect(verifySession).toHaveBeenCalledWith(false);
+        expect(chatMock).not.toHaveBeenCalled();
+    });
+
+    it('does not use a saved browser key when the logged-in viewer picks current settings', async () => {
+        const settings = {
+            ...baseSettings,
+            providers: { ...baseSettings.providers, gemini: { apiKey: 'fixture-configured', selectedModel: 'gemini-4-hydrogen' } },
+        };
+        localStorage.setItem('cvf_settings', JSON.stringify(settings));
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en', settings, labels: baseLabels, canUseConfiguredKeys: false,
+        }));
+        await act(async () => { await result.current.handleSendMessage('Example question'); });
+        expect(chatMock).not.toHaveBeenCalled();
+        expect(result.current.messages.some(message => message.content.includes('enter your API key'))).toBe(true);
+    });
+
+    it('excludes chat from the previous provider when sending a request to a new provider', async () => {
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings: baseSettings,
+            labels: baseLabels,
+            historyProvider: 'openai',
+            modelSelection: { provider: 'deepseek', model: 'deepseek-flash' },
+            selectedModelKey: 'fixture-personal',
+        }));
+        await act(async () => { await result.current.handleSendMessage('Example question'); });
+        expect(chatMock).not.toHaveBeenCalled();
+        expect(result.current.messages.some(message => message.content.includes('Start a new chat'))).toBe(true);
+    });
+
+    it('uses the provider, model and key chosen for the signed-in user', async () => {
+        chatMock.mockResolvedValueOnce({ text: 'Example answer' });
+        const { result } = renderHook(() => useAgentChat({
+            language: 'en',
+            settings: baseSettings,
+            labels: baseLabels,
+            modelSelection: { provider: 'openai', model: 'gpt-6-luna' },
+            selectedModelKey: 'fixture-personal',
+        }));
+        await act(async () => { await result.current.handleSendMessage('Example question'); });
+        expect(chatMock).toHaveBeenCalledTimes(1);
+        expect(result.current.messages.find(message => message.role === 'assistant')?.metadata?.model).toBe('gpt-6-luna');
+    });
+
     it('resolvePhaseForMessage returns null for non-existent message id', () => {
         const { result } = renderHook(() => useAgentChat({
             language: 'en',
@@ -694,4 +875,13 @@ describe('useAgentChat', () => {
         });
         expect(result.current.decisionLog.length).toBe(logBefore);
     });
+});
+it('keeps an incoming quick-work draft unsent until the user sends it', async () => {
+ vi.useFakeTimers(); chatMock.mockClear();
+ const settings = { ...baseSettings, providers: { ...baseSettings.providers, gemini: { apiKey:'fixture-key', selectedModel:'gemini-2.5-flash' } } };
+ const hook = renderHook(() => useAgentChat({ initialDraft:'Draft for review', language:'en', settings, labels:baseLabels }));
+ await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
+ expect(hook.result.current.input).toBe('Draft for review');
+ expect(chatMock).not.toHaveBeenCalled();
+ vi.useRealTimers();
 });

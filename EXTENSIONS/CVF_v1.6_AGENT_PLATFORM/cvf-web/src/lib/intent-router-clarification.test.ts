@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese clarification fixtures require UTF-8.
 /**
  * W124-T1 CP1 — intent-router-clarification unit tests
  *
@@ -298,3 +299,75 @@ describe('submitClarificationAnswer — depth limit', () => {
     }
   });
 });
+
+// ─── Vietnamese questions follow the language the user typed ─────────────────
+
+describe('clarification language', () => {
+  const en = buildNextQuestion(0)!;
+  const enScope = buildNextQuestion(1)!;
+  const vn = buildNextQuestion(0, 'vi')!;
+  const viScope = buildNextQuestion(1, 'vi')!;
+
+  it('keeps the English questions and options unchanged by default', () => {
+    expect(en.question).toBe('What best describes what you are trying to do right now?');
+    expect(en.options).toHaveLength(4);
+    expect(enScope.question).toBe('Who will use the output of this work?');
+    expect(startClarification(makeWeakResult('weak_confidence')).clarificationQuestion).toBe(en.question);
+    expect(startClarification(makeWeakResult('weak_confidence'), 'en').clarificationOptions).toEqual(en.options);
+    expect(buildClarificationState('x').language).toBe('en');
+    expect(buildClarificationState('x').history[0]).toEqual({ question: en.question, options: en.options });
+  });
+
+  it('returns Vietnamese questions with the same number of options in the same order', () => {
+    expect(vn.question).toBe('Hiện tại bạn đang muốn làm việc gì nhất?');
+    expect(vn.options).toHaveLength(en.options.length);
+    expect(viScope.options).toHaveLength(enScope.options.length);
+    for (const text of [vn.question, viScope.question, ...vn.options, ...viScope.options]) expect(text).toMatch(/[ăâêôơưđàáảãạèéẻẽẹìíỉĩịòóỏõọùúủũụỳýỷỹỵ]/i);
+    expect(vn.options[0]).toContain('nghiên cứu');
+    expect(vn.options[1]).toContain('kế hoạch');
+    expect(vn.options[2]).toContain('Xây dựng');
+    expect(vn.options[3]).toContain('Rà soát');
+    expect(startClarification(makeWeakResult('weak_confidence'), 'vi')).toMatchObject({ recoveryMode: 'clarify', clarificationQuestion: vn.question, clarificationOptions: vn.options, depth: 0 });
+    expect(buildClarificationState('tôi cần', 'vi')).toMatchObject({ language: 'vi', history: [{ question: vn.question, options: vn.options }] });
+  });
+
+  it('maps each answer to the same routing keywords by option index in both languages', () => {
+    for (let phase = 0; phase < en.options.length; phase++) {
+      for (let scope = 0; scope < enScope.options.length; scope++) {
+        const enriched = (language: 'en' | 'vi') => {
+          const questions = [buildNextQuestion(0, language)!, buildNextQuestion(1, language)!];
+          return buildEnrichedInput({
+            originalInput: 'x', language, depth: 2,
+            history: [{ ...questions[0], answer: questions[0].options[phase] }, { ...questions[1], answer: questions[1].options[scope] }],
+          });
+        };
+        expect(enriched('vi')).toBe(enriched('en'));
+        expect(enriched('en')).not.toContain('Hiện');
+      }
+    }
+  });
+
+  it('keeps the questions Vietnamese through the loop and reports the browse reason in Vietnamese', () => {
+    vi_stub();
+    let state = buildClarificationState('zzzxxx_qqqwww_unmatchable_gibberish', 'vi');
+    const raw = 'zzzxxx_raw_answer_not_in_list_abc123';
+    const first = submitClarificationAnswer(state, raw);
+    expect(first).toMatchObject({ recoveryMode: 'clarify', clarificationQuestion: viScope.question, clarificationOptions: viScope.options, depth: 1 });
+    state = advanceClarificationState(state, raw);
+    expect(state.language).toBe('vi');
+    expect(state.history[1]).toEqual({ question: viScope.question, options: viScope.options });
+    const second = submitClarificationAnswer(state, 'zzzxxx_raw_answer_not_in_list_def456');
+    expect(second.recoveryMode).toBe('browse');
+    expect(second.browseReason).toContain('thư viện kỹ năng');
+  });
+
+  it('reports the unmatched-browse reason in English when no language is set', () => {
+    vi_stub();
+    const state: ClarificationState = { originalInput: 'zzzxxx_qqqwww_unmatchable_gibberish', depth: 1, history: [{ question: 'q0', options: ['A'], answer: 'zzzxxx_raw_a' }, { question: 'q1', options: ['B'] }] };
+    const result = submitClarificationAnswer(state, 'zzzxxx_raw_b');
+    expect(result.recoveryMode).toBe('browse');
+    expect(result.browseReason).toContain('Browse the skill library');
+  });
+});
+
+function vi_stub() { vi.stubEnv('NEXT_PUBLIC_CVF_INTENT_FIRST_FRONT_DOOR', 'true'); }

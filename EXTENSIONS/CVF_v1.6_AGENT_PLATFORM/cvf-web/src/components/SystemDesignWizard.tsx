@@ -260,7 +260,6 @@ function buildSystemDesignGovernedPacket(data: WizardData) {
             `Validate the architecture trade-offs for "${systemName}" with the technical owner`,
             'Open a separate follow-up batch for implementation work outside this system-design packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:system-${slug}`,
         inputs: {
             systemName: data.systemName || '',
             problemStatement: data.problemStatement || '',
@@ -454,9 +453,7 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -626,7 +623,6 @@ export function SystemDesignWizard({ onBack }: SystemDesignWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

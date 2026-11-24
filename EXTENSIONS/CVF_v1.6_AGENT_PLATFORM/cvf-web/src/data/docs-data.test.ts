@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese navigation and documentation labels.
 /** @vitest-environment jsdom */
 import { describe, it, expect } from 'vitest';
 import { DOCS, DOC_META } from './docs-data';
@@ -139,13 +140,14 @@ describe('Agent Skills category', () => {
         expect(opWorkflows!.tag!.vi).not.toMatch(/v1\.6\.\d/);
     });
 
-    it('catalog mentions 34 skills and 7 domains', () => {
+    it('describes the agent package catalog in both languages', () => {
         const catalog = agentSkills!.items.find(
             i => i.slug === 'agent-skills-catalog'
         );
         expect(catalog).toBeDefined();
-        expect(catalog!.title.en).toContain('34');
-        expect(catalog!.desc.en).toContain('7 domains');
+        expect(catalog?.title).toEqual({ vi: 'Danh mục kỹ năng dành cho agent', en: 'Agent skill catalog' });
+        expect(catalog?.desc.en).toContain('usage limits');
+        expect(catalog?.desc.vi).toContain('giới hạn sử dụng');
     });
 
     it('agentic-patterns slug exists', () => {

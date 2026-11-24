@@ -18,9 +18,9 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 try:
-    from check_work_order_acceptance_ledger import EVIDENCE_RE, _classifier_event_issues, _json_block, git_observed_paths, validate_return as validate_acceptance_return
+    from check_work_order_acceptance_ledger import _classifier_event_issues, check_return_acceptance
 except ModuleNotFoundError:
-    from governance.compat.check_work_order_acceptance_ledger import EVIDENCE_RE, _classifier_event_issues, _json_block, git_observed_paths, validate_return as validate_acceptance_return
+    from governance.compat.check_work_order_acceptance_ledger import _classifier_event_issues, check_return_acceptance
 
 # Keep the ordinary/legacy checker startup free of the evidence module.
 # Import once, only after an applicable packet or a registered index is seen.
@@ -793,6 +793,7 @@ def diagnose_active_work_order(
     work_order_path: str,
     *,
     resolver_registry: "dict[tuple[str, str], object] | None" = None,
+    return_endpoint: str | None = None,
 ) -> Diagnostic:
     """DRC-04/DRC-05: resolve the exact worker return bound by the active work
     order and diagnose it regardless of changed-path discovery. Only that exact
@@ -836,19 +837,17 @@ def diagnose_active_work_order(
             f"not the active work order `{wo_rel}`"
         )
     issues.extend(_detached_receipt_issues(wo_text, return_rel, return_text))
-    if "```acceptance-ledger-json" in wo_text:
-        evidence, evidence_parse_issues = _json_block(return_text, EVIDENCE_RE, "acceptance-evidence-json")
-        issues.extend(evidence_parse_issues)
-        base = evidence.get("executionBaseHead") if evidence else None
-        observed = git_observed_paths(base) if isinstance(base, str) and re.fullmatch(r"[0-9a-f]{7,40}", base) else set()
-        if not evidence_parse_issues:
-            issues.extend(validate_acceptance_return(wo_text, return_text, observed))
+    if "```acceptance-ledger-json" in wo_text or return_endpoint:
+        issues.extend(check_return_acceptance(wo_rel, return_rel, wo_text, return_text, return_endpoint))
     return Diagnostic(path=return_rel, eligible=True, issues=tuple(issues))
 
 
 def run(
-    base: str | None, head: str | None, active_work_order: str | None = None
+    base: str | None, head: str | None, active_work_order: str | None = None,
+    return_endpoint: str | None = None,
 ) -> list[Diagnostic]:
+    if return_endpoint and not active_work_order:
+        raise ValueError("--return-endpoint requires --active-work-order")
     diagnostics: list[Diagnostic] = []
     changed = get_changed_paths(base, head)
     diagnosed_paths: set[str] = set()
@@ -872,7 +871,8 @@ def run(
     # discovery: the exact bound return is always diagnosed, even when the
     # changed set selects zero returns.
     if active_work_order:
-        active = diagnose_active_work_order(active_work_order, resolver_registry=resolver_registry)
+        active = diagnose_active_work_order(active_work_order, resolver_registry=resolver_registry,
+                                            **({"return_endpoint": return_endpoint} if return_endpoint else {}))
         diagnostics.append(active)
         diagnosed_paths.add(active.path)
 
@@ -924,6 +924,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--base", default=None)
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--enforce", action="store_true")
+    parser.add_argument("--return-endpoint", help="Bound active-return commit; other diagnostics remain current-tree")
     parser.add_argument(
         "--active-work-order",
         default=None,
@@ -933,6 +934,8 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     args = parser.parse_args(argv)
+    if args.return_endpoint and not args.active_work_order:
+        parser.error("--return-endpoint requires --active-work-order")
 
     print("=== CVF Worker Return Quality Gate ===")
     print(f"Standard: {STANDARD_PATH}")
@@ -940,9 +943,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Range: {args.base}..{args.head}")
     if args.active_work_order:
         print(f"Active work order: {_normalize(args.active_work_order)}")
+    if args.return_endpoint:
+        print(f"Scope: active-return fulfillment @{args.return_endpoint}; other diagnostics and raw pins: current tree")
 
     try:
-        diagnostics = run(args.base, args.head, args.active_work_order)
+        diagnostics = run(args.base, args.head, args.active_work_order,
+                          **({"return_endpoint": args.return_endpoint} if args.return_endpoint else {}))
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL: {exc}")
         return 2 if args.enforce else 0

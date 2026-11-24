@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: Vietnamese assertions cover localized analytics labels.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
@@ -139,8 +140,19 @@ describe('AnalyticsDashboard', () => {
         expect(screen.getByText(/Chưa có dữ liệu\. Hãy chạy một vài templates!/i)).toBeTruthy();
         expect(screen.getByText(/Chưa có dữ liệu skill/i)).toBeTruthy();
         expect(screen.getByText(/Chưa có dữ liệu domain/i)).toBeTruthy();
-        expect(screen.getByText('Chưa có dữ liệu')).toBeTruthy();
+        expect(screen.getAllByText('Chưa có dữ liệu').length).toBeGreaterThan(1);
+        expect(screen.getByText('Điểm TB chất lượng').previousElementSibling?.textContent).toBe('Chưa có dữ liệu');
+        expect(screen.getByText('Tỷ lệ chấp nhận').previousElementSibling?.textContent).toBe('Chưa có dữ liệu');
         expect(screen.getByText(/Chưa có events/i)).toBeTruthy();
+    });
+
+    it('reports measured zero quality and a zero acceptance rate for a completed rejected run', () => {
+        currentLanguage = 'en';
+        executionsState = [{ ...executionsState[0], result: 'rejected', qualityScore: 0 }];
+        render(<AnalyticsDashboard />);
+
+        expect(screen.getByText('Avg Quality Score').previousElementSibling?.textContent).toBe('0.0');
+        expect(screen.getByText('Accept Rate').previousElementSibling?.textContent).toBe('0%');
     });
 
     it('renders rejected distribution and handles older activity', () => {
@@ -210,15 +222,19 @@ describe('AnalyticsDashboard', () => {
                 },
                 {
                     id: 'e2', type: 'enforcement_decision', timestamp: Date.now() - 1000,
-                    data: { status: 'ALLOWED', source: 'manual' },
+                    data: { status: 'ALLOW', source: 'manual' },
                 },
                 {
                     id: 'e3', type: 'enforcement_decision', timestamp: Date.now() - 2000,
                     data: { status: 'BLOCKED', source: 'spec-gate' },
                 },
                 {
-                    id: 'e4', type: 'pre_uat_failed', timestamp: Date.now(),
-                    data: {},
+                    id: 'e4', type: 'enforcement_decision', timestamp: Date.now() - 3000,
+                    data: { status: 'DENY', source: 'spec-gate' },
+                },
+                {
+                    id: 'e5', type: 'enforcement_decision', timestamp: Date.now() - 4000,
+                    data: { source: 'spec-gate' },
                 },
             ],
             clearEvents: clearMock,
@@ -227,12 +243,12 @@ describe('AnalyticsDashboard', () => {
 
         render(<AnalyticsDashboard />);
 
-        // Should show enforcement stats: 3 decisions logged, 1 pre-UAT fail
-        expect(document.body.textContent).toContain('3');
-        expect(document.body.textContent).toContain('1');
-        // Top status should be BLOCKED (2 occurrences)
-        expect(document.body.textContent).toContain('BLOCKED');
-        expect(document.body.textContent).toContain('ALLOWED');
+        expect(screen.getByText('Quyết định đã ghi').nextElementSibling?.textContent).toBe('5');
+        expect(screen.getByText('Trạng thái phổ biến').nextElementSibling?.textContent).toContain('Bị chặn');
+        expect(screen.getByText('Được phép')).toBeTruthy();
+        expect(screen.getByText('Không được phép')).toBeTruthy();
+        expect(screen.getByText('Chưa xác định')).toBeTruthy();
+        expect(screen.queryByText('ALLOW')).toBeNull();
         // Sources
         expect(document.body.textContent).toContain('spec-gate');
         expect(document.body.textContent).toContain('manual');
@@ -249,8 +265,7 @@ describe('AnalyticsDashboard', () => {
 
         render(<AnalyticsDashboard />);
 
-        // With no enforcement events, should show N/A for top status
-        expect(document.body.textContent).toContain('N/A');
+        expect(screen.getByText('Trạng thái phổ biến').nextElementSibling?.textContent).toContain('Chưa có dữ liệu');
     });
 
     it('switches to governance tab and renders governance widgets', () => {

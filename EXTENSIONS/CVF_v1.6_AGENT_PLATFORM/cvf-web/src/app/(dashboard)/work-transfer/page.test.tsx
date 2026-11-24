@@ -1,5 +1,7 @@
 // Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
+import viCopy from '@/lib/i18n/vi.json';
+import enCopy from '@/lib/i18n/en.json';
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
@@ -37,6 +39,7 @@ let mockLang = 'vi';
 vi.mock('@/lib/i18n', () => ({
     useLanguage: () => ({
         language: mockLang,
+        t: (key: string) => ((mockLang === 'vi' ? viCopy : enCopy) as Record<string, string>)[key] ?? key,
         setLanguage: vi.fn(),
     }),
 }));
@@ -80,21 +83,21 @@ const DRAFT_CLAIM_BOUNDARY = 'Editable draft derived from an audit event. Not pr
 // Literal expected copy per language (WT-F02). Vietnamese keeps the page-test diacritics convention.
 const LABELS = {
     en: {
-        title: 'Recent audit events',
-        empty: 'No audit events found.',
-        loading: 'Loading audit history...',
-        error: 'Could not load audit history.',
-        note: 'These are audit events, not proof that a work transfer occurred.',
-        boundary: 'This page checks whether the next step has enough context. It is not final proof by itself. Checking context does not save or create a transfer record.',
+        title: 'Recent activity log',
+        empty: 'No activity in the log yet.',
+        loading: 'Loading the activity log…',
+        error: 'Could not load the activity log.',
+        note: 'This log records system activity. A handoff needs its own confirmation.',
+        boundary: 'This check does not save or create a handoff record.',
         transferWording: /transfer/i,
     },
     vi: {
-        title: 'Sự kiện nhật ký kiểm tra gần đây',
-        empty: 'Không tìm thấy sự kiện nào trong nhật ký kiểm tra.',
-        loading: 'Đang tải nhật ký kiểm tra...',
-        error: 'Không thể tải nhật ký kiểm tra.',
-        note: 'Đây là các sự kiện nhật ký kiểm tra, không phải bằng chứng rằng một lần bàn giao đã diễn ra.',
-        boundary: 'Trang này kiểm tra bước tiếp theo có đủ ngữ cảnh hay chưa. Nó không phải bằng chứng cuối cùng. Việc kiểm tra ngữ cảnh không lưu hay tạo bản ghi bàn giao.',
+        title: 'Nhật ký hoạt động gần đây',
+        empty: 'Nhật ký chưa có hoạt động nào.',
+        loading: 'Đang tải nhật ký hoạt động…',
+        error: 'Chưa tải được nhật ký hoạt động.',
+        note: 'Nhật ký chỉ ghi hoạt động hệ thống. Việc bàn giao cần được xác nhận riêng.',
+        boundary: 'Việc kiểm tra này không lưu hoặc tạo bản ghi bàn giao.',
         transferWording: /chuyển giao|bàn giao/i,
     },
 } as const;
@@ -174,20 +177,20 @@ describe('WorkTransferPage', () => {
 
     it('renders Vietnamese content correctly', async () => {
         render(<WorkTransferPage />);
-        expect(screen.getByText('Bàn giao')).toBeTruthy();
-        expect(screen.getByText('Bàn giao công việc cho bước tiếp theo')).toBeTruthy();
-        expect(screen.getByDisplayValue('Kiến thức mới đã sẵn sàng để rà soát. Hãy giữ ghi chú nguồn, biên nhận và ranh giới khẳng định cùng nhau.')).toBeTruthy();
+        expect(screen.getByRole('heading', { name: 'Bàn giao công việc' })).toBeTruthy();
+        expect(screen.getByDisplayValue('Đã xem ghi chú từ cuộc họp. Người tiếp theo cần xác nhận thời hạn trước khi gửi kế hoạch.')).toBeTruthy();
         expect(screen.getByText('Đã hoàn tất')).toBeTruthy();
         expect(screen.queryByText('Decision: ALLOW')).toBeNull();
-        expect(screen.getByText('Quyết định: ALLOW')).toBeTruthy();
+        expect(screen.getByText('Kết quả kiểm tra · Có thể bàn giao')).toBeTruthy();
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     });
 
     it('renders English content correctly', async () => {
         mockLang = 'en';
         render(<WorkTransferPage />);
-        expect(screen.getByText('Work Transfer')).toBeTruthy();
-        expect(screen.getByText('Pass reviewed work forward with less guesswork')).toBeTruthy();
+        expect(screen.getByText('Hand off work')).toBeTruthy();
+        expect(screen.getByText('Check result · Ready to hand off')).toBeTruthy();
+        expect(screen.getByDisplayValue('Reviewed the meeting notes. Confirm the deadline before sharing the plan.')).toBeTruthy();
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     });
 
@@ -272,7 +275,7 @@ describe('WorkTransferPage', () => {
             respondWith({ success: true, data: Array.from({ length: 12 }, (_, i) => rec(i + 1)) });
             render(<WorkTransferPage />);
             await screen.findByTestId('history-list');
-            expect(screen.getByText('Recent audit events')).toBeTruthy();
+            expect(screen.getByText('Recent activity log')).toBeTruthy();
             expect(renderedIds()[0]).toBe('evt-12');
         });
 
@@ -422,3 +425,33 @@ describe('WorkTransferPage', () => {
         });
     });
 });
+
+it('allows activity headings to wrap rather than truncate on narrow screens', async () => {
+    respondWith({ success: true, data: [rec(1)] });
+    render(<WorkTransferPage />);
+    const list = await screen.findByTestId('history-list');
+    const title = within(list).getByText(viCopy['workTransferPage.loggedAction']);
+    expect(title.className).not.toContain('truncate');
+    expect(title.className).toContain('break-words');
+});
+
+it('allows a journal actor identifier with no spaces to wrap on narrow screens', async () => {
+    const actorId = `actor-${'x'.repeat(100)}`;
+    respondWith({ success: true, data: [{ ...rec(1), actorId }] });
+    render(<WorkTransferPage />);
+    const list = await screen.findByTestId('history-list');
+    const attribution = within(list).getByText(new RegExp(actorId));
+    expect(attribution.className).toContain('[overflow-wrap:anywhere]');
+});
+
+it.each([`actor-${'a'.repeat(64)}`, 'ACTOR_REF_UNAVAILABLE'])(
+    'places a raw actor reference %s in the closed activity details', async actorId => {
+        respondWith({ success: true, data: [{ ...rec(1), actorId }] });
+        render(<WorkTransferPage />);
+        const list = await screen.findByTestId('history-list');
+        const attribution = within(list).getByText(new RegExp(actorId));
+        const details = attribution.closest('details');
+        expect(details).toBeTruthy();
+        expect(details?.open).toBe(false);
+    },
+);

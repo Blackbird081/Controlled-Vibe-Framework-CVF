@@ -17,6 +17,7 @@ import { CVF_SYSTEM_PROMPT } from '@/lib/ai';
 import { buildKnowledgeSystemPrompt, hasKnowledgeContext } from '@/lib/knowledge-context-injector';
 import { formatKnowledgeChunks, queryKnowledgeChunks, type KnowledgeQueryResult } from '@/lib/knowledge-retrieval';
 import { knowledgeStore } from '@/lib/knowledge-store';
+import { resolveSystemSeedSot3Source } from '@/lib/knowledge-seed';
 import { appendAuditEvent } from '@/lib/control-plane-events';
 import { withSessionAuditPayload, type SessionCookie } from '@/lib/middleware-auth';
 import {
@@ -68,6 +69,8 @@ export interface KnowledgeContextResult {
     knowledgeSystemPrompt: string;
     requestedKnowledgeCollectionId: string | null;
     sot3: Sot3KnowledgeActivationResult | null;
+    /** Durable SOT3 evidence outcome for this activation; absent when no activation was evaluated (mode OFF, pilot). */
+    sot3Evidence?: { diagnosticClass: Sot3EvidenceDiagnosticClass; recordId: string } | null;
 }
 
 const emptyRetrievalResult = (): KnowledgeQueryResult => ({
@@ -94,7 +97,10 @@ export function isolatedPilotKnowledgeContext(): KnowledgeContextResult {
 
 function resolveChunkSot3Source(chunk: { id: string; collectionId: string }) {
     const collection = knowledgeStore.getCollection(chunk.collectionId);
-    return collection?.chunks.find((stored) => stored.id === chunk.id)?.sot3Source;
+    // A stored declaration always wins. Only a built-in seed chunk (stores persisted before seed provenance existed) falls back to
+    // the code-owned declaration, and its content hash still has to match the retrieved content, so edited or user chunks that
+    // reuse a seed id are not vouched for.
+    return collection?.chunks.find((stored) => stored.id === chunk.id)?.sot3Source ?? resolveSystemSeedSot3Source(chunk.collectionId, chunk.id);
 }
 
 async function emitScopeFilterAudit(params: {
@@ -216,7 +222,7 @@ async function persistSot3ActivationEvidence(params: {
     evidenceStore: Sot3ActivationEvidenceStore;
     createdAtUtc: string;
     canonicalExecutionId?: string;
-}): Promise<Sot3EvidenceDiagnosticClass> {
+}): Promise<{ diagnosticClass: Sot3EvidenceDiagnosticClass; recordId: string }> {
     const { mode, result, requestId, actorId, organization, team, session, templateLabel, evidenceStore, createdAtUtc, canonicalExecutionId } = params;
 
     const recordId = deriveSot3EvidenceRecordId({ requestId, actorId, organization, team, mode });
@@ -241,11 +247,11 @@ async function persistSot3ActivationEvidence(params: {
     try {
         const outcome = await evidenceStore.append(record);
         await emitEvidencePersistedAudit({ mode, diagnosticClass: outcome.diagnosticClass, record, session, templateLabel });
-        return outcome.diagnosticClass;
+        return { diagnosticClass: outcome.diagnosticClass, recordId };
     } catch (error) {
         const diagnosticClass = classifySot3EvidenceError(error);
         await emitEvidencePersistedAudit({ mode, diagnosticClass, record, session, templateLabel });
-        return diagnosticClass;
+        return { diagnosticClass, recordId };
     }
 }
 
@@ -317,6 +323,7 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
     const retrievedKnowledgeContext = formatKnowledgeChunks(retrievalResult.chunks);
 
     let sot3: Sot3KnowledgeActivationResult | null = null;
+    let sot3Evidence: { diagnosticClass: Sot3EvidenceDiagnosticClass; recordId: string } | null = null;
     let finalKnowledgeContext = retrievedKnowledgeContext ?? undefined;
 
     if (mode !== 'OFF') {
@@ -351,7 +358,7 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
 
         await emitSot3ActivationAudit({ mode, result: sot3, retrievalResult, session, templateLabel });
 
-        const diagnosticClass = await persistSot3ActivationEvidence({
+        sot3Evidence = await persistSot3ActivationEvidence({
             mode,
             result: sot3,
             requestId,
@@ -366,6 +373,7 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
         });
 
         if (mode === 'ENFORCE') {
+            const diagnosticClass = sot3Evidence.diagnosticClass;
             const evidencePersisted = diagnosticClass === 'PERSISTED' || diagnosticClass === 'DUPLICATE_NOOP';
             if (!evidencePersisted) {
                 sot3 = { ...sot3, injectionPermitted: false, failureStage: 'EVIDENCE_PERSISTENCE_FAILED' };
@@ -388,5 +396,6 @@ export async function resolveKnowledgeContext(params: KnowledgeContextParams): P
         knowledgeSystemPrompt,
         requestedKnowledgeCollectionId,
         sot3,
+        sot3Evidence,
     };
 }

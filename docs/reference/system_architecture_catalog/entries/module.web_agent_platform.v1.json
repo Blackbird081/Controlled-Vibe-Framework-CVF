@@ -5,7 +5,9 @@
   "authorityClass": "ACTIVE_GOVERNED_STANDARD",
   "maturity": "ACTIVE",
   "ownerPaths": [
-    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/"
+    "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/",
+    "EXTENSIONS/CVF_MODEL_GATEWAY/",
+    "EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION/src/mao/"
   ],
   "planeMembership": [
     "cvf.asc.plane.evidence_to_operator_surface.v1"
@@ -24,9 +26,69 @@
       "path": "docs/reviews/CVF_NIS_T1B_D_INTEGRATED_REVIEW_PERSISTENCE_COMPLETION_2026-10-05.md",
       "lineOrSection": "Findings / Position; Claim Boundary",
       "evidenceRole": "NIS-T1B-D accepted bounded review persistence and Windows private-profile proof; no live activation"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_LINEAGE_PROTOTYPE_REPAIR_COMPLETION_2026-11-13.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Bounded durable attempt lineage repair; full T3 not accepted"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_STOP_STATUS_COMPLETION_2026-11-13.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Owner Stop/Resume and truthful status; no physical cancellation"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_MAO_SINGLE_WORKER_COMPLETION_2026-11-13.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Selected Web/MAO/Gateway single-worker actual proof"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_CLAUDE_CLI_COMPLETION_2026-11-13.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Bounded Windows native subscription CLI proof"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_CODEX_FINDINGS_AND_OPENAI_LANE_COMPLETION_2026-11-14.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Bounded OpenAI lane; no public certification promotion"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_MAO_ROLE_PLAN_COMPLETION_2026-11-15.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "S3-A bounded source/module proof; S3-B Web-route proof and quality gaps remain"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_MAO_REVIEWER_QUALITY_COMPLETION_2026-11-15.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Reviewer-quality slice b6bffc289 and bounded S3-B Web-route proof (2 runs); revision still not re-reviewed"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_MAO_ROLE_PLAN_HARDENING_COMPLETION_2026-11-15.md",
+      "lineOrSection": "Findings / Position; Risk / Corrective Action",
+      "evidenceRole": "Role-plan hardening 32f6f5661: bounded recheck at ordinal 4, parser/neutralisation/deadline fixes, UI provider note; module-level live proof"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_MAO_ROLE_PLAN_OUTCOME_FIDELITY_COMPLETION_2026-11-16.md",
+      "lineOrSection": "Findings / Position; Live Module Proof",
+      "evidenceRole": "Role-plan outcome fidelity 2c18d17b6: denied attempts settled as no-call outcomes, preflight, failure evidence, unreviewed partial output, verdicts in receipt and pack; module-level live proof with denials at review and recheck"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_STRICT_CAP_ACCEPTANCE_COMPLETION_2026-11-17.md",
+      "lineOrSection": "Findings / Position; Independent Review Disposition",
+      "evidenceRole": "Strict documentation cap acceptance 5a285c15e: over-cap documentation output refused with BLOCK, 422 and VALIDATION_FAILED, reviewer verdict and usage preserved; hermetic route proof, independent review, 15/15 mutants killed, zero provider calls"
+    },
+    {
+      "path": "docs/reviews/CVF_WEB_V1_HELD_EXECUTION_OWNER_RELEASE_COMPLETION_2026-11-16.md",
+      "lineOrSection": "Findings / Position; R4 Browser Check On The Real Held Journal",
+      "evidenceRole": "Held execution owner release 8223fe6aa: owner release with durable markers, post-preparation provider-call gate, 409 refusals and status-driven notice; R4 operator release on the real held journal, zero provider calls"
+    },
+    {
+      "path": "docs/reference/CVF_TECHNICAL_PRODUCT_CATALOG_2026-05-18.md",
+      "lineOrSection": "Current Connected Product Slice (2026-11-15)",
+      "evidenceRole": "Dated navigation reconciliation at 7b24e1cdf, including English agent-handoff source; not new independent product acceptance"
     }
   ],
-  "claimBoundary": "Current main Web UI line; hosts the confirmed governance dashboard route and the bounded 5-job-type Web Operations registry. NIS-T1B-D adds current-actor saved review confirmation and an opt-in WINDOWS_SINGLE_HOST_PRIVATE_V1 adapter proved on LOCAL_TEST_SESSION fixtures; no real store activation, BUILD authority, power-loss or stale-lock recovery claim.",
+  "claimBoundary": "Current main Web UI line; hosts the confirmed governance dashboard route and the bounded 5-job-type Web Operations registry. NIS-T1B-D adds current-actor saved review confirmation and an opt-in WINDOWS_SINGLE_HOST_PRIVATE_V1 adapter proved on LOCAL_TEST_SESSION fixtures; no real store activation, BUILD authority, power-loss or stale-lock recovery claim. Navigation reconciled 2026-11-15 at 7b24e1cdf (updates 2ffe0e21a, b2c8cb52a): selected Web execute consumer connects authenticated owner admission/Stop, durable attempt reserve/settle, canonical Gateway and optional MAO. Single-worker, OpenAI API and Windows Claude subscription CLI have separate bounded proofs. Role-plan source 8298f1dbb has accepted S3-A module-level proof only; its default-off flag conflicts with single-worker mode. Reviewer-quality source b6bffc289 makes user inputs authoritative to the reviewer and kept by the revision; bounded S3-B Web-route proof (operator sign-in, 2 runs) passed. Hardening source 32f6f5661 adds one isolated recheck of the revision at Web ordinal 4 (lineage cap 4) plus parser, neutralisation, deadline and UI provider fixes, with module-level live proof. F1 (non-200 evidence), N1 and partial output after Stop remain. English cvf.agentHandoffSpec.v1 exists in source, not newly independently accepted here. Full T3/T4/T5/v1 remain UNMET/UNPROVED; benchmark/BUSY, protected-host, broader Guard/SOT3 and public holds remain. Added ownerPaths identify selected dependencies, not a transfer of module ownership. lastReviewed retains the earlier independent review date; later citations carry their own scope and date.",
   "freshnessInputs": [
     "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/"
   ],

@@ -2,17 +2,29 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from 'vitest';
+import { evaluateEnforcement } from './enforcement';
 import { normalizeRiskLevel, inferRiskLevelFromText, evaluateRiskGate } from './risk-check';
 
 describe('risk-check', () => {
+    it('keeps the higher content risk when the requested risk is R0', () => {
+        const result = evaluateEnforcement({
+            mode: 'governance',
+            content: 'Prepare a production deployment.',
+            budgetOk: true,
+            cvfRiskLevel: 'R0',
+        });
+        expect(result.riskGate?.riskLevel).toBe('R3');
+        expect(result.status).toBe('NEEDS_APPROVAL');
+    });
+
     describe('normalizeRiskLevel', () => {
-        it('returns R1 for undefined/null', () => {
-            expect(normalizeRiskLevel(undefined)).toBe('R1');
-            expect(normalizeRiskLevel(null)).toBe('R1');
+        it('returns R3 for undefined/null', () => {
+            expect(normalizeRiskLevel(undefined)).toBe('R3');
+            expect(normalizeRiskLevel(null)).toBe('R3');
         });
 
-        it('returns R1 for empty string', () => {
-            expect(normalizeRiskLevel('')).toBe('R1');
+        it('returns R3 for empty string', () => {
+            expect(normalizeRiskLevel('')).toBe('R3');
         });
 
         it('normalizes standard Rx strings', () => {
@@ -29,10 +41,10 @@ describe('risk-check', () => {
             expect(normalizeRiskLevel('r0')).toBe('R0');
         });
 
-        it('returns R1 for invalid input', () => {
-            expect(normalizeRiskLevel('R5')).toBe('R1');
-            expect(normalizeRiskLevel('high')).toBe('R1');
-            expect(normalizeRiskLevel('abc')).toBe('R1');
+        it('returns R3 for invalid input', () => {
+            expect(normalizeRiskLevel('R5')).toBe('R3');
+            expect(normalizeRiskLevel('exampleR0')).toBe('R3');
+            expect(normalizeRiskLevel('abc')).toBe('R3');
         });
     });
 
@@ -56,6 +68,11 @@ describe('risk-check', () => {
         it('returns null when no risk pattern found', () => {
             expect(inferRiskLevelFromText('This is a simple message with no risk')).toBe(null);
         });
+
+        it('uses the highest signal regardless of where it appears', () => {
+            expect(inferRiskLevelFromText('R0 intake label; risk: R2; production deployment')).toBe('R3');
+            expect(inferRiskLevelFromText('R0 intake label; R4 marked operation')).toBe('R4');
+        });
     });
 
     describe('evaluateRiskGate', () => {
@@ -66,6 +83,7 @@ describe('risk-check', () => {
             expect(r2.status).toBe('BLOCK');
             const r3 = evaluateRiskGate('R4', 'full');
             expect(r3.status).toBe('BLOCK');
+            expect(evaluateRiskGate('R4', 'full', 'FREEZE').status).toBe('BLOCK');
         });
 
         it('blocks R2+ in simple mode', () => {
@@ -101,9 +119,9 @@ describe('risk-check', () => {
             expect(res.riskLevel).toBe('R2');
         });
 
-        it('normalizes null/undefined input to R1', () => {
-            expect(evaluateRiskGate(null, 'simple').riskLevel).toBe('R1');
-            expect(evaluateRiskGate(undefined, 'simple').riskLevel).toBe('R1');
+        it('normalizes null/undefined input to R3', () => {
+            expect(evaluateRiskGate(null, 'simple').riskLevel).toBe('R3');
+            expect(evaluateRiskGate(undefined, 'simple').riskLevel).toBe('R3');
         });
     });
 });

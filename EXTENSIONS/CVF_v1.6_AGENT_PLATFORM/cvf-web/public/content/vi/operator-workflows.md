@@ -27,22 +27,22 @@ Tutorial này cung cấp **10 mẫu prompt sẵn dùng** cho Sales, Marketing, P
 
 | # | Workflow | Cho ai | Rủi ro |
 |---|---------|--------|--------|
-| 1 | [Quản lý Pipeline](#workflow-1) | Sales | R2 |
-| 2 | [Tìm kiếm Prospect](#workflow-2) | Sales | R2 |
-| 3 | [Giám sát Chi phí QC](#workflow-3) | Marketing | R2 |
-| 4 | [Phân phối Nội dung](#workflow-4) | Marketing | R1 |
-| 5 | [Tiếng nói Khách hàng](#workflow-5) | Support | R2 |
-| 6 | [Báo cáo SP hàng tuần](#workflow-6) | Product | R2 |
-| 7 | [Phẫu thuật Quy trình](#workflow-7) | Vận hành | R2 |
-| 8 | [Tối ưu Lịch họp](#workflow-8) | Tất cả | R2 |
-| 9 | [Phân tích Tài chính](#workflow-9) | Finance | R2 |
-| 10 | [Tình báo Cạnh tranh](#workflow-10) | Strategy | R3 |
+| 1 | [Quản lý Pipeline](#workflow-1-quản-lý-pipeline) | Sales | R2 |
+| 2 | [Tìm kiếm Prospect](#workflow-2-tìm-kiếm-prospect) | Sales | R2 |
+| 3 | [Giám sát Chi phí QC](#workflow-3-giám-sát-chi-phí-qc) | Marketing | R2 |
+| 4 | [Phân phối Nội dung](#workflow-4-phân-phối-nội-dung) | Marketing | R1 |
+| 5 | [Tiếng nói Khách hàng](#workflow-5-tiếng-nói-khách-hàng) | Support | R2 |
+| 6 | [Báo cáo SP hàng tuần](#workflow-6-báo-cáo-sản-phẩm-hàng-tuần) | Product | R2 |
+| 7 | [Phẫu thuật Quy trình](#workflow-7-phẫu-thuật-quy-trình) | Vận hành | R2 |
+| 8 | [Tối ưu Lịch họp](#workflow-8-tối-ưu-lịch-họp) | Tất cả | R2 |
+| 9 | [Phân tích Tài chính](#workflow-9-phân-tích-tài-chính) | Finance | R2 |
+| 10 | [Tình báo Cạnh tranh](#workflow-10-tình-báo-cạnh-tranh) | Strategy | R3 |
 
 ---
 
 ## Vận hành Doanh thu
 
-### Workflow 1: Quản lý Pipeline {#workflow-1}
+### Workflow 1: Quản lý Pipeline
 
 **Rủi ro:** R2 | **Kết nối:** CRM (HubSpot/Salesforce)
 
@@ -66,7 +66,7 @@ XÁC MINH (bắt buộc):
 
 ---
 
-### Workflow 2: Tìm kiếm Prospect {#workflow-2}
+### Workflow 2: Tìm kiếm Prospect
 
 **Rủi ro:** R2 | **Kết nối:** Tìm kiếm Web
 
@@ -91,7 +91,7 @@ GOVERNANCE:
 
 ---
 
-### Workflow 3: Giám sát Chi phí QC {#workflow-3}
+### Workflow 3: Giám sát Chi phí QC
 
 **Rủi ro:** R2 | **Kết nối:** Upload CSV
 
@@ -113,7 +113,7 @@ KIỂM TRA DỮ LIỆU:
 
 ---
 
-### Workflow 4: Phân phối Nội dung {#workflow-4}
+### Workflow 4: Phân phối Nội dung
 
 **Rủi ro:** R1 (chỉ đọc + chuyển đổi — không hành động bên ngoài)
 
@@ -138,7 +138,7 @@ KIỂM TRA CHẤT LƯỢNG:
 
 ## Sản phẩm & Vận hành
 
-### Workflow 5: Tiếng nói Khách hàng {#workflow-5}
+### Workflow 5: Tiếng nói Khách hàng
 
 **Rủi ro:** R2 | **Kết nối:** Intercom/Zendesk
 
@@ -164,7 +164,7 @@ GOVERNANCE:
 
 ---
 
-### Workflow 6: Báo cáo Sản phẩm Hàng tuần {#workflow-6}
+### Workflow 6: Báo cáo Sản phẩm Hàng tuần
 
 **Rủi ro:** R2 | **Kết nối:** Jira + Notion
 
@@ -188,7 +188,7 @@ XÁC MINH:
 
 ---
 
-### Workflow 7: Phẫu thuật Quy trình {#workflow-7}
+### Workflow 7: Phẫu thuật Quy trình
 
 **Rủi ro:** R2 | **Kết nối:** Upload File (ngữ cảnh lớn)
 
@@ -216,7 +216,7 @@ OUTPUT:
 
 ---
 
-### Workflow 8: Tối ưu Lịch họp {#workflow-8}
+### Workflow 8: Tối ưu Lịch họp
 
 **Rủi ro:** R2 | **Kết nối:** Google Calendar
 
@@ -239,7 +239,7 @@ Chương trình họp đề xuất: [chương trình của bạn]
 
 ## Tài chính & Chiến lược
 
-### Workflow 9: Phân tích Tài chính {#workflow-9}
+### Workflow 9: Phân tích Tài chính
 
 **Rủi ro:** R2 | **Kết nối:** Dữ liệu Tài chính / Upload File
 
@@ -266,7 +266,7 @@ GOVERNANCE BẮT BUỘC:
 
 ---
 
-### Workflow 10: Tình báo Cạnh tranh {#workflow-10}
+### Workflow 10: Tình báo Cạnh tranh
 
 **Rủi ro:** R3 (đa agent — bắt buộc review thủ công)
 
@@ -310,6 +310,7 @@ Dùng checklist này **trước khi hành động theo bất kỳ output AI nào
 
 ## Tiếp theo là gì?
 
-- Xem đặc tả governance đầy đủ: [AGT-034 Operator Workflow Orchestrator](../../../governance/skill-library/registry/agent-skills/AGT-034_OPERATOR_WORKFLOW_ORCHESTRATOR.gov.md)
-- Duyệt tất cả 34 kỹ năng: [Danh mục Kỹ năng Agent](agent-skills-catalog)
+- [Mở thư viện kỹ năng dành cho agent](/skills)
 - Tìm hiểu mô hình rủi ro CVF: [Mô hình Rủi ro](risk-model)
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

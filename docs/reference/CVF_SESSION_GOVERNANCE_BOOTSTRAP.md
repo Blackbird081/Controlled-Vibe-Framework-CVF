@@ -276,7 +276,7 @@ Primary references:
 Use when:
 
 - screening or re-screening front-door templates or mapped skills
-- importing skills from external repos for future CVF use
+- importing skills from external repos for the non-coder front door or trusted benchmarks
 - deciding whether a skill/template is trustworthy enough for non-coder benchmark truth and may enter the `TRUSTED_FOR_VALUE_PROOF` class
 
 Primary references:

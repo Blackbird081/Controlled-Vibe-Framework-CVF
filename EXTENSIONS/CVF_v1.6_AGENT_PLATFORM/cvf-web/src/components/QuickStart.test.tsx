@@ -29,7 +29,7 @@ describe('QuickStart', () => {
 
         expect(onComplete).toHaveBeenCalledWith(
             expect.objectContaining({
-                provider: 'gemini',
+                provider: 'openai',
                 userInput: 'Tôi muốn tạo app quản lý công việc cho nhóm',
                 detectedIntent: expect.objectContaining({
                     phase: 'BUILD',

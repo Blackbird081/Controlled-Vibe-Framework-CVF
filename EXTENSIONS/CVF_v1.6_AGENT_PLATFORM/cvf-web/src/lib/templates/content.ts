@@ -45,13 +45,12 @@ NHỮNG GÌ PHẢI GIỮ NGUYÊN:
 
 SUCCESS CRITERIA:
 - Analyze the subject and organize content so non-experts can follow each step
-- Chỉ ra bước làm, required artifacts/fields, rule cần nhớ, QA checks, và lỗi hay gặp
-- Có decision branches và escalation rules khi tình huống rẽ nhánh
-- Kết thúc bằng handoff acceptance checklist rõ ràng
-- Giữ phần overview/assumptions ngắn; ưu tiên procedure, QA và recovery có thể làm ngay
+- Explicit user constraints on response language, word limit and number of steps take priority over template defaults. A word limit counts every word including headings; under a word limit use only What This Document Is For, Step-By-Step Procedure and Final Handoff Acceptance Checklist.
+- Include steps and a handoff checklist; include inputs, QA, branches and recovery only as relevant and supported by the notes.
+- Never assert an unspecified company policy, deadline, approval, signature or escalation rule as fact. Mark missing policy as Unknown or a proposal requiring confirmation.
 - Không yêu cầu người đọc hiểu API hoặc developer internals
 
-OUTPUT FORMAT (use these exact section headings in English):
+OUTPUT FORMAT (use these exact section headings in English; under a word limit keep only the first, third and last):
 ## What This Document Is For
 ## Required Inputs, Artifacts, And Fields
 ## Step-By-Step Procedure
@@ -63,80 +62,55 @@ OUTPUT FORMAT (use these exact section headings in English):
         difficulty: 'easy',
         outputTemplate: `# SOP And Handoff Runbook
 
+Use the seven headings below. Under an explicit user word limit keep only sections 1, 3 and 7; the limit counts headings; use brief entries and mark unsupported policies Unknown or as proposals requiring confirmation.
+
 ## 1. What This Document Is For
-- Topic, in one sentence
-- Who should use it
-- What they should achieve
-- Done state
-- Key assumptions, max 3 bullets
+- Purpose and reader outcome
 
 ## 2. Required Inputs, Artifacts, And Fields
-| Required Item | Source/Owner | Where It Lives | Needed Before Step | Acceptance Check |
-| --- | --- | --- | --- | --- |
+- Supported inputs, or Unknown
 
 ## 3. Step-By-Step Procedure
-| Step | Owner/Role | Trigger | Action | Required Artifact Or Field | Done Signal | Acceptance Check |
-| --- | --- | --- | --- | --- | --- | --- |
+- Follow the requested number of steps
 
 ## 4. Decision Branches
-| Situation | Decision Rule | Next Action | Owner/Role | Escalate When |
-| --- | --- | --- | --- | --- |
+- Supported branches, or Unknown
 
 ## 5. QA Checks
-- Pre-handoff QA:
-- Data/content QA:
-- User-facing QA:
-- Audit/evidence to retain:
+- Relevant checks supported by the notes
 
 ## 6. Common Failure Modes And Recovery
-| Situation | How To Notice It | What To Do | When To Escalate |
-| --- | --- | --- | --- |
+- Supported recovery, or Unknown
 
 ## 7. Final Handoff Acceptance Checklist
-- [ ] Required artifacts or fields are complete
-- [ ] Procedure steps have visible done signals
-- [ ] QA checks have pass/fail evidence
-- [ ] Escalation rule is clear
-- [ ] Open assumptions are marked for confirmation`,
+- [ ] Relevant handoff items complete
+- [ ] Unknowns or proposals needing confirmation identified`,
         sampleOutput: `# SOP And Handoff Runbook
 
 ## 1. What This Document Is For
-- This guide explains how the team receives a new inbound lead and turns it into a same-day quotation.
-- It is written for new sales operators.
-- Done state: the lead is qualified, quoted, or escalated with notes.
-- Key assumptions: lead form and CRM access are available; the approved quote template exists.
+- Hand over work between shifts.
 
 ## 2. Required Inputs, Artifacts, And Fields
-| Required Item | Source/Owner | Where It Lives | Needed Before Step | Acceptance Check |
-| --- | --- | --- | --- | --- |
-| Lead form | Website form | CRM lead record | Step 1 | Required fields are present |
-| Quote template | Sales lead | Shared drive | Step 4 | Approved version is used |
+- Current work and progress notes.
 
 ## 3. Step-By-Step Procedure
-| Step | Owner/Role | Trigger | Action | Required Artifact Or Field | Done Signal | Acceptance Check |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | Sales operator | New form arrives | Check whether the submission is complete | Lead form | Lead status updated | Missing fields are marked |
-| 2 | Sales operator | Lead is complete | Call the lead within 2 hours | Phone/email | Call note stored | Project type, budget, timeline captured |
+1. Receive the work.
+2. Check progress.
+3. Hand it over to the next shift.
 
 ## 4. Decision Branches
-| Situation | Decision Rule | Next Action | Owner/Role | Escalate When |
-| --- | --- | --- | --- | --- |
-| Missing budget | Budget not stated | Ask for range before quote | Sales operator | Lead refuses or asks for procurement terms |
+- Unknown; confirm any required decision rules.
 
 ## 5. QA Checks
-- Lead status, notes, and next action are visible in CRM.
-- Quote uses approved package wording.
+- Check that progress is clear.
 
 ## 6. Common Failure Modes And Recovery
-| Situation | How To Notice It | What To Do | When To Escalate |
-| --- | --- | --- | --- |
-| Lead asks for pricing too early | Qualification fields are blank | Explain quick intake first | Legal/procurement terms appear |
+- Recovery policy: Unknown; confirm with the team.
 
 ## 7. Final Handoff Acceptance Checklist
-- [ ] Lead status updated
-- [ ] Qualification notes stored
-- [ ] Quote sent or escalation recorded
-- [ ] Open assumptions are marked`,
+- [ ] Work received and progress checked
+- [ ] Next shift informed
+- [ ] Unknown policies identified for confirmation`,
     },
     {
         id: 'faq_outline',

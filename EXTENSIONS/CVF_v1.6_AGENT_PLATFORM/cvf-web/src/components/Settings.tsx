@@ -1,52 +1,20 @@
+// Text Encoding Exception: Vietnamese product copy needs its native characters.
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { type OpenClawMode } from '@/lib/openclaw-config';
-import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
+import { AVAILABLE_MODELS as PROVIDER_MODEL_CATALOG, type ProviderKey } from '@/lib/agent-model-catalog';
+import { useProviders } from '@/lib/hooks/useExecute';
 import { IntegrationsTab } from './IntegrationsTab';
+import { JevHomeSettings } from './home/JevHomeSettings';
+import { GOVERNED_ROUTE_DEFAULT_MODEL, GOVERNED_ROUTE_DEFAULT_PROVIDER, GOVERNED_ROUTE_OPENAI_MODELS, GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 
-// Types
-export type ProviderKey = 'gemini' | 'openai' | 'anthropic' | 'alibaba' | 'openrouter' | 'deepseek';
+export type { ProviderKey } from '@/lib/agent-model-catalog';
 
-// Available models for each provider
-export const AVAILABLE_MODELS: Record<ProviderKey, { id: string; name: string; recommended?: boolean }[]> = {
-    gemini: [
-        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', recommended: true },
-        { id: 'gemini-3-flash', name: 'Gemini 3 Flash' },
-        { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash Lite' },
-        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro' },
-        { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash' },
-    ],
-    openai: [
-        { id: 'gpt-4o', name: 'GPT-4o', recommended: true },
-        { id: 'gpt-4o-mini', name: 'GPT-4o Mini' },
-        { id: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
-        { id: 'o1', name: 'o1 (Reasoning)' },
-    ],
-    anthropic: [
-        { id: 'claude-sonnet-4-20250514', name: 'Claude Sonnet 4', recommended: true },
-        { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet' },
-        { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku' },
-    ],
-    alibaba: [
-        { id: 'qwen-flash', name: 'Qwen Flash', recommended: true },
-        { id: 'qwen3.5-122b-a10b', name: 'Qwen 3.5 122B A10B' },
-        { id: 'qwen-plus', name: 'Qwen Plus' },
-        { id: 'qwen-max', name: 'Qwen Max' },
-        { id: 'qvq-max', name: 'QVQ Max (Streaming Only)' },
-        { id: 'qvq-max-2025-03-25', name: 'QVQ Max 2025-03-25 (Endpoint Check Needed)' },
-    ],
-    openrouter: [
-        { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', recommended: true },
-        { id: 'mistralai/mistral-small-3.2-24b-instruct', name: 'Mistral Small 3.2' },
-        { id: 'google/gemini-2.5-flash-preview', name: 'Gemini 2.5 Flash (OR)' },
-        { id: 'deepseek/deepseek-chat-v3-0324', name: 'DeepSeek V3' },
-    ],
-    deepseek: [
-        { id: 'deepseek-chat', name: 'DeepSeek Chat', recommended: true },
-        { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner' },
-    ],
+export const AVAILABLE_MODELS = {
+    ...PROVIDER_MODEL_CATALOG,
+    openai: PROVIDER_MODEL_CATALOG.openai.filter(model => GOVERNED_ROUTE_OPENAI_MODELS.includes(model.id)),
 };
 
 export interface AIProviderSettings {
@@ -81,20 +49,23 @@ export interface SettingsData {
     preferences: UserPreferences;
 }
 
+export { GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider };
+
 const STORAGE_KEY = 'cvf_settings';
+const SETTINGS_SAVED = 'cvf:settings-saved';
 const MIGRATION_KEY = 'cvf_settings_migrated_governance';
 
 const defaultSettings: SettingsData = {
     providers: {
-        gemini: { apiKey: '', enabled: true, selectedModel: 'gemini-2.5-flash' },
-        openai: { apiKey: '', enabled: false, selectedModel: 'gpt-4o' },
-        anthropic: { apiKey: '', enabled: false, selectedModel: 'claude-sonnet-4-20250514' },
-        alibaba: { apiKey: '', enabled: false, selectedModel: 'qwen-flash' },
-        openrouter: { apiKey: '', enabled: false, selectedModel: 'meta-llama/llama-4-maverick' },
-        deepseek: { apiKey: '', enabled: false, selectedModel: 'deepseek-chat' },
+        gemini: { apiKey: '', enabled: false, selectedModel: AVAILABLE_MODELS.gemini[0].id },
+        openai: { apiKey: '', enabled: true, selectedModel: GOVERNED_ROUTE_DEFAULT_MODEL },
+        anthropic: { apiKey: '', enabled: false, selectedModel: AVAILABLE_MODELS.anthropic[0].id },
+        alibaba: { apiKey: '', enabled: false, selectedModel: AVAILABLE_MODELS.alibaba[0].id },
+        openrouter: { apiKey: '', enabled: false, selectedModel: AVAILABLE_MODELS.openrouter[0].id },
+        deepseek: { apiKey: '', enabled: false, selectedModel: AVAILABLE_MODELS.deepseek[0].id },
     },
     preferences: {
-        defaultProvider: 'gemini',
+        defaultProvider: 'openai',
         defaultExportMode: 'governance',
         defaultLanguage: 'vi',
         autoSaveHistory: true,
@@ -104,13 +75,55 @@ const defaultSettings: SettingsData = {
         openClawMode: 'disabled' as OpenClawMode,
         multiAgentMode: 'single',
         agentProviders: {
-            orchestrator: 'gemini',
-            architect: 'gemini',
-            builder: 'gemini',
-            reviewer: 'gemini',
+            orchestrator: 'openai',
+            architect: 'openai',
+            builder: 'openai',
+            reviewer: 'openai',
         },
     },
 };
+
+/**
+ * Idempotent migration of saved settings to the governed route: a saved default/role provider the route cannot run
+ * (gemini, openrouter, deepseek) is remapped to OpenAI, and a saved model that is no longer offered (for
+ * example o1) falls back to the provider default. Anthropic is left alone (it is valid on the native subscription lane).
+ */
+export function migrateSettingsForGovernedRoute(input: SettingsData): { settings: SettingsData; changed: boolean } {
+    let changed = false;
+    const remap = (provider: ProviderKey): ProviderKey => {
+        if (isGovernedRouteProvider(provider, true)) return provider;
+        changed = true;
+        return GOVERNED_ROUTE_DEFAULT_PROVIDER;
+    };
+    // Tolerate partial imports: missing sections fall back to the defaults before the checks run.
+    const base = { ...defaultSettings.preferences, ...input.preferences };
+    const roles = { ...defaultSettings.preferences.agentProviders, ...base.agentProviders };
+    const preferences = {
+        ...base,
+        defaultProvider: remap(base.defaultProvider),
+        agentProviders: {
+            orchestrator: remap(roles.orchestrator),
+            architect: remap(roles.architect),
+            builder: remap(roles.builder),
+            reviewer: remap(roles.reviewer),
+        },
+    };
+    const providers = { ...defaultSettings.providers, ...input.providers };
+    for (const provider of Object.keys(AVAILABLE_MODELS) as ProviderKey[]) {
+        if (AVAILABLE_MODELS[provider].some(model => model.id === providers[provider]?.selectedModel)) continue;
+        changed = true;
+        providers[provider] = { ...defaultSettings.providers[provider], ...providers[provider], selectedModel: defaultSettings.providers[provider].selectedModel };
+    }
+    return { settings: changed ? { ...input, providers, preferences } : input, changed };
+}
+
+/** In-memory injection of the build-time Gemini key into settings that hold none (shared by load and updates). */
+function applyEnvGeminiKey(settings: SettingsData): void {
+    const envGeminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
+    if (envGeminiKey && !settings.providers.gemini.apiKey) {
+        settings.providers.gemini = { ...settings.providers.gemini, apiKey: envGeminiKey };
+    }
+}
 
 function loadInitialSettings(): SettingsData {
     if (typeof window === 'undefined') {
@@ -140,10 +153,7 @@ function loadInitialSettings(): SettingsData {
             preferences: { ...defaultSettings.preferences, ...parsed.preferences },
         };
 
-        const envGeminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
-        if (envGeminiKey && !merged.providers.gemini.apiKey) {
-            merged.providers.gemini = { ...merged.providers.gemini, apiKey: envGeminiKey };
-        }
+        applyEnvGeminiKey(merged);
 
         const migrated = localStorage.getItem(MIGRATION_KEY) === '1';
         if (!migrated) {
@@ -151,14 +161,40 @@ function loadInitialSettings(): SettingsData {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
             localStorage.setItem(MIGRATION_KEY, '1');
         }
-        return merged;
+        const governed = migrateSettingsForGovernedRoute(merged);
+        if (governed.changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(governed.settings));
+        return governed.settings;
     } catch {
         return defaultSettings;
     }
 }
 
+/**
+ * Latest persisted settings merged over the defaults, or undefined when nothing valid is stored. Every `useSettings()` caller
+ * holds its own state, and an update writes the whole object: basing it on a stale or pre-load in-memory copy would persist the
+ * defaults (for example the default provider reverting to OpenAI), so updates build on what is stored.
+ */
+function readPersistedSettings(): SettingsData | undefined {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return undefined;
+        const parsed = JSON.parse(saved);
+        if (!parsed || typeof parsed !== 'object') return undefined;
+        const merged: SettingsData = {
+            ...defaultSettings,
+            ...parsed,
+            providers: { ...defaultSettings.providers, ...parsed.providers },
+            preferences: { ...defaultSettings.preferences, ...parsed.preferences },
+        };
+        applyEnvGeminiKey(merged);
+        return merged;
+    } catch {
+        return undefined;
+    }
+}
+
 // Hook for settings
-export function useSettings() {
+export function useSettings(syncSavedSettings = false) {
     const [settings, setSettings] = useState<SettingsData>(defaultSettings);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -172,10 +208,21 @@ export function useSettings() {
         });
     }, []);
 
+    useEffect(() => {
+        if (!syncSavedSettings) return;
+        const sync = () => {
+            const persisted = readPersistedSettings();
+            if (persisted) setSettings(persisted);
+        };
+        window.addEventListener(SETTINGS_SAVED, sync);
+        return () => window.removeEventListener(SETTINGS_SAVED, sync);
+    }, [syncSavedSettings]);
+
     const saveSettings = useCallback((newSettings: SettingsData) => {
         setSettings(newSettings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
         localStorage.setItem(MIGRATION_KEY, '1');
+        window.dispatchEvent(new Event(SETTINGS_SAVED));
     }, []);
 
     const updateProvider = useCallback((
@@ -183,11 +230,12 @@ export function useSettings() {
         updates: Partial<AIProviderSettings[keyof AIProviderSettings]>
     ) => {
         setSettings(prev => {
+            const base = readPersistedSettings() ?? prev;
             const newSettings = {
-                ...prev,
+                ...base,
                 providers: {
-                    ...prev.providers,
-                    [provider]: { ...prev.providers[provider], ...updates },
+                    ...base.providers,
+                    [provider]: { ...base.providers[provider], ...updates },
                 },
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
@@ -200,9 +248,10 @@ export function useSettings() {
         updates: Partial<UserPreferences>
     ) => {
         setSettings(prev => {
+            const base = readPersistedSettings() ?? prev;
             const newSettings = {
-                ...prev,
-                preferences: { ...prev.preferences, ...updates },
+                ...base,
+                preferences: { ...base.preferences, ...updates },
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
             localStorage.setItem(MIGRATION_KEY, '1');
@@ -230,7 +279,7 @@ export function useSettings() {
         reader.onload = (e) => {
             try {
                 const imported = JSON.parse(e.target?.result as string);
-                saveSettings({ ...defaultSettings, ...imported });
+                saveSettings(migrateSettingsForGovernedRoute({ ...defaultSettings, ...imported }).settings);
             } catch {
                 console.error('Failed to import settings');
             }
@@ -241,6 +290,7 @@ export function useSettings() {
     return {
         settings,
         isLoaded,
+        saveSettings,
         updateProvider,
         updatePreferences,
         resetSettings,
@@ -256,24 +306,43 @@ interface SettingsPageProps {
 
 export function SettingsPage({ onClose }: SettingsPageProps) {
     const { language } = useLanguage();
-    const {
-        settings,
-        isLoaded,
-        updateProvider,
-        updatePreferences,
-        resetSettings,
-        exportSettings,
-        importSettings,
-    } = useSettings();
+    const { settings: persisted, isLoaded, saveSettings, resetSettings, exportSettings, importSettings } = useSettings();
+    // Provider and preference edits stay a local draft until "Save settings" (operator request 2026-11-16: with silent autosave and
+    // no Save button users could not tell whether a change had taken effect). Data-tab actions still apply immediately.
+    const [draft, setDraft] = useState<SettingsData | null>(null);
+    const [savedAt, setSavedAt] = useState<string | null>(null);
+    const settings = draft ?? persisted;
+    const dirty = draft !== null && JSON.stringify(draft) !== JSON.stringify(persisted);
+    const updateProvider = (provider: keyof AIProviderSettings, updates: Partial<AIProviderSettings[keyof AIProviderSettings]>) => {
+        setDraft(prev => { const base = prev ?? persisted; return { ...base, providers: { ...base.providers, [provider]: { ...base.providers[provider], ...updates } } }; });
+        setSavedAt(null);
+    };
+    const updatePreferences = (updates: Partial<UserPreferences>) => {
+        setDraft(prev => { const base = prev ?? persisted; return { ...base, preferences: { ...base.preferences, ...updates } }; });
+        setSavedAt(null);
+    };
+    const saveDraft = () => {
+        if (!draft) return;
+        saveSettings(draft);
+        setDraft(null);
+        setSavedAt(new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }));
+    };
+    useEffect(() => {
+        if (!dirty) return;
+        const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };
+        window.addEventListener('beforeunload', warn);
+        return () => window.removeEventListener('beforeunload', warn);
+    }, [dirty]);
+
+    const { providers: serverProviders, fetchProviders } = useProviders();
+    useEffect(() => { void fetchProviders(); }, [fetchProviders]);
+    const nativeClaude = serverProviders.find(p => p.provider === 'claude' && p.executionSurface === 'claude_cli_subscription');
 
     const [activeTab, setActiveTab] = useState<'providers' | 'preferences' | 'data' | 'integrations'>('providers');
     const [showApiKey, setShowApiKey] = useState<Record<string, boolean>>({});
-    const [saved, setSaved] = useState(false);
 
     const handleApiKeyChange = (provider: keyof AIProviderSettings, value: string) => {
         updateProvider(provider, { apiKey: value });
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
     };
 
     const toggleProvider = (provider: keyof AIProviderSettings) => {
@@ -284,6 +353,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
         const file = e.target.files?.[0];
         if (file) {
             importSettings(file);
+            setDraft(null);
         }
     };
 
@@ -302,6 +372,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             enabled: 'Bật',
             disabled: 'Tắt',
             defaultProvider: 'Provider mặc định',
+            defaultProviderNote: 'Nhấn "Lưu cài đặt" để áp dụng thay đổi. Provider mặc định chọn ở đây được dùng cho các lần chạy từ trình duyệt này và thay thế mặc định của máy chủ.',
             defaultMode: 'Chế độ export mặc định',
             defaultLang: 'Ngôn ngữ mặc định',
             autoSave: 'Tự động lưu history',
@@ -322,13 +393,19 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             export: 'Xuất Settings',
             import: 'Nhập Settings',
             reset: 'Reset tất cả',
-            saved: 'Đã lưu!',
-            geminiDesc: 'Free tier lớn, nên dùng',
-            openaiDesc: 'GPT-4, GPT-4o',
-            anthropicDesc: 'Claude 3.5 Sonnet',
-            alibabaDesc: 'Qwen Flash/Plus/Max (International)',
+            save: 'Lưu cài đặt',
+            discard: 'Hủy thay đổi',
+            unsaved: 'Có thay đổi chưa lưu',
+            savedAt: 'Đã lưu lúc',
+            noChanges: 'Không có thay đổi chưa lưu',
+            confirmDiscard: 'Bạn có thay đổi chưa lưu. Đóng và bỏ các thay đổi này?',
+            geminiDesc: 'Gemini 4 và Gemini Flash-Lite',
+            openaiDesc: 'GPT-6 Luna, GPT-6.1 Terra, GPT-4o mini, GPT-4o',
+            anthropicDesc: 'Claude Sonnet, Haiku, Opus 5.5',
+            alibabaDesc: 'Qwen Plus Character, Qwen Flash Character',
             openrouterDesc: 'Multi-model hub (Llama, Mistral, DeepSeek...)',
-            deepseekDesc: 'DeepSeek Chat/Reasoner trực tiếp',
+            deepseekDesc: 'DeepSeek V4.1 Flash và V4 Pro',
+            agentModels: 'Chọn model cá nhân trong Hỏi trợ lý AI. Quyền dùng model phụ thuộc vào khóa của bạn.',
             warningReset: 'Sẽ xóa tất cả settings và API keys',
             close: 'Đóng',
         },
@@ -344,6 +421,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             enabled: 'Enabled',
             disabled: 'Disabled',
             defaultProvider: 'Default Provider',
+            defaultProviderNote: 'Press "Save settings" to apply changes. The default provider chosen here is used for runs from this browser and overrides the server default.',
             defaultMode: 'Default Export Mode',
             defaultLang: 'Default Language',
             autoSave: 'Auto-save history',
@@ -364,13 +442,19 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
             export: 'Export Settings',
             import: 'Import Settings',
             reset: 'Reset All',
-            saved: 'Saved!',
-            geminiDesc: 'Large free tier, recommended',
-            openaiDesc: 'GPT-4, GPT-4o',
-            anthropicDesc: 'Claude 3.5 Sonnet',
-            alibabaDesc: 'Qwen Flash/Plus/Max (International)',
+            save: 'Save settings',
+            discard: 'Discard changes',
+            unsaved: 'Unsaved changes',
+            savedAt: 'Saved at',
+            noChanges: 'No unsaved changes',
+            confirmDiscard: 'You have unsaved changes. Close and discard them?',
+            geminiDesc: 'Gemini 4 and Gemini Flash-Lite',
+            openaiDesc: 'GPT-6 Luna, GPT-6.1 Terra, GPT-4o mini, GPT-4o',
+            anthropicDesc: 'Claude Sonnet, Haiku, Opus 5.5',
+            alibabaDesc: 'Qwen Plus Character, Qwen Flash Character',
             openrouterDesc: 'Multi-model hub (Llama, Mistral, DeepSeek...)',
-            deepseekDesc: 'Direct DeepSeek Chat/Reasoner',
+            deepseekDesc: 'DeepSeek V4.1 Flash and V4 Pro',
+            agentModels: 'Choose a personal model in AI Agent. Access depends on your API key.',
             warningReset: 'This will delete all settings and API keys',
             close: 'Close',
         },
@@ -387,6 +471,20 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
         { id: 'deepseek' as const, name: 'DeepSeek', icon: '🦋', desc: l.deepseekDesc, color: 'cyan' },
     ];
 
+    const optionNames: Record<ProviderKey, string> = {
+        gemini: '✨ Google Gemini', openai: '🤖 OpenAI', anthropic: '🧠 Anthropic',
+        alibaba: '🌏 Alibaba DashScope', openrouter: '🔀 OpenRouter', deepseek: '🦋 DeepSeek',
+    };
+    // Unsupported providers stay visible (a saved choice must not crash the page) but cannot be newly selected.
+    const providerOptions = (Object.keys(optionNames) as ProviderKey[]).map((key) => {
+        const supported = isGovernedRouteProvider(key, Boolean(nativeClaude));
+        return (
+            <option key={key} value={key} disabled={!supported}>
+                {supported ? optionNames[key] : `${optionNames[key]} — ${GOVERNED_ROUTE_UNSUPPORTED_NOTE}`}
+            </option>
+        );
+    });
+
     return (
         <div className="bg-white dark:bg-[#1a1d2e] rounded-xl border border-gray-200 dark:border-white/[0.07] max-w-2xl mx-auto">
             {/* Header */}
@@ -395,12 +493,9 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     {l.title}
                 </h2>
                 <div className="flex items-center gap-2">
-                    {saved && (
-                        <span className="text-sm text-green-600 dark:text-green-400">✓ {l.saved}</span>
-                    )}
                     {onClose && (
                         <button
-                            onClick={onClose}
+                            onClick={() => { if (!dirty || confirm(l.confirmDiscard)) onClose(); }}
                             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.07]"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -433,6 +528,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                 {/* Providers Tab */}
                 {activeTab === 'providers' && (
                     <div className="space-y-4">
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{l.agentModels}</p>
                         {providers.map((provider) => (
                             <div
                                 key={provider.id}
@@ -450,20 +546,9 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                                 {provider.name}
                                             </span>
                                             <p className="text-xs text-gray-500">{provider.desc}</p>
-                                            {(() => {
-                                                const evidence = PROVIDER_LANE_EVIDENCE[provider.id];
-                                                if (!evidence) return null;
-                                                const style = LANE_BADGE_STYLE[evidence.status];
-                                                return (
-                                                    <span
-                                                        className={`inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${style.bg} ${style.text}`}
-                                                        title={`${evidence.note} (${evidence.passWindow}) — User-paid provider lane`}
-                                                    >
-                                                        {evidence.label}
-                                                        <span className="opacity-60">{evidence.passWindow}</span>
-                                                    </span>
-                                                );
-                                            })()}
+                                            {!isGovernedRouteProvider(provider.id, Boolean(nativeClaude)) && (
+                                                <p className="text-xs text-amber-700 dark:text-amber-300">{GOVERNED_ROUTE_UNSUPPORTED_NOTE}</p>
+                                            )}
                                         </div>
                                     </div>
                                     <button
@@ -480,7 +565,13 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
 
                                 {settings.providers[provider.id].enabled && (
                                     <>
-                                        <div className="flex gap-2">
+                                        {provider.id === 'anthropic' && nativeClaude ? (
+                                            <div role="status" className="text-sm text-gray-600 dark:text-gray-300">
+                                                <p>Claude subscription: {nativeClaude.nativeAuthState ?? 'unknown'}</p>
+                                                <p>{language === 'vi' ? 'Bí danh native: sonnet. Lựa chọn API đã lưu không hoạt động trong chế độ này.' : 'Native alias: sonnet. The saved API model is inactive in this mode.'}</p>
+                                                <p>{nativeClaude.checkedAt}</p>
+                                            </div>
+                                        ) : <><div className="flex gap-2">
                                             <input
                                                 type={showApiKey[provider.id] ? 'text' : 'password'}
                                                 value={settings.providers[provider.id].apiKey}
@@ -512,11 +603,12 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
 
                                         {/* Model Selector */}
                                         <div className="mt-3">
-                                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                            <label htmlFor={`settings-model-${provider.id}`} className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                                                 {language === 'vi' ? 'Model' : 'Model'}
                                             </label>
                                             <select
-                                                value={settings.providers[provider.id].selectedModel || AVAILABLE_MODELS[provider.id][0].id}
+                                                id={`settings-model-${provider.id}`}
+                                                value={settings.providers[provider.id].selectedModel || defaultSettings.providers[provider.id].selectedModel}
                                                 onChange={(e) => updateProvider(provider.id, { selectedModel: e.target.value })}
                                                 className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 
                                                            dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] 
@@ -524,11 +616,11 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                             >
                                                 {AVAILABLE_MODELS[provider.id].map((model) => (
                                                     <option key={model.id} value={model.id}>
-                                                        {model.name} {model.recommended ? '⭐' : ''}
+                                                        {model.name}
                                                     </option>
                                                 ))}
                                             </select>
-                                        </div>
+                                        </div></>}
                                     </>
                                 )}
                             </div>
@@ -539,6 +631,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                 {/* Preferences Tab */}
                 {activeTab === 'preferences' && (
                     <div className="space-y-6">
+                        <JevHomeSettings language={language} />
                         {/* OpenClaw Adapter */}
                         <div className={`p-4 rounded-xl border-2 transition-all ${settings.preferences.openClawEnabled
                             ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
@@ -631,12 +724,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                             className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                                         >
-                                            <option value="gemini">✨ Google Gemini</option>
-                                            <option value="openai">🤖 OpenAI</option>
-                                            <option value="anthropic">🧠 Anthropic</option>
-                                            <option value="alibaba">🌏 Alibaba DashScope</option>
-                                            <option value="openrouter">🔀 OpenRouter</option>
-                                            <option value="deepseek">🦋 DeepSeek</option>
+                                            {providerOptions}
                                         </select>
                                     </div>
                                 ))}
@@ -654,13 +742,16 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
-                                <option value="gemini">✨ Google Gemini</option>
-                                <option value="openai">🤖 OpenAI</option>
-                                <option value="anthropic">🧠 Anthropic</option>
-                                <option value="alibaba">🌏 Alibaba DashScope</option>
-                                <option value="openrouter">🔀 OpenRouter</option>
-                                <option value="deepseek">🦋 DeepSeek</option>
+                                {providerOptions}
                             </select>
+                            <p data-testid="default-provider-note" className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                {l.defaultProviderNote}
+                            </p>
+                            {!isGovernedRouteProvider(settings.preferences.defaultProvider, Boolean(nativeClaude)) && (
+                                <p role="alert" className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                                    {GOVERNED_ROUTE_UNSUPPORTED_NOTE}
+                                </p>
+                            )}
                         </div>
 
                         {/* Default Export Mode */}
@@ -768,6 +859,7 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                                 onClick={() => {
                                     if (confirm(l.warningReset)) {
                                         resetSettings();
+                                        setDraft(null);
                                     }
                                 }}
                                 className="w-full py-3 px-4 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 
@@ -785,6 +877,22 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     <IntegrationsTab />
                 )}
             </div>
+
+            {(activeTab === 'providers' || activeTab === 'preferences') && (
+                <div className="sticky bottom-0 flex flex-wrap items-center justify-end gap-3 p-4 border-t border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] rounded-b-xl">
+                    <span role="status" data-testid="settings-save-status" className={`mr-auto text-sm ${dirty ? 'text-amber-700 dark:text-amber-300 font-medium' : savedAt ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}`}>
+                        {dirty ? `● ${l.unsaved}` : savedAt ? `✓ ${l.savedAt} ${savedAt}` : l.noChanges}
+                    </span>
+                    <button type="button" onClick={() => setDraft(null)} disabled={!dirty}
+                        className="min-h-11 px-4 rounded-lg border border-gray-300 dark:border-white/[0.15] text-gray-700 dark:text-gray-300 font-medium disabled:opacity-40">
+                        {l.discard}
+                    </button>
+                    <button type="button" onClick={saveDraft} disabled={!dirty}
+                        className="min-h-11 px-5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium disabled:opacity-40">
+                        {l.save}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

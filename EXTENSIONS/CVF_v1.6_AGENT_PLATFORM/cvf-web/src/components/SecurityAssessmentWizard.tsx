@@ -262,7 +262,6 @@ function buildSecurityAssessmentGovernedPacket(data: WizardData) {
             `Validate the threat model and remediation priorities for "${systemName}" with the security owner`,
             'Open a separate implementation batch for remediation work outside this assessment packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:security-${slug}`,
         inputs: {
             systemName: data.systemName || '',
             systemType: data.systemType || '',
@@ -480,9 +479,7 @@ export function SecurityAssessmentWizard({ onBack }: SecurityAssessmentWizardPro
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}

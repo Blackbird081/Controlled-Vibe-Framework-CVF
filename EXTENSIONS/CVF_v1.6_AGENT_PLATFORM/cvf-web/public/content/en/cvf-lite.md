@@ -14,7 +14,7 @@
 | 👤 **Solo developer?** | Solo Guide (coming soon) |
 | 👥 **Team lead?** | Team Setup (coming soon) |
 | 🏢 **Enterprise?** | Enterprise Guide (coming soon) |
-| 📚 **124 Skills** | Skill Library |
+| 📚 [**Agent skill library**](/skills) | Browse packages and their usage limits |
 | 🚀 **Web UI** | v1.6 Agent Platform |
 
 ---
@@ -57,7 +57,7 @@ docs/
 │   └── custom-skills.md
 ├── concepts/               ← Deep dives
 │   ├── core-philosophy.md
-│   ├── 4-phase-process.md
+│   ├── lifecycle.md
 │   ├── governance-model.md
 │   └── ...
 └── cheatsheets/            ← Quick reference
@@ -138,4 +138,6 @@ A: Yes. Copy a skill file → edit the content → done. See v1.1/templates/ for
 A: No. CVF is agent-agnostic. Use it with Copilot, ChatGPT, Claude, Gemini, local LLMs — all work.
 
 **Q: I'm just one person, do I need anything else?**  
-A: You only need: CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ + this guide. Skip governance, templates, architecture.
+A: You only need: CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/ + this guide. Keep controls proportional to risk; use templates and architecture when they help.
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

@@ -12,8 +12,16 @@ from typing import Any, Iterable
 JOURNAL_SCHEMA = "cvf.mfrp.p4c1.pendingJournal.v2"
 FAILURE_DIAGNOSTIC_LIMIT = 12000
 STARVATION_ATTEMPT_THRESHOLD = 5
+# Single source of the structural-failure outcome names (re-used by the gate-failure module).
+DEFERRED_OUTCOME = "DEFERRED_PENDING_SESSION_SYNC"
+DEFERRED_EXPIRED_OUTCOME = "DEFERRED_EXPIRED_NOT_REPLAYABLE"  # terminal: coverage loss, not safety
+RANGE_SHAPE_OUTCOME = "INELIGIBLE_RANGE_SHAPE_MIXED"  # attempt-log only; excluded from the population
 RETRYABLE_OUTCOMES = frozenset(
-    {"UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED", "SKIPPED_NO_COMMITTED_EVIDENCE"}
+    {
+        "UNSAFE_AUTORUN_RECEIPT_GENERATION_FAILED",
+        "SKIPPED_NO_COMMITTED_EVIDENCE",
+        DEFERRED_OUTCOME,
+    }
 )
 
 _WORKER_RETURN = re.compile(
@@ -267,7 +275,13 @@ def recompute_counters(journal: dict[str, Any]) -> dict[str, Any]:
         bool(item.get("retryOfTrustedCommit")) and item.get("outcome") == "COLLECTED"
         for item in attempts
     )
-    journal["retryableCount"] = len(retryable_attempts(journal))
+    retryable = retryable_attempts(journal)
+    journal["retryableCount"] = len(retryable)
+    pending = [str(item.get("trustedCommit")) for item in retryable if item.get("outcome") == DEFERRED_OUTCOME]
+    journal["deferredPendingCount"] = len(pending)
+    journal["deferredPendingTrustedCommits"] = pending
+    journal["deferredExpiredCount"] = sum(item.get("outcome") == DEFERRED_EXPIRED_OUTCOME for item in attempts)
+    journal["ineligibleRangeShapeCount"] = sum(item.get("outcome") == RANGE_SHAPE_OUTCOME for item in attempts)
     journal["collectedCount"] = collected
     journal["populationCount"] = len(rows)
     if collected:
@@ -287,12 +301,18 @@ def recompute_counters(journal: dict[str, Any]) -> dict[str, Any]:
 
 
 def retryable_attempts(journal: dict[str, Any]) -> tuple[dict[str, Any], ...]:
-    """Return prospective missed samples eligible for one bounded retry."""
+    """Return prospective missed samples eligible for their bounded retry (one
+    consuming retry attempt per candidate; deferred candidates are re-evaluated at
+    each session-sync disclosure until collected or expired)."""
     attempts = list(journal.get("attempts", []))
+    # A retry attempt consumes the candidate's one bounded retry, except a retry
+    # that was itself deferred or whose in-flight ``SELECTED_RETRY`` marker was
+    # left as the last outcome by a crash: those leave the candidate retryable.
     retried = {
         str(item.get("retryOfTrustedCommit"))
         for item in attempts
         if item.get("retryOfTrustedCommit")
+        and item.get("outcome") not in (DEFERRED_OUTCOME, "SELECTED_RETRY")
     }
     collected = {
         str(item.get("trustedCommit"))

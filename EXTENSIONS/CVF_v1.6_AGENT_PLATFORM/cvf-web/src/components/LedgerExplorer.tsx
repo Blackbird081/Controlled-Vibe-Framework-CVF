@@ -1,7 +1,13 @@
 'use client';
 
+// Text Encoding Exception: Preserve the existing ledger status symbols.
+
 import { useState, useEffect, useCallback } from 'react';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
+import { getFriendlyPhaseLabel } from '@/lib/non-coder-language';
+import { getRiskOption } from '@/lib/governance-model';
 import { useLanguage } from '@/lib/i18n';
+import { statusLabel } from '@/lib/presentation-labels';
 import type { LedgerBlock } from '@/types/governance-engine';
 import { validateChain, type ChainValidationResult } from '@/lib/ledger-validator';
 
@@ -11,26 +17,12 @@ interface LedgerExplorerProps {
 
 const LABELS = {
     vi: {
-        title: 'Audit Ledger',
-        totalBlocks: 'Tổng blocks',
-        chainValid: 'Chain hợp lệ',
-        chainBroken: 'Chain bị phá vỡ',
-        tamperAt: 'Phát hiện sửa đổi tại block',
         noEntries: 'Chưa có bản ghi nào',
         loading: 'Đang tải...',
         error: 'Lỗi kết nối',
         refresh: 'Làm mới',
-        exportJson: 'Xuất JSON',
-        exportCsv: 'Xuất CSV',
-        hash: 'Hash',
-        prevHash: 'Hash trước',
-        event: 'Sự kiện',
         time: 'Thời gian',
-        block: 'Block',
         copied: 'Đã sao chép!',
-        filterPhase: 'Lọc phase',
-        filterRisk: 'Lọc risk',
-        filterStatus: 'Lọc trạng thái',
         all: 'Tất cả',
         page: 'Trang',
         of: 'trên',
@@ -40,26 +32,12 @@ const LABELS = {
         next: 'Sau →',
     },
     en: {
-        title: 'Audit Ledger',
-        totalBlocks: 'Total blocks',
-        chainValid: 'Chain valid',
-        chainBroken: 'Chain broken',
-        tamperAt: 'Tamper detected at block',
         noEntries: 'No entries yet',
         loading: 'Loading...',
         error: 'Connection error',
         refresh: 'Refresh',
-        exportJson: 'Export JSON',
-        exportCsv: 'Export CSV',
-        hash: 'Hash',
-        prevHash: 'Previous Hash',
-        event: 'Event',
         time: 'Time',
-        block: 'Block',
         copied: 'Copied!',
-        filterPhase: 'Filter phase',
-        filterRisk: 'Filter risk',
-        filterStatus: 'Filter status',
         all: 'All',
         page: 'Page',
         of: 'of',
@@ -73,9 +51,17 @@ const LABELS = {
 const PAGE_SIZE = 10;
 
 export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
-    const { language: contextLanguage } = useLanguage();
+    const { language: contextLanguage, t } = useLanguage();
     const language = langProp || contextLanguage;
     const l = LABELS[language];
+    const riskLabel = (risk: string) => {
+        const level = getRiskOption(risk);
+        return (language === 'vi' ? level?.label : level?.labelEn) ?? t('governancePage.logUnknownValue');
+    };
+    const outcomeLabel = (outcome: string) => {
+        const label = statusLabel(outcome, language);
+        return label === outcome ? t('governancePage.logUnknownValue') : label;
+    };
 
     const [entries, setEntries] = useState<LedgerBlock[]>([]);
     const [totalBlocks, setTotalBlocks] = useState(0);
@@ -102,7 +88,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
         .then(async json => {
             setError(null);
             if (!json.success) {
-                setError(json.error || l.disconnected); setEntries([]);
+                setError(l.disconnected); setEntries([]);
                 return;
             }
             const data = json.data;
@@ -185,7 +171,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
-                        📋 {l.title}
+                        📋 {t('governancePage.ledger')}
                     </h3>
                     {validation && (
                         <span
@@ -195,31 +181,31 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                                     : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                             }`}
                         >
-                            {validation.valid ? `✅ ${l.chainValid}` : `❌ ${l.chainBroken}`}
+                            {validation.valid ? `✅ ${t('governancePage.logValid')}` : `❌ ${t('governancePage.logBroken')}`}
                         </span>
                     )}
                     <span className="text-sm text-gray-500">
-                        {l.totalBlocks}: {totalBlocks}
+                        {t('governancePage.logCount')}: {totalBlocks}
                     </span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     <button
                         onClick={() => { setLoading(true); setError(null); void fetchLedger(); }}
-                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        className="min-h-11 min-w-11 px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                     >
                         🔄 {l.refresh}
                     </button>
                     <button
                         onClick={exportJson}
-                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
+                        className="min-h-11 min-w-11 px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors"
                     >
-                        📦 <span className="hidden sm:inline">{l.exportJson}</span><span className="sm:hidden">JSON</span>
+                        📦 {t('governancePage.logDownloadData')}
                     </button>
                     <button
                         onClick={exportCsv}
-                        className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors"
+                        className="min-h-11 min-w-11 px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors"
                     >
-                        📊 <span className="hidden sm:inline">{l.exportCsv}</span><span className="sm:hidden">CSV</span>
+                        📊 {t('governancePage.logDownloadTable')}
                     </button>
                 </div>
             </div>
@@ -228,10 +214,12 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
             {validation && !validation.valid && (
                 <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                     <p className="text-sm text-red-700 dark:text-red-400 font-medium">
-                        ⚠️ {l.tamperAt} #{validation.brokenAt}
+                        ⚠️ {t('governancePage.logTamperAt')} #{validation.brokenAt}
                     </p>
                     {validation.error && (
-                        <p className="text-xs text-red-600 dark:text-red-500 mt-1">{validation.error}</p>
+                        <TechnicalDetails className="mt-2" label={t('common.technicalDetails')}>
+                            <p>{validation.error}</p>
+                        </TechnicalDetails>
                     )}
                 </div>
             )}
@@ -241,26 +229,26 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                 <select
                     value={filterPhase}
                     onChange={e => { setFilterPhase(e.target.value); setPage(1); }}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                    className="min-h-11 min-w-11 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 >
-                    <option value="">{l.filterPhase}: {l.all}</option>
-                    {uniquePhases.map(p => <option key={p} value={p}>{p}</option>)}
+                    <option value="">{t('governancePage.logPhase')}: {l.all}</option>
+                    {uniquePhases.map(p => <option key={p} value={p}>{getFriendlyPhaseLabel(p, language).label}</option>)}
                 </select>
                 <select
                     value={filterRisk}
                     onChange={e => { setFilterRisk(e.target.value); setPage(1); }}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                    className="min-h-11 min-w-11 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 >
-                    <option value="">{l.filterRisk}: {l.all}</option>
-                    {uniqueRisks.map(r => <option key={r} value={r}>{r}</option>)}
+                    <option value="">{t('governancePage.logRisk')}: {l.all}</option>
+                    {uniqueRisks.map(r => <option key={r} value={r}>{riskLabel(r)}</option>)}
                 </select>
                 <select
                     value={filterStatus}
                     onChange={e => { setFilterStatus(e.target.value); setPage(1); }}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                    className="min-h-11 min-w-11 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 >
-                    <option value="">{l.filterStatus}: {l.all}</option>
-                    {uniqueStatuses.map(s => <option key={s} value={s}>{s}</option>)}
+                    <option value="">{t('governancePage.logStatus')}: {l.all}</option>
+                    {uniqueStatuses.map(s => <option key={s} value={s}>{outcomeLabel(s)}</option>)}
                 </select>
             </div>
 
@@ -270,7 +258,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
             )}
 
             {error && (
-                <div className="text-center py-8 text-red-500">{error}</div>
+                <div className="text-center py-8 text-red-500">{t('governancePage.logError')}</div>
             )}
 
             {!loading && !error && entries.length === 0 && (
@@ -296,7 +284,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                                             {block.block_index}
                                         </span>
                                         <span className="text-xs text-gray-500 font-mono">
-                                            {l.block} #{block.block_index}
+                                            {t('governancePage.record')} #{block.block_index}
                                         </span>
                                         {isBroken && (
                                             <span className="text-xs text-red-600 font-medium">
@@ -309,45 +297,35 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                                     </span>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono">
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-gray-500">{l.hash}:</span>
-                                        <button
-                                            onClick={() => copyHash(block.hash)}
-                                            className="text-blue-600 dark:text-blue-400 hover:underline"
-                                            title={block.hash}
-                                        >
-                                            {copiedHash === block.hash ? l.copied : truncateHash(block.hash)}
-                                        </button>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-gray-500">{l.prevHash}:</span>
-                                        <button
-                                            onClick={() => copyHash(block.previous_hash)}
-                                            className="text-gray-600 dark:text-gray-400 hover:underline"
-                                            title={block.previous_hash}
-                                        >
-                                            {copiedHash === block.previous_hash ? l.copied : truncateHash(block.previous_hash)}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {block.event && Object.keys(block.event).length > 0 && (
-                                    <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs">
-                                        <span className="text-gray-500 block mb-1">{l.event}:</span>
-                                        <div className="flex flex-wrap gap-2">
-                                            {Object.entries(block.event).map(([key, value]) => (
-                                                <span
-                                                    key={key}
-                                                    className="inline-flex items-center px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                                >
-                                                    <span className="font-medium mr-1">{key}:</span>
-                                                    {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                                                </span>
-                                            ))}
+                                <p className="mb-2 text-sm text-gray-700 dark:text-gray-300">{t('governancePage.logEntry')}</p>
+                                <TechnicalDetails label={t('common.technicalDetails')}>
+                                    <dl className="grid gap-2 text-xs sm:grid-cols-2">
+                                        <div>
+                                            <dt>{t('governancePage.logHash')}</dt>
+                                            <dd>
+                                                <button type="button" onClick={() => copyHash(block.hash)} title={block.hash} className="min-h-11 min-w-11 text-blue-600 hover:underline">
+                                                    {copiedHash === block.hash ? l.copied : truncateHash(block.hash)}
+                                                </button>
+                                            </dd>
                                         </div>
-                                    </div>
-                                )}
+                                        <div>
+                                            <dt>{t('governancePage.logPrevHash')}</dt>
+                                            <dd>
+                                                <button type="button" onClick={() => copyHash(block.previous_hash)} title={block.previous_hash} className="min-h-11 min-w-11 text-blue-600 hover:underline">
+                                                    {copiedHash === block.previous_hash ? l.copied : truncateHash(block.previous_hash)}
+                                                </button>
+                                            </dd>
+                                        </div>
+                                        {Object.entries(block.event ?? {}).map(([key, data]) => (
+                                            data !== null && typeof data !== 'object' && (
+                                                <div key={key}>
+                                                    <dt>{key}</dt>
+                                                    <dd>{String(data)}</dd>
+                                                </div>
+                                            )
+                                        ))}
+                                    </dl>
+                                </TechnicalDetails>
                             </div>
                         );
                     })}
@@ -360,7 +338,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                     <button
                         onClick={() => setPage(p => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
+                        className="min-h-11 min-w-11 px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
                     >
                         {l.prev}
                     </button>
@@ -370,7 +348,7 @@ export function LedgerExplorer({ language: langProp }: LedgerExplorerProps) {
                     <button
                         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                         disabled={page === totalPages}
-                        className="px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
+                        className="min-h-11 min-w-11 px-3 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 disabled:opacity-40"
                     >
                         {l.next}
                     </button>

@@ -199,6 +199,61 @@ export function buildProviderExecutionDiagnostic(params: {
     });
 }
 
+/** Structural subset of the Gateway error envelope; the raw `message` is never used for classification when a code exists. */
+export interface GatewayFailureForDiagnostic {
+    errorClass?: string;
+    message?: string;
+    retryable?: boolean;
+    providerDiagnostic?: { code?: string; httpStatus?: number };
+}
+
+const NO_RETRY_ACTION = 'do_not_retry_without_new_evidence' as const;
+
+/**
+ * Classifies a canonical Gateway failure from its closed provider code and HTTP status (never from keywords in free
+ * text) and honours the Gateway's own `retryable` verdict, so a paid-provider failure that will not succeed on resend
+ * (bad key, exhausted quota, unknown model, incomplete output) is never presented as "Retry possible".
+ */
+export function buildGatewayExecutionDiagnostic(params: {
+    provider: AIProvider | string;
+    model: string;
+    error: GatewayFailureForDiagnostic;
+    latencyMs?: number;
+}): ExecutionDiagnostic {
+    const { error } = params;
+    const code = error.providerDiagnostic?.code;
+    const status = error.providerDiagnostic?.httpStatus;
+    const retryable = error.retryable === true;
+    let classified: Pick<BuildExecutionDiagnosticInput, 'class' | 'retryable' | 'userAction'>;
+    switch (code) {
+        case 'request_cancelled': classified = { class: 'request_cancelled' }; break;
+        case 'provider_timeout': classified = { class: 'provider_timeout' }; break;
+        case 'quota_locked': classified = { class: 'insufficient_balance' }; break;
+        case 'credential_unavailable': classified = { class: 'missing_api_key' }; break;
+        case 'destination_denied':
+        case 'invalid_identity': classified = { class: 'policy_blocked', userAction: 'contact_admin' }; break;
+        case 'output_incomplete': classified = { class: 'provider_parse_error', retryable: false, userAction: 'revise_request' }; break;
+        case 'network_error': classified = { class: 'network_error', retryable, userAction: retryable ? 'wait_and_retry' : NO_RETRY_ACTION }; break;
+        case 'unknown_error': classified = { class: 'unknown_error' }; break;
+        case 'provider_http_error':
+            if (status === 401 || status === 403) classified = { class: 'invalid_api_key' };
+            else if (status === 429) classified = { class: 'rate_limited' };
+            else if (status === 404) classified = { class: 'model_unavailable' };
+            else classified = { class: 'provider_http_error', retryable, userAction: retryable ? 'wait_and_retry' : NO_RETRY_ACTION };
+            break;
+        default:
+            // No provider code: classify from the envelope class, then fall back to the legacy text classifier.
+            if (error.errorClass === 'credential_shielded') classified = { class: 'missing_api_key' };
+            else if (error.errorClass === 'policy_denied') classified = { class: 'policy_blocked', userAction: 'contact_admin' };
+            else classified = classifyProviderError(new Error(error.message ?? ''));
+    }
+    return buildExecutionDiagnostic({
+        stage: 'provider', provider: params.provider, model: params.model,
+        ...(status !== undefined ? { httpStatus: status } : {}),
+        latencyMs: params.latencyMs, ...classified,
+    });
+}
+
 export function renderExecutionDiagnostic(diagnostic: ExecutionDiagnostic): string {
     const target = [diagnostic.provider, diagnostic.model].filter(Boolean).join(' / ');
     const targetSuffix = target ? ` (${target})` : '';

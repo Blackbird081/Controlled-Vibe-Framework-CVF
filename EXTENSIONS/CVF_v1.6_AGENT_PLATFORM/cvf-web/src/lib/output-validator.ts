@@ -13,14 +13,17 @@
  * @module lib/output-validator
  */
 
+import { countVisibleWhitespaceUnits } from '@/lib/pack-content-constraints';
+
 // ─── Types ────────────────────────────────────────────────────────────
 
-export type ValidationDecision = 'PASS' | 'RETRY' | 'WARN';
+export type ValidationDecision = 'PASS' | 'RETRY' | 'WARN' | 'BLOCK';
 
 export type ValidationIssue =
   | 'EMPTY_OUTPUT'
   | 'TOO_SHORT'
   | 'TOO_LONG'
+  | 'WORD_LIMIT_EXCEEDED'
   | 'MISSING_STRUCTURE'
   | 'UNSAFE_CONTENT'
   | 'INTENT_MISMATCH'
@@ -35,6 +38,7 @@ export interface ValidationResult {
   retryable: boolean;
   /** Suggested prompt adjustment for retry */
   retryHint?: string;
+  wordLimit?: { limit: number; observed: number; countingMethod: 'visible_whitespace_units_v1' };
 }
 
 export interface OutputValidationInput {
@@ -45,6 +49,8 @@ export interface OutputValidationInput {
   expectedMinLength?: number;
   expectedMaxLength?: number;
   language?: 'vi' | 'en';
+  /** Server-derived recognized maximum from the original documentation inputs. */
+  explicitWordLimit?: number;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────
@@ -111,6 +117,14 @@ export function validateOutput(input: OutputValidationInput): ValidationResult {
       retryable: true,
       retryHint: 'Please provide a complete, detailed response.',
     };
+  }
+
+  const wordLimit = Number.isInteger(input.explicitWordLimit) && input.explicitWordLimit! > 0
+    ? { limit: input.explicitWordLimit!, observed: countVisibleWhitespaceUnits(output), countingMethod: 'visible_whitespace_units_v1' as const }
+    : undefined;
+  if (wordLimit && wordLimit.observed > wordLimit.limit) {
+    issues.push('WORD_LIMIT_EXCEEDED');
+    reasons.push(`Response has ${wordLimit.observed} visible whitespace units; explicit maximum: ${wordLimit.limit}.`);
   }
 
   // 2. Length check
@@ -183,6 +197,7 @@ export function validateOutput(input: OutputValidationInput): ValidationResult {
     qualityHint,
     retryable,
     retryHint,
+    ...(wordLimit ? { wordLimit } : {}),
   };
 }
 
@@ -261,6 +276,7 @@ function detectRepetition(text: string): number {
 }
 
 function computeDecision(issues: ValidationIssue[]): ValidationDecision {
+  if (issues.includes('WORD_LIMIT_EXCEEDED')) return 'BLOCK';
   if (issues.includes('EMPTY_OUTPUT')) return 'RETRY';
   if (issues.includes('UNSAFE_CONTENT')) return 'RETRY';
 
@@ -276,7 +292,7 @@ function computeQualityHint(
   outputLen: number,
   minLen: number,
 ): ValidationResult['qualityHint'] {
-  if (issues.includes('EMPTY_OUTPUT') || issues.includes('UNSAFE_CONTENT')) {
+  if (issues.includes('WORD_LIMIT_EXCEEDED') || issues.includes('EMPTY_OUTPUT') || issues.includes('UNSAFE_CONTENT')) {
     return 'needs_improvement';
   }
   if (issues.length >= 2) return 'needs_improvement';

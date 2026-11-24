@@ -1,3 +1,4 @@
+// Text Encoding Exception: Vietnamese navigation and documentation labels.
 /**
  * Shared documentation metadata used by both /docs and /docs/[slug] pages.
  * Single source of truth — avoids duplication across components.
@@ -150,16 +151,16 @@ export const DOCS: DocCategory[] = [
                 title: { vi: 'Triết lý CVF', en: 'Core Philosophy' },
                 desc: {
                     vi: '"Không nhanh hơn, mà đúng hơn" — hiểu tại sao CVF tồn tại và khác biệt gì.',
-                    en: '"Not faster, but smarter" — why CVF exists and what makes it different.',
+                    en: 'Controlled vibe coding. Safe and governable, with speed and cost in mind.',
                 },
             },
             {
                 icon: '🔄',
-                slug: '5-phase-process',
-                title: { vi: 'Quy trình 5 Phase', en: '5-Phase Process' },
+                slug: 'lifecycle',
+                title: { vi: 'Vòng đời công việc', en: 'Work lifecycle' },
                 desc: {
-                    vi: 'Intake → Design → Build → Review → Freeze — mỗi phase có role, gate, và rules riêng.',
-                    en: 'Intake → Design → Build → Review → Freeze — each phase has its own roles, gates, and rules.',
+                    vi: 'Năm giai đoạn dễ hiểu nối với bảy quyết định của Local.',
+                    en: 'Five plain-language stages connected to seven Local decisions.',
                 },
             },
             {
@@ -169,15 +170,6 @@ export const DOCS: DocCategory[] = [
                 desc: {
                     vi: '3 modes (Minimal/Standard/Full), Authority Matrix, Phase Gates, Escalation.',
                     en: '3 modes (Minimal/Standard/Full), Authority Matrix, Phase Gates, Escalation.',
-                },
-            },
-            {
-                icon: '📚',
-                slug: 'skill-system',
-                title: { vi: 'Hệ thống Skill', en: 'Skill System' },
-                desc: {
-                    vi: 'Thư viện skill theo domain — cách tìm, dùng, và hiểu việc front-door UI đã sync theo trusted/review subset, trong khi benchmark truth vẫn chỉ dựa trên TRUSTED_FOR_VALUE_PROOF.',
-                    en: 'Domain-based skill library — how to find, use, and understand that the front-door UI is now synced to the trusted/review subset, while benchmark truth still depends on TRUSTED_FOR_VALUE_PROOF only.',
                 },
             },
             {
@@ -267,10 +259,10 @@ export const DOCS: DocCategory[] = [
             {
                 icon: '🗂️',
                 slug: 'agent-skills-catalog',
-                title: { vi: 'Danh mục 34 Kỹ năng', en: '34 Skills Catalog' },
+                title: { vi: 'Danh mục kỹ năng dành cho agent', en: 'Agent skill catalog' },
                 desc: {
-                    vi: 'Tổng hợp 34 kỹ năng theo 7 lĩnh vực — Foundation, Agentic, Workflow, Intelligence, Development, DevOps, Business Ops. Bản đồ quan hệ kỹ năng.',
-                    en: 'All 34 skills organized by 7 domains — Foundation, Agentic, Workflow, Intelligence, Development, DevOps, Business Ops. Skill relationship map.',
+                    vi: 'Xem các gói dành cho agent và giới hạn sử dụng của từng mục.',
+                    en: 'Browse packages for agents and their usage limits.',
                 },
                 tag: { vi: 'TỔNG HỢP', en: 'CATALOG' },
             },
@@ -289,8 +281,8 @@ export const DOCS: DocCategory[] = [
                 slug: 'agentic-patterns',
                 title: { vi: 'Mẫu từ Claude Quickstarts', en: 'Patterns from Claude Quickstarts' },
                 desc: {
-                    vi: '6 mẫu agentic gốc từ Anthropic — RAG, Data Viz, Doc Parser, Agentic Loop, Browser Automation, MCP — ánh xạ vào CVF governance.',
-                    en: '6 agentic patterns from Anthropic — mapped to CVF governance.',
+                    vi: 'Các mẫu thiết kế từ Anthropic để tham khảo khi lập kế hoạch cho agent.',
+                    en: 'Design examples from Anthropic for planning agent workflows.',
                 },
             },
         ],
@@ -305,8 +297,8 @@ export const DOCS: DocCategory[] = [
                 slug: 'toolkit-reference',
                 title: { vi: 'CVF Toolkit Reference', en: 'CVF Toolkit Reference' },
                 desc: {
-                    vi: 'Governance engine mẫu bằng TypeScript — risk classifier, phase controller, audit logger. 111 tests, 98% coverage.',
-                    en: 'Sample governance engine in TypeScript — risk classifier, phase controller, audit logger. 111 tests, 98% coverage.',
+                    vi: 'Governance engine mẫu bằng TypeScript — risk classifier, phase controller, audit logger.',
+                    en: 'Sample governance engine in TypeScript — risk classifier, phase controller, audit logger.',
                 },
                 tag: { vi: 'THAM KHẢO', en: 'REFERENCE' },
             },
@@ -341,3 +333,15 @@ export const DOC_META: Record<string, DocMeta> = Object.fromEntries(
         ])
     )
 );
+
+// Preserve bookmarks to guides whose contents moved to a current document.
+const mergedDocs = new Map<string, string>([
+    ['4-phase-process', 'lifecycle'], ['5-phase-process', 'lifecycle'],
+    ['skill-system', 'custom-skills'],
+    ...['app-dev-skills-v4', 'devops-ai-skills-v5', 'intelligence-skills-v3',
+        'using-agentic-skills', 'using-new-skills-v2'].map(slug => [slug, 'agent-skills-catalog'] as [string, string]),
+]);
+
+export function canonicalDocSlug(slug: string): string {
+    return mergedDocs.get(slug) ?? slug;
+}

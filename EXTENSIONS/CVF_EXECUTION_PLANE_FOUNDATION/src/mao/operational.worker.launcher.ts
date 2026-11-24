@@ -8,6 +8,7 @@
 // docs/reference/multi_agent_orchestration/CVF_MAO_RUNTIME_FOUNDATION_CONTRACT.md
 // docs/reviews/CVF_BRIGADE_EARTR_LOCAL_RECONCILIATION_AND_ABSORPTION_CLOSURE_2026-08-29.md
 
+import { launchMaoAsync, type MaoAsyncInferencePort, type MaoAsyncLaunchResult } from "./operational.worker.launcher.async";
 import type { MaoFileRunStore, MaoDurableRunStoreFailure } from "./durable.run.store";
 import type {
   MaoInvocationRequest,
@@ -239,6 +240,10 @@ export class MaoOperationalWorkerLauncher {
     this.adapter = adapter;
     this.lifecycle = lifecycle;
     this.delegationPort = delegationPort;
+  }
+
+  launchAsync<T>(request: MaoOperationalLaunchRequest, port: MaoAsyncInferencePort<T>, options?: { signal?: AbortSignal }): Promise<MaoAsyncLaunchResult<T>> {
+    return launchMaoAsync(this.store, this.lifecycle, request, port, options);
   }
 
   /**

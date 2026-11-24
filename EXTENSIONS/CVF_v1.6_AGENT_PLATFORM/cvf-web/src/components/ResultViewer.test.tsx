@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  * Test: ResultViewer — export (PDF, Word, Markdown), copy, and action buttons
+ * Text Encoding Exception: Vietnamese review warning fixtures exercise operator copy.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -122,12 +123,39 @@ describe('ResultViewer', () => {
         expect(screen.getByText('This is a test output.')).toBeTruthy();
     });
 
+    it('shows the unconfirmed final review in both result and pack views, keeping the draft and export controls', () => {
+        mockLanguage = 'vi';
+        const rolePlan = { reviewerVerdict: 'REVISE' as const, revisionApplied: true, revisionReviewed: true,
+            recheckVerdict: 'UNPARSEABLE' as const, recheckDiagnostic: 'INVALID_JSON' as const, stoppedEarly: null, promptContract: 'role-plan-review-v4', stepCount: 4 };
+        render(<ResultViewer {...defaultProps} evidenceReceipt={{ ...mockEvidenceReceipt, rolePlan }} />);
+        expect(screen.getByText('Duyệt cuối chưa xác nhận')).toBeTruthy();
+        expect(screen.getByTestId('role-plan-review-notice').textContent).toContain('sai cú pháp');
+        expect(screen.getByText('This is a test output.')).toBeTruthy();
+        fireEvent.click(screen.getByTestId('pack-view-toggle'));
+        expect(screen.getByText('Duyệt cuối chưa xác nhận')).toBeTruthy();
+        expect(screen.getByTestId('role-plan-review-notice').textContent).toContain('đọc và xuất tệp bản nháp');
+    });
+    it.each(['UNPARSEABLE', 'REVISE', 'NOT_RUN'] as const)('warns for initial %s and preserves unknown legacy diagnosis', reviewerVerdict => {
+        const rolePlan = { reviewerVerdict, revisionApplied: false, revisionReviewed: null, recheckVerdict: null,
+            stoppedEarly: null, promptContract: 'role-plan-review-v4', stepCount: 2 };
+        render(<ResultViewer {...defaultProps} evidenceReceipt={{ ...mockEvidenceReceipt, rolePlan }} />);
+        expect(screen.getByText('Final review unconfirmed')).toBeTruthy();
+        if (reviewerVerdict === 'UNPARSEABLE') expect(screen.getByTestId('role-plan-review-notice').textContent).toContain('No detailed diagnostic was recorded');
+    });
+    it('does not warn after a settled recheck PASS despite the initial REVISE', () => {
+        const rolePlan = { reviewerVerdict: 'REVISE' as const, revisionApplied: true, revisionReviewed: true,
+            recheckVerdict: 'PASS' as const, stoppedEarly: null, promptContract: 'role-plan-review-v4', stepCount: 4 };
+        render(<ResultViewer {...defaultProps} evidenceReceipt={{ ...mockEvidenceReceipt, rolePlan }} />);
+        expect(screen.queryByTestId('role-plan-review-notice')).toBeNull();
+    });
+
     it('renders W119 evidence receipt fields for non-coder handoff', () => {
         render(<ResultViewer {...defaultProps} evidenceReceipt={mockEvidenceReceipt} />);
 
         const receipt = screen.getByTestId('w119-evidence-receipt');
         expect(receipt.textContent).toContain('What CVF did');
-        expect(receipt.textContent).toContain('ALLOW');
+        expect(receipt.textContent).toContain('Decision: Allowed');
+        expect(receipt.textContent).toContain('Routing: Allowed');
         expect(receipt.textContent).toContain('R1');
         expect(receipt.textContent).toContain('alibaba');
         expect(receipt.textContent).toContain('w119-lumencart-project');

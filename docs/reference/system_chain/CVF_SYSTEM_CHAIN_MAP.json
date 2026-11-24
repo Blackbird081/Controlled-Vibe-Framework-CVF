@@ -39,16 +39,16 @@
         },
         {
           "path": "docs/reference/CVF_ARCHITECTURE_DIAGRAMS.md",
-          "sha256": "e23cf4aa592ec005cc3c13cff9e95e0e8cb96d81dee3c7daa8bc60b8838833a7",
+          "sha256": "c87cfdf594be2dc2ef9f1e72578ed90fd037d2ca25c2835e48cc0a7f0e1ed81f",
           "evidenceRole": "non-doctrine module-map narration (5 Layers mermaid stack)",
-          "provenanceSha256": "84f06ebad0892a5b641c7dfeac4c3110db1a6bf304dc6f20500398cb1758a599",
+          "provenanceSha256": "b175f23ff74e436b1eafd68609b5fec87b083bd4b281bc63bcd1d49721a54867",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
           "path": "docs/CVF_CORE_KNOWLEDGE_BASE.md",
-          "sha256": "a39a5b98be025debff3b2300e3a5ad570aa50791ade5f84df502af347dd1fa3f",
+          "sha256": "d38bcff2246a23a9d80d3e6f4fafa6500d1a5d453052351893de221ae4445906",
           "evidenceRole": "non-doctrine module-map narration (5 Layers version stack)",
-          "provenanceSha256": "7ff7c3ab9b6fb05cbad05e23ea44e7df6329025f555ba0e26ff93a34351557fe",
+          "provenanceSha256": "958d7cc35ffb4d12cae8f30ad25a58ea1efae2e426ec9f194d05e5a8a4303989",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
@@ -84,9 +84,9 @@
       "sourceFingerprints": [
         {
           "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
-          "sha256": "fa68156e3584bd661de805bdedd92a2c9b03160b17a2b2f65c4c4041bac981a3",
+          "sha256": "503c2981ff3d6fa1ea4903145448cb853cfdd4d06a020c19705e08bdb5005284",
           "evidenceRole": "control matrix rows GC-001, GC-009, GC-011, GC-019",
-          "provenanceSha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
+          "provenanceSha256": "503c2981ff3d6fa1ea4903145448cb853cfdd4d06a020c19705e08bdb5005284",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {
@@ -98,7 +98,7 @@
         },
         {
           "path": "EXTENSIONS/CVF_GUARD_CONTRACT/src/index.ts",
-          "sha256": "2fc4f5ce93d775ba517fa4326432425d1631e4afa1b15154f876ea0c9d279987",
+          "sha256": "15c7531b5410e9d5602a1669dafa8cb92a2b30f64b813d12c4f773ad3e3f6cc9",
           "evidenceRole": "GC-001 real production caller (registerGuard) and GC-009 package barrel export",
           "provenanceSha256": "deae7e264f0a51446ac44110389bf65f6d3fa7f76863efe04178b435997b1cd2",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
@@ -224,9 +224,9 @@
       "sourceFingerprints": [
         {
           "path": "docs/reference/CVF_GOVERNANCE_CONTROL_MATRIX.md",
-          "sha256": "fa68156e3584bd661de805bdedd92a2c9b03160b17a2b2f65c4c4041bac981a3",
+          "sha256": "503c2981ff3d6fa1ea4903145448cb853cfdd4d06a020c19705e08bdb5005284",
           "evidenceRole": "GC-019 corrected archive-qualified citation",
-          "provenanceSha256": "f0ad0b5899bb5f39c09bc189d87cf129e50a1b6bd4969a7ec1ce30dafed6b612",
+          "provenanceSha256": "503c2981ff3d6fa1ea4903145448cb853cfdd4d06a020c19705e08bdb5005284",
           "publicDisposition": "PUBLIC_SOURCE_ONLY_NOT_INVOCATION_PROOF"
         },
         {

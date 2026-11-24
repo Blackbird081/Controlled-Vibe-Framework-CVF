@@ -1,5 +1,7 @@
 # CVF for Teams
 
+> Current Local decisions: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. The examples below do not grant authority. [Work lifecycle](lifecycle.md).
+
 **Target:** Teams of 2–10 developers working with AI  
 **Reading time:** 15 minutes  
 **Recommended:** v1.1 (governance) + v1.3 (toolkit) + v1.6 (web UI)
@@ -16,7 +18,7 @@ When multiple people code with AI, new problems emerge:
 | Lost context | No one knows what others' AI did | Action Unit traces |
 | Code debt | Inconsistent coding styles across devs | Agent archetypes + presets |
 | Wasted time | Re-solving solved problems | Shared Skill Library |
-| No review | "It works" = good enough | Phase D + Phase gates |
+| No review | "It works" = good enough | REVIEW + Phase gates |
 
 CVF gives your team a **shared language** for working with AI, without adding heavy process.
 
@@ -90,15 +92,15 @@ Choose your governance mode:
 
 ### Rules
 1. Every task needs an INPUT_SPEC before AI execution
-2. Every PR needs Phase D checklist completed
+2. Every PR needs REVIEW checklist completed
 3. Decisions that affect architecture → Decision Log
 4. High-risk changes (infrastructure, auth, data) → ARCHITECT approval
 
 ### Phase Gates
-- Phase A → B: Self-service (just write the spec)
-- Phase B → C: Peer review of design (any BUILDER)
-- Phase C → D: Self-review with checklist
-- Phase D → Merge: PR review by someone who didn't write it
+- INTAKE → DESIGN: Self-service (just write the spec)
+- DESIGN → SPEC → WORK ORDER → BUILD: Complete design, specification and work assignment under applicable authority
+- BUILD → REVIEW: Review the result with evidence
+- REVIEW → FREEZE: PR review by someone who didn't write it
 ```
 
 ---
@@ -111,18 +113,18 @@ Choose your governance mode:
 ┌─────────────────────────────────────────────────────────────┐
 │  Developer picks task from backlog                          │
 │  ↓                                                          │
-│  Phase A: Write INPUT_SPEC (what + acceptance criteria)     │
+│  INTAKE: Write INPUT_SPEC (what + acceptance criteria)     │
 │  ↓                                                          │
-│  Phase B: Design approach (reviewed by peer)                │
+│  DESIGN: Design approach (reviewed by peer)                │
 │  ↓                                                          │
-│  Phase C: Execute with AI (follow frozen spec)              │
+│  BUILD: Execute with AI (follow frozen spec)              │
 │  ↓                                                          │
-│  Phase D: Self-review with checklist                        │
+│  REVIEW: Review the result with evidence                        │
 │  ↓                                                          │
 │  Create PR with:                                            │
 │    • Code                                                   │
 │    • INPUT_SPEC.md                                          │
-│    • Phase D checklist (completed)                          │
+│    • REVIEW checklist (completed)                          │
 │    • AU trace (what AI did)                                 │
 │  ↓                                                          │
 │  Reviewer checks: code + spec compliance + governance       │
@@ -138,7 +140,7 @@ Add this to `.github/PULL_REQUEST_TEMPLATE.md`:
 ```markdown
 ## CVF Checklist
 
-### Phase D Review
+### REVIEW Review
 - [ ] Output matches INPUT_SPEC requirements
 - [ ] Acceptance criteria met (list each)
 - [ ] No scope expansion beyond spec
@@ -242,11 +244,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check Phase D Checklist
+      - name: Check REVIEW Checklist
         run: |
           # Ensure PR description contains completed checklist
           if ! grep -q "\[x\]" "$GITHUB_EVENT_PATH"; then
-            echo "❌ Phase D checklist not completed"
+            echo "❌ REVIEW checklist not completed"
             exit 1
           fi
 
@@ -291,7 +293,7 @@ fi
 **Solution:** Start with Simple governance mode. Only 2 requirements:
 
 1. Write an INPUT_SPEC before asking AI
-2. Complete Phase D checklist in PR
+2. Complete REVIEW checklist in PR
 
 Everything else is optional. Add more structure only when you feel the need.
 
@@ -318,7 +320,7 @@ Everything else is optional. Add more structure only when you feel the need.
 | Change | Default Risk | Needs Approval |
 |--------|:----------:|:---------:|
 | UI changes (colors, text) | R0 | No |
-| New API endpoint | R1 | Peer review |
+| New API endpoint | At least R2 | Follow applicable approval boundaries |
 | Auth / payment / data migration | R2 | ARCHITECT |
 | Infrastructure / deploy pipeline | R3 | GOVERNOR |
 
@@ -367,3 +369,5 @@ npm install && npm run dev
 ---
 
 *Last updated: February 15, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

@@ -29,12 +29,9 @@ analysis.
 
 Not suitable when:
 
-- the task is specifically about future forecast scenarios; use
-  [Forecast & Scenario Review](./02_forecast_scenario_review.skill.md)
-- the task is investment due diligence or enterprise risk; use
-  [Investment & Risk Due Diligence](./03_investment_risk_due_diligence.skill.md)
-- the task is final QA of a finance packet; use
-  [Finance QA Checklist](./04_finance_qa_checklist.skill.md)
+- the task is specifically about future forecast scenarios
+- the task is investment due diligence or enterprise risk
+- the task is final QA of a finance packet
 
 ---
 
@@ -217,17 +214,9 @@ Constraints: Some invoices are still pending.
 
 ---
 
-## 🔗 Related Skills
-
-- [Forecast & Scenario Review](./02_forecast_scenario_review.skill.md)
-- [Investment & Risk Due Diligence](./03_investment_risk_due_diligence.skill.md)
-- [Finance QA Checklist](./04_finance_qa_checklist.skill.md)
-
----
-
 ## 🔗 Next Step
 
-Run [Finance QA Checklist](./04_finance_qa_checklist.skill.md) before using the
+Run a finance QA checklist before using the
 packet for leadership review or implementation planning.
 
 ---

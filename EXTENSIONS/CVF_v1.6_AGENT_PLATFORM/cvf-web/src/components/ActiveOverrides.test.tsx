@@ -1,6 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: Assertions cover Vietnamese product copy.
+import enLabels from '@/lib/i18n/en.json';
+import viLabels from '@/lib/i18n/vi.json';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { ActiveOverrides, type ActiveOverride } from './ActiveOverrides';
@@ -8,7 +11,7 @@ import { ActiveOverrides, type ActiveOverride } from './ActiveOverrides';
 let language: 'vi' | 'en' = 'vi';
 
 vi.mock('@/lib/i18n', () => ({
-    useLanguage: () => ({ language }),
+    useLanguage: () => ({ language, t: (key: string) => ((language === 'vi' ? viLabels : enLabels) as Record<string, string>)[key] ?? key }),
 }));
 
 function makeOverride(partial: Partial<ActiveOverride> = {}): ActiveOverride {
@@ -54,7 +57,7 @@ describe('ActiveOverrides', () => {
 
         render(<ActiveOverrides overrides={items} />);
 
-        expect(screen.getByText(/Ghi đè đang hoạt động \(2\)/i)).toBeTruthy();
+        expect(screen.getByText(/Ngoại lệ còn hiệu lực \(2\)/i)).toBeTruthy();
         expect(screen.getByText(/Sắp hết hạn!/i)).toBeTruthy();
         expect(screen.queryByText(/expired-request/i)).toBeNull();
     });
@@ -68,7 +71,7 @@ describe('ActiveOverrides', () => {
         render(<ActiveOverrides overrides={items} compact />);
 
         expect(screen.getByText(/⏳\s*1/i)).toBeTruthy();
-        expect(screen.queryByText(/Ghi đè đang hoạt động/i)).toBeNull();
+        expect(screen.queryByText(/Ngoại lệ còn hiệu lực/i)).toBeNull();
     });
 
     it('fetches overrides when prop is missing and renders english labels', async () => {
@@ -86,7 +89,7 @@ describe('ActiveOverrides', () => {
         render(<ActiveOverrides />);
 
         expect(screen.getByText(/Loading.../i)).toBeTruthy();
-        await waitFor(() => expect(screen.getByText(/Active Overrides \(1\)/i)).toBeTruthy());
+        await waitFor(() => expect(screen.getByText(/Active exceptions \(1\)/i)).toBeTruthy());
         expect(fetchMock).toHaveBeenCalled();
     });
 
@@ -101,7 +104,7 @@ describe('ActiveOverrides', () => {
         render(<ActiveOverrides />);
 
         await waitFor(() => {
-            expect(screen.getByText(/Không có ghi đè nào/i)).toBeTruthy();
+            expect(screen.getByText(/Chưa có ngoại lệ còn hiệu lực/i)).toBeTruthy();
         });
     });
 });

@@ -1,9 +1,11 @@
 'use client';
+// Text Encoding Exception: analytics labels follow the selected Vietnamese or English locale.
 
 import { useMemo, useState } from 'react';
 import { useExecutionStore } from '@/lib/store';
 import { exportAnalyticsEvents, useAnalyticsEvents } from '@/lib/analytics';
 import { useLanguage } from '@/lib/i18n';
+import { NO_DATA_LABEL, statusLabel } from '@/lib/presentation-labels';
 import { GovernanceMetrics } from './GovernanceMetrics';
 import { RiskTrendChart } from './RiskTrendChart';
 import { EvtGovernanceHealthPanel } from './EvtGovernanceHealthPanel';
@@ -39,7 +41,7 @@ export function AnalyticsDashboard() {
         domainUsage: isVi ? '🏷️ Theo lĩnh vực' : '🏷️ Domain Usage',
         noDomainData: isVi ? 'Chưa có dữ liệu domain. Hãy mở một vài skills!' : 'No domain data yet. Open some skills!',
         resultDist: isVi ? '📊 Phân bố kết quả' : '📊 Result Distribution',
-        noResultData: isVi ? 'Chưa có dữ liệu' : 'No data yet',
+        noResultData: NO_DATA_LABEL[language],
         enforcement: '🛡️ Enforcement',
         enforcementDesc: isVi ? 'Theo dõi các quyết định chặn/clarify' : 'Track block/clarify decisions',
         decisionsLogged: isVi ? 'Quyết định đã ghi' : 'Decisions logged',
@@ -75,10 +77,11 @@ export function AnalyticsDashboard() {
         const rejected = executions.filter(e => e.result === 'rejected').length;
 
         // Calculate average quality score
-        const scoresExecs = executions.filter(e => e.qualityScore !== undefined);
-        const avgQuality = scoresExecs.length > 0
-            ? scoresExecs.reduce((sum, e) => sum + (e.qualityScore || 0), 0) / scoresExecs.length
-            : 0;
+        const qualityScores = executions.map(e => e.qualityScore)
+            .filter((score): score is number => typeof score === 'number' && Number.isFinite(score));
+        const avgQuality = qualityScores.length > 0
+            ? qualityScores.reduce((sum, score) => sum + score, 0) / qualityScores.length
+            : null;
 
         // Template usage breakdown
         const templateUsage: Record<string, number> = {};
@@ -112,7 +115,7 @@ export function AnalyticsDashboard() {
             topTemplates,
             weekActivity,
             dayLabels,
-            acceptRate: completed > 0 ? (accepted / completed * 100) : 0,
+            acceptRate: completed > 0 ? (accepted / completed * 100) : null,
         };
     }, [executions]);
 
@@ -302,11 +305,15 @@ export function AnalyticsDashboard() {
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.accepted}</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
-                    <div className="text-3xl font-bold text-orange-600">{stats.avgQuality.toFixed(1)}</div>
+                    <div className={stats.avgQuality === null ? 'text-sm text-gray-600 dark:text-gray-300' : 'text-3xl font-bold text-orange-600'}>
+                        {stats.avgQuality === null ? L.noResultData : stats.avgQuality.toFixed(1)}
+                    </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.avgQuality}</div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
-                    <div className="text-3xl font-bold text-purple-600">{stats.acceptRate.toFixed(0)}%</div>
+                    <div className={stats.acceptRate === null ? 'text-sm text-gray-600 dark:text-gray-300' : 'text-3xl font-bold text-purple-600'}>
+                        {stats.acceptRate === null ? L.noResultData : `${stats.acceptRate.toFixed(0)}%`}
+                    </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{L.acceptRate}</div>
                 </div>
             </div>
@@ -447,7 +454,7 @@ export function AnalyticsDashboard() {
                     <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
                         <div className="text-xs text-gray-500">{L.topStatus}</div>
                         <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {enforcementStats.topStatuses[0]?.[0] || 'N/A'}
+                            {enforcementStats.topStatuses[0] ? statusLabel(enforcementStats.topStatuses[0][0], language) : L.noResultData}
                         </div>
                     </div>
                 </div>
@@ -458,7 +465,7 @@ export function AnalyticsDashboard() {
                             <div className="space-y-2">
                                 {enforcementStats.topStatuses.map(([status, count]) => (
                                     <div key={status} className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
-                                        <span>{status}</span>
+                                        <span>{statusLabel(status, language)}</span>
                                         <span className="font-medium">{count}</span>
                                     </div>
                                 ))}
@@ -473,7 +480,7 @@ export function AnalyticsDashboard() {
                             <div className="space-y-2">
                                 {enforcementStats.topSources.map(([source, count]) => (
                                     <div key={source} className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
-                                        <span>{source}</span>
+                                        <span>{statusLabel(source, language)}</span>
                                         <span className="font-medium">{count}</span>
                                     </div>
                                 ))}
@@ -488,7 +495,7 @@ export function AnalyticsDashboard() {
                         {enforcementStats.recent.map(event => (
                             <div key={event.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                                 <span>
-                                    {formatEventValue(event.data?.source || 'unknown')} → {formatEventValue(event.data?.status || 'unknown')}
+                                    {statusLabel(formatEventValue(event.data?.source || 'unknown'), language)} → {statusLabel(formatEventValue(event.data?.status || 'unknown'), language)}
                                 </span>
                                 <span>{new Date(event.timestamp).toLocaleString()}</span>
                             </div>

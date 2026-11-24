@@ -1,5 +1,7 @@
 // Text Encoding Exception: localized Vietnamese user-facing copy follows this file's existing convention.
 
+import viCopy from '@/lib/i18n/vi.json';
+import enCopy from '@/lib/i18n/en.json';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -28,6 +30,7 @@ let mockLang = 'vi';
 vi.mock('@/lib/i18n', () => ({
     useLanguage: () => ({
         language: mockLang,
+        t: (key: string) => ((mockLang === 'vi' ? viCopy : enCopy) as Record<string, string>)[key] ?? key,
         setLanguage: vi.fn(),
     }),
 }));
@@ -44,7 +47,7 @@ describe('HelpPage', () => {
 
     it('renders Vietnamese content correctly', () => {
         render(<HelpPage />);
-        expect(screen.getByText('Trung tâm trợ giúp')).toBeTruthy();
+        expect(screen.getByText(viCopy['nav.help'])).toBeTruthy();
         expect(screen.getByText('Những câu hỏi quan trọng nhất')).toBeTruthy();
         expect(screen.getByText('Trò chuyện với AI')).toBeTruthy();
         expect(screen.getByText('Tự kiểm tra an toàn')).toBeTruthy();
@@ -54,7 +57,7 @@ describe('HelpPage', () => {
     it('renders English content correctly', () => {
         mockLang = 'en';
         render(<HelpPage />);
-        expect(screen.getByText('Help Center')).toBeTruthy();
+        expect(screen.getByText(enCopy['nav.help'])).toBeTruthy();
         expect(screen.getByText('The most important questions')).toBeTruthy();
     });
 });

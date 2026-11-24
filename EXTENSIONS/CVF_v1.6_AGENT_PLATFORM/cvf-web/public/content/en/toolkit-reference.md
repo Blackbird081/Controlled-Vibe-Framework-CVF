@@ -6,7 +6,7 @@
 
 The CVF Toolkit Reference is a **TypeScript-based governance enforcement engine** that demonstrates how to implement CVF governance concepts in code. It includes:
 
-- **Risk Classifier** — Contextual risk assessment (R0–R4) with domain, environment, and capability escalation
+- **Risk Classifier** — Contextual risk assessment (R0–R3; R4 blocked) with domain, environment, and capability escalation
 - **Phase Controller** — Sequential P0→P6 lifecycle with freeze protocol
 - **Governance Guard** — Central enforcement orchestrator checking risk + phase + operator + change + freeze + environment
 - **Skill Registry** — Register, query, and deactivate governance-controlled skills
@@ -44,7 +44,7 @@ The CVF Toolkit Reference is a **TypeScript-based governance enforcement engine*
 | **R1** | Low | Allowed everywhere | — |
 | **R2** | Moderate | dev + staging | UAT |
 | **R3** | High | dev only | UAT + Approval + Freeze |
-| **R4** | Critical | Blocked | UAT + Multi-Approval + Freeze |
+| **R4** | Blocked | Blocked | Never execute |
 
 ## Phase Model (P0–P6)
 
@@ -53,7 +53,7 @@ P0_DESIGN → P1_BUILD → P2_INTERNAL_VALIDATION → P3_UAT → P4_APPROVED →
 ```
 
 - Sequential only (no phase skipping)
-- R3/R4 must freeze before production
+- R4 is blocked and must never execute; assess R3 using the applicable Local controls
 - Only ADMIN can rollback P6 → P0
 
 ## Governance Flow
@@ -101,3 +101,5 @@ EXTENSIONS/CVF_TOOLKIT_REFERENCE/
 ```
 
 **Related:** [CVF Web Platform](/docs/web-ui-setup) | [Governance Model](/docs/governance-model) | [Risk Model](/docs/risk-model)
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

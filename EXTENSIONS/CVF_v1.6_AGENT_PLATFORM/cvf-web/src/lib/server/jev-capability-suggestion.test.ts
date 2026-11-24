@@ -1,6 +1,6 @@
 // Text Encoding Exception: fixture and assertion retain Vietnamese catalog content.
 import { describe, expect, it, vi } from 'vitest';
-import { JevAdapterError, parseVisibleSkills, suggestJevSkill, createJevNativeAdapter, validateJevNativeStage, jevReportedUsdMicrounits, type JevStageExecutor, type JevNativeStageV1, type SkillCandidate } from './jev-capability-suggestion';
+import { JevAdapterError, loadVisibleSkills, loadWebSkillRoster, visibleRosterDigest, parseVisibleSkills, suggestJevSkill, createJevNativeAdapter, validateJevNativeStage, jevReportedUsdMicrounits, type JevStageExecutor, type JevNativeStageV1, type SkillCandidate } from './jev-capability-suggestion';
 
 import { CredentialBoundary } from 'cvf-model-gateway';
 import { jevDigest, jevStageKey, JEV_RECIPE_REVISION } from './jev-suggestion-custody';
@@ -145,5 +145,22 @@ describe('OpenRouter System One offline boundary', () => {
   it('keeps unknown cost distinct and rounds known cost conservatively',()=>{
     expect(jevReportedUsdMicrounits(null)).toBeNull();expect(jevReportedUsdMicrounits(-1)).toBeNull();
     expect(jevReportedUsdMicrounits(0)).toBeNull();expect(jevReportedUsdMicrounits(0.0000001)).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('Web and legacy Jev skill rosters', () => {
+  it('preserves the trial projection and independently digests the live Web catalog', async () => {
+    const legacy = await loadVisibleSkills();
+    const current = await loadWebSkillRoster();
+    expect(visibleRosterDigest(legacy)).toBe('2f8fcce9e5c4865c8530535422332f3345e3713206f8deaea542a2c0b631e03c');
+    expect(current.digest).not.toBe(visibleRosterDigest(legacy));
+    expect(current.roster).toHaveLength(26);
+    expect(current.roster.every(row => row.domainId === 'agent_system_skills')).toBe(true);
+    expect(current.roster).toContainEqual(expect.objectContaining({
+      skillId: 'cvf-engineering-test-evidence-audit',
+      description: expect.stringContaining('asserted existing-proof claim'),
+    }));
+    expect(current.roster.map(row => row.skillId)).not.toContain('cvf-dispatch-quality-reviewer');
+    expect(current.roster.map(row => row.skillId)).not.toContain('01_finance_analysis_system');
   });
 });

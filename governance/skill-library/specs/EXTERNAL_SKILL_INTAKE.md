@@ -11,8 +11,7 @@ CVF Skill Intake as Risk & Authority Mapping
 This document defines the intake process for external skills
 by mapping them into existing CVF governance structures.
 
-Intake is NOT an evaluation of usefulness.
-It is a governance alignment exercise.
+Intake assesses both fit within CVF risk and authority boundaries and the value of the proposed use over the agent's available native approach. Record the task, native baseline, and concrete reason or observed improvement. Admission requires proportionate value after setup, review, and maintenance costs plus a decision from the existing owner.
 
 ---
 
@@ -31,20 +30,20 @@ The skill must adapt or be rejected.
 
 ## 3. Intake as Mapping (Not Review)
 
-Each intake answers exactly four questions:
+Risk and authority mapping answers these four questions:
 
 1. What capability does the skill provide?
 2. What is the PRIMARY risk level (R0–R3)?
 3. What authority boundaries are acceptable?
 4. Can the skill be constrained to fit those boundaries?
 
-If any answer is “unknown” → intake fails.
+An unknown answer holds the proposed use. A source may stay as a discovery lead within existing authority. Assess uplift separately from this mapping. The same result reached natively at lower total cost is a reason to leave the candidate as a lead or decline it.
 
 ---
 
 ## 4. Mandatory Mapping Fields
 
-Each external skill intake MUST produce the following mapping:
+Admission of an end-user skill or executable capability requires the applicable risk and authority mapping. A read-only R0 reference uses the compact owner record in the Governed Capability Intake Doctrine.
 
 ### 4.1 Capability Extraction
 
@@ -85,13 +84,13 @@ Based on mapping results, the outcome is one of:
 - ✅ Accept (Restricted by Design)  
   Directly fits CVF boundaries.
 
-No other outcomes are allowed.
+These outcomes describe boundary fit. The existing owner also records the value decision before promotion.
 
 ---
 
 ## 6. Documentation Artifact
 
-Each intake MUST generate:
+Each admitted end-user skill or executable capability must keep its applicable linkage and mapping evidence. An existing owner record may be used when it holds these fields:
 
 - Skill Mapping Record
 - Explicit CVF linkage references
@@ -103,6 +102,8 @@ This artifact is required for:
 - Audit
 - UAT
 - Future deprecation
+
+For passive R0 material, use the existing receiving owner record with source, reuse rights, use limits, owner, and one observed use. See the [Governed Capability Intake Doctrine](../../../docs/reference/CVF_GOVERNED_CAPABILITY_INTAKE_DOCTRINE_2026-05-07.md#read-only-r0-references).
 
 ---
 
@@ -131,56 +132,24 @@ for ingesting external skills into CVF.
 
 ### 9.1 Source Intake (Discovery)
 
-**Example: SkillsMP**
+Record a small set of source leads for the task. Treat SkillsMP and other
+directories as discovery sources. For each proposed use, assess source
+identity, provenance, reuse rights, risk and benefit over the agent's
+available native approach.
 
-```bash
-cd governance/skill-library
-SKILLSMP_API_KEY="***" python registry/import_skillsmp.py --limit 50 --per-category 50
-```
+### 9.2 Candidate Admission
 
-**Outputs:**
+The existing CVF owner decides which named candidate or excerpt to admit for
+the intended use. A shortlist grants no authority to create skill files,
+register skills, create acceptance evidence, run code or publish.
 
-- `registry/external-sources/skillsmp/skillsmp_shortlist.json`
-- `registry/external-sources/skillsmp/skillsmp_shortlist.csv`
-- `registry/external-sources/skillsmp/skillsmp_shortlist.md`
+The legacy entry points `registry/run_external_intake.py` and
+`registry/convert_shortlist_to_cvf.py` now exit before making changes. Existing
+shortlists and maps remain available as historical discovery records.
 
-**Rules:**
-
-- Use **env vars only** for API keys (no secrets in repo)
-- Do not import raw skills directly into CVF library
-
----
-
-### 9.1.1 One-command Intake (Recommended)
-
-```bash
-cd governance/skill-library
-SKILLSMP_API_KEY="***" python registry/run_external_intake.py --limit 50 --per-category 50
-```
-
-This runs the full pipeline end-to-end.
-
----
-
-### 9.2 Shortlist Normalization
-
-```bash
-cd governance/skill-library
-python registry/convert_shortlist_to_cvf.py --limit 50
-```
-
-**Standard filters:**
-
-- **Dedupe by repo**
-- If near-duplicate, prefer **better descriptions**
-- Map to CVF domain (App Development first, then existing domains)
-
-**Outputs:**
-
-- CVF skills generated in:
-  - `EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/<domain>/*.skill.md`
-- Import map:
-  - `registry/external-sources/skillsmp/skillsmp_to_cvf_map.md`
+For an admitted end-user skill, apply the checks and derived outputs in
+sections 9.3-9.6 that correspond to the approved changes. Generated UAT records
+are inputs to verification. Record observed results before claiming acceptance.
 
 ---
 

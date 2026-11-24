@@ -1,4 +1,5 @@
 'use client';
+// Text Encoding Exception: the developer navigation uses localized Vietnamese copy.
 
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
@@ -16,7 +17,7 @@ interface SidebarProps {
     appState: string;
     onNavigate: (state: string) => void;
     executionsCount: number;
-    userRole: string;
+    userRole: string | null;
     permissions: {
         canUseAgent: boolean;
         canUseMultiAgent: boolean;
@@ -32,7 +33,7 @@ interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
     user?: string;
-    role?: string;
+    role?: string | null;
 }
 
 const ROLE_BADGE_COLOR: Record<string, string> = {
@@ -63,12 +64,15 @@ export default function Sidebar({
     const { language, setLanguage, t } = useLanguage();
     const pathname = usePathname();
 
-    const roleKey = (userRole in ROLE_BADGE_COLOR ? userRole : 'admin');
-    const badgeColor = ROLE_BADGE_COLOR[roleKey] ?? ROLE_BADGE_COLOR.admin;
+    const roleKey = userRole && Object.hasOwn(ROLE_BADGE_COLOR, userRole) ? userRole : 'unknown';
+    const badgeColor = ROLE_BADGE_COLOR[roleKey] ?? ROLE_BADGE_COLOR.viewer;
+    const roleLabel = t(`sidebar.role.${roleKey}`);
+    const privileged = userRole === 'admin' || userRole === 'owner';
+    const canReadOperations = Boolean(userRole && userRole !== 'viewer');
 
     const initials = user
         ? user.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()
-        : roleKey.slice(0, 2).toUpperCase();
+        : roleLabel.slice(0, 2).toUpperCase();
 
     const handleNav = (state: string) => {
         onNavigate(state);
@@ -96,10 +100,13 @@ export default function Sidebar({
                     'bg-[#0d0f1a] border-r border-white/[0.06]',
                     'flex flex-col',
                     'transform transition-transform duration-300 ease-in-out',
-                    isOpen ? 'translate-x-0' : '-translate-x-full',
+                    isOpen ? 'translate-x-0' : 'invisible -translate-x-full md:visible',
                     'md:translate-x-0',
                 )}
-                aria-label="Main navigation"
+                aria-label={t('sidebar.navigation')}
+                onKeyDown={event => {
+                    if (event.key === 'Escape' && isOpen) onClose();
+                }}
             >
                 {/* ── Logo ─────────────────────────────────────── */}
                 <div className="flex items-center gap-2.5 px-[18px] py-[18px] pb-[14px] border-b border-white/[0.06] flex-shrink-0">
@@ -113,8 +120,8 @@ export default function Sidebar({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="md:hidden p-1.5 rounded text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-colors"
-                        aria-label="Close sidebar"
+                        className="md:hidden flex min-h-11 min-w-11 items-center justify-center rounded text-white/60 hover:text-white/90 hover:bg-white/[0.07] transition-colors"
+                        aria-label={t('sidebar.close')}
                     >
                         ✕
                     </button>
@@ -130,150 +137,120 @@ export default function Sidebar({
                         {initials}
                     </div>
                     <div className="min-w-0 flex-1">
-                        <div className="text-white/90 text-[12px] font-medium truncate">{user || 'User'}</div>
-                        <div className="text-white/25 text-[10px] capitalize">{roleKey}</div>
+                        <div className="text-white/90 text-[12px] font-medium truncate">{user || t('sidebar.user')}</div>
                     </div>
                     <span className={clsx(
-                        'flex-shrink-0 text-[9px] font-bold uppercase tracking-[0.06em]',
+                        'flex-shrink-0 text-[9px] font-bold tracking-[0.04em]',
                         'px-[7px] py-[3px] rounded',
                         badgeColor,
                     )}>
-                        {roleKey}
+                        {roleLabel}
                     </span>
                 </div>
 
                 {/* ── Nav ─────────────────────────────────────── */}
-                <nav className="flex-1 overflow-y-auto px-[10px] py-2" aria-label="Main navigation">
-
-                    {/* Home */}
-                    <SidebarNavGroup id="home" title={t('sidebar.home') || 'Home'}>
-                        <SidebarNavItem icon={Home} label={t('nav.home') || 'Home'}
-                            isActive={(appState === 'home' && !isRoute('/workspace')) || isRoute('/home')}
+                <nav className="flex-1 overflow-y-auto scroll-py-2 px-[10px] py-2" aria-label={t('sidebar.navigation')}>
+                    <div className="flex flex-col gap-px" data-sidebar-group="main">
+                        <SidebarNavItem icon={Home} label={t('nav.home')}
+                            isActive={pathname === '/' || pathname === '/home' || isRoute('/home/')}
                             onClick={() => handleNav('home')} />
-                        <SidebarNavItem icon={Sparkles} label={t('nav.landing') || 'Landing Page'}
-                            isActive={appState === 'landing' || isRoute('/landing')}
-                            onClick={() => handleNav('landing')} />
-                    </SidebarNavGroup>
-
-                    {/* AI work */}
-                    <SidebarNavGroup id="ai-work" title={t('sidebar.aiWork') || 'AI Work'}>
-                        <SidebarNavItem icon={LayoutDashboard} label="CVF Workspace"
-                            isActive={appState === 'workspace' || isRoute('/workspace')}
-                            href="/workspace" onNavigate={onClose} />
                         {permissions.canUseAgent && (
-                            <SidebarNavItem icon={Bot} label={t('nav.aiAgent') || 'AI Agent'}
-                                isActive={appState === 'agent'}
-                                onClick={() => handleNav('agent')} />
+                            <SidebarNavItem icon={Bot} label={t('nav.aiAgent')}
+                                isActive={appState === 'agent'} onClick={() => handleNav('agent')} />
                         )}
-                        {permissions.canUseMultiAgent && (
-                            <SidebarNavItem icon={Network} label={t('nav.multiAgent') || 'Multi Agent'}
-                                isActive={appState === 'multi-agent'}
-                                onClick={() => handleNav('multi-agent')} />
-                        )}
-                        {permissions.canUseTools && (
-                            <SidebarNavItem icon={Wrench} label={t('nav.tools') || 'Tools'}
-                                isActive={appState === 'tools'}
-                                onClick={() => handleNav('tools')} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={FlaskConical} label={t('nav.simulation') || 'Simulation'}
-                                isActive={appState === 'simulation' || isRoute('/simulation')}
-                                onClick={() => handleNav('simulation')} />
-                        )}
-                    </SidebarNavGroup>
-
-                    {/* Knowledge and review */}
-                    <SidebarNavGroup id="knowledge-review" title={t('sidebar.knowledgeReview') || 'Knowledge & Review'}>
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={Lightbulb} label={t('nav.knowledge') || 'Knowledge'}
-                                isActive={isRoute('/governance/knowledge')}
-                                href="/governance/knowledge" onNavigate={onClose} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={BookOpen} label={t('nav.knowledgeIntake') || 'Knowledge Intake'}
-                                isActive={isRoute('/knowledge/intake')}
-                                href="/knowledge/intake" onNavigate={onClose} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={FileCheck2} label={t('nav.artifacts') || 'Artifacts'}
-                                isActive={isRoute('/artifacts')}
-                                href="/artifacts" onNavigate={onClose} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={ClipboardCheck} label={t('nav.workTransfer') || 'Work Transfer'}
-                                isActive={isRoute('/work-transfer')}
-                                href="/work-transfer" onNavigate={onClose} />
-                        )}
-                        <SidebarNavItem icon={Zap} label={t('nav.skills') || 'Skills'}
+                        <SidebarNavItem icon={Zap} label={t('nav.skills')}
                             isActive={appState === 'skills' || (isRoute('/skills') && !isRoute('/skills/search'))}
                             onClick={() => handleNav('skills')} />
-                        <SidebarNavItem icon={Search} label={t('nav.skillSearch') || 'Skill Search'}
-                            isActive={appState === 'skill-search' || isRoute('/skills/search')}
-                            onClick={() => handleNav('skill-search')} />
-                        <SidebarNavItem icon={HelpCircle} label={t('nav.help') || 'Help'}
+                        <SidebarNavItem icon={LayoutDashboard} label={t('nav.workspace')}
+                            isActive={appState === 'workspace' || isRoute('/workspace')}
+                            href="/workspace" onNavigate={onClose} />
+                        <SidebarNavItem icon={HelpCircle} label={t('nav.help')}
                             isActive={appState === 'help' || isRoute('/help')}
                             onClick={() => handleNav('help')} />
-                        <SidebarNavItem icon={BookOpen} label={t('nav.docs') || 'Docs'}
-                            isActive={appState === 'docs' || isRoute('/docs')}
-                            onClick={() => handleNav('docs')} />
-                    </SidebarNavGroup>
+                        <SidebarNavItem icon={Sparkles} label={t('nav.landing')}
+                            isActive={appState === 'landing' || isRoute('/landing')}
+                            onClick={() => handleNav('landing')} />
+                        {(permissions.canUseContext || permissions.canUseSettings || permissions.canUseAIUsage) && (
+                            <SidebarNavGroup id="account" title={t('sidebar.account')} defaultCollapsed>
+                                {permissions.canUseSettings && (
+                                    <SidebarNavItem icon={Settings} label={t('nav.settings')} isActive={false}
+                                        onClick={() => { onShowSettings(); onClose(); }} />
+                                )}
+                                {permissions.canUseAIUsage && (
+                                    <SidebarNavItem icon={Coins} label={t('nav.aiUsage')} isActive={false}
+                                        onClick={() => { onShowAIUsage(); onClose(); }} />
+                                )}
+                                {permissions.canUseContext && (
+                                    <SidebarNavItem icon={UserCircle} label={t('nav.context')} isActive={false}
+                                        onClick={() => { onShowUserContext(); onClose(); }} />
+                                )}
+                            </SidebarNavGroup>
+                        )}
+                    </div>
 
-                    {/* Advanced operations */}
-                    <SidebarNavGroup id="advanced-operations" title={t('sidebar.advancedOperations') || 'Advanced Operations'}>
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={Activity} label={t('nav.history') || 'History'}
-                                isActive={appState === 'history' || isRoute('/history')}
-                                onClick={() => handleNav('history')}
-                                badge={executionsCount > 0 ? executionsCount : undefined} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={BarChart3} label={t('nav.analytics') || 'Analytics'}
-                                isActive={appState === 'analytics' || isRoute('/analytics')}
-                                onClick={() => handleNav('analytics')} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={Gauge} label={t('nav.runtime') || 'Runtime Monitor'}
-                                isActive={appState === 'runtime' || isRoute('/runtime')}
-                                onClick={() => handleNav('runtime')} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={ShoppingBag} label={t('nav.marketplace') || 'Marketplace'}
-                                isActive={appState === 'marketplace' || isRoute('/marketplace')}
-                                onClick={() => handleNav('marketplace')} />
-                        )}
-                        {userRole !== 'viewer' && (
-                            <SidebarNavItem icon={Shield} label={t('nav.governance') || 'Governance'}
-                                isActive={appState === 'governance' || (isRoute('/governance') && !isRoute('/governance/knowledge'))}
-                                onClick={() => handleNav('governance')} />
-                        )}
-                        {(userRole === 'admin' || userRole === 'owner') && (
-                            <SidebarNavItem icon={Building2} label={t('nav.enterprise') || 'Enterprise'}
-                                isActive={isRoute('/admin')}
-                                href="/admin/team" onNavigate={onClose} />
-                        )}
-                        <SidebarNavItem icon={Lock} label={t('nav.safety') || 'AI Safety'}
-                            isActive={appState === 'safety' || isRoute('/safety')}
-                            onClick={() => handleNav('safety')} />
-                    </SidebarNavGroup>
-
-                    {/* Account */}
-                    <SidebarNavGroup id="account" title={t('sidebar.account') || 'Account'}>
-                        {permissions.canUseContext && (
-                            <SidebarNavItem icon={UserCircle} label={t('nav.context') || 'Context'}
-                                isActive={false}
-                                onClick={() => { onShowUserContext(); onClose(); }} />
-                        )}
-                        {permissions.canUseSettings && (
-                            <SidebarNavItem icon={Settings} label={t('nav.settings') || 'Settings'}
-                                isActive={false}
-                                onClick={() => { onShowSettings(); onClose(); }} />
-                        )}
-                        {permissions.canUseAIUsage && (
-                            <SidebarNavItem icon={Coins} label={t('nav.aiUsage') || 'AI Usage'}
-                                isActive={false}
-                                onClick={() => { onShowAIUsage(); onClose(); }} />
-                        )}
-                    </SidebarNavGroup>
+                    <div className="mt-2 border-t border-white/[0.09] pt-2">
+                        <SidebarNavGroup id="developer" title={t('sidebar.developer')} defaultCollapsed={!privileged}
+                            storageKey={privileged ? 'cvf_sidebar_dev_admin' : 'cvf_sidebar_dev_standard'}>
+                            <SidebarNavItem icon={Sparkles} label={language === 'vi' ? 'Luồng khởi đầu có kiểm soát' : 'Governed starter path'}
+                                isActive={false} onClick={() => handleNav('quickStart')} />
+                            {permissions.canUseMultiAgent && (
+                                <SidebarNavItem icon={Network} label={t('nav.multiAgent')}
+                                    isActive={appState === 'multi-agent'} onClick={() => handleNav('multi-agent')} />
+                            )}
+                            {permissions.canUseTools && (
+                                <SidebarNavItem icon={Wrench} label={t('nav.tools')}
+                                    isActive={appState === 'tools'} onClick={() => handleNav('tools')} />
+                            )}
+                            {canReadOperations && (
+                                <>
+                                    <SidebarNavItem icon={FlaskConical} label={t('nav.simulation')}
+                                        isActive={appState === 'simulation' || isRoute('/simulation')}
+                                        onClick={() => handleNav('simulation')} />
+                                    <SidebarNavItem icon={Gauge} label={t('nav.runtime')}
+                                        isActive={appState === 'runtime' || isRoute('/runtime')}
+                                        onClick={() => handleNav('runtime')} />
+                                    <SidebarNavItem icon={Activity} label={t('nav.history')}
+                                        isActive={appState === 'history' || isRoute('/history')}
+                                        onClick={() => handleNav('history')}
+                                        badge={executionsCount > 0 ? executionsCount : undefined} />
+                                    <SidebarNavItem icon={BarChart3} label={t('nav.analytics')}
+                                        isActive={appState === 'analytics' || isRoute('/analytics')}
+                                        onClick={() => handleNav('analytics')} />
+                                    <SidebarNavItem icon={Shield} label={t('nav.governance')}
+                                        isActive={isRoute('/governance') && !isRoute('/governance/knowledge') && !isRoute('/governance/mao-runs')}
+                                        onClick={() => handleNav('governance')} />
+                                    <SidebarNavItem icon={Activity} label={t('nav.maoRuns')}
+                                        isActive={isRoute('/governance/mao-runs')}
+                                        href="/governance/mao-runs" onNavigate={onClose} />
+                                    <SidebarNavItem icon={ShoppingBag} label={t('nav.marketplace')}
+                                        isActive={appState === 'marketplace' || isRoute('/marketplace')}
+                                        onClick={() => handleNav('marketplace')} />
+                                    <SidebarNavItem icon={Lightbulb} label={t('nav.knowledge')}
+                                        isActive={isRoute('/governance/knowledge')}
+                                        href="/governance/knowledge" onNavigate={onClose} />
+                                    <SidebarNavItem icon={BookOpen} label={t('nav.knowledgeIntake')}
+                                        isActive={isRoute('/knowledge/intake')} href="/knowledge/intake" onNavigate={onClose} />
+                                    <SidebarNavItem icon={FileCheck2} label={t('nav.artifacts')}
+                                        isActive={isRoute('/artifacts')} href="/artifacts" onNavigate={onClose} />
+                                    <SidebarNavItem icon={ClipboardCheck} label={t('nav.workTransfer')}
+                                        isActive={isRoute('/work-transfer')} href="/work-transfer" onNavigate={onClose} />
+                                </>
+                            )}
+                            <SidebarNavItem icon={Search} label={t('nav.skillSearch')}
+                                isActive={appState === 'skill-search' || isRoute('/skills/search')}
+                                onClick={() => handleNav('skill-search')} />
+                            <SidebarNavItem icon={BookOpen} label={t('nav.docs')}
+                                isActive={appState === 'docs' || isRoute('/docs')}
+                                onClick={() => handleNav('docs')} />
+                            <SidebarNavItem icon={Lock} label={t('nav.safety')}
+                                isActive={appState === 'safety' || isRoute('/safety')}
+                                onClick={() => handleNav('safety')} />
+                            {privileged && (
+                                <SidebarNavItem icon={Building2} label={t('nav.enterprise')}
+                                    isActive={isRoute('/admin')} href="/admin/team" onNavigate={onClose} />
+                            )}
+                        </SidebarNavGroup>
+                    </div>
                 </nav>
 
                 {/* ── Footer ─────────────────────────────────── */}

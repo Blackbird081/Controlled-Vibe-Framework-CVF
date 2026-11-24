@@ -1,3 +1,4 @@
+import { isSameBrowserOrigin } from './browser-origin';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { requireAdminApiSession, type AdminSession } from '@/lib/admin-session';
@@ -11,13 +12,6 @@ const reply = (status: number, body: Record<string, unknown>) => NextResponse.js
   status, headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, Origin' },
 });
 const fail = (status: number, error: string) => reply(status, { success: false, error });
-const sameOrigin = (request: Request) => {
-  try {
-    const origin = request.headers.get('origin');
-    const site = request.headers.get('sec-fetch-site');
-    return !!origin && origin === new URL(request.url).origin && (!site || site === 'same-origin');
-  } catch { return false; }
-};
 export function normalPrincipal(session: AdminSession, now: number): DraftPrincipal | null {
   if (session.authMode !== 'session' || session.realUserId || session.realRole || session.impersonation
     || !Number.isFinite(session.expiresAt) || session.expiresAt <= now) return null;
@@ -55,7 +49,7 @@ export function draftRouteHandlers(deps: Dependencies = {}) {
   }
   return {
     async POST(request: NextRequest): Promise<NextResponse> {
-      if (!sameOrigin(request)) return fail(403, 'ORIGIN_REFUSED');
+      if (!isSameBrowserOrigin(request)) return fail(403, 'ORIGIN_REFUSED');
       const owner = await principal(request);
       if (owner instanceof NextResponse) return owner;
       if (!store) return fail(503, 'DRAFT_PROFILE_DISABLED');

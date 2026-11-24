@@ -286,7 +286,6 @@ function buildProductDesignGovernedPacket(data: WizardData) {
             `Validate the primary user flow and scope for "${productName}" with the product owner`,
             'Open a separate follow-up batch for implementation work outside this design packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:product-${slug}`,
         inputs: {
             productName: data.productName || '',
             productType: data.productType || '',
@@ -546,9 +545,7 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -776,7 +773,6 @@ export function ProductDesignWizard({ onBack }: ProductDesignWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

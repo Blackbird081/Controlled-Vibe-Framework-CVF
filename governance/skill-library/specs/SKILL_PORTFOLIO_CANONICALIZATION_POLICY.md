@@ -71,7 +71,7 @@ function, not by small tactic names.
 
 ## 5. Merge-First Rule
 
-When a new source proposes a skill:
+When a new source proposes an end-user skill, identify a named job and the material improvement over the agent's native approach before considering another portfolio entry.
 
 1. Check whether its value can be added to an existing canonical skill.
 2. If yes, update that skill and record the source in version history.
@@ -79,7 +79,7 @@ When a new source proposes a skill:
 4. Create a new skill only if the capability is recurring, non-overlapping,
    form-capable, and needed by non-coders as a separate entrypoint.
 
-New skill creation is the last option, not the default outcome.
+New skill creation is the last option, not the default outcome. Route reusable agent-only references to the existing owner under the Governed Capability Intake Doctrine. Form eligibility applies to the end-user entry point.
 
 ---
 

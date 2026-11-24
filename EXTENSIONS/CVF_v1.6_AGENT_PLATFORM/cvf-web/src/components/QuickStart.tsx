@@ -1,5 +1,7 @@
 'use client';
 
+// Text Encoding Exception: bilingual Vietnamese/English UI copy for the governed-route provider note (operator language).
+
 /**
  * QuickStart Component — Guided Governed Intake
  * ==========================================
@@ -17,6 +19,7 @@ import {
   type QuickStartResult,
 } from '@/lib/governed-starter-path';
 import { routeIntent, isIntentFirstEnabled, type IntentRouteResult } from '@/lib/intent-router';
+import { GOVERNED_ROUTE_DEFAULT_PROVIDER, GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 
 interface QuickStartProps {
   onComplete: (result: QuickStartResult) => void;
@@ -25,14 +28,8 @@ interface QuickStartProps {
 }
 
 const PROVIDERS = [
-  {
-    id: 'gemini',
-    name: 'Google Gemini',
-    icon: '✨',
-    desc: { vi: 'Free tier lớn', en: 'Large free tier' },
-    recommended: true,
-  },
-  { id: 'openai', name: 'OpenAI', icon: '🤖', desc: { vi: 'GPT-4o', en: 'GPT-4o' } },
+  { id: 'openai', name: 'OpenAI', icon: '🤖', desc: { vi: 'GPT-4o mini (mặc định)', en: 'GPT-4o mini (default)' }, recommended: true },
+  { id: 'gemini', name: 'Google Gemini', icon: '✨', desc: { vi: 'Free tier lớn', en: 'Large free tier' } },
   { id: 'anthropic', name: 'Anthropic', icon: '🧠', desc: { vi: 'Claude', en: 'Claude' } },
   { id: 'alibaba', name: 'Alibaba Qwen', icon: '🌏', desc: { vi: 'Qwen Turbo', en: 'Qwen Turbo' } },
   { id: 'openrouter', name: 'OpenRouter', icon: '🔀', desc: { vi: 'Nhiều model', en: 'Multi-model' } },
@@ -41,7 +38,7 @@ const PROVIDERS = [
 
 export default function QuickStart({ onComplete, onSkip, language = 'vi' }: QuickStartProps) {
   const [step, setStep] = useState(1);
-  const [provider, setProvider] = useState('gemini');
+  const [provider, setProvider] = useState<string>(GOVERNED_ROUTE_DEFAULT_PROVIDER);
   const [apiKey, setApiKey] = useState('');
   const [userInput, setUserInput] = useState('');
   const [detectedIntent, setDetectedIntent] = useState<DetectedIntent | null>(null);
@@ -97,7 +94,7 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
     recommended: '⭐ Recommended',
   };
   const providerDetails = useMemo(
-    () => PROVIDERS.map((item) => ({ ...item, localizedDesc: item.desc[language] })),
+    () => PROVIDERS.map((item) => ({ ...item, localizedDesc: isGovernedRouteProvider(item.id) ? item.desc[language] : GOVERNED_ROUTE_UNSUPPORTED_NOTE })),
     [language],
   );
 
@@ -142,7 +139,8 @@ export default function QuickStart({ onComplete, onSkip, language = 'vi' }: Quic
               <button
                 key={p.id}
                 onClick={() => setProvider(p.id)}
-                className={`cvf-control flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                disabled={!isGovernedRouteProvider(p.id)}
+                className={`cvf-control flex items-center gap-3 p-3 rounded-lg border-2 transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
                   provider === p.id
                     ? 'cvf-accent-soft'
                     : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'

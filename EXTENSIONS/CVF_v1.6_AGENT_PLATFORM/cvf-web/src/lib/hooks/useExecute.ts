@@ -2,7 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { AIProvider, ExecutionResponse } from '@/lib/ai';
+import type { SettingsData } from '@/components/Settings';
+import { AIProvider, ExecutionResponse, ProviderStatus, ExecutionRequest } from '@/lib/ai';
 
 interface UseExecuteOptions {
     onSuccess?: (result: ExecutionResponse) => void;
@@ -85,26 +86,22 @@ export function useExecute(options?: UseExecuteOptions) {
 
 // Hook to check provider status
 export function useProviders() {
-    const [providers, setProviders] = useState<{
-        provider: AIProvider;
-        configured: boolean;
-        model: string;
-        laneStatus?: string;
-        keySourceName?: string | null;
-        readiness?: 'live_task_ready' | 'not_configured';
-    }[]>([]);
+    const [providers, setProviders] = useState<ProviderStatus[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [anyConfigured, setAnyConfigured] = useState(false);
 
     const fetchProviders = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('/api/providers');
+            const response = await fetch('/api/providers', { cache: 'no-store' });
+            if (!response.ok) throw new Error('Provider status unavailable');
             const data = await response.json();
-            setProviders(data.providers || []);
+            if (!Array.isArray(data.providers)) throw new Error('Invalid provider status');
+            setProviders(data.providers);
             setAnyConfigured(data.anyConfigured || false);
-        } catch (err) {
-            console.error('Failed to fetch providers:', err);
+        } catch {
+            setProviders([]);
+            setAnyConfigured(false);
         } finally {
             setIsLoading(false);
         }
@@ -116,4 +113,43 @@ export function useProviders() {
         anyConfigured,
         fetchProviders,
     };
+}
+
+
+export function mapSettingsProviderToExecutionProvider(provider?: string): ExecutionRequest['provider'] | undefined {
+    if (!provider) {
+        return undefined;
+    }
+
+    if (provider === 'anthropic') {
+        return 'claude';
+    }
+
+    return provider as ExecutionRequest['provider'];
+}
+
+export function selectExecutionProviderModel(settings: SettingsData) {
+    const executionProvider = mapSettingsProviderToExecutionProvider(settings.preferences?.defaultProvider);
+    const selectedModel = settings.preferences?.defaultProvider
+        ? settings.providers?.[settings.preferences.defaultProvider]?.selectedModel
+        : undefined;
+    return { executionProvider, selectedModel };
+}
+
+/** Pure selection only; callers retain their original fetch/json awaits and active check. */
+export function resolveClaudeReadinessModel(status: { providers?: unknown }, selectedModel?: string): string | undefined {
+    if (!Array.isArray(status.providers)) throw new Error('Claude readiness is unknown.');
+    const lane = status.providers.find((p: { provider: string }) => p.provider === 'claude');
+    if (lane?.executionSurface === 'claude_cli_subscription') {
+        if (lane.nativeAuthState !== 'available' || lane.readiness !== 'live_task_ready' || lane.model !== 'sonnet') throw new Error('Claude subscription is not ready. Inspect native sign-in before another run.');
+        return 'sonnet';
+    }
+    return selectedModel;
+}
+
+// Text Encoding Exception: Vietnamese model readout preserves its native characters.
+export function nativeModelReadout(evidence: { executionSurface?: string; observedModelId?: string } | null, isVi: boolean): string | undefined {
+    if (evidence?.executionSurface !== 'claude_cli_subscription') return undefined;
+    const label = isVi ? 'Bí danh: sonnet; model quan sát:' : 'Alias: sonnet; observed model:';
+    return `${label} ${evidence.observedModelId || (isVi ? 'chưa rõ' : 'unknown')}`;
 }

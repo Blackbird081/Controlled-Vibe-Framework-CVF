@@ -1,5 +1,7 @@
 # Hướng dẫn: Cài đặt Giao diện Web CVF (v1.6)
 
+> Các quyết định Local hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây không tự cấp quyền. [Vòng đời công việc](lifecycle.md).
+
 **Thời gian:** 15 phút  
 **Cấp độ:** Người mới bắt đầu  
 **Bạn sẽ làm:** Cài đặt, cấu hình và chạy ứng dụng web CVF v1.6  
@@ -132,7 +134,7 @@ Bạn sẽ thấy trang chủ CVF Agent Platform với:
 |--------|----------------|
 | **Simple** | Chỉ chat, không chấm điểm |
 | **Rules** | Mỗi phản hồi được chấm 0-100, bạn accept/reject |
-| **Full CVF** | Phase gate: phải hoàn thành danh sách kiểm tra Phase A trước Phase B |
+| **Full CVF** | Phase gate: phải hoàn thành danh sách kiểm tra INTAKE trước DESIGN |
 
 ---
 
@@ -286,3 +288,5 @@ Xem Hướng dẫn Triển khai Hosted để biết các tùy chọn Docker, sel
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: preserves localized reader text and existing navigation symbols. -->

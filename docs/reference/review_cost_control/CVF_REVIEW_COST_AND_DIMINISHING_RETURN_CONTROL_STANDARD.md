@@ -178,13 +178,16 @@ public-sync action. This target is operational telemetry, not a waiver of a
 critical defect. An eligible review that exceeds it records
 `LATENCY_BUDGET_EXCEEDED_WITH_REASON` and classifies the avoidable delay.
 
-The default closure choreography is one material commit followed by at most
-one continuity commit. Semantic inspection and bounded repairs finish before
-the material commit. Committing early, discovering the committed-range split
-afterward, or using repeated broad gates to discover literal requirements are
-review-process defects. More than one commit in either lane requires
-`EXCEPTION_WITH_REASON`; a hook-created retry does not by itself justify an
-extra material commit.
+The preferred closure plan is one material commit followed by one continuity
+commit when needed. This is a planning target, not a numeric stop condition.
+Semantic inspection and bounded repairs should finish before material commit.
+Premature commits, avoidable range recomputation and repeated broad discovery
+gates remain review-process defects. Record the causal reason and real cost of
+unplanned repair or splits; continue admitted local work within scope and its
+remaining time/effect budget without a new operator confirmation for count alone.
+Operator revision, 2026-11-13: commit counts remain mandatory telemetry; they
+no longer force an exception token or reject an otherwise valid review. Explicit
+operator hard limits remain binding; historical failures and costs are retained.
 
 Use this order:
 
@@ -813,8 +816,12 @@ evidence and the operator may override it explicitly.
 - `WORKTREE_CHURN`
 - `MULTIPLE_AVOIDABLE_DELAYS`
 
-If `materialCommitCount > 1` or `continuityCommitCount > 1`,
-`commitPlanDisposition` must start with `EXCEPTION_WITH_REASON:`.
+Commit counts are non-negative telemetry, without a count-based rejection.
+`MATERIAL_ONLY` and `CONTINUITY_ONLY` describe the lane, not its cardinality.
+Use `EXCEPTION_WITH_REASON:` for a documented exceptional plan when useful;
+legacy reason-bearing records remain valid and an empty reason remains invalid.
+The default-pair token must describe the actual planned shape; extra commits
+are assessed through their scope, necessity, proof and cost rather than a cap.
 
 ## Stop-Disposition Vocabulary
 
@@ -861,7 +868,7 @@ Continuation, and never for an unlinked or invalidly linked completion review.
 | `stopDisposition` is one of the five allowed tokens | ENFORCE |
 | round-three escalation token restriction | ENFORCE |
 | audit, commit-plan, latency, and delay vocabularies | ENFORCE |
-| multi-commit exception-reason requirement | ENFORCE |
+| non-negative commit telemetry and plan vocabulary; no numeric cap | ENFORCE |
 | changed work-order dispatch kind, convergence fields, and cross-field rules | ENFORCE |
 | parent-assignment invocation-count ceiling before external dispatch | ENFORCE |
 | round-two new-critical-evidence requirement and round-three dispatch stop | ENFORCE |
@@ -887,7 +894,7 @@ make review cost visible without pretending to judge finding value.
 ### Evidence Comparison
 
 The checker validates the full telemetry field set, controlled vocabularies,
-the round-three route, multi-commit exception reason, and the declaration for
+the round-three route, commit telemetry and optional exception reason, and the declaration for
 every changed completion review. Focused tests cover valid, missing, invalid,
 escalation, commit-exception, archive, and non-review cases.
 

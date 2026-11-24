@@ -1,13 +1,17 @@
 'use client';
 
+// Text Encoding Exception: Preserve the existing brand indicator symbol.
+
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n';
+import { TechnicalDetails } from '@/components/TechnicalDetails';
+import { NO_DATA_LABEL } from '@/lib/presentation-labels';
 
 export interface BrandDriftData {
-    driftScore: number;   // 0-100
-    status: 'FROZEN' | 'COMPLIANT' | 'DRIFTING';
-    changedFields: string[];
-    lastChecked: string;
+    driftScore: number | null;   // 0-100
+    status: 'FROZEN' | 'COMPLIANT' | 'DRIFTING' | null;
+    changedFields: string[] | null;
+    lastChecked: string | null;
 }
 
 interface BrandDriftIndicatorProps {
@@ -17,23 +21,17 @@ interface BrandDriftIndicatorProps {
 
 const LABELS = {
     vi: {
-        title: 'Brand Guardian',
         frozen: '🔒 Đã khóa',
         compliant: '✅ Tuân thủ',
         drifting: '⚠️ Đang lệch',
-        drift: 'Lệch',
-        changedFields: 'Trường thay đổi',
         lastChecked: 'Kiểm tra lần cuối',
         loading: 'Đang kiểm tra...',
         noDrift: 'Không có thay đổi',
     },
     en: {
-        title: 'Brand Guardian',
         frozen: '🔒 Frozen',
         compliant: '✅ Compliant',
         drifting: '⚠️ Drifting',
-        drift: 'Drift',
-        changedFields: 'Changed fields',
         lastChecked: 'Last checked',
         loading: 'Checking...',
         noDrift: 'No changes detected',
@@ -46,19 +44,21 @@ function getDriftColor(score: number): string {
     return 'bg-red-500';
 }
 
-function getStatusBadge(status: string, l: typeof LABELS.en) {
+function getStatusBadge(status: BrandDriftData['status'], l: typeof LABELS.en, noData: string) {
     switch (status) {
         case 'FROZEN': return { text: l.frozen, bg: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' };
         case 'COMPLIANT': return { text: l.compliant, bg: 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' };
-        default: return { text: l.drifting, bg: 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300' };
+        case 'DRIFTING': return { text: l.drifting, bg: 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300' };
+        default: return { text: noData, bg: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300' };
     }
 }
 
 export function BrandDriftIndicator({ data: propData, compact = false }: BrandDriftIndicatorProps) {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const l = LABELS[language];
     const [fetchedData, setData] = useState<BrandDriftData | null>(null);
     const data = propData ?? fetchedData;
+    const noData = NO_DATA_LABEL[language];
     const [loading, setLoading] = useState(!propData);
 
     useEffect(() => {
@@ -70,17 +70,20 @@ export function BrandDriftIndicator({ data: propData, compact = false }: BrandDr
                 if (!res.ok) throw new Error(`${res.status}`);
                 const json = await res.json();
                 if (!cancelled) {
+                    const measured = json?.fallback === true ? undefined : json?.data;
+                    const score = measured?.drift_score;
+                    const status = measured?.status;
+                    const fields = measured?.changed_fields;
+                    const lastChecked = measured?.last_checked;
                     setData({
-                        driftScore: json.data?.drift_score ?? 0,
-                        status: json.data?.status ?? 'COMPLIANT',
-                        changedFields: json.data?.changed_fields ?? [],
-                        lastChecked: json.data?.last_checked ?? new Date().toISOString(),
+                        driftScore: typeof score === 'number' && score >= 0 && score <= 100 ? score : null,
+                        status: status === 'FROZEN' || status === 'COMPLIANT' || status === 'DRIFTING' ? status : null,
+                        changedFields: Array.isArray(fields) && fields.every(field => typeof field === 'string') ? fields : null,
+                        lastChecked: typeof lastChecked === 'string' && Number.isFinite(Date.parse(lastChecked)) ? lastChecked : null,
                     });
                 }
             } catch {
-                if (!cancelled) {
-                    setData({ driftScore: 0, status: 'COMPLIANT', changedFields: [], lastChecked: new Date().toISOString() });
-                }
+                if (!cancelled) setData(null);
             } finally {
                 if (!cancelled) setLoading(false);
             }
@@ -90,14 +93,15 @@ export function BrandDriftIndicator({ data: propData, compact = false }: BrandDr
     }, [propData]);
 
     if (!propData && loading) return <p className="text-xs text-gray-400">{l.loading}</p>;
-    if (!data) return null;
+    const driftScore = data?.driftScore ?? null;
+    const changedFields = data?.changedFields;
 
-    const badge = getStatusBadge(data.status, l);
+    const badge = getStatusBadge(data?.status ?? null, l, noData);
 
     if (compact) {
         return (
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full ${badge.bg}`}>
-                {badge.text} {data.driftScore > 0 && `${data.driftScore}%`}
+                {badge.text} {driftScore !== null && `${driftScore}%`}
             </span>
         );
     }
@@ -106,7 +110,7 @@ export function BrandDriftIndicator({ data: propData, compact = false }: BrandDr
         <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-2">
             <div className="flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                    🛡️ {l.title}
+                    🛡️ {t('governancePage.brandDrift')}
                 </h4>
                 <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${badge.bg}`}>
                     {badge.text}
@@ -116,36 +120,38 @@ export function BrandDriftIndicator({ data: propData, compact = false }: BrandDr
             {/* Drift bar */}
             <div>
                 <div className="flex justify-between text-xs text-gray-500 mb-1">
-                    <span>{l.drift}</span>
-                    <span>{data.driftScore}%</span>
+                    <span>{t('governancePage.brandChange')}</span>
+                    <span>{driftScore === null ? noData : `${driftScore}%`}</span>
                 </div>
-                <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                {driftScore !== null && <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
                     <div
-                        className={`h-full rounded-full transition-all ${getDriftColor(data.driftScore)}`}
-                        style={{ width: `${Math.min(100, data.driftScore)}%` }}
+                        className={`h-full rounded-full transition-all ${getDriftColor(driftScore)}`}
+                        style={{ width: `${driftScore}%` }}
                     />
-                </div>
+                </div>}
             </div>
 
             {/* Changed fields */}
-            {data.changedFields.length > 0 ? (
+            {changedFields && (changedFields.length > 0 ? (
                 <div>
-                    <p className="text-xs text-gray-500 mb-1">{l.changedFields}:</p>
+                    <p className="mb-2 text-xs text-gray-500">{t('governancePage.brandHasChanges')}</p>
+                    <TechnicalDetails label={t('common.technicalDetails')}>
                     <div className="flex flex-wrap gap-1">
-                        {data.changedFields.map(f => (
+                        {changedFields.map(f => (
                             <span key={f} className="px-1.5 py-0.5 text-[10px] bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 rounded">
                                 {f}
                             </span>
                         ))}
                     </div>
+                    </TechnicalDetails>
                 </div>
             ) : (
                 <p className="text-xs text-gray-400">{l.noDrift}</p>
-            )}
+            ))}
 
-            <p className="text-[10px] text-gray-400">
+            {data?.lastChecked && <p className="text-[10px] text-gray-400">
                 {l.lastChecked}: {new Date(data.lastChecked).toLocaleString()}
-            </p>
+            </p>}
         </div>
     );
 }

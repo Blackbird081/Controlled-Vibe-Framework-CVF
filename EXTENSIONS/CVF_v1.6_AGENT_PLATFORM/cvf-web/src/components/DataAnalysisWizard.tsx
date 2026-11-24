@@ -257,7 +257,6 @@ function buildDataAnalysisGovernedPacket(data: WizardData) {
             `Validate the analysis outcomes for "${analysisGoal}" with the target audience`,
             'Open a separate follow-up batch for implementation or modeling work outside this analysis packet',
         ],
-        skillPreflightDeclaration: `NONCODER_REFERENCE_PACKET:analysis-${slug}`,
         inputs: {
             analysisGoal: data.analysisGoal || '',
             businessQuestion: data.businessQuestion || '',
@@ -450,9 +449,7 @@ export function DataAnalysisWizard({ onBack }: DataAnalysisWizardProps) {
                         intent={governedLiveExecution.request.intent}
                         executionOverrides={{
                             mode: governedLiveExecution.request.mode,
-                            cvfPhase: governedLiveExecution.request.cvfPhase,
                             cvfRiskLevel: governedLiveExecution.request.cvfRiskLevel,
-                            skillPreflightDeclaration: governedLiveExecution.request.skillPreflightDeclaration,
                             fileScope: governedLiveExecution.request.fileScope,
                         }}
                         onComplete={(output) => setLiveRunOutput(output)}
@@ -622,7 +619,6 @@ export function DataAnalysisWizard({ onBack }: DataAnalysisWizardProps) {
                                             <div><strong>Mode:</strong> {governedPacket.executionHandoff.mode}</div>
                                             <div><strong>Intent:</strong> {governedPacket.executionHandoff.intent}</div>
                                             <div><strong>File scope:</strong> {governedPacket.executionHandoff.fileScope.join(', ')}</div>
-                                            <div><strong>Skill preflight:</strong> {governedPacket.executionHandoff.skillPreflightDeclaration}</div>
                                         </div>
                                     </div>
 

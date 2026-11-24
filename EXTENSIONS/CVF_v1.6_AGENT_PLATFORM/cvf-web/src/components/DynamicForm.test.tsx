@@ -22,10 +22,6 @@ vi.mock('./SpecExport', () => ({
     ),
 }));
 
-vi.mock('@/lib/skill-template-map', () => ({
-    getSkillForTemplate: () => null,
-}));
-
 const appBuilderCompleteTemplate: Template = {
     id: 'app_builder_complete',
     name: '📦 Tạo Ứng dụng Hoàn chỉnh',
@@ -74,6 +70,13 @@ describe('DynamicForm Surface 1 template i18n', () => {
         expect(allText).not.toContain('1. Tên app / sản phẩm');
         expect(allText).not.toContain('Nó giải quyết vấn đề gì');
         expect(allText).not.toContain('Tập trung vào vấn đề thật ngoài đời');
+    });
+
+    it('links to the recommended package for the receiving agent', () => {
+        render(<DynamicForm {...defaultProps} />);
+
+        expect(screen.getByRole('link', { name: 'Suggested agent package' }).getAttribute('href'))
+            .toBe('/skills/agent_system_skills/cvf-engineering-spec-driven-development');
     });
 
     it('keeps app_builder_complete form chrome in Vietnamese mode', () => {

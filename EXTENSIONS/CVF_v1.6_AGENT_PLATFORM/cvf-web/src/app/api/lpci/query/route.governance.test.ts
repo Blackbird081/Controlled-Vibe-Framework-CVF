@@ -1,5 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
+import { mkdtemp, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 import { POST } from './route';
 import { computeServiceRequestSignature, deriveServiceTokenIdentity } from '@/lib/service-token-auth';
@@ -31,7 +34,12 @@ function makeRequest(body: unknown) {
 }
 
 describe('POST /api/lpci/query route governance proof', () => {
-  beforeEach(() => {
+  const originalEventsPath = process.env.CVF_CONTROL_PLANE_EVENTS_PATH;
+  let tempDir = '';
+
+  beforeEach(async () => {
+    tempDir = await mkdtemp(path.join(os.tmpdir(), 'cvf-lpci-query-governance-'));
+    process.env.CVF_CONTROL_PLANE_EVENTS_PATH = path.join(tempDir, 'events.json');
     process.env.CVF_SERVICE_TOKEN = 'test-service-token';
     verifySessionCookieMock.mockReset();
     verifySessionCookieMock.mockResolvedValue(null);
@@ -40,7 +48,16 @@ describe('POST /api/lpci/query route governance proof', () => {
     process.env.LPCI_QUERY_SERVICE_ACTOR_ALLOWLIST = allowedActor;
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    if (originalEventsPath) {
+      process.env.CVF_CONTROL_PLANE_EVENTS_PATH = originalEventsPath;
+    } else {
+      delete process.env.CVF_CONTROL_PLANE_EVENTS_PATH;
+    }
+    if (tempDir) {
+      await rm(tempDir, { recursive: true, force: true });
+      tempDir = '';
+    }
     delete process.env.CVF_SERVICE_TOKEN;
     delete process.env.LPCI_QUERY_SERVICE_ACTOR_ALLOWLIST;
   });

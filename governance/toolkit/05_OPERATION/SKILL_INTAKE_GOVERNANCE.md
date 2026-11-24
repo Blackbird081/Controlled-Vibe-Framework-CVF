@@ -9,10 +9,10 @@
 
 ## Overview
 
-This document defines the mandatory rules and process for integrating **external skills** into the CVF Skill Library. It prevents domain drift, naming conflicts, and misalignment with CVF's core principles.
+This policy governs external skills integrated into the end-user CVF Skill Library. The [GC-044 rescreen standard](../../../docs/reference/CVF_TEMPLATE_SKILL_CORPUS_RESCREEN_STANDARD_2026-04-14.md) governs front-door quality and trusted-subset admission.
 
 > [!IMPORTANT]
-> All external skills MUST pass this intake process before being placed into any domain. No exceptions.
+> End-user skills must pass this intake before front-door exposure. Agent-only capabilities use the [Governed Capability Intake Doctrine](../../../docs/reference/CVF_GOVERNED_CAPABILITY_INTAKE_DOCTRINE_2026-05-07.md). The form, 15 sections, English-only rejection, and Template Bridge below apply to the end-user skill artifact. Agent references may preserve source language when the agent can reliably verify the relevant content. Executable integration follows its applicable governance route.
 
 ---
 
@@ -30,13 +30,13 @@ Before evaluating any new skill, reviewers must verify it aligns with:
 
 ---
 
-## Intake Criteria (Pass ALL 5 to proceed)
+## End-User Skill Intake Criteria
 
-A skill may enter the CVF Library only if it meets **all 5** of the following:
+An end-user skill must satisfy the following criteria:
 
 | # | Criterion | Must Answer YES |
 |---|---|---|
-| 1 | **Unique value** | Does this skill address something not already in the library? |
+| 1 | **Unique value and uplift over native** | Does the candidate address a real job and add material value over the existing library and available native approach? |
 | 2 | **CVF phase alignment** | Does it fit one or more phases (Discovery / Design / Build / Review)? |
 | 3 | **Form-capable** | Can it be expressed as a form with clear Input → Output? |
 | 4 | **Domain-assignable** | Does it naturally belong to an existing functional domain? |
@@ -96,7 +96,7 @@ Use this priority order to assign the correct domain:
 
 ## Mandatory Sections Checklist (15 Required)
 
-All skills must include these 15 sections validated by `validate_skills.py`:
+End-user skill specs must include these 15 sections checked by `validate_skills.py`:
 
 | # | Section heading | Notes |
 |---|---|---|
@@ -132,7 +132,7 @@ All skills must include these 15 sections validated by `validate_skills.py`:
 
 ## Template Bridge Requirement
 
-Every skill integrated into the library **MUST** have a corresponding Template entry for full bidirectional navigation.
+Each skill exposed through the non-coder front door must have a corresponding Template entry for bidirectional navigation.
 
 ### Steps
 
@@ -183,9 +183,9 @@ Examples:
 
 ---
 
-## Governance Pipeline (Run After Every Intake)
+## End-User Skill Governance Pipeline
 
-After all skill files are created and validated, run the full pipeline:
+Run the existing validation and update the derived outputs affected by the admitted end-user skill change. Keep all gates applicable to the changed surface. Generated UAT records prepare verification. Record observed outcomes before using them as acceptance evidence.
 
 ```bash
 # Step 1: Validate all skill files
@@ -207,11 +207,13 @@ node EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/scripts/build-skill-index.js
 # Step 6: TypeScript build check
 cd EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web && npm run build
 
-# Step 7: Commit and push
-git add -A
-git commit -m "feat(skills): [domain] add [skill_name] — CVF v1.5.2 intake"
-git push origin main
 ```
+
+**Step 7. Review the exact changes and generated outputs against the approved
+manifest.** The authorized Local closer stages only the approved paths and
+uses the [tranche commit standard](../../../docs/reference/CVF_TRANCHE_COMMIT_CHOREOGRAPHY_STANDARD_2026-06-03.md)
+for checks and commit. Push requires separate operator authorization and follows
+the [canonical repository route](../../../docs/reference/CVF_AGENTS_CRITICAL_REPOSITORY_BOUNDARY_2026-06-23.md).
 
 ---
 

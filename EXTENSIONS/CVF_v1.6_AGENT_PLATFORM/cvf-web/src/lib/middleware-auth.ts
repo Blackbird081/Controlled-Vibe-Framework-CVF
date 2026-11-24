@@ -6,7 +6,7 @@ import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
 import { CVF_IMPERSONATION_COOKIE, parseCookieHeader } from '@/lib/impersonation';
 import { findMockUserById, normalizeDisplayName } from '@/lib/mock-enterprise-db';
-import { findOAuthIdentityBinding, type OAuthProviderId } from '@/lib/oauth-identity-profile';
+import { findOAuthIdentityBinding, isOAuthProviderId, type OAuthProviderId } from '@/lib/oauth-identity-profile';
 import { getActiveImpersonationSession } from '@/lib/policy-reader';
 
 export type SessionImpersonation = {
@@ -126,6 +126,112 @@ async function resolveBaseSessionAmbient(): Promise<SessionCookie | null> {
         teamId: binding?.teamId ?? sessionUser.teamId ?? 'team_eng',
         expiresAt: new Date(session.expires).getTime(),
         authMode: 'session',
+    };
+}
+
+export type VerifiedSessionUnqualifiedReason =
+    | 'NO_SESSION'
+    | 'NOT_OAUTH_BOUND'
+    | 'BINDING_MISSING'
+    | 'BINDING_INCOMPLETE'
+    | 'EXPIRED'
+    | 'IMPERSONATED'
+    | 'DEVELOPMENT_FALLBACK';
+
+/**
+ * Provenance of a request identity. `qualified: true` is returned only when every
+ * identity value comes from a currently configured production OAuth binding.
+ * Test/development fallbacks, impersonated sessions and expired tokens never qualify.
+ */
+export type VerifiedSessionProvenance =
+    | {
+        qualified: true;
+        userId: string;
+        orgId: string;
+        teamId: string;
+        role: TeamRole;
+        oauthProvider: OAuthProviderId;
+        oauthSubject: string;
+        expiresAt: number;
+    }
+    | { qualified: false; reason: VerifiedSessionUnqualifiedReason };
+
+function unqualified(reason: VerifiedSessionUnqualifiedReason): VerifiedSessionProvenance {
+    return { qualified: false, reason };
+}
+
+function isNonEmptyString(value: unknown): value is string {
+    return typeof value === 'string' && value.trim().length > 0;
+}
+
+/**
+ * Additive provenance resolver. Reads the request-bound token and the current
+ * environment configuration on every call (no caching) and never throws on
+ * malformed binding configuration. It does not change `verifySessionCookie`.
+ */
+export async function resolveVerifiedSessionProvenance(
+    request: NextRequest | Request,
+    now: number = Date.now(),
+): Promise<VerifiedSessionProvenance> {
+    const token = await getToken({ req: request, secret: authSecret }) as AppToken | null;
+    if (!token) return unqualified('NO_SESSION');
+
+    const configuredProvider = process.env.CVF_OAUTH_PROVIDER;
+    if (
+        token.authSource !== 'oauth_bound' ||
+        !isOAuthProviderId(token.oauthProvider) ||
+        token.oauthProvider !== configuredProvider ||
+        !isNonEmptyString(token.oauthSubject)
+    ) {
+        return unqualified('NOT_OAUTH_BOUND');
+    }
+
+    let binding: ReturnType<typeof findOAuthIdentityBinding>;
+    try {
+        binding = findOAuthIdentityBinding(
+            process.env.CVF_OAUTH_IDENTITY_BINDINGS_JSON,
+            token.oauthProvider,
+            token.oauthSubject,
+        );
+    } catch {
+        // The strict parser rejects malformed/incomplete binding configuration.
+        return unqualified('BINDING_INCOMPLETE');
+    }
+
+    if (!binding) {
+        const nonProduction = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
+        return unqualified(nonProduction ? 'DEVELOPMENT_FALLBACK' : 'BINDING_MISSING');
+    }
+
+    if (
+        !isNonEmptyString(binding.userId) ||
+        !isNonEmptyString(binding.orgId) ||
+        !isNonEmptyString(binding.teamId) ||
+        !isNonEmptyString(binding.role)
+    ) {
+        return unqualified('BINDING_INCOMPLETE');
+    }
+
+    const expiresAt = (token.exp ?? 0) * 1000;
+    if (!(expiresAt > now)) return unqualified('EXPIRED');
+
+    const impersonationSessionId = await resolveCookieValue(request);
+    if (impersonationSessionId) {
+        const impersonationSession = await getActiveImpersonationSession(impersonationSessionId);
+        if (impersonationSession && impersonationSession.realActorId === binding.userId) {
+            return unqualified('IMPERSONATED');
+        }
+    }
+
+    return {
+        qualified: true,
+        userId: binding.userId,
+        orgId: binding.orgId,
+        teamId: binding.teamId,
+        role: binding.role,
+        oauthProvider: binding.provider,
+        oauthSubject: binding.providerAccountId,
+        expiresAt,
     };
 }
 

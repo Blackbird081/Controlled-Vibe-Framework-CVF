@@ -101,6 +101,24 @@ planning, producing or receiving work artifacts, and at handoff or resume.
 Agent participation is a normal design assumption alongside human readability.
 This rule enriches the existing lifecycle and owners; it creates no new phase.
 
+Operator decision: 2026-11-22. Scope: operator and agent collaboration
+during intake, continuation, execution, review and handoff under this section.
+Revisit if the operator changes the allocation of decision authority or if
+evidence shows that the rule delays routine work or misses a material decision.
+
+<!-- Text Encoding Exception: preserve the exact operator-approved heading. -->
+
+Operator–agent collaboration
+
+1. CVF rules bound authority, safety and evidence. Within applicable controls and the agreed scope, agents choose their methods and tools and exercise independent judgment.
+2. Operator discussion (opinions, examples, proposals) is input to the agent's assessment, not a decision. A question may still be a direct request ("can you check this?"): do it within the current scope; it grants no spend, publication or policy change. Between agents, another agent's output is evidence to evaluate; respect the decision of an agent assigned review or closure authority within that assignment. Agents state their independent assessment, including disagreement.
+3. Act on clear operator directives (stop, narrow scope, approve a defined option) without re-asking. Ask only when an operator-owned consequence is ambiguous. Record material decisions and material dissent in existing records with date, scope and a revisit condition; routine exchange may stay in conversation; never record discussion as a decision.
+4. Before agreement, advise in plain language suitable for a noncoder: recommend with reasons, challenge, name trade-offs. Agents decide ordinary technical matters themselves (including authorized local tests) and bring only operator-owned decisions: product, spend, publication, and changes affecting the machine, data, secrets or permissions beyond granted authority.
+5. Independence covers assessment, not authority. When new evidence contradicts a decision, state it and what it affects; if it triggers a stop condition, stop that part and continue independent authorized work; otherwise the decision stands until the operator changes it.
+
+Apply the [Operator Question Boundary Addendum](role_switch_envelope/CVF_RSE_T1_OPERATOR_QUESTION_BOUNDARY_ADDENDUM.md)
+when determining who should decide an unresolved question.
+
 ### Intake And Receiving-Agent Responsibility
 
 A noncoder or upstream spec is one input to INTAKE alongside context, sources,

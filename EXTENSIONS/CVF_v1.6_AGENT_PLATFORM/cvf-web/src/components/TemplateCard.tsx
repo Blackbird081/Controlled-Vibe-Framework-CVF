@@ -8,6 +8,7 @@ import { getTemplateName, getTemplateDescription } from '@/lib/template-i18n';
 interface TemplateCardProps {
     template: Template;
     onClick: () => void;
+    displayName?: string;
     onPreview?: (e: React.MouseEvent) => void;
     onTry?: () => void;
 }
@@ -16,13 +17,13 @@ const subscribeToHydration = () => () => {};
 const clientReady = () => true;
 const serverReady = () => false;
 
-export function TemplateCard({ template, onClick, onPreview, onTry }: TemplateCardProps) {
+export function TemplateCard({ template, onClick, onPreview, onTry, displayName }: TemplateCardProps) {
     // Visible server HTML must not promise an action before its handlers exist.
     const ready = useSyncExternalStore(subscribeToHydration, clientReady, serverReady);
     const { language } = useLanguage();
     const categoryInfo = CATEGORY_INFO[template.category as Category];
     const categoryDisplayName = language === 'en' ? categoryInfo.nameEn : categoryInfo.name;
-    const templateDisplayName = getTemplateName(template.id, template.name, language);
+    const templateDisplayName = displayName ?? getTemplateName(template.id, template.name, language);
     const templateDisplayDesc = getTemplateDescription(template.id, template.description, language);
     const categoryBadgeClasses = {
         blue: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',

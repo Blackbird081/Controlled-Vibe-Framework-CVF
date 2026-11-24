@@ -1,10 +1,14 @@
 # CVF - Bắt Đầu Trong 5 Phút
 
+Chưa biết viết mã? Bấm đúp `Start-CVF-Web.cmd` trong thư mục CVF để mở Web, rồi xem [Cài CVF trên máy của bạn](http://127.0.0.1:3000/help/setup). For the English launcher, use `Start-CVF-Web-EN.cmd`.
+
 Text Encoding Exception: this existing user-facing guide intentionally uses
 Vietnamese text.
 
 [🇬🇧 English guides](guides/) | 🇻🇳 Tiếng Việt
 
+> **Vibe coding có kiểm soát. An toàn và có thể quản lý, đồng thời cân nhắc tốc độ và chi phí.**
+>
 > **🎯 Mục tiêu:** Giúp bạn hiểu và chạy được CVF project đầu tiên trong 5 phút
 >
 > **Mới với CVF?** Đọc [Quick Orientation](guides/CVF_QUICK_ORIENTATION.md) trước (tổng quan và ví dụ giao AI việc code). Lối vào cũ: [CVF_INTERNAL_USER_GUIDE](reference/CVF_INTERNAL_USER_GUIDE.md).
@@ -306,7 +310,7 @@ npm run dev
 3. **Tools:**
    - Web UI: Templates & Skills
    - Governance Toolkit: Phase gates, risk control
-   - Skill Library: **62** active skills across 12 domains (see [README](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/README.md) for current count)
+   - [End-user form index](../governance/skill-library/registry/user-skills/INDEX.md) and [agent packages](../docs/reference/agent_system_skills/generated/skill-index.json)
 
 ### Step 3: First Team Project (5 phút)
 
@@ -461,7 +465,7 @@ git push origin feature/your-feature-name
 ### Path 3: Deep Dives (ongoing)
 
 - [Governance Toolkit](../governance/toolkit/) - Comprehensive
-- [Skill Library](../EXTENSIONS/CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS/) - 62 active skills
+- [Browse reusable forms for end users](../governance/skill-library/registry/user-skills/INDEX.md)
 - [Version History](concepts/version-evolution.md) - Evolution
 - [Architecture](reference/CVF_ARCHITECTURE_DIAGRAMS.md) - Technical specs
 

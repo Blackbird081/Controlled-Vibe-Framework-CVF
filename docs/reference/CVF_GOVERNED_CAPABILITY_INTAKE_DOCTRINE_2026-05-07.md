@@ -25,7 +25,7 @@ evidence-bound.
 
 ## Core Rule
 
-External capability intake is a governed sequence:
+External capabilities admitted to execute code, tools, commands, or workflows must follow this governed sequence:
 
 1. discover the capability;
 2. record provenance;
@@ -34,9 +34,29 @@ External capability intake is a governed sequence:
 5. define allowed and blocked operations;
 6. choose sandbox / adapter posture;
 7. bind the evidence requirement;
-8. evaluate whether it improves CVF without widening claims.
+8. establish material uplift over the current authorized native approach for a named task, accounting for cost, risk, and evidence limits.
 
 No candidate may skip directly from "interesting source" to "runtime authority".
+Adopting a new external executable capability requires the eight steps above
+and all three W7 intake stages. Ordinary use of an already authorized native
+capability does not constitute CVF asset admission.
+
+## Read-Only R0 References
+
+When a source is only read as data for a specific task, use the existing owner
+record. Record the source and revision when available, license or reuse rights,
+allowed use and limits, receiving owner, reason it helps beyond the native
+approach, and one observed use linked to the task result. A trial read within
+existing authority can supply the evidence. Mark the reference adopted when the
+owner can verify its use and reuse rights. Keep unresolved sources as leads.
+
+Use `CVF_TASK_PROPORTIONAL_GOVERNANCE_ROUTING_STANDARD_2026-08-17.md` to route
+the work. `P0_OBSERVE` can cover authorized read-only observation and
+`P1_LIGHT` can cover a small owner note when eligible. External absorption
+and all higher routing floors still apply. Source examples are passive when
+read as data. Loading instructions for execution, binding tools, running a CLI,
+or granting effects requires the applicable executable capability review.
+If the boundary is unclear, apply the stricter route until resolved.
 
 ## Intake Record Shape
 
@@ -81,7 +101,7 @@ If no owner surface exists, the capability is deferred.
 ## Relationship To Existing W7 External Asset Intake
 
 This doctrine extends the logic of `CVF_W7_EXTERNAL_ASSET_INTAKE_PROFILE.md`.
-The W7 profile remains the canonical external asset path. This document adds a
+The W7 profile remains the canonical external asset path for capabilities entering that pipeline. The R0 reference route uses the existing receiving owner record. This document adds a
 broader doctrine for capability-bearing material that may include tools,
 providers, harnesses, workflows, and generated agents.
 

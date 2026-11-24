@@ -10,7 +10,6 @@ import { useLanguage } from '@/lib/i18n';
 
 const COPY = {
   en: {
-    label: 'Review Packet Export',
     title: 'Turn approved work into an HTML review packet',
     intro: 'This page is for people who need a clean, reviewable version of AI-assisted work. It keeps the source, receipt, review status, and boundary visible so the next reviewer does not have to guess what happened.',
     boundary: 'HTML review packet only. PDF, image export, and final proof are handled separately.',
@@ -24,7 +23,6 @@ const COPY = {
     ],
   },
   vi: {
-    label: 'Đóng gói',
     title: 'Biến phần đã duyệt thành gói HTML để rà soát',
     intro: 'Trang này dành cho người cần một bản dễ đọc của công việc có AI hỗ trợ. Nguồn, receipt, trạng thái rà soát và ranh giới được giữ rõ để người xem tiếp theo không phải đoán.',
     boundary: 'Chỉ là gói HTML để rà soát. PDF, xuất ảnh và bằng chứng cuối cùng được xử lý riêng.',
@@ -66,7 +64,7 @@ const starterRequest: ArtifactExportRequest = {
 const cardIcons = [Sparkles, ShieldCheck, FileCheck2];
 
 export default function ArtifactsPage() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const copy = COPY[language === 'vi' ? 'vi' : 'en'];
 
   return (
@@ -77,7 +75,7 @@ export default function ArtifactsPage() {
           <div className="max-w-3xl">
             <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-300">
               <FileCheck2 className="h-4 w-4" aria-hidden="true" />
-              {copy.label}
+              {t('nav.artifacts')}
             </div>
             <h1 className="text-2xl font-bold text-gray-950 dark:text-white">{copy.title}</h1>
             <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{copy.intro}</p>

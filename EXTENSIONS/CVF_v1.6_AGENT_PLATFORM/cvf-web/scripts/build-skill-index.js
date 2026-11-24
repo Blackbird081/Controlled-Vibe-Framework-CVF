@@ -6,6 +6,7 @@ const fs = require('fs');
 const { summarizeSkillContent, serializeAsciiJson } = require('./skill-summary');
 const path = require('path');
 const { loadSkillCorpusGovernance } = require('./skill-corpus-governance');
+const { writeJevAssfRoster } = require('./build-jev-assf-roster');
 
 const BASE_DIR = path.resolve(__dirname, '..');
 const SKILLS_ROOT = path.resolve(BASE_DIR, '../../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS');
@@ -151,7 +152,7 @@ function computeUatScore(content) {
 }
 
 const SPEC_SECTION_CHECKS = [
-    { label: 'purpose', weight: 20, pattern: /##\s+.*Mục đích/i },
+    { label: 'purpose', weight: 20, pattern: /##\s+.*(?:Mục đích|Purpose)/i },
     { label: 'formInput', weight: 15, pattern: /##\s+.*Form Input/i },
     { label: 'expectedOutput', weight: 15, pattern: /##\s+.*Expected Output/i },
     { label: 'validationHooks', weight: 10, pattern: /##\s+.*Validation Hooks/i },
@@ -444,8 +445,7 @@ function buildAssfContent(skill, claimBoundary, controlPlaneRecord) {
     return lines.join('\n');
 }
 
-function buildAssfProjectedSkills(controlPlaneProjection) {
-    const assfIndex = loadAssfSkillIndex();
+function buildAssfProjectedSkills(controlPlaneProjection, assfIndex) {
     const projectedSkills = [];
     const controlPlaneById = new Map(
         (controlPlaneProjection.runtimePackages || []).map((record) => [record.skillId, record]),
@@ -504,7 +504,7 @@ function buildAssfProjectedSkills(controlPlaneProjection) {
     return projectedSkills;
 }
 
-function buildSkillIndex() {
+function buildSkillIndex(assfIndex) {
     if (!fs.existsSync(SKILLS_ROOT)) {
         console.warn(`Skills root not found: ${SKILLS_ROOT}`);
         return { categories: [], meta: {} };
@@ -519,7 +519,7 @@ function buildSkillIndex() {
     const existingPublicSkillRecords = loadExistingPublicSkillRecords();
     const assfControlPlaneInventory = loadAssfControlPlaneInventory();
     const assfControlPlaneProjection = buildAssfControlPlaneProjection(assfControlPlaneInventory);
-    const assfProjectedSkills = buildAssfProjectedSkills(assfControlPlaneProjection);
+    const assfProjectedSkills = buildAssfProjectedSkills(assfControlPlaneProjection, assfIndex);
 
     const entries = fs.readdirSync(SKILLS_ROOT, { withFileTypes: true });
     for (const entry of entries) {
@@ -533,10 +533,16 @@ function buildSkillIndex() {
 
         for (const file of files) {
             if (!file.endsWith('.skill.md')) continue;
-            const filePath = path.join(categoryPath, file);
-            const content = fs.readFileSync(filePath, 'utf-8');
             const skillId = file.replace('.skill.md', '');
             totalScannedSkills += 1;
+            const governanceKey = `${folderName}::${skillId}`;
+            const governanceEntry = corpusGovernance.skillMap.get(governanceKey);
+            if (governanceEntry?.frontDoorVisible !== true) {
+                nonPublicSkills += 1;
+                continue;
+            }
+            const filePath = path.join(categoryPath, file);
+            const content = fs.readFileSync(filePath, 'utf-8').replace(/\r\n?/g, '\n');
             const uatPath = path.join(UAT_ROOT, `UAT-${skillId}.md`);
             const uatContent = fs.existsSync(uatPath) ? fs.readFileSync(uatPath, 'utf-8') : '';
             const fallbackTitle = deriveTitleFromFilename(skillId);
@@ -568,8 +574,6 @@ function buildSkillIndex() {
             const fallbackPhases = DOMAIN_PHASES_MAP[folderName] || DOMAIN_PHASES_MAP[domainValue.toLowerCase().replace(/ /g, '_')] || 'Discovery, Design';
             const fallbackAutonomy = RISK_AUTONOMY[fallbackRisk] || 'Human confirmation required';
             const fallbackScope = fallbackRisk === 'R0' ? 'Informational' : (fallbackRisk === 'R3' || fallbackRisk === 'R4') ? 'Strategic' : 'Tactical';
-            const governanceKey = `${folderName}::${skillId}`;
-            const governanceEntry = corpusGovernance.skillMap.get(governanceKey);
 
             const titleCandidate = titleMatch ? titleMatch[1].trim() : '';
             const finalTitle = isTitleTrustworthy(titleCandidate, skillId) ? titleCandidate : fallbackTitle;
@@ -580,7 +584,7 @@ function buildSkillIndex() {
                 domain: domainValue,
                 difficulty: difficultyMatch ? difficultyMatch[1].trim() : 'Unknown',
                 summary: '',
-                path: path.relative(BASE_DIR, filePath),
+                path: toPosixPath(path.relative(BASE_DIR, filePath)),
                 content,
                 riskLevel: riskMatch ? riskMatch[1].trim() : fallbackRisk,
                 allowedRoles: rolesMatch ? rolesMatch[1].trim() : 'User, Reviewer',
@@ -594,31 +598,22 @@ function buildSkillIndex() {
                 specScore,
                 specQuality,
                 specGate,
-                corpusClass: governanceEntry ? governanceEntry.corpusClass : corpusGovernance.classes.UNSCREENED,
-                frontDoorVisible: governanceEntry ? governanceEntry.frontDoorVisible : false,
-                frontDoorTier: governanceEntry ? governanceEntry.frontDoorTier : 'QUARANTINED',
-                trustedBenchmarkSurface: governanceEntry ? governanceEntry.trustedBenchmarkSurface : false,
-                hasRestrictedLinks: governanceEntry ? governanceEntry.hasRestrictedLinks : false,
-                linkedTemplates: governanceEntry ? governanceEntry.linkedTemplates : [],
-                corpusNote: governanceEntry ? governanceEntry.corpusNote : 'Unscreened legacy surface; excluded from front-door truth until classified.',
+                corpusClass: governanceEntry.corpusClass,
+                frontDoorVisible: governanceEntry.frontDoorVisible,
+                frontDoorTier: governanceEntry.frontDoorTier,
+                trustedBenchmarkSurface: governanceEntry.trustedBenchmarkSurface,
+                hasRestrictedLinks: governanceEntry.hasRestrictedLinks,
+                linkedTemplates: governanceEntry.linkedTemplates,
+                corpusNote: governanceEntry.corpusNote,
             };
-            const existingPublicSkill = existingPublicSkillRecords.get(`${folderName}::${skillId}`);
-            if (existingPublicSkill && typeof existingPublicSkill.content === 'string') {
-                // Keep this projection tranche from refreshing unrelated legacy
-                // skill markdown content in the generated public index.
-                skillRecord.content = existingPublicSkill.content;
-            }
+            const existingPublicSkill = existingPublicSkillRecords.get(governanceKey);
             if (existingPublicSkill && typeof existingPublicSkill.uatContent === 'string') {
                 skillRecord.uatContent = existingPublicSkill.uatContent;
             }
 
-            skillRecord.summary = summarizeSkillContent(skillRecord.content);
+            skillRecord.summary = summarizeSkillContent(skillRecord.content, { includeEnglishPurpose: true });
 
-            if (skillRecord.frontDoorVisible) {
-                visibleSkills.push(skillRecord);
-            } else {
-                nonPublicSkills += 1;
-            }
+            visibleSkills.push(skillRecord);
         }
 
         const categoryName = folderName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -725,7 +720,13 @@ function writeControlPlaneProjection(projectionPayload) {
     return { outPath, updated: true };
 }
 
-const indexPayload = buildSkillIndex();
+const assfIndex = loadAssfSkillIndex();
+writeJevAssfRoster(
+    path.resolve(BASE_DIR, '../../..'),
+    assfIndex.skills,
+    path.resolve(BASE_DIR, 'src/lib/server/jev-web-assf-roster.json'),
+);
+const indexPayload = buildSkillIndex(assfIndex);
 const controlPlaneProjection = indexPayload.assfControlPlaneProjection;
 delete indexPayload.assfControlPlaneProjection;
 const { outPath: controlPlaneOutPath, updated: controlPlaneUpdated } = writeControlPlaneProjection(controlPlaneProjection);

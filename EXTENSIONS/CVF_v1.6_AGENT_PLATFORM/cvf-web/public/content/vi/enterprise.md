@@ -1,5 +1,7 @@
 # CVF cho Doanh nghiệp
 
+> Các quyết định Local hiện tại: INTAKE → DESIGN → SPEC → WORK ORDER → BUILD → REVIEW → FREEZE. Ví dụ dưới đây không tự cấp quyền. [Vòng đời công việc](lifecycle.md).
+
 **Đối tượng:** Tổ chức có 10+ lập trình viên và yêu cầu tuân thủ  
 **Thời gian đọc:** 20 phút  
 **Khuyến nghị:** v1.1 + v1.2 + v1.3 + v1.6
@@ -12,12 +14,12 @@ AI đã có mặt trong tổ chức của bạn. Lập trình viên đang sử d
 
 | Nhu cầu Doanh nghiệp | Giải pháp CVF |
 |-----------------------|---------------|
-| **Governance** — Ai có thể làm gì | Ma trận Quyền hạn: 4 vai trò × 4 phase |
+| **Governance** — Ai có thể làm gì | Quyền phụ thuộc giai đoạn, vai trò và rủi ro |
 | **Khả năng kiểm toán** — Truy vết quyết định | Nhật ký Action Unit + Bản ghi Quyết định |
 | **Quản lý rủi ro** — Kiểm soát phạm vi ảnh hưởng | Mức rủi ro R0–R3 với phase gate |
 | **Tuân thủ** — Đáp ứng yêu cầu quy định | Governance Toolkit (7 module) |
 | **Chuẩn hóa** — Sử dụng AI nhất quán | Agent Archetype + Skill Library |
-| **Tái sử dụng** — Không phát minh lại bánh xe | 114 skill có sẵn + skill nhóm |
+| **Tái sử dụng** — Không phát minh lại bánh xe | [Gói dành cho agent](/skills) và biểu mẫu nội bộ của nhóm |
 
 ---
 
@@ -34,33 +36,7 @@ AI đã có mặt trong tổ chức của bạn. Lập trình viên đang sử d
 
 2. **Định nghĩa chính sách governance**
 
-```markdown
-# Company XYZ — CVF Governance Policy
-
-## Roles
-| CVF Role | Maps To | Count |
-|----------|---------|-------|
-| OBSERVER | Junior devs, interns | ~30% |
-| BUILDER | Regular devs | ~50% |
-| ARCHITECT | Senior devs, tech leads | ~15% |
-| GOVERNOR | VP Eng, Security team | ~5% |
-
-## Risk Levels
-| Level | Definition | Approval Required |
-|-------|-----------|-------------------|
-| R0 | Read-only, formatting, summarization | None |
-| R1 | Internal code, single service, bounded | Peer review |
-| R2 | Cross-service, auth, data, payments | ARCHITECT |
-| R3 | Infrastructure, deploy, external APIs | GOVERNOR + Security |
-
-## Phase Gates
-| Transition | Gate | Approver |
-|-----------|------|----------|
-| A → B | Intent review | Self-service |
-| B → C | Design approval | ARCHITECT (for R2+) |
-| C → D | Code review + Phase D checklist | Peer (any BUILDER) |
-| D → Production | Final review | GOVERNOR (for R2+) |
-```
+Xác định người phụ trách, hành động được phép, ranh giới rủi ro, bằng chứng và chuyển cấp theo ma trận quyền Local áp dụng. R4 bị chặn; thiếu thông tin là R3. Xem [mô hình rủi ro](risk-model.md) và [vòng đời công việc](lifecycle.md).
 
 1. **Chọn nhóm thí điểm** (5–7 dev, 1 dự án, 4 tuần)
 
@@ -127,8 +103,8 @@ Chỉnh sửa `governance/toolkit/03_CONTROL/CVF_PHASE_AUTHORITY_MATRIX.md`:
 
 **Chương trình workshop:**
 
-- Giờ 1: Triết lý CVF ("Kết quả > Code", 4 phase)
-- Giờ 2: Thực hành: Viết INPUT_SPEC đầu tiên + sử dụng danh sách kiểm tra Phase D
+- Giờ 1: Triết lý CVF ("Kết quả > Code", vòng đời công việc)
+- Giờ 2: Thực hành: Viết INPUT_SPEC đầu tiên + sử dụng danh sách kiểm tra REVIEW
 - Giờ 3: Mức rủi ro, governance, vai trò
 - Giờ 4: Demo giao diện web + giới thiệu Skill Library
 
@@ -232,7 +208,7 @@ Mỗi tương tác AI có thể được chấm điểm qua 6 hạng mục:
 - [ ] INPUT_SPEC.md attached or linked
 - [ ] Risk level: R__ (0/1/2/3)
 
-### Phase D Review
+### REVIEW Review
 - [ ] Output matches INPUT_SPEC requirements
 - [ ] Acceptance criteria met
 - [ ] No scope expansion
@@ -277,13 +253,13 @@ jobs:
 
 Ánh xạ phase CVF vào quy trình Jira:
 
-| Trạng thái Jira | Phase CVF | Quy tắc Chuyển đổi |
+| Trạng thái Jira | BUILDVF | Quy tắc Chuyển đổi |
 |-----------------|-----------|---------------------|
 | To Do | — | — |
-| Discovery | Phase A | Người được giao viết INPUT_SPEC |
-| Design | Phase B | INPUT_SPEC được duyệt → thiết kế |
-| In Progress | Phase C | Thiết kế được duyệt → xây dựng |
-| Review | Phase D | Code + danh sách kiểm tra Phase D |
+| Discovery | INTAKE | Người được giao viết INPUT_SPEC |
+| Design | DESIGN | INPUT_SPEC được duyệt → thiết kế |
+| In Progress | BUILD | Thiết kế được duyệt → xây dựng |
+| Review | REVIEW | Code + danh sách kiểm tra REVIEW |
 | Done | Chấp nhận | Tất cả kiểm tra đạt |
 
 **Trường tùy chỉnh:**
@@ -345,7 +321,7 @@ CVF Compliance Dashboard
 Phase gate compliance:        94%  (target: >90%)
 R3 incidents this quarter:     0   (target: 0)
 Skills in library:           247   (42 global, 205 domain)
-Avg time to Phase D:         4.2d  (baseline: 6.1d)
+Avg time to REVIEW:         4.2d  (baseline: 6.1d)
 Developer satisfaction:      4.3/5 (target: >4.0)
 Governance bypass attempts:    2   (auto-detected by CI)
 ─────────────────────────────────────
@@ -366,7 +342,7 @@ Governance bypass attempts:    2   (auto-detected by CI)
 
 - Chuẩn hóa: tất cả nhóm sử dụng CVF v1.1 + Governance Toolkit
 - Sự cố bảo mật: **0** (phase gate R3 ngăn chặn vấn đề)
-- Review code: **<1 ngày** (danh sách kiểm tra Phase D pre-validate)
+- Review code: **<1 ngày** (danh sách kiểm tra REVIEW pre-validate)
 - Tái sử dụng skill: **62%** tính năng mới dùng skill có sẵn
 
 ### ROI
@@ -385,7 +361,7 @@ Governance bypass attempts:    2   (auto-detected by CI)
 **H: Làm thế nào để bắt buộc tuân thủ CVF?**  
 Đ: Ba lớp:
 
-1. **Kỹ thuật:** CI/CD gate chặn PR không có danh sách kiểm tra Phase D
+1. **Kỹ thuật:** CI/CD gate chặn PR không có danh sách kiểm tra REVIEW
 2. **Xã hội:** PR template làm CVF dễ hơn việc không dùng
 3. **Kiểm toán:** Review governance hàng quý (xem `05_OPERATION/CVF_AUDIT_PROTOCOL.md`)
 
@@ -435,3 +411,5 @@ Governance bypass attempts:    2   (auto-detected by CI)
 ---
 
 *Cập nhật lần cuối: 15 tháng 2, 2026 | CVF v1.6*
+
+<!-- Text Encoding Exception: retains localized reader text and navigation symbols. -->

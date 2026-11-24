@@ -9,151 +9,17 @@
 Use `governance/skill-library/specs/SKILL_PORTFOLIO_CANONICALIZATION_POLICY.md`
 before importing external skill packs or adding overlapping micro-skills.
 
-## 📊 Thống kê
+## Danh mục hiện tại
 
-| Metric | Value |
-| ------ | ----- |
-| **Tổng Skills** | **62 active skills** |
-| **Domains** | 12 domains |
-| **Archived** | 80 skills (legacy/) |
+Trên CVF Web, chọn mẫu kết quả ở Trang chủ để viết bản đặc tả. [Sổ nguồn v1.5.2](../../governance/skill-library/registry/user-skills/INDEX.md) ghi ứng viên tài chính đang chờ chứng nhận. [Danh mục gói dành cho agent](../../docs/reference/agent_system_skills/generated/skill-index.json) ghi tình trạng chứng nhận và phạm vi riêng của từng gói.
 
 ## 🚀 Bắt đầu nhanh
 
-### Cách sử dụng Skill Library
-
-**Bước 1:** Chọn domain phù hợp với nhu cầu
-**Bước 2:** Mở file `.skill.md` trong domain đó
-**Bước 3:** Đọc **Form Input** để biết cần điền gì
-**Bước 4:** Copy template và điền thông tin
-**Bước 5:** Paste vào AI (ChatGPT, Claude, Gemini)
-**Bước 6:** Đánh giá output theo **Checklist**
+Mở Trang chủ CVF Web, chọn mẫu theo kết quả cần và điền thông tin để tạo bản đặc tả.
 
 ---
 
-## 🗂️ Domains
-
-### 👔 [HR & Operations](hr_operations/) (Phase 5) ⭐ NEW
-
-5 skills cho quản lý nhân sự và vận hành
-
-| Skill | Mục đích | Difficulty |
-|-------|----------|------------|
-| Job Description | Tạo JD chuẩn | Easy |
-| Interview Evaluation | Đánh giá ứng viên | Medium |
-| Performance Review | Đánh giá hiệu suất | Medium |
-| Onboarding Checklist | Checklist nhân viên mới | Easy |
-| Policy Documentation | Viết chính sách nội bộ | Medium |
-
----
-
-### ⚖️ [Legal & Contracts](legal_contracts/) (Phase 5) ⭐ NEW
-
-5 skills cho hợp đồng và pháp lý
-
-| Skill | Mục đích | Difficulty |
-|-------|----------|------------|
-| Contract Review | Review hợp đồng | Medium |
-| NDA Template | Tạo NDA | Medium |
-| Terms of Service | Viết ToS | Advanced |
-| Compliance Checklist | Checklist tuân thủ | Medium |
-| IP Protection | Bảo vệ sở hữu trí tuệ | Medium |
-
----
-
-### 🤖 [AI/ML Evaluation](ai_ml_evaluation/) (Phase 5) ⭐ NEW
-
-6 skills cho đánh giá và tối ưu AI
-
-| Skill | Mục đích | Difficulty |
-|-------|----------|------------|
-| Model Selection | Chọn model phù hợp | Medium |
-| Prompt Evaluation | Đánh giá prompt | Medium |
-| Output Quality Check | Kiểm tra output | Easy |
-| Bias Detection | Phát hiện bias | Advanced |
-| Cost Optimization | Tối ưu chi phí | Medium |
-| AI Use Case Fit | Đánh giá AI có fit không | Medium |
-
----
-
-### 🚀 [App Development](app_development/) (Phase 4)
-
-8 skills cho việc tạo spec để AI Agent build local apps
-
-| Skill | Mục đích | Difficulty | Status |
-|-------|----------|------------|---|
-| App Requirements Spec | Thu thập requirements | Easy | |
-| Tech Stack Selection | Chọn công nghệ | Medium | |
-| Architecture Design | Thiết kế hệ thống | Hard | |
-| Database Schema Design | Data modeling | Medium | |
-| API Design Spec | Thiết kế API | Medium | |
-| Desktop App Spec | Windows, menus, shortcuts | Medium | |
-| CLI Tool Spec | Commands, arguments | Medium | |
-| Local Deployment | Packaging, distribution | Medium | |
-| UI Pre-Delivery Checklist | Checklist cuối trước khi ship UI | Easy | ⭐ NEW |
-
----
-
-### 📈 [Marketing & SEO](marketing_seo/) (Canonicalized)
-
-5 skills cho SEO, competitor analysis, content quality, social media, và brand strategy
-
-| Skill | Mục đích | Difficulty |
-| ----- | -------- | ---------- |
-| SEO Audit | Audit SEO toàn diện | Medium |
-| Competitor Analysis | Phân tích đối thủ | Medium |
-| Content Quality Review | Review chất lượng content | Easy |
-| Social Media Review | Review social ads/posts | Easy |
-| Brand Strategy Review | Review brand voice & strategy | Medium |
-
----
-
-### 🎨 [Product & UX](product_ux/) (Phase 2)
-
-Canonical UI/UX web guidance now lives in root `DESIGN.md`,
-`product_ux/cvf_web_ux_redesign_system.skill.md`, and
-`product_ux/claude_design_handoff.skill.md`. Legacy visual micro-skills are
-kept under `legacy/` for audit/reference only.
-
-| Skill (NEW) | Mục đích | Difficulty | Status |
-|-------------|----------|------------|---|
-| CVF Web UX Redesign System | Chuẩn hóa design DNA, layout, component rules, và handoff cho web build/redesign | Advanced | ⭐ NEW |
-| Claude Design Handoff | Hấp thụ prototype Claude Design/HTML thành spec sạch cho agent build | Advanced | ⭐ NEW |
-| Accessibility Audit | Kiểm tra WCAG compliance khi cần QA chuyên sâu | Medium | |
-| UX Heuristic Evaluation | Đánh giá UX theo Nielsen khi cần review sau build | Medium | |
-
----
-
-### 🔐 [Security & Compliance](security_compliance/) (Phase 3)
-
-6 skills cho API security, GDPR, privacy, và incidents
-
----
-
-### 💰 [Finance & Analytics](finance_analytics/) (Phase 4)
-
-Canonical finance guidance now uses 4 active, non-coder friendly skills. Older
-finance micro-skills are retained under `finance_analytics/legacy/` for
-audit/reference only.
-
-| Skill | Mục đích | Difficulty |
-|-------|----------|------------|
-| Finance Analysis System | Phân tích budget, statement, cash flow, KPI, ROI thành finance packet | Medium |
-| Forecast & Scenario Review | Review forecast, scenario, stress test, và threshold decision | Medium |
-| Investment & Risk Due Diligence | Due diligence investment/project/vendor với risk register | Advanced |
-| Finance QA Checklist | QA evidence, assumptions, risk boundary trước khi gửi quyết định | Easy |
-
----
-
-### Các Domains khác
-
-- [Web Development](web_development/) — 6 skills
-- [Business Analysis](business_analysis/) — 4 skills
-- [Content Creation](content_creation/) — 4 skills
-- [Technical Review](technical_review/) — 3 skills
-
----
-
-## 📝 Hướng dẫn sử dụng chi tiết
+## 📝 Cấu trúc nguồn v1.5.2
 
 ### Cấu trúc skill file
 
@@ -172,27 +38,16 @@ audit/reference only.
 ## 📜 Version History ← Lịch sử phiên bản
 ```
 
-### Ví dụ sử dụng
+## Ví dụ tạo đặc tả trên CVF Web
 
-**Tình huống:** Cần tạo JD cho vị trí mới
-
-1. Mở `hr_operations/01_job_description.skill.md`
-2. Đọc phần **Form Input**:
-   - Vị trí: Senior Developer
-   - Level: 5+ năm
-   - Department: Engineering
-   - Responsibilities: [...]
-3. Paste thông tin vào AI
-4. Nhận JD draft
-5. Check theo **Checklist đánh giá**
-6. Accept nếu pass, Reject nếu fail
+Cần tạo mô tả công việc cho vị trí mới. Mở Trang chủ CVF Web, tìm mẫu mô tả công việc, điền thông tin về vị trí, trách nhiệm và yêu cầu. Xuất bản đặc tả để xem lại hoặc giao cho agent.
 
 ---
 
 ## 🔗 Links
 
 - **GitHub:** [Blackbird081/Controlled-Vibe-Framework-CVF](https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF)
-- **CVF Web UI:** `EXTENSIONS/CVF_v1.5_UX_PLATFORM/cvf-web`
+- **CVF Web UI:** [CVF Web](../CVF_v1.6_AGENT_PLATFORM/cvf-web/)
 - **DIFFICULTY_GUIDE:** [DIFFICULTY_GUIDE.md](DIFFICULTY_GUIDE.md)
 - **SKILL_TEMPLATE:** [SKILL_TEMPLATE.md](SKILL_TEMPLATE.md)
 

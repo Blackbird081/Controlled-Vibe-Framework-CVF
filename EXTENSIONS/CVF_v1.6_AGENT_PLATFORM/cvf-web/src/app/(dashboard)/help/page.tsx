@@ -11,11 +11,20 @@ import { HELP_CONTENT } from '@/data/help-content';
 import { useLanguage } from '@/lib/i18n';
 
 export default function HelpPage() {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const content = HELP_CONTENT[language];
     const [openIndex, setOpenIndex] = useState<number>(0);
 
     const supportCards = [
+        {
+            icon: Rocket,
+            title: language === 'vi' ? 'Cài CVF trên máy của bạn' : 'Set up CVF on your computer',
+            desc: language === 'vi'
+                ? 'Cài VS Code, chọn tiện ích và tự kiểm tra trước khi mở CVF Web.'
+                : 'Install VS Code, choose an extension, and check your computer before opening CVF Web.',
+            href: '/help/setup',
+            event: undefined,
+        },
         { icon: BookOpen, title: content.features[0]?.title, desc: content.features[0]?.desc, href: content.features[0]?.link, event: content.features[0]?.event },
         { icon: Rocket, title: content.features[2]?.title, desc: content.features[2]?.desc, href: content.features[2]?.link, event: content.features[2]?.event },
         { icon: Users, title: content.features[5]?.title, desc: content.features[5]?.desc, href: content.features[5]?.link, event: content.features[5]?.event },
@@ -27,7 +36,7 @@ export default function HelpPage() {
     return (
         <div className="pb-10">
             <SurfaceTopBar
-                title={language === 'vi' ? 'Trung tâm trợ giúp' : 'Help Center'}
+                title={t('nav.help')}
                 subtitle={language === 'vi'
                     ? 'Bắt đầu từ mục tiêu, rồi đi theo một luồng rõ ràng từ thu thập đến bàn giao.'
                     : 'Guides for every feature — from simple templates to advanced AI workflows.'}
@@ -36,7 +45,7 @@ export default function HelpPage() {
                         href="/docs"
                         className="cvf-control inline-flex items-center rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/15"
                     >
-                        {language === 'vi' ? 'Mở tài liệu' : 'Open docs'}
+                        {t('nav.docs')}
                     </Link>
                 )}
             />

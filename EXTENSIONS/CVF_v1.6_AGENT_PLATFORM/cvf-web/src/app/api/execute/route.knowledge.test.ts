@@ -41,13 +41,12 @@ function buildProvenance(sourceId: string, content: string, overrides: Partial<S
   };
 }
 
-const executeAIMock = vi.hoisted(() => vi.fn());
+const providerSpy = vi.hoisted(() => vi.fn());
 const evaluateEnforcementMock = vi.hoisted(() => vi.fn());
 const verifySessionCookieMock = vi.hoisted(() => vi.fn());
 const checkTeamQuotaMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/ai', () => ({
-  executeAI: executeAIMock,
   CVF_SYSTEM_PROMPT: 'BASE_SYSTEM_PROMPT',
 }));
 
@@ -57,6 +56,7 @@ vi.mock('@/lib/enforcement', () => ({
 
 vi.mock('@/lib/middleware-auth', () => ({
   verifySessionCookie: verifySessionCookieMock,
+  resolveVerifiedSessionProvenance: async () => ({ qualified: true, userId: 'user-tester', orgId: 'org-1', teamId: 'team-1', role: 'admin', oauthProvider: 'github', oauthSubject: 'route-test-subject', expiresAt: 4102444800000 }),
   withSessionAuditPayload: (
     session: { impersonation?: { realActorId: string; sessionId: string } } | null | undefined,
     payload?: Record<string, unknown>,
@@ -82,6 +82,7 @@ vi.mock('@/lib/guard-engine-singleton', () => ({
 }));
 
 import { POST } from './route';
+import { useCanonicalRouteHarness } from '@/test/canonical-route-test-support';
 
 describe('/api/execute — retrieval partitioning enforcement', () => {
   const originalEnv = { ...process.env };
@@ -103,7 +104,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     delete process.env.DEFAULT_AI_PROVIDER;
     delete process.env.CVF_SERVICE_TOKEN;
 
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
@@ -116,7 +117,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
       hardCapUSD: 100,
       overrideActive: false,
     });
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -144,7 +145,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need tenant-a alpha-scope partition details',
         inputs: { question: 'What is the tenant-a codename?' },
         provider: 'openai',
@@ -157,7 +158,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
 
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
     expect(options.systemPrompt as string).toContain('TENANT-A-SIGNAL');
     expect(options.systemPrompt as string).not.toContain('SHADOW-BETA');
     expect(data.knowledgeInjection).toMatchObject({
@@ -181,7 +182,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Compare tenant-a and tenant-b partition markers',
         inputs: { question: 'What tenant private markers exist?' },
         provider: 'openai',
@@ -200,7 +201,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need tenant-a alpha-scope partition details',
         inputs: { question: 'What is the tenant-a codename?' },
         knowledgeContext: 'INLINE-BYPASS SHOULD NOT APPEAR',
@@ -209,7 +210,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     });
 
     await POST(req as never);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
 
     expect(options.systemPrompt as string).toContain('TENANT-A-SIGNAL');
     expect(options.systemPrompt as string).not.toContain('INLINE-BYPASS SHOULD NOT APPEAR');
@@ -222,7 +223,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     // Sign the exact body so authorization succeeds and the route reaches the
     // inline-knowledgeContext rejection; a bare token would 401 before that.
     const bodyText = JSON.stringify({
-      templateName: 'Knowledge Query',
+      templateId: 'meeting_notes', templateName: 'Knowledge Query',
       intent: 'Internal governed context handoff',
       inputs: { question: 'What is the service-only context?' },
       knowledgeContext: 'SERVICE-ONLY INLINE CONTEXT',
@@ -244,7 +245,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
 
     expect(res.status).toBe(400);
     expect(data.error).toMatch(/Inline knowledgeContext is no longer accepted/i);
-    expect(executeAIMock).not.toHaveBeenCalled();
+    expect(providerSpy).not.toHaveBeenCalled();
   });
 
   it('applies admin scope overrides to collection retrieval', async () => {
@@ -259,15 +260,15 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
-        intent: 'Need engineering deploy runbook guidance',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
+        intent: 'Need engineering runbook guidance',
         inputs: { question: 'What is the engineering codename?' },
         provider: 'openai',
       }),
     });
 
     await POST(req as never);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
 
     expect(options.systemPrompt as string).toContain('BRAVO-CIRCUIT');
   });
@@ -276,7 +277,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Use governed continuity memory for this execution',
         inputs: { question: 'What should we preserve?' },
         provider: 'openai',
@@ -310,7 +311,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
 
     const res = await POST(req as never);
     const data = await res.json();
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
 
     expect(res.status).toBe(200);
     expect(options.systemPrompt as string).toContain('## GOVERNED AIF MEMORY REINJECTION');
@@ -330,7 +331,7 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Attempt unauthorized continuity memory',
         inputs: { question: 'What should we preserve?' },
         provider: 'openai',
@@ -351,14 +352,14 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
     expect(res.status).toBe(403);
     expect(data.error).toBe('aif_memory_reinjection_policy_denied');
     expect(data.governanceEvidenceReceipt.aifMemoryReinjection.injected).toBe(false);
-    expect(executeAIMock).not.toHaveBeenCalled();
+    expect(providerSpy).not.toHaveBeenCalled();
   });
 
   it('blocks AIF memory reinjection when all requested memories are secret or disputed', async () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Attempt unsafe continuity memory',
         inputs: { question: 'What should we preserve?' },
         provider: 'openai',
@@ -385,8 +386,11 @@ describe('/api/execute — retrieval partitioning enforcement', () => {
       { id: 'mem-secret', reason: 'privacy_filtered' },
       { id: 'mem-disputed', reason: 'lifecycle_disputed' },
     ]));
-    expect(executeAIMock).not.toHaveBeenCalled();
+    expect(providerSpy).not.toHaveBeenCalled();
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });
 
 describe('/api/execute - SOT3 knowledge activation modes', () => {
@@ -410,7 +414,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     delete process.env.DEFAULT_AI_PROVIDER;
     delete process.env.CVF_SERVICE_TOKEN;
 
-    executeAIMock.mockReset();
+    providerSpy.mockReset();
     evaluateEnforcementMock.mockReset();
     verifySessionCookieMock.mockReset();
     checkTeamQuotaMock.mockReset();
@@ -423,7 +427,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
       hardCapUSD: 100,
       overrideActive: false,
     });
-    executeAIMock.mockResolvedValue({
+    providerSpy.mockResolvedValue({
       success: true,
       output: validOutput,
       provider: 'openai',
@@ -467,7 +471,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need route-enforce-signal governed content details',
         inputs: { question: 'What is the route-enforce-signal?' },
         provider: 'openai',
@@ -478,8 +482,8 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(executeAIMock).toHaveBeenCalledTimes(1);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    expect(providerSpy).toHaveBeenCalledTimes(1);
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
     expect(options.systemPrompt as string).toContain('ROUTE-ENFORCE-SIGNAL governed content');
     expect(data.knowledgeInjection.injected).toBe(true);
 
@@ -510,7 +514,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need route-noprov-signal raw content details',
         inputs: { question: 'What is the route-noprov-signal?' },
         provider: 'openai',
@@ -527,7 +531,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     // corrected expected shape (409, zero calls) instead of the prior
     // shape (200, provider called once, raw content silently dropped).
     expect(res.status).toBe(409);
-    expect(executeAIMock).toHaveBeenCalledTimes(0);
+    expect(providerSpy).toHaveBeenCalledTimes(0);
     expect(data.success).toBe(false);
     expect(JSON.stringify(data)).not.toContain('ROUTE-NOPROV-SIGNAL');
 
@@ -554,7 +558,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need route-shadow-signal governed content details',
         inputs: { question: 'What is the route-shadow-signal?' },
         provider: 'openai',
@@ -565,7 +569,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
     expect(options.systemPrompt as string).toContain('ROUTE-SHADOW-SIGNAL governed content');
     expect(data.knowledgeInjection.injected).toBe(true);
 
@@ -591,7 +595,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const req = new Request('http://localhost/api/execute', {
       method: 'POST',
       body: JSON.stringify({
-        templateName: 'Knowledge Query',
+        templateId: 'meeting_notes', templateName: 'Knowledge Query',
         intent: 'Need route-off-signal legacy content details',
         inputs: { question: 'What is the route-off-signal?' },
         provider: 'openai',
@@ -599,7 +603,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     });
 
     const res = await POST(req as never);
-    const options = executeAIMock.mock.calls[0][3] as Record<string, unknown>;
+    const options = providerSpy.mock.calls[0][3] as Record<string, unknown>;
 
     expect(res.status).toBe(200);
     expect(options.systemPrompt as string).toContain('ROUTE-OFF-SIGNAL legacy content');
@@ -607,4 +611,7 @@ describe('/api/execute - SOT3 knowledge activation modes', () => {
     const events = await readAuditEvents();
     expect(events.some((event) => event.eventType === 'SOT3_KNOWLEDGE_ACTIVATION_EVALUATED')).toBe(false);
   });
+
+  // Canonical Gateway harness: lineage journal + provider transport double (replaces the removed executeAI mock).
+  useCanonicalRouteHarness(providerSpy);
 });

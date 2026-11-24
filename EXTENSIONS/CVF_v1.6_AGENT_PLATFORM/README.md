@@ -85,7 +85,8 @@ CVF_v1.6_AGENT_PLATFORM/
 
 | Link | Description |
 |------|-------------|
-| [Skill Library](../CVF_v1.5.2_SKILL_LIBRARY_FOR_END_USERS) | 141 skills, 12 domains |
+| [End-user forms](../../governance/skill-library/registry/user-skills/INDEX.md) | Reusable forms for people preparing a task |
+| [Agent package index](../../docs/reference/agent_system_skills/generated/skill-index.json) | Agent packages, certification and status |
 | [Governance Layer](../../governance/skill-library/) | Skill governance registry |
 | [CVF Documentation](../../docs/) | Framework docs |
 

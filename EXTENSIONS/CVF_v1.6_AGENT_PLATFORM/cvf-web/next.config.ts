@@ -64,7 +64,14 @@ const nextConfig: NextConfig = {
     // imports. Turbopack must try .ts/.tsx before .js when transpiling LPF.
     resolveExtensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
+    // serverExternalPackages only externalizes packages imported from this app. The lineage journal store lives in
+    // CVF_EXECUTION_PLANE_FOUNDATION and requires better-sqlite3 from there, so webpack bundled the native package and its
+    // `bindings` lookup failed at runtime (every journal operation became UNAVAILABLE in `next start`). Keep it external.
+    if (isServer) {
+      const externals = Array.isArray(config.externals) ? config.externals : config.externals ? [config.externals] : [];
+      config.externals = [...externals, { 'better-sqlite3': 'commonjs better-sqlite3' }];
+    }
     config.resolve.modules = [...(config.resolve.modules ?? ['node_modules']), path.resolve(__dirname, 'node_modules')];
     config.resolve.extensionAlias = {
       ...config.resolve.extensionAlias,
@@ -77,39 +84,6 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: securityHeaders,
-      },
-    ];
-  },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        has: [
-          {
-            type: 'query',
-            key: 'template',
-            value: '(?<template>.+)',
-          },
-        ],
-        destination: '/home?template=:template',
-        permanent: false,
-      },
-      {
-        source: '/',
-        has: [
-          {
-            type: 'query',
-            key: 'category',
-            value: '(?<category>.+)',
-          },
-        ],
-        destination: '/home?category=:category',
-        permanent: false,
-      },
-      {
-        source: '/',
-        destination: '/landing',
-        permanent: false,
       },
     ];
   },

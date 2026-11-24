@@ -10,7 +10,7 @@ Deep dives into CVF's principles, architecture, and design decisions.
 | [Controlled Execution Loop](controlled-execution-loop.md) | The canonical `INTAKE -> DESIGN -> SPEC -> WORK ORDER -> BUILD -> REVIEW -> FREEZE` model |
 | [4-Phase Process](4-phase-process.md) | Legacy Discovery → Design → Build → Review foundation |
 | [Governance Model](governance-model.md) | Roles, authority matrix, agents, commands |
-| [Skill System](skill-system.md) | Skill structure, 114-skill library, lifecycle |
+| [Skill System](skill-system.md) | End-user forms and packages for agents |
 | [Risk Model](risk-model.md) | R0-R4 levels, 5 risk dimensions, aggregation rules |
 | [Version Evolution](version-evolution.md) | v1.0 → v1.6 history and version selection guide |
 

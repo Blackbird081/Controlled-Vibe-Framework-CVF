@@ -6,7 +6,9 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import type { SkillIndexPayload } from '@/types/skill';
-import { generateCompleteSpec, getTemplateById } from './templates';
+import { generateSpec } from '@/components/SpecExport';
+import { getTemplateById } from './templates';
+import { ASSF_PACKAGE_CATEGORY, getTemplatesForAssfPackage } from './assf-template-recommendations';
 
 function loadSkillIndex(): SkillIndexPayload {
   const raw = readFileSync(path.resolve(process.cwd(), 'public/data/skills-index.json'), 'utf8');
@@ -29,10 +31,13 @@ describe('front-door template standard', () => {
   const skillIndex = loadSkillIndex();
   const frontDoorTemplateIds = Array.from(
     new Set(
-      skillIndex.categories
-        .flatMap((category) => category.skills)
-        .filter((skill) => skill.frontDoorVisible)
-        .flatMap((skill) => (skill.linkedTemplates ?? []).map((linked) => linked.templateId)),
+      skillIndex.categories.flatMap((category) =>
+        category.skills.filter((skill) => skill.frontDoorVisible).flatMap((skill) =>
+          category.id === ASSF_PACKAGE_CATEGORY
+            ? getTemplatesForAssfPackage(skill.id)
+            : (skill.linkedTemplates ?? []).map((linked) => linked.templateId),
+        ),
+      ),
     ),
   );
 
@@ -62,7 +67,7 @@ describe('front-door template standard', () => {
         });
       }
 
-      const spec = generateCompleteSpec(template!, sampleValuesForTemplate(templateId));
+      const spec = generateSpec(template!, sampleValuesForTemplate(templateId), 'en', 'governance');
       expect(spec, `${templateId} should generate a governed export packet`).toContain('CVF Non-Coder Success Standard');
       expect(spec, `${templateId} should generate governed response rules`).toContain('Governed Response Rules');
       expect(spec, `${templateId} should generate execution constraints`).toContain('Execution Constraints');

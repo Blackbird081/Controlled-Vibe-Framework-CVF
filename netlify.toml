@@ -1,5 +1,5 @@
 [build]
-  command = "npm --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_MODEL_GATEWAY install --no-audit --no-fund && npm --prefix EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_GUARD_CONTRACT ci && npm --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web ci && npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web run build"
+  command = "npm --prefix EXTENSIONS/CVF_CONTROL_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_MODEL_GATEWAY install --no-audit --no-fund && npm --prefix EXTENSIONS/CVF_LEARNING_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_GUARD_CONTRACT ci && npm --prefix EXTENSIONS/CVF_EXECUTION_PLANE_FOUNDATION ci && npm --prefix EXTENSIONS/CVF_ECO_v2.5_MCP_SERVER ci && npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web ci && npm --prefix EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web run build"
   publish = "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/.next"
 
 [build.environment]

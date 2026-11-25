@@ -42,6 +42,8 @@ Change summary: Read the Auth.js session cookie under the name Auth.js uses for 
 
 Changed owners: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/auth-session-cookie.ts`; `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts`; `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/skills/suggest/handlers.ts` and their tests.
 
+Structural review: PUBLIC_PROJECTION_STRUCTURE_REVIEWED; one new CVF Web helper module and its regression test inside the existing `cvf-web/src/lib/` folder; no new extension, route, dependency, provider or runtime authority.
+
 Validation: Regression tests with Auth.js-encoded session tokens cover HTTPS, HTTP, configured origin precedence, rejection of the HTTP cookie name on HTTPS, chunked cookies and an authenticated route. Source checks passed lint, TypeScript, production build and the full Web suite. Sign-in on the deployed site is checked separately.
 
 ```public-change-evidence-json

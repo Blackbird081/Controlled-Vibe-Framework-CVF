@@ -1,0 +1,14 @@
+{
+  "algorithm": "sha256",
+  "base": "d66056dda",
+  "files": [
+    {
+      "path": "candidate-inventory.json",
+      "sha256": "6d71afc9b427e04150b6a2154f5378264d440bcc79531b1e0aff7648dea649a8"
+    },
+    {
+      "path": "gold-cases.json",
+      "sha256": "cddc6ee92509061b7ada2da5c4da5fe8527d1653d0f0abc13f6b69a0c20bf170"
+    }
+  ]
+}

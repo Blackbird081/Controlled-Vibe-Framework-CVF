@@ -736,7 +736,6 @@ export default function HomePage() {
             {workflowState === 'browse' && (
                 <HomeSpecComposer
                     language={language}
-                    providers={providers}
                     starterGoal={starterHandoff?.userInput}
                     onStarterGoalImported={handleDismissGovernedStarter}
                     onStartNewWork={handleStartNewWork}

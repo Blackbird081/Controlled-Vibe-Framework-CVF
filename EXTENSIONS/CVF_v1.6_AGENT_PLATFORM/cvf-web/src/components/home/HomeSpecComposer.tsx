@@ -2,30 +2,28 @@
 // Text Encoding Exception: this component presents the Vietnamese and English Home specification workflow.
 
 import { useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import Link from 'next/link';
 import { ArrowRight, Download, FolderOpen, Plus } from 'lucide-react';
-import { useSettings } from '@/components/Settings';
 import { TechnicalDetails } from '@/components/TechnicalDetails';
-import { createAIProvider } from '@/lib/ai-providers';
-import { verifyAgentChatAccount } from '@/lib/hooks/useAuth';
 import { HomeSpecAccountScope, useHomeSpecInput } from '@/lib/hooks/useHomeSpecInput';
-import { mapSettingsProviderToExecutionProvider, resolveClaudeReadinessModel } from '@/lib/hooks/useExecute';
-import type { ProviderStatus } from '@/lib/ai';
-import { useQuotaManager } from '@/lib/quota-manager';
 import { routeEligibleHomeKeywords as routeHomeSpecKeywords } from '@/lib/home-spec-keyword-router';
 import { getHomeCommonQuestions, isHomeCommonQuestion } from '@/lib/home-spec-common-questions';
 import { homeQuickActions as OUTCOME_WORKFLOW_REGISTRY, getHomeSpecFields, getLegacyHomeSpecFields, homeSpecOutcomeTitle, homeSpecTemplates, resolveHomeOutcomeId, type HomeSpecLocale } from '@/lib/home-spec-jev-catalog';
 import { requestHomeSpecJev, type HomeSpecChoice, type HomeSpecFields } from '@/lib/home-spec-jev-client';
+import { appendHomeSpecClarification } from '@/lib/home-spec-clarification';
 import { HomeAssfSuggestion } from './HomeAssfSuggestion';
-import { generateHomeSpec, HOME_SPEC_AI_LIMIT, homeSpecContextWithAiReference, makeHomeGeneralTemplate, recordHomeSpecExport } from './home-spec-export';
+import { HomeSpecClarificationPanel, useHomeSpecClarification } from './HomeSpecClarification';
+import { prepareHomeSpec, makeHomeGeneralTemplate, recordHomeSpecExport } from './home-spec-export';
 import { findHomeSpecDeliverable } from './home-spec-deliverable';
 import { homeSpecExternalRequest } from './home-spec-external-request';
+import { isMessagingProject, isPersonalMessageRequest } from './home-spec-personal-message';
+import { PHYSICAL_SAFETY_GUIDANCE } from '@/lib/physical-safety';
 import { isNewHomeSpecTask } from './home-spec-task';
 
 const action = 'cvf-control inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50';
 const primary = action + ' bg-indigo-600 text-white hover:bg-indigo-700';
 const secondary = action + ' border border-slate-300 bg-white text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200';
 const input = 'w-full min-h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 dark:border-white/15 dark:bg-[#111218] dark:text-white';
+const exportDescriptionCoverage = "From the user's description in User Context (not entered separately)";
 
 interface Props {
     language: HomeSpecLocale;
@@ -35,12 +33,10 @@ interface Props {
     onStarterGoalImported?: () => void;
     onStartNewWork?: () => void;
     library: ReactNode;
-    providers: ProviderStatus[];
 }
 
-type Stage = 'describe' | 'clarify' | 'review' | 'candidates' | 'unmatched' | 'outside' | 'fields' | 'draft';
+type Stage = 'describe' | 'clarify' | 'review' | 'candidates' | 'unmatched' | 'outside' | 'quick' | 'fields' | 'draft';
 type Event = 'selection' | 'library' | 'no_match' | 'clarify' | 'export';
-const writerApprovalRequired = 'writer-approval-required';
 
 const copy = {
     vi: {
@@ -59,22 +55,14 @@ const copy = {
         outsideHelp: 'Soạn tin nhắn hoặc danh sách việc cần làm',
         outsideDraft: 'Giúp tôi soạn tin nhắn để tự gửi hoặc lập danh sách những việc tôi có thể tự làm cho yêu cầu dưới đây.',
         outsideEdit: 'Sửa mô tả',
-        outsideSafety: 'Hãy rời vùng nguy hiểm, tránh chạm vào thiết bị hoặc công tắc ở đó, chỉ ngắt điện nếu có thể làm an toàn và không nghi rò gas, rồi gọi người có chuyên môn hoặc dịch vụ khẩn cấp nếu có nguy hiểm ngay.',
+        outsideSafety: PHYSICAL_SAFETY_GUIDANCE.vi,
         genericFields: { goal: 'Mục tiêu', context: 'Bối cảnh', deliverable: 'Kết quả cần nhận', constraints: 'Giới hạn' },
         confirm: 'Dùng loại kết quả này', missing: 'Bổ sung thông tin còn thiếu', allSet: 'Bạn có thể xem lại bản đặc tả.',
-        review: 'Xem lại đặc tả', edit: 'Sửa thông tin đã nhập', write: 'Nhờ AI làm rõ',
-        settings: 'Chưa có khóa để nhờ AI làm rõ. Bạn vẫn có thể tải bản đặc tả từ thông tin đã nhập.',
-        setup: 'Xem hướng dẫn cài đặt', writer: 'Dịch vụ AI', technical: 'Chi tiết kỹ thuật',
-        failed: 'Không kết nối được dịch vụ AI. Bạn vẫn có thể tải bản đặc tả.',
-        writerApproval: 'Bước này cần người có quyền duyệt trước khi dùng AI. Bạn vẫn tải được bản thường.',
-        approvalInbox: 'Mở hộp thư phê duyệt',
-        permission: 'Tài khoản này chưa thể dùng chức năng làm rõ bằng AI.',
-        session: 'Chưa xác minh được tài khoản. Đăng nhập lại để dùng chức năng làm rõ bằng AI.',
-        quota: 'Bạn đã hết ngân sách AI. Kiểm tra mức sử dụng AI trong Cài đặt.',
+        review: 'Xem lại đặc tả', edit: 'Sửa thông tin đã nhập',
+        technical: 'Chi tiết kỹ thuật',
         draft: 'Bản nháp đặc tả', specification: 'Bản đặc tả', outcome: 'Loại kết quả',
         description: 'Mô tả công việc', clarification: 'Thông tin làm rõ',
-        rewritten: 'Phần AI làm rõ', reviewAi: 'Xem lại và sửa phần AI làm rõ trước khi tải.',
-        download: 'Tải bản đặc tả', downloadRewrite: 'Tải bản đặc tả đã làm rõ',
+        download: 'Tải bản đặc tả',
         startNew: 'Bắt đầu việc mới', discardDraft: 'Bạn muốn bỏ bản nháp chưa tải xuống và bắt đầu việc mới?',
         newTaskQuestion: 'Đây là việc mới phải không?',
         newTaskDetails: 'Việc mới sẽ bắt đầu với các ô trống. Bạn có thể mở lại việc chưa tải trong Bản nháp.',
@@ -90,7 +78,7 @@ const copy = {
         rate: 'Có quá nhiều yêu cầu gợi ý trong một phút. CVF dùng từ khóa để gợi ý.',
         fieldsFallback: 'CVF dùng danh sách thông tin của mẫu. Bỏ qua phần bạn đã nêu trong mô tả.',
         newFieldPlaceholder: 'Điền nếu thông tin này chưa có trong mô tả.',
-        fromUserContext: 'Theo mô tả của người dùng ở mục User Context (chưa nhập riêng)',
+        fromUserContext: 'Lấy từ phần bạn mô tả (chưa nhập riêng)',
         optionalQuestions: 'Thông tin bổ sung (không bắt buộc)',
         provided: 'Đã có', userWillSupply: 'Người dùng sẽ bổ sung', openQuestions: 'Câu hỏi mở',
         noMaterials: 'Chưa ghi tệp, mẫu hay đường dẫn sẽ gửi thêm.',
@@ -113,22 +101,14 @@ const copy = {
         outsideHelp: 'Draft a message or checklist',
         outsideDraft: 'Help me draft a message I can send or make a checklist I can follow for the request below.',
         outsideEdit: 'Edit your description',
-        outsideSafety: 'Move away from the danger, avoid touching equipment or switches in the affected area, cut power only if you can do so safely and there is no suspected gas leak, then call a qualified professional or emergency services if there is immediate danger.',
+        outsideSafety: PHYSICAL_SAFETY_GUIDANCE.en,
         genericFields: { goal: 'Goal', context: 'Context', deliverable: 'Deliverable', constraints: 'Constraints' },
         confirm: 'Use this outcome', missing: 'Add missing information', allSet: 'You can review the specification.',
-        review: 'Review specification', edit: 'Edit entered information', write: 'Ask AI to clarify',
-        settings: 'No key is set up for AI clarification. You can still download a specification from what you entered.',
-        setup: 'View setup instructions', writer: 'AI service', technical: 'Technical details',
-        failed: 'Could not connect to the AI service. You can still download the specification.',
-        writerApproval: 'Someone with approval permission needs to approve this step before AI can help. You can still download the regular specification.',
-        approvalInbox: 'Open the approval inbox',
-        permission: 'This account cannot use AI clarification.',
-        session: 'Your account could not be verified. Sign in again to use AI clarification.',
-        quota: 'Your AI usage budget is exhausted. Check AI usage in Settings.',
+        review: 'Review specification', edit: 'Edit entered information',
+        technical: 'Technical details',
         draft: 'Specification draft', specification: 'Specification', outcome: 'Outcome',
         description: 'Work description', clarification: 'Clarification',
-        rewritten: 'AI clarification', reviewAi: 'Review and edit the AI clarification before downloading.',
-        download: 'Download specification', downloadRewrite: 'Download clarified specification',
+        download: 'Download specification',
         startNew: 'Start new work', discardDraft: 'Discard this draft with changes you have not downloaded and start new work?',
         newTaskQuestion: 'Is this a new task?',
         newTaskDetails: 'The new task starts with blank answers. You can reopen work you haven’t downloaded under Unfinished drafts.',
@@ -144,12 +124,12 @@ const copy = {
         rate: 'There were too many requests for suggestions in one minute. CVF is using keywords to suggest an outcome.',
         fieldsFallback: 'CVF is using the template’s input list. Skip any details already included in your description.',
         newFieldPlaceholder: 'Fill this in if it is missing from your description.',
-        fromUserContext: "From the user's description in User Context (not entered separately)",
+        fromUserContext: 'Taken from the description you entered',
         optionalQuestions: 'Optional details',
         provided: 'Provided', userWillSupply: 'User will supply', openQuestions: 'Open questions',
         noMaterials: 'No files, examples or links listed for later.',
         nothingOpen: 'This template has no unanswered details flagged.',
-        checkOpen: 'The receiving agent will clarify details that affect the work.',
+        checkOpen: 'These details will be clarified before any work that depends on them.',
     },
 } as const;
 
@@ -176,22 +156,11 @@ export function HomeSpecComposer(props: Props) {
     return <HomeSpecWork key={accountScope ? `account:${accountScope}` : 'guest'} {...props} />;
 }
 
-function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal, onStarterGoalImported, onStartNewWork, library, providers }: Props) {
+function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal, onStarterGoalImported, onStartNewWork, library }: Props) {
     const t = copy[language];
-    const { settings } = useSettings(true);
-    const { accountScope, canUseSettings } = useContext(HomeSpecAccountScope) ?? {};
+    const accountScope = useContext(HomeSpecAccountScope)?.accountScope;
     const { input: savedInput, setInput, resetInput, startSeparateTask, restoreDraft } = useHomeSpecInput(accountScope);
-    const { goal, extra, values, draft } = savedInput;
-    const { checkBudget, trackUsage } = useQuotaManager();
-    const writer = settings.preferences.defaultProvider;
-    const writerConfig = settings.providers[writer];
-    const executionProvider = mapSettingsProviderToExecutionProvider(writer);
-    const serverWriter = providers.find(provider => provider.provider === executionProvider);
-    const useServerWriter = serverWriter?.configured && (writer === 'alibaba'
-        || serverWriter.executionSurface === 'claude_cli_subscription' || !writerConfig?.apiKey?.trim());
-    const writerConfigured = Boolean(useServerWriter || (writer !== 'alibaba' && writerConfig?.apiKey?.trim()));
-    const writerMessage = !canUseSettings ? t.permission : !accountScope ? t.session
-        : writerConfigured ? null : t.settings;
+    const { goal, extra, values } = savedInput;
     const [stage, setStage] = useState<Stage>('describe');
     const [chosen, setChosen] = useState(initialTemplate ? resolveHomeOutcomeId(initialTemplate) ?? '' : '');
     const [keywordSuggestion, setKeywordSuggestion] = useState('');
@@ -208,7 +177,6 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     const [notice, setNotice] = useState('');
     const [error, setError] = useState('');
     const [busy, setBusy] = useState(false);
-    const [aiEditorOpen, setAiEditorOpen] = useState(false);
     const [downloadReady, setDownloadReady] = useState(false);
     const [goalEdit, setGoalEdit] = useState<string | null>(null);
     const [confirmNewTask, setConfirmNewTask] = useState(false);
@@ -223,8 +191,11 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     const suggestedAssfPackageId = suggestion?.key === suggestionKey ? suggestion.skillId : undefined;
     const outcomeTitle = generic ? t.genericTitle : homeSpecOutcomeTitle(chosen, language);
     const outcomeId = keywordSuggestion || chosen;
-    const quickSuggestion = (jevChoice || Boolean(keywordSuggestion)) && isShortWritingOutcome(outcomeId);
-    const quickCandidates = candidates.length > 0 && candidates.every(isShortWritingOutcome);
+    const quickDescription = stage === 'describe' && isPersonalMessageRequest(description) && !homeSpecExternalRequest(description, extra);
+    const allowShortSuggestion = !isMessagingProject(goal);
+    const quickSuggestion = isPersonalMessageRequest(goal)
+        || (allowShortSuggestion && (jevChoice || Boolean(keywordSuggestion)) && isShortWritingOutcome(outcomeId));
+    const quickCandidates = allowShortSuggestion && candidates.length > 0 && candidates.every(isShortWritingOutcome);
     const matchingPreset = OUTCOME_WORKFLOW_REGISTRY.find(item => item.templateId === outcomeId);
     const abbreviatedTitle = matchingPreset?.outcomeKey === 'create_prd' || matchingPreset?.outcomeKey === 'generate_sop'
         ? matchingPreset.title[language] : null;
@@ -251,12 +222,6 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         ...commonAnswers.filter(answer => answer.id !== 'homeInputReferences'),
     ];
     const referencesAnswer = commonAnswers.find(answer => answer.id === 'homeInputReferences')?.value;
-    const unanswered = [...fields, ...visibleCommonQuestions].filter(field => !values[field.id]?.trim());
-    const localMarkdown = [
-        `# ${t.specification}`,
-        ...previewSections.map(section => `## ${section.label}\n\n${section.value}`),
-        ...(referencesAnswer ? [`## ${t.userWillSupply}\n\n${referencesAnswer}`] : []),
-    ].join('\n\n') + '\n';
     const exportTemplate = generic ? makeHomeGeneralTemplate('en', copy.en.genericTitle, copy.en.genericFields)
         : homeSpecTemplates.find(template => template.id === chosen);
     const exportFields = [...(exportTemplate?.fields ?? []), ...legacyFields, ...commonQuestions];
@@ -264,11 +229,17 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         values[id]?.trim() ? [[id, values[id]]] : [],
     ));
     const coverageValues = { ...enteredValues, ...Object.fromEntries([...templateFields, ...commonQuestions].flatMap(({ id }) =>
-        missingFieldIds && !missingFieldIds.has(id) && !enteredValues[id] ? [[id, copy.en.fromUserContext]] : [],
+        missingFieldIds && !missingFieldIds.has(id) && !enteredValues[id] ? [[id, exportDescriptionCoverage]] : [],
     )) };
-    const aiDraft = draft.slice(0, HOME_SPEC_AI_LIMIT);
-    const agentMarkdown = stage === 'draft' && exportTemplate
-        ? generateHomeSpec(exportTemplate, enteredValues, coverageValues, language, originalUserText, originalUserText, suggestedAssfPackageId) : '';
+    const packet = stage === 'draft' && exportTemplate
+        ? prepareHomeSpec(exportTemplate, enteredValues, coverageValues, language, originalUserText, originalUserText,
+            suggestedAssfPackageId, generic ? t.genericFields : undefined) : undefined;
+    const agentMarkdown = packet?.markdown ?? '';
+    const clarificationAnswers = Object.values(enteredValues);
+    const canClarify = stage === 'draft' && !homeSpecExternalRequest(goal, [extra, ...clarificationAnswers].join('\n'));
+    const clarification = useHomeSpecClarification({ language, goal, extra, answers: clarificationAnswers }, canClarify, Boolean(accountScope));
+    const downloadMarkdown = appendHomeSpecClarification(agentMarkdown, clarification.result, language);
+    const openQuestions = packet?.openQuestions ?? [];
 
     useEffect(() => {
         mounted.current = true;
@@ -370,6 +341,12 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
             return;
         }
         if (action === 'resume' && resumeDraftOutcome(savedInput.templateId)) return;
+        if (!chosen && isPersonalMessageRequest(description)) {
+            setLibraryOpen(false);
+            setNotice('');
+            showStage('quick');
+            return;
+        }
         const alreadyAsked = !newTask && clarificationAsked;
         const submittedGoal = homeSpecJevGoal(description.trim(), nextExtra);
         void perform(async () => {
@@ -478,74 +455,21 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         setStage('fields');
     }
 
-    function writeDraft() {
-        if (writerMessage || !accountScope) {
-            setError(writerMessage ?? t.session);
-            return;
-        }
-        if (!checkBudget().ok) { setError(t.quota); return; }
-        void perform(async () => {
-            try {
-                if (!await verifyAgentChatAccount(accountScope, true)) { setError(t.session); return; }
-                if (!mounted.current) return;
-                const prompt = [
-                    'Clarify the goal, deliverables, scope, acceptance criteria, and open questions in the brief below. Return only those clarifications in Markdown. Mark what is unknown. Do not invent facts, claim work has run, or write rules or permissions.',
-                    language === 'vi' ? 'Write the clarification in Vietnamese.' : 'Write the clarification in English.',
-                    localMarkdown,
-                ].join('\n\n');
-                let text: string;
-                if (useServerWriter) {
-                    const model = executionProvider === 'claude'
-                        ? resolveClaudeReadinessModel({ providers }, writerConfig.selectedModel)
-                        : writerConfig.selectedModel;
-                    const result = await fetch('/api/execute', {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            templateName: language === 'vi' ? 'Bản đặc tả' : 'Specification',
-                            inputs: {}, intent: prompt, mode: 'governance',
-                            action: 'analyze template execution request',
-                            provider: executionProvider, model,
-                        }),
-                    });
-                    const response = result.ok || result.status === 409 ? await result.json() : null;
-                    if (!mounted.current) return;
-                    if (result.status === 409 && response?.approvalStatus === 'pending') {
-                        setError(writerApprovalRequired);
-                        return;
-                    }
-                    text = result.ok && response?.success && typeof response.output === 'string' ? response.output : '';
-                } else {
-                    const llm = createAIProvider(writer, { apiKey: writerConfig.apiKey, model: writerConfig.selectedModel, language });
-                    const response = await llm.chat([{ role: 'user', content: prompt }]);
-                    text = response.text;
-                    trackUsage(writer, response.model, response.usage?.promptTokens ?? Math.ceil(prompt.length / 4),
-                        response.usage?.completionTokens ?? Math.ceil(text.length / 4));
-                }
-                if (!mounted.current) return;
-                if (!text.trim()) { setError(t.failed); return; }
-                setInput('draft', text.trim().slice(0, HOME_SPEC_AI_LIMIT));
-                setAiEditorOpen(true);
-            } catch { setError(t.failed); }
-        });
-    }
-
-    function download(tier: 'local' | 'ai') {
+    function download() {
         setError('');
         try {
-            if (!exportTemplate) throw new Error('Missing Home export template');
-            const context = tier === 'ai' ? homeSpecContextWithAiReference(originalUserText, aiDraft, 'en') : originalUserText;
-            const content = generateHomeSpec(exportTemplate, enteredValues, coverageValues, language, context, originalUserText, suggestedAssfPackageId);
+            if (!exportTemplate || !packet) throw new Error('Missing Home specification');
             const date = new Date().toISOString().slice(0, 10);
-            const filename = `cvf-spec-${exportTemplate.id}-${date}${tier === 'ai' ? '-ai' : ''}.md`;
-            const url = URL.createObjectURL(new Blob([content], { type: 'text/markdown;charset=utf-8' }));
+            const filename = `cvf-spec-${exportTemplate.id}-${date}.md`;
+            const url = URL.createObjectURL(new Blob([downloadMarkdown], { type: 'text/markdown;charset=utf-8' }));
             const link = Object.assign(document.createElement('a'), { href: url, download: filename });
             try { link.click(); }
             finally { setTimeout(() => URL.revokeObjectURL(url), 0); }
-            if (tier === 'ai' || !aiDraft.trim()) setInput('downloadedTemplate', exportTemplate.id);
+            setInput('downloadedTemplate', exportTemplate.id);
             setDownloadReady(true);
             setNotice(t.downloaded);
-            recordHomeSpecExport(accountScope, { runId, tier });
-            if (tier === 'ai') void feedback('export');
+            recordHomeSpecExport(accountScope, { runId, tier: 'local' });
+            void feedback('export');
         } catch {
             setNotice('');
             setError(t.downloadFailed);
@@ -553,7 +477,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     }
 
     async function copySpec() {
-        try { await navigator.clipboard.writeText(agentMarkdown); setNotice(t.copied); setError(''); }
+        try { await navigator.clipboard.writeText(downloadMarkdown); setNotice(t.copied); setError(''); }
         catch { setError(t.copyFailed); }
     }
 
@@ -571,6 +495,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     }
 
     function showStage(next: Stage) {
+        if (next !== 'draft') clarification.clear();
         setError('');
         setNotice('');
         setStage(next);
@@ -581,6 +506,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     }
 
     function resetJourney(templateId = '') {
+        clarification.clear();
         setStage('describe');
         setChosen(templateId);
         setKeywordSuggestion('');
@@ -596,7 +522,6 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         setMissingFieldIds(null);
         setNotice('');
         setError('');
-        setAiEditorOpen(false);
         setDownloadReady(false);
         setGoalEdit(null);
         setConfirmNewTask(false);
@@ -605,7 +530,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     function startNewWork() {
         if (inFlight.current) return;
         const selection = generic ? 'home-general' : keywordSuggestion || chosen;
-        const hasDraft = [description, goal, extra, draft, ...Object.values(values)].some(value => value.trim());
+        const hasDraft = [description, goal, extra, ...Object.values(values)].some(value => value.trim());
         const downloadedForThisOutcome = goalEdit === null && savedInput.downloadedTemplate
             && (!selection || selection === savedInput.downloadedTemplate);
         if (hasDraft && !downloadedForThisOutcome && !window.confirm(t.discardDraft)) return;
@@ -616,7 +541,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     }
 
     function changeDescription(value: string) {
-        if (savedInput.templateId || [extra, draft, ...Object.values(values)].some(answer => answer.trim())) {
+        if (savedInput.templateId || [extra, ...Object.values(values)].some(answer => answer.trim())) {
             setGoalEdit(value === goal ? null : value);
         } else {
             setInput('goal', value);
@@ -669,8 +594,11 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                                 inputRef.current?.focus();
                             }}>{t.keepCurrentTask}</button>
                         </div>
-                    </div> : <div className="flex flex-wrap gap-2"><button className={primary} disabled={busy}>{busy ? t.wait : t.go}<ArrowRight size={16} aria-hidden="true" /></button>
-                    <button type="button" className={secondary} onClick={() => openAssistant(description)}>{t.quick}</button></div>}
+                    </div> : <div className="flex flex-wrap gap-2">
+                        {quickDescription && <button type="button" className={primary} onClick={() => openAssistant(description)}>{t.quick}</button>}
+                        <button className={quickDescription ? secondary : primary} disabled={busy}>{busy ? t.wait : t.go}<ArrowRight size={16} aria-hidden="true" /></button>
+                        {!quickDescription && <button type="button" className={secondary} onClick={() => openAssistant(description)}>{t.quick}</button>}
+                    </div>}
                 </form>}
                 {stage === 'describe' && savedInput.unfinishedDrafts.length > 0 && <details>
                     <summary className="cursor-pointer font-medium">{t.unfinishedDrafts}</summary>
@@ -697,6 +625,10 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                     <h2 className="text-lg font-semibold">{t.unmatched}</h2>
                     <button type="button" className={primary} onClick={startGeneric} disabled={busy}>{t.makeGeneric}</button>
                     <button type="button" className={secondary} onClick={() => openAssistant(t.outsideDraft + '\n\n' + originalUserText)} disabled={busy}>{t.outsideHelp}</button>
+                </div>}
+                {stage === 'quick' && <div className="flex flex-wrap gap-2" aria-live="polite">
+                    <button type="button" className={primary} onClick={() => openAssistant(originalUserText)}>{t.quick}</button>
+                    <button type="button" className={secondary} onClick={startGeneric}>{t.quickSpec}</button>
                 </div>}
                 {stage === 'outside' && <div className="space-y-3" aria-live="polite">
                     <h2 className="text-lg font-semibold">{t.outside}</h2>
@@ -746,12 +678,13 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                         </section>
                         <section>
                             <h3 className="font-semibold">{t.openQuestions}</h3>
-                            <p>{unanswered.length ? t.checkOpen : t.nothingOpen}</p>
-                            {unanswered.length > 0 && <ul className="list-disc space-y-1 pl-5">
-                                {unanswered.map(field => <li key={field.id}>{field.label}</li>)}
+                            <p>{openQuestions.length ? t.checkOpen : t.nothingOpen}</p>
+                            {openQuestions.length > 0 && <ul className="list-disc space-y-1 pl-5">
+                                {openQuestions.map(question => <li key={question}>{question}</li>)}
                             </ul>}
                         </section>
                     </article>
+                    {canClarify && clarification.result && <HomeSpecClarificationPanel language={language} result={clarification.result} />}
                     <div className="space-y-1"><h3 className="font-semibold">{t.howTo}</h3><p className="text-sm">{t.howToText}</p></div>
                     {runId && runId === jevSkillRunId && (
                         <HomeAssfSuggestion key={suggestionKey} runId={runId} goal={jevGoal} language={language}
@@ -759,40 +692,22 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                     )}
                     <TechnicalDetails label={t.technical} testId="home-spec-agent-details">
                         <pre className="max-h-72 overflow-y-auto whitespace-pre-wrap font-mono text-xs">{agentMarkdown}</pre>
-                        {!writerMessage && <p>{t.writer}{' · '}{writer} / {serverWriter?.executionSurface === 'claude_cli_subscription' ? 'sonnet' : writerConfig.selectedModel}</p>}
                     </TechnicalDetails>
                     <p id="home-spec-download-purpose" className="text-sm text-slate-600 dark:text-slate-300">{t.downloadPurpose}</p>
                     <div className="flex flex-wrap gap-2">
                         <button type="button" className={secondary} onClick={() => void copySpec()}>{t.copy}</button>
-                        <button type="button" className={primary} aria-describedby="home-spec-download-purpose" onClick={() => download('local')}><Download size={17} aria-hidden="true" />{t.download}</button>
+                        <button type="button" className={primary} aria-describedby="home-spec-download-purpose" onClick={download}><Download size={17} aria-hidden="true" />{t.download}</button>
+                        {canClarify && <button type="button" className={secondary} onClick={() => void clarification.clarify()}
+                            aria-describedby={clarification.message ? 'home-clarification-status' : undefined} disabled={clarification.disabled}>{clarification.label}</button>}
                         <button type="button" className={secondary} onClick={() => showStage('fields')} disabled={busy}>{t.edit}</button>
                     </div>
-                    {writerMessage ? <div className="text-sm">
-                        <p>{writerMessage}</p>
-                        {writerMessage === t.settings && <Link href="/help/setup" className="inline-flex min-h-11 items-center text-indigo-600 underline dark:text-indigo-300">{t.setup}</Link>}
-                    </div> : (
-                        <button type="button" className={secondary} disabled={busy} onClick={writeDraft}>{busy ? t.wait : t.write}</button>
-                    )}
-                    {(draft || aiEditorOpen) && <div className="space-y-2">
-                        <label htmlFor="home-spec-rewrite" className="block font-semibold">{t.rewritten}</label>
-                        <p id="home-spec-review-ai" className="text-sm text-slate-600 dark:text-slate-300">{t.reviewAi}</p>
-                        <textarea id="home-spec-rewrite" className={input} rows={8} value={aiDraft} aria-describedby="home-spec-review-ai" maxLength={HOME_SPEC_AI_LIMIT} onChange={e => {
-                            setAiEditorOpen(true);
-                            setInput('draft', e.target.value.slice(0, HOME_SPEC_AI_LIMIT));
-                        }} />
-                        <button type="button" className={secondary} aria-describedby="home-spec-download-purpose" disabled={busy || !aiDraft.trim()} onClick={() => download('ai')}>{t.downloadRewrite}</button>
-                    </div>}
+                    {canClarify && clarification.message && <p id="home-clarification-status" role="status" className="text-sm text-slate-600 dark:text-slate-300">{clarification.message}</p>}
                     {downloadReady && <button type="button" className={secondary} onClick={startNewWork} disabled={busy}>
                         <Plus size={17} aria-hidden="true" />{t.startNew}
                     </button>}
                 </div>}
                 {notice && <p role="status" className="text-sm text-slate-600 dark:text-slate-300">{notice}</p>}
-                {error === writerApprovalRequired ? (
-                    <div role="alert" className="text-sm text-slate-700 dark:text-slate-200">
-                        <p>{t.writerApproval}</p>
-                        <Link href="/approvals" className="inline-flex min-h-11 items-center text-indigo-600 underline dark:text-indigo-300">{t.approvalInbox}</Link>
-                    </div>
-                ) : error && <p role="alert" className="text-sm text-red-700 dark:text-red-300">{error}</p>}
+                {error && <p role="alert" className="text-sm text-red-700 dark:text-red-300">{error}</p>}
             </section>
             {stage === 'describe' && <section aria-label={t.templates} className="flex flex-wrap gap-2">
                 {OUTCOME_WORKFLOW_REGISTRY.map(outcome => <button type="button" className={secondary} key={outcome.templateId} aria-pressed={chosen === outcome.templateId} onClick={() => chooseTemplate(outcome.templateId)} disabled={busy}>{homeSpecOutcomeTitle(outcome.templateId, language)}</button>)}

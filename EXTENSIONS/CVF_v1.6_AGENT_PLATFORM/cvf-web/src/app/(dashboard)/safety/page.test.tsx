@@ -1,8 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: the test checks the Vietnamese empty-state message.
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SafetyPage from './page';
 
 const updatePreferencesMock = vi.fn();
@@ -164,6 +165,61 @@ describe('SafetyPage OpenClaw integration UI', () => {
 
     afterEach(() => {
         vi.unstubAllGlobals();
+    });
+
+    it.each([
+        ['en', 'No proposals to show yet', '0 proposals'],
+        ['vi', 'Chưa có dữ liệu đề xuất để hiển thị', '0 đề xuất'],
+    ] as const)('shows an honest empty proposal section in %s', async (language, empty, count) => {
+        mockLanguage = language;
+        setupFetchMock(fetchMock, { proposals: [] });
+        render(<SafetyPage />);
+
+        expect(screen.queryByText('Deploy auth system', { exact:true })).toBeNull();
+        await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/openclaw'));
+        expect(await screen.findByText(empty)).toBeTruthy();
+        expect(screen.getByText(count)).toBeTruthy();
+    });
+
+    it('removes a previously visible proposal when the latest response is empty', async () => {
+        setupFetchMock(fetchMock, { proposals: [{
+            id:'p-existing', action:'Previously visible proposal', source:'api', riskLevel:'low', state:'approved', time:'now',
+        }] });
+        render(<SafetyPage />);
+        expect(await screen.findByText('Previously visible proposal')).toBeTruthy();
+
+        setupFetchMock(fetchMock, { proposals:[] });
+        fireEvent.change(screen.getByPlaceholderText(/e\.g\. Deploy auth system/i), { target:{value:'Run a local safety check'} });
+        fireEvent.click(screen.getByRole('button', { name:/Submit OpenClaw/i }));
+
+        expect(await screen.findByText('No proposals to show yet')).toBeTruthy();
+        expect(screen.queryByText('Previously visible proposal')).toBeNull();
+    });
+
+    it('ignores an older empty response after a newer proposal is shown', async () => {
+        setupFetchMock(fetchMock, { proposals: [{
+            id:'p-new', action:'Newest proposal', source:'api', riskLevel:'low', state:'approved', time:'now',
+        }] });
+        const respond = fetchMock.getMockImplementation()!;
+        let releaseInitial!: () => void;
+        const initial = new Promise<Response>(resolve => {
+            releaseInitial = () => resolve(Response.json({proposals:[]}));
+        });
+        let initialGet = false;
+        fetchMock.mockImplementation((url, init) => {
+            if (url === '/api/openclaw' && !init?.method && !initialGet) {
+                initialGet = true;
+                return initial;
+            }
+            return respond(url, init);
+        });
+        render(<SafetyPage />);
+        await waitFor(() => expect(initialGet).toBe(true));
+        fireEvent.change(screen.getByPlaceholderText(/e\.g\. Deploy auth system/i), { target:{value:'Run a local safety check'} });
+        fireEvent.click(screen.getByRole('button', { name:/Submit OpenClaw/i }));
+        expect(await screen.findByText('Newest proposal')).toBeTruthy();
+        await act(async () => releaseInitial());
+        expect(screen.getByText('Newest proposal')).toBeTruthy();
     });
 
     it('loads and renders live proposals when OpenClaw is enabled', async () => {

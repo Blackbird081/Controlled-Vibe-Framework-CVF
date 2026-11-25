@@ -15,6 +15,7 @@ import { useQuotaManager, ProviderKey } from '@/lib/quota-manager';
 import { checkResponseGovernance } from '@/lib/governance-post-check';
 import { GOVERNED_ROUTE_DEFAULT_MODEL, GOVERNED_ROUTE_DEFAULT_PROVIDER } from '@/lib/governed-route-providers';
 import { type AgentModelSelection } from '@/lib/agent-model-catalog';
+import { hasPhysicalSafetyConcern, normalizeRequestText, PHYSICAL_SAFETY_GUIDANCE } from '@/lib/physical-safety';
 import {
     calculateQualityScore,
     shouldRequireAcceptance,
@@ -337,6 +338,25 @@ ${notice}` : notice;
     const handleSendMessage = useCallback(async (messageContent?: string) => {
         const content = messageContent || input.trim();
         if (!content || isLoading) return;
+
+        if (hasPhysicalSafetyConcern(normalizeRequestText(content))) {
+            const now = Date.now();
+            setMessages(prev => [...prev, {
+                id: `msg_${now}`,
+                role: 'user',
+                content,
+                timestamp: new Date(now),
+                status: 'complete',
+            }, {
+                id: `msg_${now + 1}`,
+                role: 'assistant',
+                content: PHYSICAL_SAFETY_GUIDANCE[language],
+                timestamp: new Date(now),
+                status: 'complete',
+            }]);
+            setInput('');
+            return;
+        }
 
         let provider = modelSelection?.provider ?? settings.preferences.defaultProvider;
         let apiKey = modelSelection

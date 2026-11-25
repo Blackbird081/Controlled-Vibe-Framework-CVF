@@ -13,6 +13,7 @@ export type HomeSpecLocale = 'vi' | 'en';
 export const NO_SPEC_MATCH = 'no_match';
 const noMatchDescription = 'No suitable template. The request is outside every listed result type or too vague to select a result safely.';
 const override: Readonly<Record<string, string>> = descriptions;
+// Template description changes follow docs/roadmaps/CVF_UI01_WEB_LOCAL_ALIGNMENT_ROADMAP_2026-11-22.md#permanent-e1-gate-for-template-descriptions.
 const homeScopedDescriptions: Readonly<Partial<Record<string, Record<HomeSpecLocale, string>>>> = {
     web_build_handoff: {
         vi: 'Soạn lời giới thiệu, tiêu đề từng phần và lời mời hành động cho một trang tĩnh giới thiệu dịch vụ, sản phẩm hoặc tổ chức.',
@@ -25,6 +26,14 @@ const homeScopedDescriptions: Readonly<Partial<Record<string, Record<HomeSpecLoc
     operator_plan: {
         vi: 'Lập kế hoạch vận hành hằng ngày cho nội bộ: phân công, ca làm, bàn giao và công việc định kỳ. Không dùng cho chiến dịch tiếp thị, tăng khách hàng hay chiến lược kinh doanh.',
         en: 'Plan day-to-day internal operations: staffing, shifts, handoffs, responsibilities, and recurring work. Not for marketing campaigns, audience growth, or business strategy.',
+    },
+    home_proposal: {
+        vi: 'Soạn lời đề nghị để thuyết phục một bên cụ thể chấp thuận, mua hoặc tài trợ. Nêu chi phí hoặc lợi ích cho họ. Không dùng cho kế hoạch nghiên cứu, chiến dịch tiếp thị hay kế hoạch nội bộ.',
+        en: 'Persuade a specific client, sponsor, or manager to approve, buy, or fund an offer. Explain its cost or benefit to them. Not for research, marketing campaigns, or internal plans.',
+    },
+    strategy_analysis: {
+        vi: 'So sánh phương án, chọn chiến lược hoặc lập kế hoạch tiếp thị, chiến dịch quảng bá hay tăng khách. Nêu việc ưu tiên, cách làm và cách đánh giá kết quả.',
+        en: 'Compare options, choose a strategy, or plan marketing, a promotional campaign, or customer growth. Include priorities, actions, and how to judge results.',
     },
 };
 const legacyFieldLabelsVi: Readonly<Record<string, string>> = {
@@ -121,7 +130,9 @@ export const homeSpecTemplates: Template[] = [
             description: homeScopedDescriptions[template.id]?.vi ?? template.description,
             ...(template.id === 'web_build_handoff' ? { sampleOutput: undefined, ...homeLandingContent('vi') } : {}),
         })),
-    ...newHomeTemplates,
+    ...newHomeTemplates.map(template => ({
+        ...template, description: homeScopedDescriptions[template.id]?.vi ?? template.description,
+    })),
 ];
 export function isHomeOnlyOutcome(id: string): boolean {
     return newHomeOutcomes.some(outcome => outcome.id === id);
@@ -145,7 +156,7 @@ export function homeSpecOutcomeTitle(templateId: string, locale: HomeSpecLocale)
 export function getJevOutcomeChoices(): { id: string; description: string }[] {
     return [{ id: NO_SPEC_MATCH, description: noMatchDescription }, ...homeSpecTemplates.map(template => {
         const created = newHomeOutcomes.find(outcome => outcome.id === template.id);
-        const description = created?.descriptionEn ?? homeScopedDescriptions[template.id]?.en ?? (template.id === 'email_template' ? 'Write an email for a recipient and purpose.'
+        const description = homeScopedDescriptions[template.id]?.en ?? created?.descriptionEn ?? (template.id === 'email_template' ? 'Write an email for a recipient and purpose.'
             : template.id === 'tos_review' ? 'Review terms of service for a specific service.'
             : override[template.id] ?? [homeSpecOutcomeTitle(template.id, 'en'), template.description].filter(Boolean).join('. '));
         return { id: template.id, description: description.replace(/\s+/g, ' ').trim().slice(0, 195) };

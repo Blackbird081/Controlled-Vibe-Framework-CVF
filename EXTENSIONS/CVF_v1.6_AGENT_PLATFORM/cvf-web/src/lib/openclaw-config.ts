@@ -163,14 +163,3 @@ export async function fetchProposals(): Promise<OpenClawProposal[]> {
         return [];
     }
 }
-
-// ==================== SAMPLE DATA (fallback) ====================
-
-export const SAMPLE_PROPOSALS: OpenClawProposal[] = [
-    { id: 'p-001', action: 'Deploy auth system', source: 'api', riskLevel: 'low', state: 'approved', time: '2 min ago' },
-    { id: 'p-002', action: 'Update pricing engine', source: 'openclaw', riskLevel: 'high', state: 'pending', time: '15 min ago' },
-    { id: 'p-003', action: 'Grant admin role to @user3', source: 'structured', riskLevel: 'high', state: 'rejected', time: '1 hr ago' },
-    { id: 'p-004', action: 'Scale AI token limit', source: 'api', riskLevel: 'medium', state: 'approved', time: '3 hr ago' },
-    { id: 'p-005', action: 'Enable sandbox mode', source: 'openclaw', riskLevel: 'low', state: 'approved', time: '5 hr ago' },
-    { id: 'p-006', action: 'Modify rate limiter', source: 'openclaw', riskLevel: 'medium', state: 'blocked', time: '6 hr ago' },
-];

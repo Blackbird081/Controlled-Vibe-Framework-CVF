@@ -28,7 +28,7 @@ const secondChoice = { decision: 'preselect', templateId: 'documentation', runId
 const clarifyLabel = 'Trợ lý cần biết thêm chi tiết nào?';
 
 function start(goal = original, language: 'vi' | 'en' = 'vi') {
-    render(<HomeSpecComposer language={language} library={<div>Thư viện</div>} providers={[]} />);
+    render(<HomeSpecComposer language={language} library={<div>Thư viện</div>} />);
     fireEvent.change(screen.getByLabelText(language === 'vi' ? 'Bạn muốn tạo gì?' : 'What do you want to create?'), { target: { value: goal } });
     fireEvent.click(screen.getByRole('button', { name: language === 'vi' ? 'Tiếp tục' : 'Continue' }));
 }

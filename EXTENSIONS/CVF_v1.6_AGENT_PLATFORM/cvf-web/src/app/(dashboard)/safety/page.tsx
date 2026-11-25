@@ -1,6 +1,7 @@
 'use client';
+// Text Encoding Exception: this page displays Vietnamese and English safety text.
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
 import { useTools } from '@/lib/agent-tools';
@@ -14,7 +15,6 @@ import {
 } from '@/lib/safety-status';
 import {
     OPENCLAW_MODE_INFO,
-    SAMPLE_PROPOSALS,
     submitToOpenClaw,
     fetchProposals,
     type OpenClawMode,
@@ -335,7 +335,9 @@ function ProposalsTable({ proposals, language }: {
                 </h3>
                 <span className="text-xs text-gray-500">{proposals.length} {language === 'vi' ? 'mục' : 'items'}</span>
             </div>
-            <div className="overflow-x-auto">
+            {proposals.length === 0 ? <p role="status" className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
+                {language === 'vi' ? 'Chưa có dữ liệu đề xuất để hiển thị' : 'No proposals to show yet'}
+            </p> : <div className="overflow-x-auto">
                 <table className="w-full text-sm min-w-[600px]">
                     <thead>
                         <tr className="bg-gray-50 dark:bg-white/[0.05]">
@@ -377,7 +379,7 @@ function ProposalsTable({ proposals, language }: {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div>}
         </div>
     );
 }
@@ -1353,7 +1355,8 @@ export default function SafetyPage() {
     const openClawMode = (settings.preferences.openClawMode ?? 'disabled') as OpenClawMode;
 
     // Live proposals
-    const [proposals, setProposals] = useState<OpenClawProposal[]>(SAMPLE_PROPOSALS);
+    const [proposals, setProposals] = useState<OpenClawProposal[]>([]);
+    const proposalRequest = useRef(0);
     const [lastResult, setLastResult] = useState<Record<string, unknown> | null>(null);
 
     const proposalStats = useMemo(() => {
@@ -1365,10 +1368,9 @@ export default function SafetyPage() {
     }, [proposals]);
 
     const loadProposals = useCallback(async () => {
-        const live = await fetchProposals();
-        if (live.length > 0) {
-            setProposals(live as OpenClawProposal[]);
-        }
+        const request = ++proposalRequest.current;
+        const latest = await fetchProposals();
+        if (request === proposalRequest.current) setProposals(latest);
     }, []);
 
     useEffect(() => {

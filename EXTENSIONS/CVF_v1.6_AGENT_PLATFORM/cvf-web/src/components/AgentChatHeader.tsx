@@ -6,6 +6,7 @@ import { ChatMessage, CVFMode, MODE_CONFIG } from '@/lib/agent-chat';
 import { ProviderKey } from '@/lib/quota-manager';
 import { ExportMenu } from './ExportMenu';
 import { PROVIDER_NAMES } from '@/lib/agent-model-catalog';
+import { TechnicalDetails } from './TechnicalDetails';
 
 interface AgentChatHeaderProps {
     currentMode: CVFMode;
@@ -45,9 +46,13 @@ export function AgentChatHeader({
                 <span className="text-2xl">🤖</span>
                 <div>
                     <h3 className="font-bold text-white">{language === 'vi' ? 'Trợ lý AI' : 'AI assistant'}</h3>
-                    <p className="text-xs text-blue-100">
+                    <TechnicalDetails
+                        label={language === 'vi' ? 'Chi tiết kỹ thuật' : 'Technical details'}
+                        className="mt-1 border-white/25 text-white! dark:border-white/25"
+                        contentClassName="px-3 pb-2 text-xs text-blue-100"
+                    >
                         {modelName ?? PROVIDER_NAMES[defaultProvider]}
-                    </p>
+                    </TechnicalDetails>
                 </div>
                 {currentMode !== 'simple' && (
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${MODE_CONFIG[currentMode].color}`}>

@@ -1,10 +1,12 @@
 'use client';
 
+// Text Encoding Exception: the disclosure label is localized for Vietnamese users.
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ChatMessage, PHASE_CONFIG } from '@/lib/agent-chat';
 import { AcceptRejectButtons } from './AcceptRejectButtons';
 import { QualityScoreBadge } from './QualityScoreBadge';
+import { TechnicalDetails } from './TechnicalDetails';
 import { autoCheckItems, calculatePhaseCompliance, CVFPhase } from '@/lib/cvf-checklists';
 
 const DEFAULT_PRICING = { input: 1.00, output: 4.00 };
@@ -176,61 +178,67 @@ export function AgentChatMessageBubble({
 
                 {message.metadata && message.status === 'complete' && (
                     <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <div className="text-xs text-gray-500 flex flex-wrap items-center gap-2">
-                            {phaseKey && (() => {
-                                const config = (PHASE_CONFIG as Record<string, { color: string; icon: string; label: string }>)[phaseKey] || PHASE_CONFIG.Processing;
-                                return (
-                                    <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${config.color}`}>
-                                        <span>{config.icon}</span>
-                                        <span>{config.label || phaseKey}</span>
-                                    </span>
-                                );
-                            })()}
-
-                            {isKnownPhase && (
-                                <ComplianceIndicator phase={phaseKey as CVFPhase} response={message.content} language={language} />
-                            )}
-
-                            {qualityScore && (
-                                <QualityScoreBadge score={qualityScore} language={language} />
-                            )}
-
-                            {typeof factualScore === 'number' && (
-                                <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${factualBadgeClass}`}>
-                                    <span>📎</span>
-                                    <span>
-                                        {language === 'vi' ? 'Factual' : 'Factual'}: {factualScore}%
-                                        {factualRisk ? ` (${factualRisk})` : ''}
-                                    </span>
-                                </span>
-                            )}
-
-                            {preUatStatus && (
-                                <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${preUatBadgeClass}`}>
-                                    <span>🧪</span>
-                                    <span>
-                                        {language === 'vi' ? 'Pre-UAT' : 'Pre-UAT'}: {preUatStatus}
-                                        {typeof preUatScore === 'number' && ` ${preUatScore}%`}
-                                    </span>
-                                </span>
-                            )}
-
-                            {message.metadata.model && (
-                                <span>🤖 {message.metadata.model}</span>
-                            )}
-                            {message.metadata.tokens && (
-                                <span>
-                                    📊 {message.metadata.tokens >= 1000
-                                        ? `${(message.metadata.tokens / 1000).toFixed(1)}K`
-                                        : message.metadata.tokens} tokens
-                                    {message.metadata.model && (
-                                        <span className="text-green-600 dark:text-green-400 ml-1">
-                                            • ${calculateMessageCost(pricing, message.metadata.model, message.metadata.tokens).toFixed(4)}
+                        {(phaseKey || qualityScore || typeof factualScore === 'number' || preUatStatus ||
+                            message.metadata.model || message.metadata.tokens) ? (
+                            <TechnicalDetails
+                                label={language === 'vi' ? 'Chi tiết kỹ thuật' : 'Technical details'}
+                                contentClassName="flex flex-wrap items-center gap-2 px-3 pb-3 text-xs text-gray-600 dark:text-gray-300"
+                            >
+                                {phaseKey && (() => {
+                                    const config = (PHASE_CONFIG as Record<string, { color: string; icon: string; label: string }>)[phaseKey] || PHASE_CONFIG.Processing;
+                                    return (
+                                        <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${config.color}`}>
+                                            <span>{config.icon}</span>
+                                            <span>{config.label || phaseKey}</span>
                                         </span>
-                                    )}
-                                </span>
-                            )}
-                        </div>
+                                    );
+                                })()}
+
+                                {isKnownPhase && (
+                                    <ComplianceIndicator phase={phaseKey as CVFPhase} response={message.content} language={language} />
+                                )}
+
+                                {qualityScore && (
+                                    <QualityScoreBadge score={qualityScore} language={language} />
+                                )}
+
+                                {typeof factualScore === 'number' && (
+                                    <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${factualBadgeClass}`}>
+                                        <span>📎</span>
+                                        <span>
+                                            Factual: {factualScore}%
+                                            {factualRisk ? ` (${factualRisk})` : ''}
+                                        </span>
+                                    </span>
+                                )}
+
+                                {preUatStatus && (
+                                    <span className={`px-2 py-0.5 rounded-full flex items-center gap-1 ${preUatBadgeClass}`}>
+                                        <span>🧪</span>
+                                        <span>
+                                            {language === 'vi' ? 'Pre-UAT' : 'Pre-UAT'}: {preUatStatus}
+                                            {typeof preUatScore === 'number' && ` ${preUatScore}%`}
+                                        </span>
+                                    </span>
+                                )}
+
+                                {message.metadata.model && (
+                                    <span>🤖 {message.metadata.model}</span>
+                                )}
+                                {message.metadata.tokens && (
+                                    <span>
+                                        📊 {message.metadata.tokens >= 1000
+                                            ? `${(message.metadata.tokens / 1000).toFixed(1)}K`
+                                            : message.metadata.tokens} tokens
+                                        {message.metadata.model && (
+                                            <span className="text-green-600 dark:text-green-400 ml-1">
+                                                • ${calculateMessageCost(pricing, message.metadata.model, message.metadata.tokens).toFixed(4)}
+                                            </span>
+                                        )}
+                                    </span>
+                                )}
+                            </TechnicalDetails>
+                        ) : null}
 
                         {acceptanceStatus === 'pending' && (
                             <AcceptRejectButtons

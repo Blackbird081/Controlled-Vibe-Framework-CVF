@@ -41,6 +41,7 @@ interface HomeIntakePacket {
     riskLevel: RiskLevel;
     certifiedBoundaries: string;
     suggestedAssfPackageId?: string;
+    openQuestions: string[];
 }
 
 function renderHomeOutput(template: Template, output: string, values: Record<string, string>) {
@@ -412,10 +413,6 @@ export function generateSpec(
     const englishWorkingBrief = homeIntake ? '' : buildEnglishWorkingBrief(template, values, workingValues, lang, mode);
     const portableHandoffReadiness = buildPortableAgentHandoffReadiness(template, workingValues, lang, mode);
     const commonQuestions = homeIntake ? getHomeCommonQuestions('en') : [];
-    const stillOpen = [
-        ...missingRequired.filter(field => !isHomeCommonQuestion(field.id)).map(field => resolveFieldLabel(field, field.id)),
-        ...commonQuestions.filter(field => !values[field.id]?.trim()).map(field => field.exportLabel),
-    ];
     const homeIntakeCoverage = homeIntake ? [
         '### Provided',
         'See Task and User Context for the original request and User Input for the full set of supplied answers.',
@@ -426,9 +423,9 @@ export function generateSpec(
         '### User Will Supply',
         values.homeInputReferences?.trim() ? values.homeInputReferences : 'No further inputs recorded for delivery by the user.',
         '### Open Questions',
-        stillOpen.length
-            ? ['Check whether these unfilled details affect the next permitted action.', ...stillOpen.map(label => `- ${label}`)].join('\n')
-            : 'No unfilled template inputs flagged. Check for consequential unknowns during intake.',
+        homeIntake.openQuestions.length
+            ? ['Check whether these open questions affect the next permitted action.', ...homeIntake.openQuestions.map(label => `- ${label}`)].join('\n')
+            : 'No open questions recorded. Check for consequential unknowns during intake.',
     ].join('\n\n') : '';
 
     let spec = `---

@@ -18,8 +18,8 @@ vi.mock('@/lib/home-spec-jev-client', () => ({
 }));
 
 function composer(language: 'en' | 'vi', props?: Partial<ComponentProps<typeof HomeSpecComposer>>) {
-    return <HomeSpecAccountScope.Provider value={{ accountScope: fixture.scope, canUseSettings: false }}>
-        <HomeSpecComposer language={language} library={<p>Library</p>} providers={[]} {...props} />
+    return <HomeSpecAccountScope.Provider value={{ accountScope: fixture.scope }}>
+        <HomeSpecComposer language={language} library={<p>Library</p>} {...props} />
     </HomeSpecAccountScope.Provider>;
 }
 
@@ -142,8 +142,8 @@ describe('Home specification input retention', () => {
 
     it('preserves an unscoped in-memory draft when a Home outcome is selected', async () => {
         const view = (selectionRequest: { id: string; revision: number } | null) =>
-            <HomeSpecAccountScope.Provider value={{ accountScope: undefined, canUseSettings: false }}>
-                <HomeSpecComposer language="en" library={<p>Library</p>} providers={[]} selectionRequest={selectionRequest} />
+            <HomeSpecAccountScope.Provider value={{ accountScope: undefined }}>
+                <HomeSpecComposer language="en" library={<p>Library</p>} selectionRequest={selectionRequest} />
             </HomeSpecAccountScope.Provider>;
         const mounted = render(view(null));
         const goal = 'Unfinished bakery order details';

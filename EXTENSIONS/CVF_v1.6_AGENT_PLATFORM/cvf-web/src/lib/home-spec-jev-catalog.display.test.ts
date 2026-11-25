@@ -92,6 +92,20 @@ describe('Home outcome catalog K3', () => {
     expect(vietnamese).toMatch(/hằng ngày.*phân công.*ca làm.*bàn giao.*không dùng cho.*tiếp thị.*chiến lược/i);
   });
 
+  it('limits proposals to a specific recipient and routes marketing plans to strategy', () => {
+    const choices = getJevOutcomeChoices();
+    const proposal = choices.find(item => item.id === 'home_proposal')?.description;
+    const strategy = choices.find(item => item.id === 'strategy_analysis')?.description;
+    expect(proposal).toMatch(/specific.*(?:approve|buy|fund).*cost or benefit.*not for research.*marketing.*internal plans/i);
+    expect(strategy).toMatch(/options.*strategy.*marketing.*campaign.*customer growth/i);
+    expect(getHomeExportTemplate('home_proposal', 'en')?.description).toBe(proposal);
+    expect(getHomeExportTemplate('strategy_analysis', 'en')?.description).toBe(strategy);
+    expect(getHomeExportTemplate('home_proposal', 'vi')?.description)
+      .toMatch(/thuyết phục.*cụ thể.*chấp thuận.*mua.*tài trợ.*chi phí hoặc lợi ích.*nghiên cứu.*tiếp thị.*nội bộ/i);
+    expect(getHomeExportTemplate('strategy_analysis', 'vi')?.description)
+      .toMatch(/phương án.*chiến lược.*tiếp thị.*chiến dịch.*tăng khách/i);
+  });
+
   it('reads certified floors and boundaries without granting execution', () => {
     expect(getHomeOutcomeAuthority('app_requirements_spec')?.riskLevel).toBe('R1');
     expect(getHomeOutcomeAuthority('data_analysis')?.riskLevel).toBe('R2');

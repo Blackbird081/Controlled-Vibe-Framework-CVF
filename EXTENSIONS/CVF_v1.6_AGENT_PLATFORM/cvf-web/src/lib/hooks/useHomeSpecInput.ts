@@ -2,29 +2,28 @@
 
 import { createContext, useCallback, useState, useSyncExternalStore } from 'react';
 
-export const HomeSpecAccountScope = createContext<{ accountScope: string | undefined; canUseSettings: boolean } | null>(null);
+export const HomeSpecAccountScope = createContext<{ accountScope: string | undefined } | null>(null);
 
 type HomeSpecDraft = {
     goal: string;
     extra: string;
     values: Record<string, string>;
-    draft: string;
     templateId?: string;
     downloadedTemplate?: string;
 };
 
 type HomeSpecInput = HomeSpecDraft & { unfinishedDrafts: HomeSpecDraft[] };
-const blankDraft: HomeSpecDraft = { goal: '', extra: '', values: {}, draft: '' };
+const blankDraft: HomeSpecDraft = { goal: '', extra: '', values: {} };
 const empty: HomeSpecInput = { ...blankDraft, unfinishedDrafts: [] };
 const cache = new Map<string, { raw: string; input: HomeSpecInput; onlyInMemory?: boolean }>();
 const changed = 'cvf:homeSpecInputChanged';
 
 function parseDraft(input: Partial<HomeSpecDraft> | null): HomeSpecDraft | null {
-    if (!input || typeof input.goal !== 'string' || typeof input.extra !== 'string' || typeof input.draft !== 'string'
+    if (!input || typeof input.goal !== 'string' || typeof input.extra !== 'string'
         || !input.values || Array.isArray(input.values) || typeof input.values !== 'object'
         || Object.values(input.values).some(value => typeof value !== 'string')) return null;
     return {
-        goal: input.goal, extra: input.extra, draft: input.draft, values: input.values,
+        goal: input.goal, extra: input.extra, values: input.values,
         templateId: typeof input.templateId === 'string' ? input.templateId : undefined,
         downloadedTemplate: typeof input.downloadedTemplate === 'string' ? input.downloadedTemplate : undefined,
     };

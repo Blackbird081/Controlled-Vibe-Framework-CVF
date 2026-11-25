@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+// Text Encoding Exception: tests verify the Vietnamese disclosure label.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentChatMessageBubble } from './AgentChatMessageBubble';
@@ -87,6 +88,30 @@ describe('AgentChatMessageBubble', () => {
         render(<AgentChatMessageBubble message={message} language="vi" />);
         expect(screen.getByText(/Đã chấp nhận/i)).toBeTruthy();
     });
+
+    it.each([['vi', 'Chi tiết kỹ thuật'], ['en', 'Technical details']] as const)(
+        'puts the phase, factual score and model code behind a closed disclosure in %s',
+        (language, label) => {
+            const message: ChatMessage = {
+                id: 'technical-details', role: 'assistant', status: 'complete', timestamp: new Date(0),
+                content: 'The reply is still visible.',
+                metadata: { phase: 'Processing', factualScore: 32, factualRisk: 'high', model: 'gpt-4o-mini' },
+            };
+            render(<AgentChatMessageBubble message={message} language={language} />);
+
+            expect(screen.getByText(message.content).closest('details')).toBeNull();
+            const phase = screen.getByText('Processing');
+            const score = screen.getByText('Factual: 32% (high)');
+            const model = screen.getByText(/gpt-4o-mini/);
+            const details = phase.closest('details');
+            expect(details?.open).toBe(false);
+            expect(score.closest('details')).toBe(details);
+            expect(model.closest('details')).toBe(details);
+
+            fireEvent.click(screen.getByText(label));
+            expect(details?.open).toBe(true);
+        },
+    );
 
     it('copies code block content', () => {
         const message: ChatMessage = {

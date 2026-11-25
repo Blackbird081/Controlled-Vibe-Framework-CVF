@@ -294,7 +294,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                         </div>
                     </div>
                 )}
-                <HomeSpecAccountScope.Provider value={{ accountScope, canUseSettings: permissions.canUseSettings }}>{children}</HomeSpecAccountScope.Provider>
+                <HomeSpecAccountScope.Provider value={{ accountScope }}>{children}</HomeSpecAccountScope.Provider>
 
                 {/* Footer */}
                 <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-800">

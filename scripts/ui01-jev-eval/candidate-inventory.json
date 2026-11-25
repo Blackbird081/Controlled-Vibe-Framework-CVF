@@ -1,0 +1,1623 @@
+{
+  "base": "d66056dda",
+  "noMatch": {
+    "id": "no_match",
+    "title": {
+      "vi": "Không mẫu nào phù hợp",
+      "en": "No suitable template"
+    }
+  },
+  "keywords": {
+    "homeFirstChoice": "src/lib/intent-router.ts#routeIntent (IntentEntry.handleChange and handleStart)",
+    "secondaryRanked": "src/lib/template-recommender.ts#recommendTemplates (spec-first-mediation.buildRecommendations)"
+  },
+  "counts": {
+    "sourceTemplateRows": 60,
+    "uniqueRoutes": 58,
+    "choicesWithNoMatch": 59,
+    "nonProductFolders": 2,
+    "homeWizards": 9,
+    "homeFolderChildren": 9,
+    "selectableRankedRecommenderRows": 49,
+    "quickOutcomeAliases": 6
+  },
+  "candidates": [
+    {
+      "id": "business_strategy_wizard",
+      "title": "📈 Chiến lược Kinh doanh",
+      "description": "Wizard nhiều bước tạo Tài liệu Quyết định Chiến lược với governed packet và live path để đối soát",
+      "category": "business",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "strategy_analysis",
+      "title": "Phân tích Chiến lược",
+      "description": "Phân tích chiến lược kinh doanh, so sánh các phương án",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "topic",
+          "label": "Chủ đề chiến lược"
+        },
+        {
+          "id": "context",
+          "label": "Bối cảnh"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "risk_assessment",
+      "title": "Đánh giá Rủi ro",
+      "description": "Đánh giá rủi ro với kế hoạch giảm thiểu",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "subject",
+          "label": "Chủ đề đánh giá"
+        },
+        {
+          "id": "description",
+          "label": "Mô tả chi tiết"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "competitor_review",
+      "title": "Phân tích Đối thủ",
+      "description": "Phân tích đối thủ cạnh tranh",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "company",
+          "label": "Công ty của bạn"
+        },
+        {
+          "id": "competitors",
+          "label": "Đối thủ chính"
+        },
+        {
+          "id": "industry",
+          "label": "Ngành"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "operator_plan",
+      "title": "Kế hoạch Vận hành",
+      "description": "Tạo kế hoạch hành động có timeline, owner, metric và acceptance checks cho người vận hành không chuyên",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "goal",
+          "label": "Mục tiêu kế hoạch"
+        },
+        {
+          "id": "context",
+          "label": "Bối cảnh"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "decision_memo",
+      "title": "Decision Memo",
+      "description": "So sánh các lựa chọn bằng cùng tiêu chí và đưa ra recommendation có decision rule",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "decision",
+          "label": "Quyết định cần đưa ra"
+        },
+        {
+          "id": "context",
+          "label": "Bối cảnh"
+        },
+        {
+          "id": "options",
+          "label": "Các lựa chọn"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "system_design_wizard",
+      "title": "🔧 Thiết kế Hệ thống",
+      "description": "Multi-step wizard tạo System Design Document với governed packet và live path để đối soát",
+      "category": "technical",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "code_review",
+      "title": "Review Code",
+      "description": "Biến đoạn logic hoặc phần build gây lo ngại thành một gói review dễ hiểu để non-coder biết chỗ nào cần sửa và cần handoff gì cho builder",
+      "category": "technical",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "workSample",
+          "label": "Phần cần xem"
+        },
+        {
+          "id": "goal",
+          "label": "Phần này đang phục vụ việc gì?"
+        },
+        {
+          "id": "worry",
+          "label": "Điều gì làm bạn lo hoặc thấy sai?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "architecture_review",
+      "title": "Review Kiến trúc",
+      "description": "Review kiến trúc hệ thống",
+      "category": "technical",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "system",
+          "label": "Tên hệ thống"
+        },
+        {
+          "id": "description",
+          "label": "Mô tả kiến trúc"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "content_strategy_wizard",
+      "title": "✍️ Chiến lược Nội dung",
+      "description": "Multi-step wizard tạo Content Strategy với governed packet và live path để đối soát",
+      "category": "content",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "documentation",
+      "title": "Tài liệu Kỹ thuật",
+      "description": "Biến knowledge rời rạc thành tài liệu handoff hoặc hướng dẫn dễ hiểu để người không chuyên vẫn dùng và bàn giao tiếp được",
+      "category": "content",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "subject",
+          "label": "Tài liệu này nói về việc gì?"
+        },
+        {
+          "id": "currentNotes",
+          "label": "Bạn đang có những ghi chú / thông tin gì?"
+        },
+        {
+          "id": "readerGoal",
+          "label": "Người đọc cần làm được gì sau khi đọc?"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "generate_sop",
+          "title": {
+            "vi": "Tạo SOP",
+            "en": "Generate SOP"
+          },
+          "outputContract": "Standard operating procedure",
+          "requiredFields": [
+            "process_name",
+            "actors",
+            "steps",
+            "controls"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faq_outline",
+      "title": "FAQ Outline",
+      "description": "Tạo FAQ có câu hỏi, câu trả lời trực tiếp, edge cases và publish readiness checks",
+      "category": "content",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "subject",
+          "label": "FAQ nói về việc gì?"
+        },
+        {
+          "id": "context",
+          "label": "Bối cảnh / ghi chú"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "acceptance_criteria",
+      "title": "Acceptance Criteria",
+      "description": "Viết acceptance criteria quan sát được, test được, kèm data/state/error expectations",
+      "category": "content",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "feature",
+          "label": "Feature / workflow"
+        },
+        {
+          "id": "context",
+          "label": "Bối cảnh / yêu cầu"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "email_template",
+      "title": "Mẫu Email",
+      "description": "Tạo email chuyên nghiệp",
+      "category": "content",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "purpose",
+          "label": "Mục đích email"
+        },
+        {
+          "id": "context",
+          "label": "Context"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "create_proposal",
+          "title": {
+            "vi": "Viết proposal",
+            "en": "Create Proposal"
+          },
+          "outputContract": "Proposal document",
+          "requiredFields": [
+            "customer_need",
+            "scope",
+            "timeline",
+            "constraints"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "research_project_wizard",
+      "title": "🔬 Dự án Nghiên cứu",
+      "description": "Multi-step wizard tạo Research Proposal với governed packet và live path để đối soát",
+      "category": "research",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "data_analysis_wizard",
+      "title": "📊 Phân tích Dữ liệu",
+      "description": "Multi-step wizard tạo Data Analysis Plan với governed packet và live path để đối soát",
+      "category": "research",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "data_analysis",
+      "title": "Phân tích Dữ liệu",
+      "description": "Biến dữ liệu hoặc báo cáo thô thành insight và khuyến nghị dễ hiểu cho người ra quyết định không chuyên phân tích",
+      "category": "research",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "dataset",
+          "label": "Bạn đang có dữ liệu / báo cáo gì?"
+        },
+        {
+          "id": "questions",
+          "label": "Bạn cần ra quyết định gì từ dữ liệu này?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "marketing_campaign_wizard",
+      "title": "📣 Chiến dịch Marketing",
+      "description": "Multi-step wizard tạo Campaign Brief với governed packet và live path để đối soát",
+      "category": "marketing",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "seo_audit",
+      "title": "Kiểm tra SEO",
+      "description": "Đánh giá website về Technical SEO, On-page, Off-page",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "url",
+          "label": "URL Website"
+        },
+        {
+          "id": "industry",
+          "label": "Ngành/Lĩnh vực"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "copywriting_evaluation",
+      "title": "Đánh giá Copywriting",
+      "description": "Đánh giá và cải thiện marketing copy",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "copy",
+          "label": "Copy Text"
+        },
+        {
+          "id": "type",
+          "label": "Loại Copy"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        },
+        {
+          "id": "cta",
+          "label": "Mục tiêu CTA"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "landing_page_cro",
+      "title": "Tối ưu Landing Page",
+      "description": "Tối ưu conversion rate cho landing pages",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "url",
+          "label": "Landing Page URL"
+        },
+        {
+          "id": "goal",
+          "label": "Mục tiêu conversion"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "pricing_strategy",
+      "title": "Review Chiến lược Giá",
+      "description": "Đánh giá và tối ưu pricing strategy",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "product",
+          "label": "Sản phẩm/Dịch vụ"
+        },
+        {
+          "id": "currentPrice",
+          "label": "Giá hiện tại"
+        },
+        {
+          "id": "model",
+          "label": "Pricing Model"
+        },
+        {
+          "id": "target",
+          "label": "Target Customer"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "content_quality",
+      "title": "Checklist Chất lượng Nội dung",
+      "description": "Đánh giá chất lượng content với E-E-A-T",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "content",
+          "label": "Content URL/Text"
+        },
+        {
+          "id": "type",
+          "label": "Content Type"
+        },
+        {
+          "id": "keyword",
+          "label": "Target Keyword"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "email_campaign",
+      "title": "Review Chiến dịch Email",
+      "description": "Đánh giá email marketing campaigns",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "email",
+          "label": "Email Content"
+        },
+        {
+          "id": "type",
+          "label": "Email Type"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        },
+        {
+          "id": "goal",
+          "label": "Campaign Goal"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "social_ad_review",
+      "title": "Review Quảng cáo MXH",
+      "description": "Tối ưu ads trên Facebook, Instagram, TikTok",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "creative",
+          "label": "Ad Creative"
+        },
+        {
+          "id": "copy",
+          "label": "Ad Copy"
+        },
+        {
+          "id": "platform",
+          "label": "Platform"
+        },
+        {
+          "id": "objective",
+          "label": "Campaign Objective"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "brand_voice",
+      "title": "Đồng bộ Giọng điệu Thương hiệu",
+      "description": "Đảm bảo brand voice nhất quán",
+      "category": "marketing",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "brand",
+          "label": "Brand Name"
+        },
+        {
+          "id": "industry",
+          "label": "Industry"
+        },
+        {
+          "id": "audience",
+          "label": "Target Audience"
+        },
+        {
+          "id": "samples",
+          "label": "Sample Content"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "product_design_wizard",
+      "title": "🎨 Thiết kế Sản phẩm",
+      "description": "Multi-step wizard tạo Product Design Spec với governed packet và live path để đối soát",
+      "category": "product",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "accessibility_audit",
+      "title": "Kiểm tra Accessibility",
+      "description": "Kiểm tra WCAG compliance",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "url",
+          "label": "Page URL"
+        },
+        {
+          "id": "level",
+          "label": "WCAG Level"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "user_flow_analysis",
+      "title": "Phân tích User Flow",
+      "description": "Phân tích và tối ưu user journeys",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "flow",
+          "label": "User Flow"
+        },
+        {
+          "id": "goal",
+          "label": "Conversion Goal"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "ux_heuristic_evaluation",
+      "title": "Đánh giá UX Heuristic",
+      "description": "Đánh giá UX theo Nielsen's 10 Heuristics",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "product",
+          "label": "Product/Feature"
+        },
+        {
+          "id": "description",
+          "label": "Description"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "feature_prioritization",
+      "title": "Ưu tiên Tính năng",
+      "description": "RICE/ICE framework cho feature prioritization",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "features",
+          "label": "Feature List"
+        },
+        {
+          "id": "goal",
+          "label": "Product Goal"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "user_persona",
+      "title": "Xây dựng User Persona",
+      "description": "Tạo user personas dựa trên data",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "product",
+          "label": "Product/Service"
+        },
+        {
+          "id": "data",
+          "label": "User Data"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "error_handling_ux",
+      "title": "UX Xử lý Lỗi",
+      "description": "Cải thiện cách handle errors",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "errors",
+          "label": "Current Error Messages"
+        },
+        {
+          "id": "context",
+          "label": "Error Context"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "onboarding_review",
+      "title": "Review Onboarding",
+      "description": "Tối ưu first-time user experience",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "id": "flow",
+          "label": "Current Onboarding Flow"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "web_ux_redesign_system",
+      "title": "Hệ thống UX Web",
+      "description": "Biến brief giao diện thành packet UX/UI có review gate rõ ràng để non-coder duyệt hướng UX an toàn trước khi builder đụng vào phần build.",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "projectSurface",
+          "label": "Website / sản phẩm này là gì?"
+        },
+        {
+          "id": "users",
+          "label": "Ai sẽ dùng nó?"
+        },
+        {
+          "id": "coreFlows",
+          "label": "Người dùng cần làm gì trên web?"
+        },
+        {
+          "id": "pagesModals",
+          "label": "Những màn hình / popup cần có"
+        },
+        {
+          "id": "mustPreserve",
+          "label": "Những gì tuyệt đối không được đổi"
+        },
+        {
+          "id": "visualDirection",
+          "label": "Bạn muốn giao diện có cảm giác như thế nào?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "web_build_handoff",
+      "title": "Bàn giao Web cho Agent",
+      "description": "Template cực ngắn cho non-coder: chỉ mô tả website bằng ngôn ngữ thường ngày, CVF sẽ tự đóng gói thành packet build cho agent",
+      "category": "product",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "websiteGoal",
+          "label": "Website này để làm gì?"
+        },
+        {
+          "id": "audience",
+          "label": "Ai sẽ dùng website?"
+        },
+        {
+          "id": "mustDo",
+          "label": "Người dùng phải làm được những việc nào?"
+        },
+        {
+          "id": "screens",
+          "label": "Cần những trang / popup nào?"
+        },
+        {
+          "id": "mustPreserve",
+          "label": "Những gì phải giữ nguyên"
+        },
+        {
+          "id": "lookAndFeel",
+          "label": "Bạn muốn giao diện mang cảm giác gì?"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "build_landing_page",
+          "title": {
+            "vi": "Viết landing page",
+            "en": "Build Landing Page"
+          },
+          "outputContract": "Landing page copy",
+          "requiredFields": [
+            "offer",
+            "audience",
+            "proof_points",
+            "constraints"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "security_assessment_wizard",
+      "title": "🔐 Đánh giá Bảo mật",
+      "description": "Multi-step wizard tạo Security Assessment Report với governed packet và live path để đối soát",
+      "category": "security",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "api_security",
+      "title": "Checklist Bảo mật API",
+      "description": "Review rủi ro bảo vệ cho các luồng dữ liệu và thao tác quan trọng mà không bắt non-coder phải liệt kê endpoint hay chi tiết kỹ thuật",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "criticalFlows",
+          "label": "Người dùng hoặc hệ thống đang làm những việc nhạy cảm nào?"
+        },
+        {
+          "id": "sensitiveData",
+          "label": "Thông tin nhạy cảm nào đi qua các luồng này?"
+        },
+        {
+          "id": "currentProtections",
+          "label": "Hiện tại đang bảo vệ bằng cách nào?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "gdpr_compliance",
+      "title": "Kiểm tra Tuân thủ GDPR",
+      "description": "EU data protection compliance check",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "product",
+          "label": "Website/App"
+        },
+        {
+          "id": "dataCollected",
+          "label": "Data Collected"
+        },
+        {
+          "id": "purpose",
+          "label": "Processing Purpose"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "privacy_policy_audit",
+      "title": "Kiểm tra Chính sách Bảo mật",
+      "description": "Privacy policy review và cải thiện",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "policy",
+          "label": "Policy URL/Text"
+        },
+        {
+          "id": "businessType",
+          "label": "Business Type"
+        },
+        {
+          "id": "markets",
+          "label": "Target Markets"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "incident_response",
+      "title": "Kế hoạch Ứng phó Sự cố",
+      "description": "Security incident response planning",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "companySize",
+          "label": "Company Size"
+        },
+        {
+          "id": "industry",
+          "label": "Industry"
+        },
+        {
+          "id": "criticalSystems",
+          "label": "Critical Systems"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "data_handling",
+      "title": "Review Xử lý Dữ liệu",
+      "description": "Review vòng đời dữ liệu theo cách dễ hiểu để non-coder vẫn mô tả được dữ liệu đi đâu, ai dùng, giữ bao lâu và chỗ nào đang rủi ro",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "dataTypes",
+          "label": "Bạn đang xử lý những loại thông tin nào?"
+        },
+        {
+          "id": "sources",
+          "label": "Thông tin này đi vào hệ thống từ đâu?"
+        },
+        {
+          "id": "storageFlow",
+          "label": "Sau khi vào rồi thì dữ liệu đi đâu và ai dùng?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "tos_review",
+      "title": "Review Điều khoản Dịch vụ",
+      "description": "Terms of Service coverage và fairness",
+      "category": "security",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "tos",
+          "label": "ToS URL/Text"
+        },
+        {
+          "id": "serviceType",
+          "label": "Service Type"
+        },
+        {
+          "id": "model",
+          "label": "Business Model"
+        },
+        {
+          "id": "markets",
+          "label": "Target Markets"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "review_contract",
+          "title": {
+            "vi": "Review hợp đồng",
+            "en": "Review Contract"
+          },
+          "outputContract": "Contract review report",
+          "requiredFields": [
+            "contract_text",
+            "review_goal",
+            "jurisdiction_context"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "app_builder_wizard",
+      "title": "🧙 Xây dựng Ứng dụng",
+      "description": "Multi-step wizard tạo app spec với governed packet, review và live path. Khuyên dùng cho app phức tạp!",
+      "category": "development",
+      "home": "wizard",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [],
+      "aliases": []
+    },
+    {
+      "id": "build_my_app",
+      "title": "🚀 Tạo Ứng dụng",
+      "description": "Mô tả ý tưởng app để CVF route vào governed starter path cho người không biết code.",
+      "category": "development",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [
+        {
+          "id": "appIdea",
+          "label": "Ý tưởng App"
+        },
+        {
+          "id": "appType",
+          "label": "Loại App"
+        },
+        {
+          "id": "targetUser",
+          "label": "Ai sẽ dùng?"
+        },
+        {
+          "id": "platform",
+          "label": "Chạy trên"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "app_builder_complete",
+      "title": "📦 Tạo Ứng dụng Hoàn chỉnh",
+      "description": "Tạo brief có cấu trúc để agent tiếp nhận phân tích INTAKE; non-coder mô tả mục tiêu, phạm vi và ranh giới mà không phải chọn stack hay hạ tầng.",
+      "category": "development",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": false,
+      "requiredFields": [
+        {
+          "id": "appName",
+          "label": "1. Tên app / sản phẩm"
+        },
+        {
+          "id": "appType",
+          "label": "2. Đây là loại sản phẩm gì?"
+        },
+        {
+          "id": "problem",
+          "label": "3. Nó giải quyết vấn đề gì?"
+        },
+        {
+          "id": "targetUsers",
+          "label": "4. Ai sẽ dùng sản phẩm này?"
+        },
+        {
+          "id": "coreFeatures",
+          "label": "5. Những việc quan trọng nhất app phải làm được"
+        },
+        {
+          "id": "successCriteria",
+          "label": "6. Khi nào bạn xem đây là phiên bản đạt yêu cầu?"
+        },
+        {
+          "id": "platforms",
+          "label": "8. App cần chạy ở đâu?"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "create_prd",
+          "title": {
+            "vi": "Tạo PRD",
+            "en": "Create PRD"
+          },
+          "outputContract": "Product requirements document",
+          "requiredFields": [
+            "product_goal",
+            "target_user",
+            "problem",
+            "constraints"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "app_requirements_spec",
+      "title": "Spec Yêu cầu Ứng dụng",
+      "description": "Thu thập requirements cho app mới, định nghĩa scope và success criteria",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "individual_skills_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "appName",
+          "label": "App Name"
+        },
+        {
+          "id": "appType",
+          "label": "App Type"
+        },
+        {
+          "id": "problem",
+          "label": "Problem Statement"
+        },
+        {
+          "id": "targetUsers",
+          "label": "Target Users"
+        },
+        {
+          "id": "coreFeatures",
+          "label": "Core Features (3-5)"
+        },
+        {
+          "id": "outOfScope",
+          "label": "Out of Scope"
+        },
+        {
+          "id": "successCriteria",
+          "label": "Success Criteria"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "architecture_design",
+      "title": "Thiết kế Kiến trúc",
+      "description": "Thiết kế kiến trúc hệ thống với component diagram",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "individual_skills_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "appName",
+          "label": "App Name"
+        },
+        {
+          "id": "techStack",
+          "label": "Tech Stack"
+        },
+        {
+          "id": "coreFeatures",
+          "label": "Core Features"
+        },
+        {
+          "id": "appType",
+          "label": "Architecture Type"
+        },
+        {
+          "id": "dataFlow",
+          "label": "Data Flow"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "api_design",
+      "title": "Spec Thiết kế API",
+      "description": "Biến nhu cầu trao đổi dữ liệu thành integration handoff packet để non-coder mô tả hợp đồng vận hành mà không phải tự chọn kiểu API.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "individual_skills_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "appName",
+          "label": "1. Hệ thống / integration này tên gì?"
+        },
+        {
+          "id": "whoUsesIt",
+          "label": "2. Ai dùng hoặc phụ thuộc vào integration này?"
+        },
+        {
+          "id": "jobsToSupport",
+          "label": "3. Integration này phải hỗ trợ những việc gì?"
+        },
+        {
+          "id": "informationExchanged",
+          "label": "4. Những thông tin nào cần đi qua lại?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "cli_tool_spec",
+      "title": "Spec Công cụ CLI",
+      "description": "Spec cho command-line tool: commands, arguments, options",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "individual_skills_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": false,
+      "requiredFields": [
+        {
+          "id": "toolName",
+          "label": "Tool Name"
+        },
+        {
+          "id": "purpose",
+          "label": "Purpose"
+        },
+        {
+          "id": "commands",
+          "label": "Commands"
+        },
+        {
+          "id": "targetUsers",
+          "label": "Target Users"
+        },
+        {
+          "id": "language",
+          "label": "Language"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "vibe_to_spec",
+      "title": "Vibe-to-Spec Translator",
+      "description": "Convert vague vibe descriptions (\"make it feel luxurious\") into a concrete Vibe Mapping Table AI can use.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "vibe_workflow_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": false,
+      "requiredFields": [
+        {
+          "id": "vibeDescription",
+          "label": "Vibe Description"
+        },
+        {
+          "id": "appType",
+          "label": "App Type"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "vibe_logic_mapping",
+      "title": "Vibe Logic Mapping",
+      "description": "Biến vibe đã duyệt thành style brief builder-ready mà không buộc non-coder phải khai tech stack hay tự dịch sang spec kỹ thuật.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "vibe_workflow_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": false,
+      "requiredFields": [
+        {
+          "id": "approvedVibe",
+          "label": "Approved Vibe Keywords"
+        },
+        {
+          "id": "productSurface",
+          "label": "Product Surface"
+        },
+        {
+          "id": "userOutcome",
+          "label": "User Outcome"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "project_init_checklist",
+      "title": "Project Init Checklist",
+      "description": "Run this before starting any new CVF project. Ensures all foundations are ready before AI begins working.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "vibe_workflow_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "projectName",
+          "label": "Project Name"
+        },
+        {
+          "id": "projectDescription",
+          "label": "One-line Description"
+        },
+        {
+          "id": "operatingSystem",
+          "label": "Operating System"
+        },
+        {
+          "id": "pythonInstalled",
+          "label": "Python Installed?"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "non_coder_debug",
+      "title": "Non-Coder Debug",
+      "description": "App crashed or showing wrong results? Describe what you see — AI diagnoses and fixes in plain language.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "vibe_workflow_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "errorSymptom",
+          "label": "What did you see?"
+        },
+        {
+          "id": "stepsToReproduce",
+          "label": "How to trigger it again"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "auto_documentation",
+      "title": "Auto Documentation",
+      "description": "Generate a USER_GUIDE.md for your app — plain-language Quick Start, feature list, and common error fixes.",
+      "category": "development",
+      "home": "folder-child",
+      "parentFolder": "vibe_workflow_folder",
+      "rankedRecommenderEligible": false,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "appName",
+          "label": "App Name"
+        },
+        {
+          "id": "howToLaunch",
+          "label": "How to Launch"
+        },
+        {
+          "id": "coreFeatures",
+          "label": "Core Features (3–5)"
+        },
+        {
+          "id": "operatingSystem",
+          "label": "Operating System"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "meeting_notes",
+      "title": "Biên bản Cuộc họp",
+      "description": "Tạo biên bản họp có cấu trúc từ ghi chú thô",
+      "category": "content",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "meeting_topic",
+          "label": "Chủ đề cuộc họp"
+        },
+        {
+          "id": "raw_notes",
+          "label": "Ghi chú thô / nội dung đã thảo luận"
+        }
+      ],
+      "aliases": [
+        {
+          "id": "summarize_meeting",
+          "title": {
+            "vi": "Tóm tắt meeting",
+            "en": "Summarize Meeting"
+          },
+          "outputContract": "Meeting summary",
+          "requiredFields": [
+            "meeting_notes",
+            "participants",
+            "desired_outcome"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "job_description",
+      "title": "Mô tả Công việc (JD)",
+      "description": "Soạn JD chuyên nghiệp để đăng tuyển dụng hoặc lưu nội bộ",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "position_title",
+          "label": "Tên vị trí tuyển dụng"
+        },
+        {
+          "id": "responsibilities",
+          "label": "Trách nhiệm / công việc chính"
+        },
+        {
+          "id": "requirements",
+          "label": "Yêu cầu ứng viên"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "performance_review",
+      "title": "Đánh giá Hiệu suất Nhân viên",
+      "description": "Viết nhận xét đánh giá hiệu suất nhân viên có cấu trúc",
+      "category": "business",
+      "home": "direct-form",
+      "parentFolder": null,
+      "rankedRecommenderEligible": true,
+      "trustedFormRoute": true,
+      "requiredFields": [
+        {
+          "id": "employee_role",
+          "label": "Vị trí / vai trò nhân viên"
+        },
+        {
+          "id": "achievements",
+          "label": "Thành tích / kết quả nổi bật"
+        }
+      ],
+      "aliases": []
+    }
+  ],
+  "excluded": [
+    {
+      "id": "individual_skills_folder",
+      "title": "📂 Bộ Skill Templates (8)",
+      "reason": "Home navigation container, never an output candidate",
+      "children": [
+        "app_requirements_spec",
+        "architecture_design",
+        "api_design",
+        "cli_tool_spec"
+      ]
+    },
+    {
+      "id": "vibe_workflow_folder",
+      "title": "🎨 Vibe Workflow (4)",
+      "reason": "Home navigation container, never an output candidate",
+      "children": [
+        "vibe_to_spec",
+        "vibe_logic_mapping",
+        "project_init_checklist",
+        "non_coder_debug",
+        "auto_documentation"
+      ]
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/(dashboard)/home/page.tsx",
+      "sha256": "290a9e66f94a9eb04262a5c7cd0cbb5b32b109192be867c9fec6c2c2ef908f32"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/IntentEntry.tsx",
+      "sha256": "4ad9c508e9e99257afd544058c892e176a4cd9bfef397c240621a75ff00332b4"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/OutcomeQuickActions.tsx",
+      "sha256": "da932b059ebb91be70558564b705417db88f124198ccc2087adf408f87eb8d08"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/components/home/HomeBrowseExperience.tsx",
+      "sha256": "3e38705c253500509ff95613d412215d1c0586419228ecea4dcce2d773aa2a31"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/data/skill-template-map.json",
+      "sha256": "b3a35c511a89a8b1ec9b64b2ed586f4298b4cfd2ba2f779c2b73e6b1db4f5de6"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/cvf-web-redesign-dna.ts",
+      "sha256": "b836a257160c5f90ea6ce247140bf172948b15872f9a4f10a4a1876e0e812a9b"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/form-routing.ts",
+      "sha256": "0a84f5ab8c63a1d8ff7d895c596c804c7732c7b5d4c05aa9181895f26b5efbd9"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/governed-starter-path.ts",
+      "sha256": "b078cdd125314a7730061cf4924e527a323311be88bd80fc3e1808ea15af7cee"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/intent-detector.ts",
+      "sha256": "99a4640ebc02e4fea4b31b9439a1bee49d06381625060a271a9e3797d2075fff"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/intent-router.ts",
+      "sha256": "a3575ae81163b933657d4815a415ef4a2699cee19c6a72d62e1ac35e7d4a56bb"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/skill-template-map.ts",
+      "sha256": "fbdf7e0182e4b3080a30c8032ad79b8c3347e6e4e1cca711962c4b336d92176b"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/spec-first-mediation.ts",
+      "sha256": "1eb131c0ad0cb6755066bb26477543dd464ccabb7a2a76b447367fe373358639"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/spec-gate.ts",
+      "sha256": "803a2c04ae0b7122e706793da899597945895266f5be0b450260d61e61be09aa"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-intent.ts",
+      "sha256": "87b0832304f796f7dd4f9775db9f9a4a2a2c8bb3e1e1a14423585762d284b1a5"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/template-recommender.ts",
+      "sha256": "e1f6ee4ed31c4487f3a907c8a218a136b864ae4cc646d0a36d272d5b054e3620"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/business.ts",
+      "sha256": "1038301afa58af2136240782e23d90cf8e8c03afa45e0cabbe07627ffb12b928"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/content.ts",
+      "sha256": "0f42d24f9aac07bca0a28718219a09212259c5c107dc845e16a362a306d7c005"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/development.ts",
+      "sha256": "cfc1a231173efb210ff0a5f28c35858f474ee26be40a0c66bf52853103c041c8"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/hr.ts",
+      "sha256": "1d49a4a79bb38e7f3390c5439e60b3649b6374e2c3d5e8fd28ca27be4df19290"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/index.ts",
+      "sha256": "058320e6073533f4c2cc4fb9edcc94e87162ae88671368bc58bd2c696e719805"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/marketing.ts",
+      "sha256": "ff589f2150049962e45ce4594b13e07d8ce8efacb31e717b8273e95913651d42"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/product.ts",
+      "sha256": "be7f956f71217548ac66e6e7fa93dfc78d078e08486981b34ebfcd2ddf118486"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/research.ts",
+      "sha256": "3784e9831db8fd141ccc0183731c6ce44d49a3497f59d3d11c5779c470378357"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/security.ts",
+      "sha256": "b1b9001df9df1f21bfc36df685c55282a70af694e99846db2c62fe66fbf89923"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/templates/technical.ts",
+      "sha256": "fbae5427a39ae1ea65194bd3d0159643d7e83c57d0a12a953f734d0dd8f66e91"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/trusted-form-corpus.ts",
+      "sha256": "39f7b57858ceb1d153f8748dd5bb9e5da9efc4eb4a1464b45c7943674fd6252c"
+    },
+    {
+      "path": "EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/workflow-composition/outcome-workflow-registry.ts",
+      "sha256": "d76ef5a6e7f185e3422ff603e10abe9745a49828106e4ff659e9654e5a186336"
+    }
+  ],
+  "encodingNote": "Text Encoding Exception: the synthetic fixture preserves native Vietnamese labels."
+}

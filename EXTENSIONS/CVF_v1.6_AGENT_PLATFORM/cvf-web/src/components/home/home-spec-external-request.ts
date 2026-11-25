@@ -1,23 +1,22 @@
-// Text Encoding Exception: the patterns distinguish English and Vietnamese user requests.
+import { hasPhysicalSafetyConcern, isDocumentRequest, normalizeRequestText } from '@/lib/physical-safety';
 import { findHomeSpecDeliverable } from './home-spec-deliverable';
 
-const actionEn = /^(?:(?:please|can you|could you|would you)\s+)*(?:order\s+(?:me|us)\b|order\s+.+\s+from\b|place\s+an\s+order\b|call\s+(?:(?:a|the|my)\s+)?(?:plumber|technician|electrician)\b|(?:book|reserve|schedule)\s+(?:(?:me|us|a|an|the|my)\s+)*(?:flight|ticket|table|room|appointment|meeting|reservation)\b)/iu;
-const actionVi = /^(?:(?:vui lòng|làm ơn|nhờ|tôi muốn|mình cần)\s+)*(?:đặt\s+(?:giúp|hộ|hàng|món|đồ ăn|vé|lịch|chỗ|phòng|bàn)|gọi\s+(?:thợ|đồ ăn|món))(?=$|[^\p{L}\p{M}])/iu;
-
-const hazardSignals = [
-    /\b(?:smell(?:s|ing)? gas|gas leak(?:ing)?|on fire|(?:there's|there is) (?:a fire|smoke)|smoke (?:coming|from))\b/iu,
-    /\b(?:(?:electricity|outlet|wiring) near water|water near (?:an? )?(?:outlet|electricity|wiring)|air conditioner.{0,80}(?:leaking|dripping) water)\b/iu,
-    /(?<![\p{L}\p{M}])(?:rò|rỉ|mùi)\s+(?:khí\s+)?ga(?:s)?(?![\p{L}\p{M}])|bốc cháy|bốc khói|có khói/iu,
-    /(?:máy lạnh|điều hoà|điều hòa).{0,80}(?:rò|rỉ|chảy)\s+nước|(?:điện|ổ cắm)\s+(?:ở )?gần\s+nước|nước\s+(?:ở )?gần\s+(?:điện|ổ cắm)/iu,
-];
-const urgentPlumbing = /gọi\s+thợ\s+sửa\s+ống\s+nước.{0,35}\bngay\b|\bcall\s+(?:a|the)\s+plumber.{0,35}\b(?:right now|urgently)\b/iu;
+const actionEn = /\b(?:order (?:me|us)|order [^.!?\n]{1,70} from|place an order|call (?:(?:a|an|the|my) )?(?:plumber|technician|electrician|repair service|taxi|cab|courier)|(?:book|reserve|schedule|reschedule|cancel) (?:(?:me|us|a|an|the|my|our) )*(?:flights?|tickets?|tables?|rooms?|appointments?|meetings?|reservations?|taxis?|cabs?|couriers?|delivery|deliveries))\b/;
+const personVi = /(?:toi|minh|em|anh|chi|tui minh|chung toi|chung minh)/.source;
+const helpVi = `(?:(?:giup|ho|gium)(?: ${personVi})? )?`;
+const numberVi = /(?:mot|hai|ba|bon|nam|sau|bay|tam|chin|muoi|\d+)/.source;
+const actionVi = new RegExp(`\\b(?:goi|dat|keu|book) ${helpVi}(?:${numberVi} )?(?:(?:chiec|nguoi|chai|phan|suat) )?(?:tho|nguoi|xe|taxi|grab|ben giao hang|nha cung cap|cua hang|do an|nuoc|hang|mon|ve|lich|cho|phong|ban)\\b`);
+const orderForDeliveryVi = new RegExp(`\\bdat ${helpVi}${numberVi} [^.!?\\n]{1,70}\\bgiao (?:toi|den|ve)\\b`);
+const changeBookingVi = new RegExp(`\\b(?:huy|doi) ${helpVi}(?:ve|lich hen|phong)\\b`);
+const delegatePartyVi = new RegExp(`\\b(?:nho(?: ${personVi})? )?(?:goi|dat|keu) ${helpVi}(?:ben|phia) (?!canh\\b|trai\\b|phai\\b|tren\\b|duoi\\b|trong\\b|ngoai\\b|doi dien\\b)[a-z0-9]+\\b`);
+const messageEn = /^(?:(?:please|help me) )?(?:text|message|reply)\b/;
+const messageVi = /^(?:(?:hay|lam on|giup(?: (?:toi|minh|em|anh|chi))?) )?(?:nhan(?: tin)?|viet (?:tin(?: nhan)?|loi nhan|thu)|tra loi)\b/;
+const partyInformationVi = /^(?:(?:toi|minh|em|anh|chi) )?(?:(?:can|muon|hay|lam on) )?(?:so sanh|(?:lap )?bao gia|liet ke|ghi chu)\b/;
 
 export function homeSpecExternalRequest(goal: string, detail: string): 'action' | 'hazard' | null {
-    const description = goal.trim().normalize('NFC');
-    const context = [description, detail.normalize('NFC')].join('\n');
-    const external = actionEn.test(description) || actionVi.test(description);
-    const hazard = hazardSignals.some(signal => signal.test(context));
-    if (external) return hazard || urgentPlumbing.test(description) ? 'hazard' : 'action';
-    if (hazard && !findHomeSpecDeliverable([description])) return 'hazard';
-    return null;
+    const description = normalizeRequestText(goal);
+    if (hasPhysicalSafetyConcern(description, normalizeRequestText(detail))) return 'hazard';
+    if (isDocumentRequest(description) || messageEn.test(description) || messageVi.test(description) || partyInformationVi.test(description)
+        || findHomeSpecDeliverable([goal.trim()])) return null;
+    return [actionEn, actionVi, orderForDeliveryVi, changeBookingVi, delegatePartyVi].some(action => action.test(description)) ? 'action' : null;
 }

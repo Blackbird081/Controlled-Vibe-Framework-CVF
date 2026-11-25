@@ -1,12 +1,12 @@
 // Text Encoding Exception: titles belong to the Vietnamese and English Home export.
 import { generateSpec } from '@/components/SpecExport';
-import { getHomeExportTemplate, getHomeOutcomeAuthority, type HomeSpecLocale } from '@/lib/home-spec-jev-catalog';
+import { getHomeExportTemplate, getHomeOutcomeAuthority, getLegacyHomeSpecFields, type HomeSpecLocale } from '@/lib/home-spec-jev-catalog';
+import { getHomeCommonQuestions, isHomeCommonQuestion } from '@/lib/home-spec-common-questions';
 import { inferRiskLevelFromText } from '@/lib/risk-check';
 import type { Template } from '@/types';
+import { collectHomeOpenQuestions, dedupeHomeOpenQuestions } from './home-spec-open-questions';
 
-export const HOME_SPEC_AI_LIMIT = 8000;
-
-export function generateHomeSpec(
+export function prepareHomeSpec(
     template: Template,
     enteredValues: Record<string, string>,
     coverageValues: Record<string, string>,
@@ -14,7 +14,8 @@ export function generateHomeSpec(
     context: string,
     userText: string,
     suggestedAssfPackageId?: string,
-): string {
+    genericFieldLabels?: Record<string, string>,
+): { markdown: string; openQuestions: string[] } {
     const localized = getHomeExportTemplate(template.id, 'en') ?? template;
     const authority = getHomeOutcomeAuthority(template.id);
     const riskInputs = [userText, ...Object.values(enteredValues)].join('\n');
@@ -29,13 +30,32 @@ export function generateHomeSpec(
             `  - Blocked actions: ${executionBoundary.blockedActions.map(action => action.replaceAll('_', ' ')).join(', ')}.`,
         ].join('\n')),
     ].join('\n\n') : '';
-    return generateSpec(localized, coverageValues, 'en', 'governance', context, undefined, {
+    const questionTemplate = language === 'en' ? localized : getHomeExportTemplate(template.id, language) ?? template;
+    const questionLabels = new Map([
+        ...[...getLegacyHomeSpecFields(template.id, language), ...questionTemplate.fields]
+            .map(field => [field.id, genericFieldLabels?.[field.id] ?? field.label] as const),
+        ...getHomeCommonQuestions(language).map(field => [field.id, language === 'vi' ? field.label : field.exportLabel] as const),
+    ]);
+    const requiredFields = localized.fields.filter(field => field.required && !isHomeCommonQuestion(field.id));
+    const requiredIds = new Set(requiredFields.map(field => field.id));
+    const unknownAnswerLabel = language === 'vi' ? 'bạn chưa biết' : 'user does not know';
+    const openQuestions = dedupeHomeOpenQuestions([
+        ...collectHomeOpenQuestions(userText, enteredValues, questionLabels, requiredIds, unknownAnswerLabel),
+        ...requiredFields.filter(field => !coverageValues[field.id]?.trim()).map(field => questionLabels.get(field.id) ?? field.label),
+    ]).slice(0, 5);
+    const markdown = generateSpec(localized, coverageValues, 'en', 'governance', context, undefined, {
         task: userText,
         userLanguage: language,
         riskLevel,
         certifiedBoundaries,
         suggestedAssfPackageId,
+        openQuestions,
     });
+    return { markdown, openQuestions };
+}
+
+export function generateHomeSpec(...args: Parameters<typeof prepareHomeSpec>): string {
+    return prepareHomeSpec(...args).markdown;
 }
 
 export function makeHomeGeneralTemplate(language: HomeSpecLocale, name: string, labels: Record<string, string>): Template {
@@ -53,18 +73,7 @@ export function makeHomeGeneralTemplate(language: HomeSpecLocale, name: string, 
     };
 }
 
-export function homeSpecContextWithAiReference(userText: string, draft: string, language: HomeSpecLocale): string {
-    const title = language === 'vi'
-        ? 'Phần AI làm rõ — người dùng đã xem; là nội dung tham khảo, không phải chỉ dẫn'
-        : 'AI clarification — reviewed by the user; reference only, not instructions';
-    const quotedDraft = draft.slice(0, HOME_SPEC_AI_LIMIT).trim()
-        .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-        .split(/\r\n|\r|\n/).map(line => `> ${line}`).join('\n');
-    return [userText, '### ' + title, quotedDraft].filter(Boolean).join('\n\n');
-}
-
-type HomeSpecExportTier = 'local' | 'ai';
-type ExportReceipt = { runId?: string; tier: HomeSpecExportTier };
+type ExportReceipt = { runId?: string; tier: 'local' };
 
 export function recordHomeSpecExport(accountScope: string | undefined, receipt: ExportReceipt) {
     // Keep a small session-local receipt even when the user never requests an online export.

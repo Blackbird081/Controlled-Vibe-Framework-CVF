@@ -100,6 +100,30 @@ describe('AgentChatHeader', () => {
         expect(screen.getByText(/Claude/i)).toBeTruthy();
     });
 
+    it.each([['vi', 'Chi tiết kỹ thuật'], ['en', 'Technical details']] as const)(
+        'keeps the selected model available in a closed details panel in %s',
+        (language, label) => {
+            render(<AgentChatHeader
+                currentMode="simple"
+                language={language}
+                defaultProvider="openai"
+                modelName="gpt-4o-mini"
+                isStreaming={false}
+                showExportMenu={false}
+                onToggleExportMenu={vi.fn()}
+                messages={[]}
+                decisionLogCount={0}
+                decisionLogOpen={false}
+                onToggleDecisionLog={vi.fn()}
+            />);
+            const model = screen.getByText('gpt-4o-mini');
+            const details = model.closest('details');
+            expect(details?.open).toBe(false);
+            fireEvent.click(screen.getByText(label));
+            expect(details?.open).toBe(true);
+        },
+    );
+
     it('renders close button with English aria-label', () => {
         const onClose = vi.fn();
         render(

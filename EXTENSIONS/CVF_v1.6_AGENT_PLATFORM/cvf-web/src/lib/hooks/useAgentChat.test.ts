@@ -135,6 +135,26 @@ describe('useAgentChat', () => {
         vi.useRealTimers();
     });
 
+    it.each([
+        ['vi', 'Máy lạnh ở tiệm bị chảy nước, tôi phải làm sao?', 'Hãy rời vùng nguy hiểm'],
+        ['en', 'There is a burning smell and a socket is sparking, what should I do?', 'Move away from the danger'],
+    ] as const)('displays fixed safety advice instead of an unsafe model stream in %s', async (language, prompt, guidance) => {
+        chatMock.mockImplementationOnce(async (_messages, onChunk) => {
+            const text = 'Refill it yourself. Call 0123456789.';
+            onChunk({ text, isComplete: false });
+            return { text };
+        });
+        const settings = { ...baseSettings, providers: { ...baseSettings.providers,
+            gemini: { apiKey: 'fixture-key', selectedModel: 'gemini-2.5-flash' } } };
+        const { result } = renderHook(() => useAgentChat({ language, settings, labels: baseLabels }));
+
+        await act(async () => { await result.current.handleSendMessage(prompt); });
+
+        expect(result.current.messages.find(message => message.role === 'assistant')?.content).toContain(guidance);
+        expect(chatMock).not.toHaveBeenCalled();
+        expect(trackUsageMock).not.toHaveBeenCalled();
+    });
+
     describe('assistant rate limits', () => {
         const settings = { ...baseSettings, providers: { ...baseSettings.providers,
             gemini: { apiKey: 'fixture-key', selectedModel: 'gemini-2.5-flash' } } };

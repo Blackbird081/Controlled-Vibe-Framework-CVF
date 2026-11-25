@@ -4,6 +4,7 @@ import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 import type { TeamRole } from 'cvf-guard-contract/enterprise';
 
+import { resolveAuthSessionCookie } from '@/lib/auth-session-cookie';
 import { CVF_IMPERSONATION_COOKIE, parseCookieHeader } from '@/lib/impersonation';
 import { findMockUserById, normalizeDisplayName } from '@/lib/mock-enterprise-db';
 import { findOAuthIdentityBinding, isOAuthProviderId, type OAuthProviderId } from '@/lib/oauth-identity-profile';
@@ -90,8 +91,13 @@ export function withSessionAuditPayload(
     return Object.keys(nextPayload).length > 0 ? nextPayload : undefined;
 }
 
+async function readRequestToken(request: Request): Promise<AppToken | null> {
+    const { secure, name } = resolveAuthSessionCookie(request);
+    return getToken({ req: request, secret: authSecret, secureCookie: secure, cookieName: name, salt: name });
+}
+
 async function resolveBaseSessionFromRequest(request: NextRequest | Request): Promise<SessionCookie | null> {
-    const token = await getToken({ req: request, secret: authSecret }) as AppToken | null;
+    const token = await readRequestToken(request);
     if (!token) return null;
 
     const binding = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development'
@@ -173,7 +179,7 @@ export async function resolveVerifiedSessionProvenance(
     request: NextRequest | Request,
     now: number = Date.now(),
 ): Promise<VerifiedSessionProvenance> {
-    const token = await getToken({ req: request, secret: authSecret }) as AppToken | null;
+    const token = await readRequestToken(request);
     if (!token) return unqualified('NO_SESSION');
 
     const configuredProvider = process.env.CVF_OAUTH_PROVIDER;

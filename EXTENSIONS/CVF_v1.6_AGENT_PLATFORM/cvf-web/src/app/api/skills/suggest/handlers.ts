@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { CredentialBoundary, type AdapterAdmissionRecord } from 'cvf-model-gateway';
 import { requireAdminApiSession } from '@/lib/admin-session';
+import { resolveAuthSessionCookie } from '@/lib/auth-session-cookie';
 import { buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { createProviderAttemptLedger, buildProviderAttemptReconciliation } from '@/lib/provider-attempt-admission';
 import { assertJevAdmission, createJevCanonicalPort, executeJevCanonicalStage } from '@/lib/canonical-web-gateway-execution';
@@ -11,15 +12,18 @@ import { JevSuggestionCustody, JevCustodyError, jevDigest, jevPolicyDigest, vali
 import type { JevAuthorizedRuntime, JevTrialRuntime } from '@/lib/server/jev-authorized-runtime';
 
 const reply=(status:number,body:Record<string,unknown>)=>NextResponse.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',Vary:'Cookie, Origin'}});
-/** Same native getToken default cookie name; bearer fallback is refused by this pilot. */
+/** Bind the same browser cookie as the request-bound Auth.js session reader. */
 export function verifiedJevCookieBinding(request:NextRequest):string|null{
   if(request.headers.has('authorization'))return null;
-  const parts=request.cookies.getAll().filter(c=>/^authjs\.session-token(?:\.\d+)?$/.test(c.name));
+  const {name}=resolveAuthSessionCookie(request);
+  const prefix=`${name}.`;
+  const parts=request.cookies.getAll().filter(c=>c.name===name
+    ||(c.name.startsWith(prefix)&&/^\d+$/.test(c.name.slice(prefix.length))));
   if(!parts.length||parts.length>20||new Set(parts.map(c=>c.name)).size!==parts.length)return null;
-  const base=parts.find(p=>p.name==='authjs.session-token');
+  const base=parts.find(p=>p.name===name);
   if(base)return parts.length===1&&base.value?jevDigest(base.value):null;
   const sorted=parts.sort((a,b)=>Number(a.name.split('.').at(-1))-Number(b.name.split('.').at(-1)));
-  if(sorted.some((p,i)=>p.name!==`authjs.session-token.${i}`||!p.value))return null;
+  if(sorted.some((p,i)=>p.name!==`${prefix}${i}`||!p.value))return null;
   return jevDigest(sorted.map(p=>p.value).join(''));
 }
 export function buildJevActionGrant(input:{actor:JevActor;nonce:string;goal:string;roster:SkillCandidate[];sessionExpiresAt:number;canonicalExecutionId:string;policy:JevAuthorizedPolicy;now:number}):JevActionGrant{

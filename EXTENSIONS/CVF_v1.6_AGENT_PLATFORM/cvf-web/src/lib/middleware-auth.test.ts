@@ -133,7 +133,7 @@ describe('middleware-auth', () => {
             await verifySessionCookie(request);
 
             expect(getTokenMock).toHaveBeenCalledTimes(1);
-            expect(getTokenMock).toHaveBeenCalledWith({ req: request, secret: 'test-secret' });
+            expect(getTokenMock).toHaveBeenCalledWith(expect.objectContaining({ req: request, secret: 'test-secret' }));
             expect(authMock).not.toHaveBeenCalled();
         });
 
@@ -289,7 +289,7 @@ describe('middleware-auth', () => {
 
             const result = await resolveVerifiedSessionProvenance(fakeRequest(), NOW);
 
-            expect(getTokenMock).toHaveBeenCalledWith({ req: expect.any(Request), secret: 'test-secret' });
+            expect(getTokenMock).toHaveBeenCalledWith(expect.objectContaining({ req: expect.any(Request), secret: 'test-secret' }));
             expect(result).toEqual({
                 qualified: true,
                 userId: 'cvf-user-1',

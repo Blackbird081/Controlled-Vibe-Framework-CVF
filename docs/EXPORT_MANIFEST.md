@@ -38,14 +38,14 @@ production readiness or a successful QBS benchmark claim.
 
 ## Public Change Evidence
 
-Change summary: Install the MCP Server dependencies in the Netlify build before compiling CVF Web.
+Change summary: Read the Auth.js session cookie under the name Auth.js uses for the effective origin, so signed-in users keep their role on HTTPS deployments.
 
-Changed owners: `netlify.toml`.
+Changed owners: `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/auth-session-cookie.ts`; `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts`; `EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/skills/suggest/handlers.ts` and their tests.
 
-Validation: Reproduced the TypeScript module-resolution errors on Linux Node 22. The patched command passed a fresh production build, and `/landing` and `/login` returned HTTP 200 in the local production server. Netlify publication is checked separately.
+Validation: Regression tests with Auth.js-encoded session tokens cover HTTPS, HTTP, configured origin precedence, rejection of the HTTP cookie name on HTTPS, chunked cookies and an authenticated route. Source checks passed lint, TypeScript, production build and the full Web suite. Sign-in on the deployed site is checked separately.
 
 ```public-change-evidence-json
-{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"b6d5a51a1e90c1c03426baa3d355834089ac652a","sourceCommit":"840af1ccbece60c66b657ca572855106a403fd3f","changedPaths":["netlify.toml"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
+{"schemaVersion":"cvf.publicChangeEvidence.v1","publicBase":"d2ce734c60babd0b4ee54769317793afb2bd38dc","sourceCommit":"dfdaf01a72329d636ef70dbb54948ae971a4a869","changedPaths":["EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/app/api/skills/suggest/handlers.ts","EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/auth-session-cookie.test.ts","EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/auth-session-cookie.ts","EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.test.ts","EXTENSIONS/CVF_v1.6_AGENT_PLATFORM/cvf-web/src/lib/middleware-auth.ts"],"claimBoundary":"PUBLIC_CHANGE_TRACEABILITY_NOT_PRIVATE_CLOSURE"}
 ```
 
 ## Historical Export Binding

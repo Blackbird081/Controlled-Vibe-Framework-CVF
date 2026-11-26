@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useEffect } from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { SettingsPage, SettingsButton, useSettings, migrateSettingsForGovernedRoute, type SettingsData } from './Settings';
+import { ProviderBadge, ProviderSwitcher } from './ProviderSwitcher';
 
 /** Runs a callback once from an effect, right after the hook's own load effect of the same component. */
 function useEffectOnce(run: () => void) { useEffect(() => { run(); // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,7 +196,7 @@ describe('SettingsPage', () => {
         await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
 
         const modelSelect = screen.getByRole('combobox') as HTMLSelectElement;
-        expect(modelSelect.value).toBe('gpt-4o-mini');
+        expect(modelSelect.value).toBe('gpt-6-luna');
         fireEvent.change(modelSelect, { target: { value: 'gpt-4o' } });
         expect(modelSelect.value).toBe('gpt-4o');
 
@@ -220,12 +221,12 @@ describe('SettingsPage', () => {
         expect(saved).toContain('showWelcomeTour');
     });
 
-    it('defaults a fresh user to OpenAI gpt-4o-mini and offers no reasoning models', async () => {
+    it('defaults a fresh user to OpenAI gpt-6-luna and offers no reasoning models', async () => {
         renderSettingsPage();
         await waitFor(() => expect(screen.getByText('⚙️ Cài đặt')).toBeTruthy());
 
         const modelSelect = screen.getByRole('combobox') as HTMLSelectElement;
-        expect(modelSelect.value).toBe('gpt-4o-mini');
+        expect(modelSelect.value).toBe('gpt-6-luna');
         const offered = Array.from(modelSelect.options).map(option => option.value);
         expect(offered).toEqual(['gpt-6-luna', 'gpt-6.1-terra', 'gpt-4o-mini', 'gpt-4o']);
         expect(offered).not.toContain('o1');
@@ -234,6 +235,29 @@ describe('SettingsPage', () => {
         const defaultSelect = screen.getByText('Provider mặc định').parentElement!.querySelector('select') as HTMLSelectElement;
         expect(defaultSelect.value).toBe('openai');
         expect(screen.queryByRole('alert')).toBeNull();
+    });
+
+    it.each(['gpt-4o-mini', 'gpt-4o'])('keeps the saved OpenAI model %s selected', async selectedModel => {
+        const saved = JSON.stringify({ providers: { openai: { apiKey: '', enabled: true, selectedModel } } });
+        localStorage.setItem('cvf_settings', saved);
+        localStorage.setItem('cvf_settings_migrated_governance', '1');
+        renderSettingsPage();
+
+        await waitFor(() => expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe(selectedModel));
+        expect(localStorage.getItem('cvf_settings')).toBe(saved);
+    });
+
+    it('shows the saved OpenAI model in both provider displays', async () => {
+        localStorage.setItem('cvf_settings', JSON.stringify({
+            providers: { openai: { apiKey: '', enabled: true, selectedModel: 'gpt-4o-mini' } },
+        }));
+        localStorage.setItem('cvf_settings_migrated_governance', '1');
+        render(<><ProviderSwitcher /><ProviderBadge /></>);
+
+        await waitFor(() => {
+            expect(screen.getByText('Model hiện tại').parentElement?.textContent).toContain('gpt-4o-mini');
+            expect(screen.getAllByRole('button', { name: /GPT-4o mini/ })).toHaveLength(2);
+        });
     });
 
     it('marks providers the governed route cannot run as unavailable, and explains a saved choice that stays unsupported', async () => {
@@ -270,9 +294,9 @@ describe('SettingsPage', () => {
         const persisted = JSON.parse(localStorage.getItem('cvf_settings') || '{}');
         expect(persisted.preferences.defaultProvider).toBe('openai');
         expect(persisted.preferences.agentProviders).toEqual({ orchestrator: 'openai', architect: 'openai', builder: 'alibaba', reviewer: 'openai' });
-        expect(persisted.providers.openai.selectedModel).toBe('gpt-4o-mini');
-        // The page itself runs on the migrated values, so execute reads openai / gpt-4o-mini.
-        expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('gpt-4o-mini');
+        expect(persisted.providers.openai.selectedModel).toBe('gpt-6-luna');
+        // The page and execution use the same governed default.
+        expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('gpt-6-luna');
         fireEvent.click(screen.getByText('🎨 Preferences'));
         const defaultSelect = screen.getByText('Provider mặc định').parentElement!.querySelector('select') as HTMLSelectElement;
         expect(defaultSelect.value).toBe('openai');

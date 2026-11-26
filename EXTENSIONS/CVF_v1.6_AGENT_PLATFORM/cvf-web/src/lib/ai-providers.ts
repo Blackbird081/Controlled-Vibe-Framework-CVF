@@ -8,6 +8,7 @@
 import { detectSpecMode } from '@/lib/agent-chat';
 import { getCVFSystemPrompt } from './cvf-system-prompt';
 import { AssistantRateLimitError } from './assistant-rate-limit';
+import { GOVERNED_ROUTE_DEFAULT_MODEL } from './governed-route-providers';
 
 export { getCVFSystemPrompt } from './cvf-system-prompt';
 
@@ -418,7 +419,7 @@ export class OpenAIProvider {
 
     constructor(config: AIProviderConfig, deepSeekThinking?: 'enabled' | 'disabled') {
         this.apiKey = config.apiKey;
-        this.model = config.model || 'gpt-4o-mini';
+        this.model = config.model || GOVERNED_ROUTE_DEFAULT_MODEL;
         this.baseUrl = config.baseUrl || this.baseUrl;
         this.language = config.language || 'vi';
         this.deepSeekThinking = deepSeekThinking;

@@ -1,4 +1,5 @@
 import { DEFAULT_MODEL_PRICING } from './model-pricing';
+import { GOVERNED_ROUTE_DEFAULT_MODEL } from './governed-route-providers';
 
 // Rough token estimate: 4 chars per token
 function estimateTokens(text: string): number {
@@ -12,7 +13,7 @@ export function checkBudget(prompt: string): boolean {
 }
 
 export function estimateCost(model: string, prompt: string): number {
-    const pricing = DEFAULT_MODEL_PRICING[model] || DEFAULT_MODEL_PRICING['gpt-4o-mini'];
+    const pricing = DEFAULT_MODEL_PRICING[model] || DEFAULT_MODEL_PRICING[GOVERNED_ROUTE_DEFAULT_MODEL];
     const tokens = estimateTokens(prompt);
     const inputRate = pricing?.input || 0;
     return (tokens / 1_000_000) * inputRate;

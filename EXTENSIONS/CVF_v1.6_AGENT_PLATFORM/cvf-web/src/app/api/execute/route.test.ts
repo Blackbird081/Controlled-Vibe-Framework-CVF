@@ -386,7 +386,7 @@ describe('/api/execute', () => {
         expect(prompt).toContain('Meeting Topic');
         expect(prompt).not.toContain('Empty Field');
         // The route supplies no explicit model, so the canonical OpenAI default applies; the adapter default token limit is 4096.
-        expect(providerSpy.mock.calls[0][3]).toMatchObject({ model: 'gpt-4o-mini', maxTokens: 4096 });
+        expect(providerSpy.mock.calls[0][3]).toMatchObject({ model: 'gpt-6-luna', maxTokens: 4096 });
         expect(providerSpy.mock.calls[0][1]).toBe('test-key');
     });
 

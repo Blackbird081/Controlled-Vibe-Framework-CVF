@@ -352,7 +352,7 @@ describe('isolated canonical route candidate', () => {
             const [url, init] = fetch.mock.calls[0];
             expect(url).toBe('https://api.openai.com/v1/chat/completions');
             expect(init.redirect).toBe('error'); expect(init.headers.Authorization).toBe(`Bearer ${secret}`);
-            expect(JSON.parse(String(init.body))).toMatchObject({ model: 'gpt-4o-mini', max_tokens: 4096 });
+            expect(JSON.parse(String(init.body))).toMatchObject({ model: 'gpt-6-luna', max_completion_tokens: 4096, reasoning_effort: 'none' });
             // Usage and provenance come only from the provider response.
             expect(data.usage).toEqual({ inputTokens: 111, outputTokens: 222, totalTokens: 333 });
             expect(data.canonicalGateway.usageProvenance).toBe('provider_reported_partial_or_complete');

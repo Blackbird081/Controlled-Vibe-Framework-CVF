@@ -59,6 +59,44 @@ describe('homeSpecExternalRequest', () => {
     });
 
     it.each([
+        'Please book us a quiet airport hotel room for Thursday.',
+        'Could you reserve two aisle seats for the matinee?',
+        'Our train was delayed, please reschedule my evening dental appointment.',
+        'Order a large vegetarian pizza for dinner.',
+        'Đặt giúp tôi một cặp vé xem nhạc tối thứ Sáu.',
+        'Gọi giùm mình một đội thợ đến lắp kệ chiều mai.',
+        'Chuyến bay bị dời, nhờ bạn đặt hộ em thêm một phòng đôi ở Quy Nhơn.',
+        'Đổi giúp tôi hai cặp vé sang suất chiếu cuối ngày.',
+    ])('recognizes modifiers within a direct request: %s', (text) => {
+        expect(homeSpecExternalRequest(text, '')).toBe('action');
+    });
+
+    it.each([
+        'Write a checklist for booking a quiet hotel room.',
+        'Can you tell me how to book a hotel room near the airport?',
+        'At lunch Maya said she might reserve two aisle seats.',
+        'Reserve a spot for the group outside the hotel rooms.',
+        'Book an unusually quiet inexpensive downtown hotel room.',
+        'Viết hướng dẫn cách đặt thêm một phòng khách sạn.',
+        'Chỉ tôi cách đặt một cặp vé xem nhạc.',
+        'Chị ấy nói là sẽ đặt thêm một phòng bên biển.',
+        'Đặt giúp tôi hai câu hỏi về vé tàu để gửi đại lý.',
+        'Đặt giúp tôi mỗi người trong nhóm một vé đi Huế.',
+        'Book club meetings start at noon.',
+        'Đổi màu vé sang xanh.',
+        'Đặt mật khẩu phòng họp thế nào?',
+    ])('keeps descriptions, instructions, and out-of-range phrases ordinary: %s', (text) => {
+        expect(homeSpecExternalRequest(text, '')).toBeNull();
+    });
+
+    it.each([
+        'Đổi giúp tôi một cặp vé hạng thường sang hạng ưu tiên.',
+        'Hôm nay trời mưa, đặt giúp tôi một cặp vé xem phim.',
+    ])('routes modified ticket requests: %s', (text) => {
+        expect(homeSpecExternalRequest(text, '')).toBe('action');
+    });
+
+    it.each([
         'Write an evacuation plan for a fire or gas leak.',
         'Create an electrical safety procedure for a short circuit.',
         'I need an incident report about yesterday’s outlet sparks.',

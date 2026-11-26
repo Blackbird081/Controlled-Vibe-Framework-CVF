@@ -5,6 +5,7 @@ import type { WorkflowCompositionSummary } from '@/lib/workflow-composition';
 import type { AifMemoryReinjectionReceipt, AifMemoryReinjectionRequest } from '@/lib/aif-memory-reinjection';
 import type { DurableMemoryReceipt } from 'cvf-learning-plane-foundation/web-runtime';
 import type { ExecutionDiagnostic } from '@/lib/execution-diagnostics';
+import { GOVERNED_ROUTE_DEFAULT_MODEL } from '@/lib/governed-route-providers';
 
 // AI Provider Types and Interfaces
 export type AIProvider = 'openai' | 'claude' | 'gemini' | 'alibaba' | 'openrouter' | 'deepseek';
@@ -356,7 +357,7 @@ export interface ProviderStatus {
 
 // Default models per provider (should match AVAILABLE_MODELS in Settings.tsx)
 export const DEFAULT_MODELS: Record<AIProvider, string> = {
-    openai: 'gpt-4o-mini',
+    openai: GOVERNED_ROUTE_DEFAULT_MODEL,
     claude: 'claude-sonnet-4-20250514',
     gemini: 'gemini-2.5-flash',
     alibaba: 'qwen-flash',

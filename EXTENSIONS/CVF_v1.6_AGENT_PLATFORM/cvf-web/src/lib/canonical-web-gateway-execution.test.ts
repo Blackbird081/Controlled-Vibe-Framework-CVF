@@ -497,16 +497,16 @@ describe('OpenAI canonical candidate', () => {
     const params = (ledger: ReturnType<typeof createProviderAttemptLedger>, purpose: 'initial' | 'retry' = 'initial') => ({
         canonicalExecutionId: 'openai-trace-1', prompt: 'fixture prompt',
         policy: { traceId: 'openai-trace-1', policyResult: 'allow' as const, allowedProviderIds: ['openai'] },
-        preferredProviderId: 'openai', routing: { requestedModelId: 'gpt-4o-mini' }, ledger, purpose,
+        preferredProviderId: 'openai', routing: { requestedModelId: 'gpt-6-luna' }, ledger, purpose,
     });
 
     it('runs through the actual port and one fixture adapter, joining identities and reporting provider usage only', async () => {
         const { createOpenAiCanonicalWebExecutor, canonicalWebExecutionResponse, CANONICAL_WEB_OPENAI_DEFAULT_MODEL } = await import('./canonical-web-gateway-execution');
-        expect(CANONICAL_WEB_OPENAI_DEFAULT_MODEL).toBe('gpt-4o-mini');
+        expect(CANONICAL_WEB_OPENAI_DEFAULT_MODEL).toBe('gpt-6-luna');
         resetRateLimitStoresForTest();
         const adapter = { providerId: 'openai', execute: vi.fn().mockResolvedValue({ text: 'fixture output', providerUsage: { inputTokens: 5, outputTokens: 6, totalTokens: 11 } }) };
         const executor = createOpenAiCanonicalWebExecutor({ env: { OPENAI_API_KEY: 'fixture-openai-secret' }, adapter });
-        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-candidate', providerModel: 'openai:gpt-4o-mini' });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-candidate', providerModel: 'openai:gpt-6-luna' });
         const result = await executor.execute(params(ledger));
         expect(adapter.execute).toHaveBeenCalledTimes(1);
         expect(ledger.providerCallCount).toBe(1);
@@ -526,14 +526,14 @@ describe('OpenAI canonical candidate', () => {
         const fetch = vi.fn().mockImplementation(async () => new Response(JSON.stringify({ choices: [{ message: { content: 'valid output' }, finish_reason: 'stop' }] }), { status: 200 }));
         vi.stubGlobal('fetch', fetch);
         const executor = createOpenAiCanonicalWebExecutor({ env, maxTokens: 321 });
-        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-refresh', providerModel: 'openai:gpt-4o-mini' });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-refresh', providerModel: 'openai:gpt-6-luna' });
         env.OPENAI_API_KEY = 'fixture-new';
         const result = await executor.execute(params(ledger));
         expect(result.response?.text).toBe('valid output');
         const [url, init] = fetch.mock.calls[0];
         expect(url).toBe('https://api.openai.com/v1/chat/completions');
         expect(init.headers.Authorization).toBe('Bearer fixture-new');
-        expect(JSON.parse(String(init.body))).toMatchObject({ model: 'gpt-4o-mini', max_tokens: 321 });
+        expect(JSON.parse(String(init.body))).toMatchObject({ model: 'gpt-6-luna', max_completion_tokens: 321, reasoning_effort: 'none' });
         expect(result.receipt.credentialFingerprint).toBe(fingerprintSecret('fixture-new'));
         expect(result.response?.providerUsage).toBeUndefined();
         expect(JSON.stringify(result)).not.toContain('fixture-new');
@@ -545,7 +545,7 @@ describe('OpenAI canonical candidate', () => {
         resetRateLimitStoresForTest();
         const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
         const executor = createOpenAiCanonicalWebExecutor({ env: {} });
-        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-nokey', providerModel: 'openai:gpt-4o-mini' });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-nokey', providerModel: 'openai:gpt-6-luna' });
         const result = await executor.execute(params(ledger));
         expect(fetch).not.toHaveBeenCalled();
         expect(result.response).toBeUndefined();
@@ -558,7 +558,7 @@ describe('OpenAI canonical candidate', () => {
         resetRateLimitStoresForTest();
         const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
         const executor = createOpenAiCanonicalWebExecutor({ env: { OPENAI_API_KEY: 'fixture-key', OPENAI_BASE_URL: 'https://attacker.example/v1' } });
-        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-baseurl', providerModel: 'openai:gpt-4o-mini' });
+        const ledger = createProviderAttemptLedger({ identityKind: 'session', identityHash: 'openai-baseurl', providerModel: 'openai:gpt-6-luna' });
         const result = await executor.execute(params(ledger));
         expect(fetch).not.toHaveBeenCalled();
         expect(result.error?.providerDiagnostic?.code).toBe('destination_denied');

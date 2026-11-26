@@ -331,6 +331,17 @@ describe('ai-providers', () => {
         expect(body.max_completion_tokens).toBe(reasoning ? 4096 : undefined);
     });
 
+    it('uses Luna when the OpenAI assistant has no selected model', async () => {
+        const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ choices: [{ message: { content: 'Hello' } }] })));
+        vi.stubGlobal('fetch', fetchMock);
+
+        const result = await createAIProvider('openai', { apiKey: 'key' }).chat([message]);
+        expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+            model: 'gpt-6-luna', reasoning_effort: 'none',
+        });
+        expect(result.model).toBe('gpt-6-luna');
+    });
+
     it('requests native GPT-6 stream usage and preserves an explicit token-limit finish reason', async () => {
         const fetchMock = vi.fn().mockResolvedValue(responseStream(
             'data: {"choices":[{"delta":{"content":"Hello"},"finish_reason":"length"}]}\n',

@@ -61,7 +61,7 @@ describe('/api/providers', () => {
 
         expect(data.anyConfigured).toBe(true);
         expect(openai.configured).toBe(true);
-        expect(openai.model).toBe('gpt-4o-mini');
+        expect(openai.model).toBe('gpt-6-luna');
         expect(openai.keySourceName).toBe('CVF_OPENAI_API_KEY');
         expect(openai.readiness).toBe('live_task_ready');
         expect(JSON.stringify(openai)).not.toContain('openai-alias-key');

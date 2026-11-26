@@ -5,7 +5,7 @@
 import { useMemo, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { validateApiKey } from '@/lib/security';
-import { GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
+import { GOVERNED_ROUTE_DEFAULT_MODEL, GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 import { AVAILABLE_MODELS, ProviderKey, SettingsData } from './Settings';
 
 interface ApiKeyWizardProps {
@@ -17,7 +17,7 @@ interface ApiKeyWizardProps {
 }
 
 const PROVIDERS: Array<{ id: ProviderKey; name: string; icon: string; hint: string }> = [
-    { id: 'openai', name: 'OpenAI', icon: '🤖', hint: 'Recommended: runs on the governed route (default gpt-4o-mini)' },
+    { id: 'openai', name: 'OpenAI', icon: '🤖', hint: `Recommended: runs on the governed route (default ${GOVERNED_ROUTE_DEFAULT_MODEL})` },
     { id: 'gemini', name: 'Google Gemini', icon: '✨', hint: 'Strong free tier' },
     { id: 'anthropic', name: 'Anthropic Claude', icon: '🧠', hint: 'Strong for long-form reasoning' },
     { id: 'deepseek', name: 'DeepSeek', icon: '🦋', hint: 'Direct DeepSeek Chat/Reasoner' },
@@ -33,13 +33,13 @@ export function ApiKeyWizard({ onComplete, onClose, settings, updateProvider, up
     const [showKey, setShowKey] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [defaultProvider, setDefaultProvider] = useState<ProviderKey>(() => (isGovernedRouteProvider(settings.preferences.defaultProvider) ? settings.preferences.defaultProvider : initialProvider));
-    const [selectedModel, setSelectedModel] = useState<string>(() => settings.providers[initialProvider].selectedModel || AVAILABLE_MODELS[initialProvider][0].id);
+    const [selectedModel, setSelectedModel] = useState<string>(() => settings.providers[initialProvider].selectedModel || GOVERNED_ROUTE_DEFAULT_MODEL);
 
     const handleProviderChange = (nextProvider: ProviderKey) => {
         const existing = settings.providers[nextProvider];
         setProvider(nextProvider);
         setApiKey(existing.apiKey || '');
-        setSelectedModel(existing.selectedModel || AVAILABLE_MODELS[nextProvider][0].id);
+        setSelectedModel(existing.selectedModel || (nextProvider === 'openai' ? GOVERNED_ROUTE_DEFAULT_MODEL : AVAILABLE_MODELS[nextProvider][0].id));
         setDefaultProvider(nextProvider);
         setError(null);
     };

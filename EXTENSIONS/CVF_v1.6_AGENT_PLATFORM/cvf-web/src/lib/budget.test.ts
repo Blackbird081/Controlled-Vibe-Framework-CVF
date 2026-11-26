@@ -58,10 +58,10 @@ describe('budget', () => {
             expect(typeof cost).toBe('number');
         });
 
-        it('falls back to gpt-4o-mini pricing for unknown model', () => {
+        it('falls back to gpt-6-luna pricing for unknown model', () => {
             const costUnknown = estimateCost('unknown-model-xyz', 'test prompt');
-            const costMini = estimateCost('gpt-4o-mini', 'test prompt');
-            expect(costUnknown).toBe(costMini);
+            const costDefault = estimateCost('gpt-6-luna', 'test prompt');
+            expect(costUnknown).toBe(costDefault);
         });
 
         it('returns 0 for empty prompt', () => {

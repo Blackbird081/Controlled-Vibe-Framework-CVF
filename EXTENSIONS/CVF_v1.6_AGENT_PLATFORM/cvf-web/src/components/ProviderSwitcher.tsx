@@ -5,7 +5,8 @@ import { useLanguage } from '@/lib/i18n';
 import { useSettings } from './Settings';
 import { AIProvider } from '@/lib/ai-providers';
 import { PROVIDER_LANE_EVIDENCE, LANE_BADGE_STYLE } from '@/lib/provider-lane-metadata';
-import { GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
+import { AVAILABLE_MODELS } from '@/lib/agent-model-catalog';
+import { GOVERNED_ROUTE_DEFAULT_MODEL, GOVERNED_ROUTE_UNSUPPORTED_NOTE, isGovernedRouteProvider } from '@/lib/governed-route-providers';
 
 interface ProviderOption {
     id: AIProvider;
@@ -16,13 +17,25 @@ interface ProviderOption {
 }
 
 const PROVIDERS: ProviderOption[] = [
-    { id: 'openai', name: 'GPT-4o mini', icon: '🤖', color: 'from-green-500 to-emerald-500', model: 'gpt-4o-mini' },
+    {
+        id: 'openai',
+        name: AVAILABLE_MODELS.openai.find(model => model.id === GOVERNED_ROUTE_DEFAULT_MODEL)?.name ?? GOVERNED_ROUTE_DEFAULT_MODEL,
+        icon: '🤖',
+        color: 'from-green-500 to-emerald-500',
+        model: GOVERNED_ROUTE_DEFAULT_MODEL,
+    },
     { id: 'gemini', name: 'Gemini', icon: '✨', color: 'from-blue-500 to-cyan-500', model: 'gemini-2.5-flash' },
     { id: 'anthropic', name: 'Claude', icon: '🧠', color: 'from-purple-500 to-pink-500', model: 'claude-sonnet-4-20250514' },
     { id: 'alibaba', name: 'Qwen', icon: '🌏', color: 'from-amber-500 to-orange-500', model: 'qwen-flash' },
     { id: 'openrouter', name: 'OpenRouter', icon: '🔀', color: 'from-violet-500 to-indigo-500', model: 'meta-llama/llama-4-maverick' },
     { id: 'deepseek', name: 'DeepSeek', icon: '🦋', color: 'from-cyan-500 to-blue-500', model: 'deepseek-chat' },
 ];
+
+function withSelectedOpenAIModel(provider: ProviderOption, modelId: string | undefined): ProviderOption {
+    if (provider.id !== 'openai') return provider;
+    const selection = AVAILABLE_MODELS.openai.find(model => model.id === modelId);
+    return selection ? { ...provider, name: selection.name, model: selection.id } : provider;
+}
 
 interface ProviderSwitcherProps {
     compact?: boolean;
@@ -36,7 +49,8 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const currentProvider = PROVIDERS.find(p => p.id === settings.preferences.defaultProvider) || PROVIDERS[0];
+    const providers = PROVIDERS.map(provider => withSelectedOpenAIModel(provider, settings.providers.openai.selectedModel));
+    const currentProvider = providers.find(p => p.id === settings.preferences.defaultProvider) || providers[0];
     const hasApiKey = !!settings.providers[currentProvider.id]?.apiKey;
 
     const labels = {
@@ -92,7 +106,7 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
                     <div className="absolute top-full mt-2 right-0 bg-white dark:bg-gray-800 
                                    rounded-xl shadow-xl border border-gray-200 dark:border-gray-700
                                    overflow-hidden z-50 min-w-48">
-                        {PROVIDERS.map(provider => {
+                        {providers.map(provider => {
                             const providerHasKey = !!settings.providers[provider.id]?.apiKey;
                             const isSelected = provider.id === currentProvider.id;
 
@@ -145,7 +159,7 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
             <h4 className="text-sm font-medium text-gray-500 mb-3">{l.selectProvider}</h4>
 
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                {PROVIDERS.map(provider => {
+                {providers.map(provider => {
                     const providerHasKey = !!settings.providers[provider.id]?.apiKey;
                     const isSelected = provider.id === currentProvider.id;
 
@@ -209,7 +223,8 @@ export function ProviderSwitcher({ compact = false, showStatus = true, onChange 
 // Inline provider badge for chat header
 export function ProviderBadge({ onClick }: { onClick?: () => void }) {
     const { settings } = useSettings();
-    const currentProvider = PROVIDERS.find(p => p.id === settings.preferences.defaultProvider) || PROVIDERS[0];
+    const selectedProvider = PROVIDERS.find(p => p.id === settings.preferences.defaultProvider) || PROVIDERS[0];
+    const currentProvider = withSelectedOpenAIModel(selectedProvider, settings.providers.openai.selectedModel);
     const hasApiKey = !!settings.providers[currentProvider.id]?.apiKey;
 
     return (
@@ -249,7 +264,7 @@ export function QuickProviderSwitch({ size = 'md' }: { size?: 'sm' | 'md' }) {
                     <button
                         key={provider.id}
                         onClick={() => handleSwitch(provider.id)}
-                        title={`${provider.name} (${hasKey ? 'Ready' : 'No API Key'})`}
+                        title={`${withSelectedOpenAIModel(provider, settings.providers.openai.selectedModel).name} (${hasKey ? 'Ready' : 'No API Key'})`}
                         className={`${sizeClasses[size]} rounded-full flex items-center justify-center
                                    transition-all ${isSelected
                                 ? `bg-gradient-to-br ${provider.color} text-white shadow-md scale-110`

@@ -306,7 +306,7 @@ describe('/api/execute canonical denials and explicit failures', () => {
         const res = await POST(makeExecuteRequest({ templateName: 'Strategy', intent: 'Analyze the market', inputs: strategyInputs, provider: 'openai', ...(model ? { model } : {}) }) as never);
         expect(res.status).toBe(200);
         expect(providerSpy).toHaveBeenCalledTimes(1);
-        expect(providerSpy.mock.calls[0][3]).toMatchObject({ model: model ?? 'gpt-4o-mini' });
+        expect(providerSpy.mock.calls[0][3]).toMatchObject({ model: model ?? 'gpt-6-luna' });
     });
 
     it('extends the allowlist only through the server-side CVF_OPENAI_ALLOWED_MODELS list', async () => {

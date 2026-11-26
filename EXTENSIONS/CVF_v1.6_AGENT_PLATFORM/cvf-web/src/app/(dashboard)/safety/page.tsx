@@ -4,6 +4,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useSettings } from '@/components/Settings';
+import GovernanceCheckRuns from '@/components/GovernanceCheckRuns';
 import { useTools } from '@/lib/agent-tools';
 import {
     getAllRiskLevels,
@@ -1324,6 +1325,8 @@ export default function SafetyPage() {
                     </div>
                 </div>
             </div>
+
+            <GovernanceCheckRuns language={lang} />
 
             {/* OpenClaw Integration Panel */}
             <OpenClawPanel

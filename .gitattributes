@@ -1,4 +1,5 @@
 # Preserve exact review and design evidence bytes for SHA-256 reconciliation.
+scripts/ui01-jev-eval/**/*.json text eol=lf
 # Preserve Root P5 admission and its exact copied runtime manifest across checkouts.
 docs/baselines/CVF_GC018_NCR_HTML_M6_FINAL_SOURCE_LIVE_2026-10-28.md text eol=lf
 docs/baselines/evidence/ncr-html-m6-final-source-live-manifest-20261028.json text eol=lf

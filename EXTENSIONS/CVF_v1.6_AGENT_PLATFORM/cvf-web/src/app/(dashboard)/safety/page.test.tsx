@@ -3,7 +3,7 @@
  */
 // Text Encoding Exception: the test checks the Vietnamese empty-state message.
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import SafetyPage from './page';
 
 const updatePreferencesMock = vi.fn();
@@ -68,6 +68,7 @@ function setupFetchMock(fetchMock: ReturnType<typeof vi.fn>, options?: {
     kernelOk?: boolean;
     proposals?: Array<Record<string, unknown>>;
     postResult?: Record<string, unknown>;
+    governanceRuns?: Array<Record<string, unknown>>;
 }) {
     const kernelTelemetry = options?.kernelTelemetry ?? makeKernelTelemetry();
     const kernelOk = options?.kernelOk ?? true;
@@ -98,6 +99,13 @@ function setupFetchMock(fetchMock: ReturnType<typeof vi.fn>, options?: {
             };
         }
 
+        if (url.endsWith('/api/governance/check-runs')) {
+            return {
+                ok: options?.governanceRuns !== undefined,
+                json: async () => options?.governanceRuns,
+            };
+        }
+
         if (url.endsWith('/api/openclaw') && init?.method === 'POST') {
             return {
                 ok: true,
@@ -121,6 +129,38 @@ function setupFetchMock(fetchMock: ReturnType<typeof vi.fn>, options?: {
 
 describe('SafetyPage OpenClaw integration UI', () => {
     const fetchMock = vi.fn();
+
+    it.each([
+        ['en', 'Latest governance checks', 'Passed', 'Failed', 'Running', 'View on GitHub'],
+        ['vi', 'Kết quả kiểm quản trị gần nhất', 'Đạt', 'Lỗi', 'Đang chạy', 'Xem trên GitHub'],
+    ] as const)('shows GitHub workflow outcomes in %s', async (language, heading, passed, failed, running, github) => {
+        mockLanguage = language;
+        const run = { startedAt: '2026-11-25T14:40:53Z', sha: '8593454f337a13c248d2dc0f168c3f7af111587a' };
+        const link = 'https://github.com/Blackbird081/Controlled-Vibe-Framework-CVF/actions/runs/';
+        setupFetchMock(fetchMock, { governanceRuns: [
+            { ...run, workflow: 'documentation', state: 'passed', href: link + '1' },
+            { ...run, workflow: 'static', state: 'failed', href: link + '2' },
+            { ...run, workflow: 'publicSync', state: 'running', href: link + '3' },
+        ] });
+        render(<SafetyPage />);
+        const region = await screen.findByRole('region', { name: heading });
+        const content = within(region);
+        expect(await content.findByText(passed)).toBeTruthy();
+        expect(content.getByText(failed)).toBeTruthy();
+        expect(content.getByText(running)).toBeTruthy();
+        expect(content.getAllByText('8593454f')).toHaveLength(3);
+        expect(content.getAllByRole('link', { name: new RegExp(github) }).map(node => node.getAttribute('href')))
+            .toEqual([link + '1', link + '2', link + '3']);
+        expect(region.querySelector('time')?.dateTime).toBe(run.startedAt);
+    });
+
+    it('shows an honest failure when check results cannot be loaded', async () => {
+        setupFetchMock(fetchMock);
+        render(<SafetyPage />);
+        const region = await screen.findByRole('region', { name: 'Latest governance checks' });
+        expect(await within(region).findByText('Could not load check results')).toBeTruthy();
+        expect(within(region).queryByRole('link')).toBeNull();
+    });
 
     beforeEach(() => {
         mockLanguage = 'en';

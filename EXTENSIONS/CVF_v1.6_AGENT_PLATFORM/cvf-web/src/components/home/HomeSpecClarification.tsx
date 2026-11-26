@@ -1,24 +1,19 @@
 'use client';
 // Text Encoding Exception: these are the Vietnamese and English result labels.
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSettings } from '@/components/Settings';
 import {
-    homeClarificationTitle, type HomeClarification, type HomeClarificationAvailability, type HomeClarificationInput,
+    homeClarificationTitle, requestHomeClarification, type HomeClarification, type HomeClarificationInput,
 } from '@/lib/home-spec-clarification';
-
-export const HomeSpecClarificationAvailability = createContext<HomeClarificationAvailability>('missing_key');
-
-export function HomeSpecClarificationProvider({ availability, children }: { availability: HomeClarificationAvailability; children: ReactNode }) {
-    return <HomeSpecClarificationAvailability.Provider value={availability}>{children}</HomeSpecClarificationAvailability.Provider>;
-}
 
 const copy = {
     vi: {
         action: 'Nhờ AI làm rõ', pending: 'AI đang làm rõ…',
-        missing_key: 'Trang này chưa có khóa để dùng AI. Bạn vẫn có thể tải bản đặc tả.',
-        sign_in: 'Đăng nhập để nhờ AI làm rõ. Bạn vẫn có thể tải bản đặc tả.',
-        unavailable: 'Hiện chưa dùng được AI để làm rõ. Bạn vẫn có thể tải bản đặc tả.',
-        limit: 'Tính năng làm rõ đã hết lượt hôm nay. Bạn vẫn có thể tải bản đặc tả.',
+        missing_key: 'Cần khóa OpenAI của bạn để dùng nút này. Bạn vẫn có thể tải bản đặc tả.',
+        invalid_key: 'OpenAI từ chối khóa này. Hãy kiểm tra khóa và quyền dùng AI trong Cài đặt. Bạn vẫn có thể tải bản đặc tả.',
+        limit: 'OpenAI đang giới hạn lượt gọi. Hãy kiểm tra hạn mức của khóa hoặc thử lại sau. Bạn vẫn có thể tải bản đặc tả.',
+        billing: 'Lượt làm rõ này được tính vào khóa OpenAI của bạn.',
         timeout: 'AI mất quá nhiều thời gian. Bạn vẫn có thể tải bản đặc tả.',
         provider_error: 'Chưa kết nối được với AI. Bạn vẫn có thể tải bản đặc tả.',
         format_error: 'Chưa dùng được câu trả lời của AI. Bạn vẫn có thể tải bản đặc tả.',
@@ -27,10 +22,10 @@ const copy = {
     },
     en: {
         action: 'Ask AI to clarify', pending: 'AI is clarifying…',
-        missing_key: 'This site has no key for AI yet. You can still download the specification.',
-        sign_in: 'Sign in to ask AI to clarify. You can still download the specification.',
-        unavailable: 'AI clarification is temporarily unavailable. You can still download the specification.',
-        limit: "AI clarification has reached today's limit. You can still download the specification.",
+        missing_key: 'You need your own OpenAI key to use this button. You can still download the specification.',
+        invalid_key: 'Your OpenAI key was refused. Check the key and its access in Settings. You can still download the specification.',
+        limit: 'OpenAI is limiting requests. Check your key’s usage limit or try again later. You can still download the specification.',
+        billing: 'This clarification is billed to your OpenAI key.',
         timeout: 'AI took too long to respond. You can still download the specification.',
         provider_error: 'Could not connect to AI. You can still download the specification.',
         format_error: 'Could not use the answer from AI. You can still download the specification.',
@@ -39,20 +34,11 @@ const copy = {
     },
 } as const;
 
-type Label = keyof typeof copy.en;
-type State = { input: string; status: Label | 'ready'; result?: HomeClarification };
+type State = { input: string; status: Exclude<keyof typeof copy.en, 'action' | 'billing'> | 'ready'; result?: HomeClarification };
 
-function isClarification(value: unknown): value is HomeClarification {
-    if (!value || typeof value !== 'object') return false;
-    const { summary, questions } = value as Partial<HomeClarification>;
-    return Array.isArray(summary) && summary.every(paragraph => typeof paragraph === 'string')
-        && Array.isArray(questions) && questions.length <= 5 && questions.every(question => typeof question === 'string')
-        && summary.length + questions.length > 0;
-}
-
-export function useHomeSpecClarification(input: HomeClarificationInput, active: boolean, signedIn: boolean) {
-    const configured = useContext(HomeSpecClarificationAvailability);
-    const availability = signedIn ? configured : 'sign_in';
+export function useHomeSpecClarification(input: HomeClarificationInput, active: boolean, canUseSavedKey = true) {
+    const { settings } = useSettings(true);
+    const key = canUseSavedKey ? settings.providers?.openai?.apiKey?.trim() : undefined;
     const labels = copy[input.language];
     const body = JSON.stringify(input);
     const inflight = useRef<AbortController | null>(null);
@@ -71,34 +57,23 @@ export function useHomeSpecClarification(input: HomeClarificationInput, active: 
     }
 
     async function clarify() {
-        if (!active || availability !== 'ready' || inflight.current) return;
+        if (!active || !key || inflight.current) return;
         const controller = new AbortController();
         inflight.current = controller;
         setState({ input: body, status: 'pending' });
         try {
-            const response = await fetch('/api/intent-spec/home-clarification', {
-                method: 'POST', headers: { 'content-type': 'application/json' }, body, signal: controller.signal,
-            });
-            const result = await response.json();
+            const reply = await requestHomeClarification(input, key, controller.signal);
             if (controller.signal.aborted) return;
-            if (response.ok && result.status === 'ready' && isClarification(result.clarification)) {
-                setState({ input: body, status: 'ready', result: result.clarification });
-            } else {
-                const status = typeof result.status === 'string' && Object.hasOwn(labels, result.status)
-                    ? result.status as Label : 'unavailable';
-                setState({ input: body, status });
-            }
-        } catch {
-            if (!controller.signal.aborted) setState({ input: body, status: 'unavailable' });
+            setState(reply.status === 'ready' ? { input: body, status: 'ready', result: reply.result } : { input: body, status: reply.status });
         } finally {
             if (inflight.current === controller) inflight.current = null;
         }
     }
 
-    const message = availability !== 'ready' ? labels[availability]
+    const message = !key ? labels.missing_key
         : current && current.status !== 'ready' ? labels[current.status] : '';
-    return { clarify, clear, message, result: current?.result ?? null, label: labels.action,
-        disabled: availability !== 'ready' || current?.status === 'pending' };
+    return { clarify, clear, message, missingKey: !key, billing: labels.billing, result: current?.result ?? null,
+        label: labels.action, disabled: !key || current?.status === 'pending' };
 }
 
 export function HomeSpecClarificationPanel({ language, result }: { language: HomeClarificationInput['language']; result: HomeClarification }) {

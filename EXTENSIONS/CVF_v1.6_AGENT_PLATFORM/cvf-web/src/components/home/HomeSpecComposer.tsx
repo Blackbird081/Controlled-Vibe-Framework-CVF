@@ -2,6 +2,7 @@
 // Text Encoding Exception: this component presents the Vietnamese and English Home specification workflow.
 
 import { useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import Link from 'next/link';
 import { ArrowRight, Download, FolderOpen, Plus } from 'lucide-react';
 import { TechnicalDetails } from '@/components/TechnicalDetails';
 import { HomeSpecAccountScope, useHomeSpecInput } from '@/lib/hooks/useHomeSpecInput';
@@ -158,7 +159,8 @@ export function HomeSpecComposer(props: Props) {
 
 function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal, onStarterGoalImported, onStartNewWork, library }: Props) {
     const t = copy[language];
-    const accountScope = useContext(HomeSpecAccountScope)?.accountScope;
+    const homeAccount = useContext(HomeSpecAccountScope);
+    const accountScope = homeAccount?.accountScope;
     const { input: savedInput, setInput, resetInput, startSeparateTask, restoreDraft } = useHomeSpecInput(accountScope);
     const { goal, extra, values } = savedInput;
     const [stage, setStage] = useState<Stage>('describe');
@@ -237,7 +239,9 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     const agentMarkdown = packet?.markdown ?? '';
     const clarificationAnswers = Object.values(enteredValues);
     const canClarify = stage === 'draft' && !homeSpecExternalRequest(goal, [extra, ...clarificationAnswers].join('\n'));
-    const clarification = useHomeSpecClarification({ language, goal, extra, answers: clarificationAnswers }, canClarify, Boolean(accountScope));
+    const clarification = useHomeSpecClarification(
+        { language, goal, extra, answers: clarificationAnswers }, canClarify, homeAccount?.canUseSavedProviderKey,
+    );
     const downloadMarkdown = appendHomeSpecClarification(agentMarkdown, clarification.result, language);
     const openQuestions = packet?.openQuestions ?? [];
 
@@ -701,7 +705,16 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                             aria-describedby={clarification.message ? 'home-clarification-status' : undefined} disabled={clarification.disabled}>{clarification.label}</button>}
                         <button type="button" className={secondary} onClick={() => showStage('fields')} disabled={busy}>{t.edit}</button>
                     </div>
-                    {canClarify && clarification.message && <p id="home-clarification-status" role="status" className="text-sm text-slate-600 dark:text-slate-300">{clarification.message}</p>}
+                    {canClarify && clarification.message && <p id="home-clarification-status" role="status" className="text-sm text-slate-600 dark:text-slate-300">
+                        {clarification.message}{clarification.missingKey && <> <Link
+                            href={homeAccount?.canUseSavedProviderKey === false ? '/help/setup' : '?open=settings'}
+                            scroll={false} className="underline text-indigo-700 dark:text-indigo-300">
+                            {homeAccount?.canUseSavedProviderKey === false
+                                ? (language === 'vi' ? 'Xem hướng dẫn cài đặt' : 'View setup instructions')
+                                : (language === 'vi' ? 'Cài đặt' : 'Settings')}
+                        </Link></>}
+                    </p>}
+                    {canClarify && !clarification.missingKey && <p className="text-sm text-slate-600 dark:text-slate-300">{clarification.billing}</p>}
                     {downloadReady && <button type="button" className={secondary} onClick={startNewWork} disabled={busy}>
                         <Plus size={17} aria-hidden="true" />{t.startNew}
                     </button>}

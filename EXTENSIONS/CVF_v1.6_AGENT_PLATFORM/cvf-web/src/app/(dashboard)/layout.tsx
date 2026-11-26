@@ -56,6 +56,7 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
     const { sessionReady, userRole, userName, accountScope, permissions, handleLogout, impersonation, endImpersonation } = useAuth();
     const { settings, updateProvider, updatePreferences } = useSettings();
     const modals = useModals(permissions);
+    const openDashboardModal = modals.openModal;
     const { executions } = useExecutionStore();
     const openParam = searchParams.get('open');
     const queryModal = resolveOpenModal(openParam);
@@ -81,6 +82,10 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
         window.addEventListener('cvf:openApiKeyWizard', handler);
         return () => window.removeEventListener('cvf:openApiKeyWizard', handler);
     }, [modals]);
+
+    useEffect(() => {
+        if (openParam === 'settings') openDashboardModal('settings');
+    }, [openParam, openDashboardModal]);
 
     useEffect(() => {
         const handleOpenAgent = (event: Event) => {
@@ -294,7 +299,9 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
                         </div>
                     </div>
                 )}
-                <HomeSpecAccountScope.Provider value={{ accountScope }}>{children}</HomeSpecAccountScope.Provider>
+                <HomeSpecAccountScope.Provider value={{
+                    accountScope, canUseSavedProviderKey: permissions.canUseSettings && !impersonation,
+                }}>{children}</HomeSpecAccountScope.Provider>
 
                 {/* Footer */}
                 <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-800">
@@ -324,7 +331,13 @@ function DashboardLayoutInner({ children }: { children: React.ReactNode }) {
             {modals.showSettings && (
                 <div className="fixed inset-0 z-[70] bg-black/50 flex items-center justify-center p-3 md:p-4">
                     <div className="w-full h-full md:h-auto md:max-w-2xl max-h-[90vh] overflow-y-auto safe-area-pt safe-area-pb">
-                        <SettingsPage onClose={() => modals.closeModal('settings')} />
+                        <SettingsPage onClose={() => {
+                            modals.closeModal('settings');
+                            if (openParam !== 'settings') return;
+                            const params = new URLSearchParams(searchParams.toString());
+                            params.delete('open');
+                            router.replace(params.size ? `${pathname}?${params}` : pathname, { scroll: false });
+                        }} />
                     </div>
                 </div>
             )}

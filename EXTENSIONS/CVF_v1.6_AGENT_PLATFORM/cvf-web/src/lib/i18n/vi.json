@@ -119,6 +119,8 @@
     "nav.aiAgent": "Hỏi trợ lý AI",
     "nav.multiAgent": "Nhóm trợ lý AI",
     "nav.tools": "Công cụ",
+    "complianceReport.title": "Báo cáo tuân thủ",
+    "complianceReport.noData": "Chưa có dữ liệu để lập báo cáo tuân thủ.",
     "nav.home": "Trang chủ",
     "nav.landing": "Trang giới thiệu",
     "nav.skillSearch": "Tìm kỹ năng nâng cao",

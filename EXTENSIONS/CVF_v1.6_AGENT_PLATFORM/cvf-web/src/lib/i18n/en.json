@@ -119,6 +119,8 @@
     "nav.aiAgent": "Ask the AI assistant",
     "nav.multiAgent": "AI assistant team",
     "nav.tools": "Tools",
+    "complianceReport.title": "Compliance report",
+    "complianceReport.noData": "No data is available for a compliance report yet.",
     "nav.home": "Home",
     "nav.landing": "Introduction",
     "nav.skillSearch": "Skill Search",

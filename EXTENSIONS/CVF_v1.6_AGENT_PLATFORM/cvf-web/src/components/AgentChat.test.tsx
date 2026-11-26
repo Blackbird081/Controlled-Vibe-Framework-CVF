@@ -86,6 +86,52 @@ describe('AgentChat', () => {
         expect(await screen.findByText(/No API key configured/i)).toBeTruthy();
     });
 
+    it.each(['en', 'vi'] as const)('minimizes the chat when following the setup link in %s', language => {
+        uiLanguage = language;
+        const onMinimize = vi.fn();
+        const onClose = vi.fn();
+        render(<AgentChat onMinimize={onMinimize} onClose={onClose} />);
+        const link = screen.getByRole('link', { name: language === 'vi' ? 'Xem hướng dẫn cài đặt' : 'View setup instructions' });
+        expect(link.getAttribute('href')).toBe('/help/setup');
+        fireEvent.click(link);
+        expect(onMinimize).toHaveBeenCalledTimes(1);
+        expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it('minimizes for both relative and external links in a chat reply, keeping the links intact', () => {
+        const onMinimize = vi.fn();
+        render(<AgentChat onMinimize={onMinimize} existingMessages={[{
+            id: 'fixture-links', role: 'assistant', content: '[Local help](/help/setup) and [External help](https://example.invalid/help).',
+            timestamp: new Date(), status: 'complete',
+        }]} />);
+        for (const [label, href] of [['Local help', '/help/setup'], ['External help', 'https://example.invalid/help']]) {
+            const link = screen.getByRole('link', { name: label });
+            expect(link.getAttribute('href')).toBe(href);
+            expect(link.getAttribute('target')).toBe('_blank');
+            fireEvent.click(link);
+        }
+        expect(onMinimize).toHaveBeenCalledTimes(2);
+    });
+
+    it('follows web links on a browser with no URL.parse and leaves malformed links alone', () => {
+        const descriptor = Object.getOwnPropertyDescriptor(URL, 'parse');
+        Object.defineProperty(URL, 'parse', { configurable: true, value: undefined });
+        const onMinimize = vi.fn();
+        try {
+            render(<AgentChat onMinimize={onMinimize} existingMessages={[{
+                id: 'legacy-browser-links', role: 'assistant', timestamp: new Date(), status: 'complete',
+                content: '[Help](/help/setup), [Website](https://example.invalid/), [Malformed](http://[invalid]).',
+            }]} />);
+            fireEvent.click(screen.getByRole('link', { name: 'Help' }));
+            fireEvent.click(screen.getByRole('link', { name: 'Website' }));
+            expect(fireEvent.click(screen.getByRole('link', { name: 'Malformed' }))).toBe(true);
+            expect(onMinimize).toHaveBeenCalledTimes(2);
+        } finally {
+            if (descriptor) Object.defineProperty(URL, 'parse', descriptor);
+            else Reflect.deleteProperty(URL, 'parse');
+        }
+    });
+
     it('sends message and renders assistant response', async () => {
         apiKey = 'test-key';
         chatMock.mockImplementationOnce(async (_messages: unknown, onStream?: (chunk: { text: string; isComplete: boolean }) => void) => {

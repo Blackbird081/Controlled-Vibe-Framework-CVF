@@ -22,7 +22,7 @@ import {
 } from '@/lib/openclaw-config';
 import { explain, mapCvfRiskLevel, type IntentType } from '@/lib/explainability';
 import { parseNaturalPolicy, getDecisionColor } from '@/lib/natural-policy-parser';
-import { RUNTIME_ADAPTERS, CAPABILITY_LABELS, STATUS_STYLES } from '@/lib/runtime-adapters';
+import { RUNTIME_ADAPTERS, CAPABILITY_LABELS } from '@/lib/runtime-adapters';
 import {
     RISK_MATRIX,
     DESTRUCTIVE_RULES,
@@ -39,7 +39,7 @@ import {
 interface OpenClawResultData {
     response?: string;
     decision?: { status?: string };
-    proposal?: { action?: string; confidence?: number; riskLevel?: string };
+    proposal?: { action?: string; riskLevel?: string };
     mode?: string;
     guard?: { reason?: string };
     data?: {
@@ -335,6 +335,9 @@ function ProposalsTable({ proposals, language }: {
                 </h3>
                 <span className="text-xs text-gray-500">{proposals.length} {language === 'vi' ? 'mục' : 'items'}</span>
             </div>
+            {proposals.length > 0 && <p className="px-6 pt-3 text-xs text-gray-500 dark:text-gray-400">
+                {language === 'vi' ? 'Danh sách có thể gồm đề xuất từ lượt thử.' : 'This list may include proposals from test runs.'}
+            </p>}
             {proposals.length === 0 ? <p role="status" className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
                 {language === 'vi' ? 'Chưa có dữ liệu đề xuất để hiển thị' : 'No proposals to show yet'}
             </p> : <div className="overflow-x-auto">
@@ -448,22 +451,20 @@ function OpenClawTestSection({ language, onSubmit, lastResult }: {
                             </span>
                             <span className="font-semibold text-sm">{lastResult.response}</span>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                             <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">{language === 'vi' ? 'Hành động' : 'Action'}</div>
                                 <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.action}</div>
-                            </div>
-                            <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
-                                <div className="text-gray-500">{language === 'vi' ? 'Độ tin cậy' : 'Confidence'}</div>
-                                <div className="font-mono font-medium mt-0.5">{((lastResult.proposal?.confidence ?? 0) * 100).toFixed(0)}%</div>
                             </div>
                             <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
                                 <div className="text-gray-500">{language === 'vi' ? 'Rủi ro' : 'Risk'}</div>
                                 <div className="font-mono font-medium mt-0.5">{lastResult.proposal?.riskLevel?.toUpperCase()}</div>
                             </div>
                             <div className="p-2 rounded bg-white dark:bg-[#1a1d2e]">
-                                <div className="text-gray-500">Mode</div>
-                                <div className="font-mono font-medium mt-0.5">{lastResult.mode === 'real' ? '🤖 AI' : '📋 Mock'}</div>
+                                <div className="text-gray-500">{language === 'vi' ? 'Loại lượt thử' : 'Test mode'}</div>
+                                <div className="font-mono font-medium mt-0.5">{lastResult.mode === 'real'
+                                    ? (language === 'vi' ? 'Có cấu hình AI' : 'AI configured')
+                                    : (language === 'vi' ? 'Mô phỏng' : 'Simulation')}</div>
                             </div>
                         </div>
                         {lastResult.guard?.reason && (
@@ -493,18 +494,20 @@ interface KernelTrace {
     latencyMs?: number;
 }
 
+interface KernelStats {
+    totalRequests?: number;
+    refusalCount?: number;
+    avgLatencyMs?: number;
+    p95LatencyMs?: number;
+    domainLockActive?: boolean;
+    currentRiskLevel?: string;
+    policyVersion?: string;
+}
+
 interface KernelTelemetry {
     traces: KernelTrace[];
     riskHistory: { level: string; timestamp: number; score: number }[];
-    stats: {
-        totalRequests: number;
-        refusalCount: number;
-        avgLatencyMs: number;
-        p95LatencyMs: number;
-        domainLockActive: boolean;
-        currentRiskLevel: string;
-        policyVersion: string;
-    };
+    stats: KernelStats | null;
 }
 
 function useKernelTelemetry() {
@@ -554,64 +557,64 @@ const DECISION_LABELS: Record<string, { icon: string; label: string; labelVi: st
     ROLLBACK_REQUIRED: { icon: '↩️', label: 'Rollback', labelVi: 'Rollback' },
 };
 
-function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
-    const { stats } = telemetry;
-    const allowRate = stats.totalRequests > 0
+function KernelHealthDashboard({ stats, lang }: { stats: KernelStats | null; lang: 'vi' | 'en' }) {
+    const allowRate = stats?.totalRequests && stats.refusalCount != null
         ? ((stats.totalRequests - stats.refusalCount) / stats.totalRequests * 100).toFixed(1)
-        : '100.0';
+        : null;
+    const riskLevel = stats?.currentRiskLevel ?? '';
 
     const cards = [
         {
             icon: '🔒',
             title: lang === 'vi' ? 'Domain Lock' : 'Domain Lock',
-            value: stats.domainLockActive
+            value: stats?.domainLockActive == null ? '—' : stats.domainLockActive
                 ? (lang === 'vi' ? 'Đang hoạt động' : 'Active')
                 : (lang === 'vi' ? 'Tắt' : 'Inactive'),
-            color: stats.domainLockActive
+            color: stats?.domainLockActive == null ? 'text-gray-600' : stats.domainLockActive
                 ? 'text-emerald-600 dark:text-emerald-400'
                 : 'text-red-600 dark:text-red-400',
-            badge: stats.domainLockActive
+            badge: stats?.domainLockActive == null ? '' : stats.domainLockActive
                 ? 'bg-emerald-100 dark:bg-emerald-900/40'
                 : 'bg-red-100 dark:bg-red-900/40',
         },
         {
             icon: '⚡',
             title: lang === 'vi' ? 'Mức rủi ro' : 'Risk Level',
-            value: stats.currentRiskLevel,
-            color: RISK_TEXT_COLORS[stats.currentRiskLevel] || 'text-gray-600',
-            badge: `${RISK_COLORS[stats.currentRiskLevel] || 'bg-gray-500'}/20`,
+            value: riskLevel || '—',
+            color: RISK_TEXT_COLORS[riskLevel] || 'text-gray-600',
+            badge: `${RISK_COLORS[riskLevel] || 'bg-gray-500'}/20`,
         },
         {
             icon: '📊',
             title: lang === 'vi' ? 'Tổng yêu cầu' : 'Total Requests',
-            value: `${stats.totalRequests}`,
+            value: stats?.totalRequests ?? '—',
             color: 'text-blue-600 dark:text-blue-400',
             badge: 'bg-blue-100 dark:bg-blue-900/40',
-            sub: `${allowRate}% ${lang === 'vi' ? 'cho phép' : 'allowed'}`,
+            sub: allowRate == null ? undefined : `${allowRate}% ${lang === 'vi' ? 'cho phép' : 'allowed'}`,
         },
         {
             icon: '🚫',
             title: lang === 'vi' ? 'Từ chối' : 'Refusals',
-            value: `${stats.refusalCount}`,
-            color: stats.refusalCount > 0
+            value: stats?.refusalCount ?? '—',
+            color: !stats || stats.refusalCount == null ? 'text-gray-600' : stats.refusalCount > 0
                 ? 'text-amber-600 dark:text-amber-400'
                 : 'text-emerald-600 dark:text-emerald-400',
-            badge: stats.refusalCount > 0
+            badge: !stats || stats.refusalCount == null ? '' : stats.refusalCount > 0
                 ? 'bg-amber-100 dark:bg-amber-900/40'
                 : 'bg-emerald-100 dark:bg-emerald-900/40',
         },
         {
             icon: '⏱️',
             title: lang === 'vi' ? 'Độ trễ TB' : 'Avg Latency',
-            value: `${stats.avgLatencyMs}ms`,
+            value: stats?.avgLatencyMs == null ? '—' : `${stats.avgLatencyMs}ms`,
             color: 'text-purple-600 dark:text-purple-400',
             badge: 'bg-purple-100 dark:bg-purple-900/40',
-            sub: `P95: ${stats.p95LatencyMs}ms`,
+            sub: `P95: ${stats?.p95LatencyMs == null ? '—' : `${stats.p95LatencyMs}ms`}`,
         },
         {
             icon: '📜',
             title: lang === 'vi' ? 'Policy' : 'Policy Version',
-            value: stats.policyVersion,
+            value: stats?.policyVersion || '—',
             color: 'text-gray-600 dark:text-gray-400',
             badge: 'bg-gray-100 dark:bg-gray-700',
         },
@@ -622,7 +625,9 @@ function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry
             <h2 className="text-xl font-bold mb-4">
                 🧠 {lang === 'vi' ? 'Tình trạng Kernel' : 'Kernel Runtime Health'}
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {!stats ? <p role="status" className="text-sm text-gray-600 dark:text-gray-300">
+                {lang === 'vi' ? 'Chưa có dữ liệu giám sát để hiển thị' : 'No monitoring data to show yet'}
+            </p> : <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {cards.map(card => (
                     <div key={card.title} className={`p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] ${card.badge}`}>
                         <div className="text-2xl mb-2">{card.icon}</div>
@@ -631,7 +636,7 @@ function KernelHealthDashboard({ telemetry, lang }: { telemetry: KernelTelemetry
                         {card.sub && <div className="text-xs text-gray-400 mt-1">{card.sub}</div>}
                     </div>
                 ))}
-            </div>
+            </div>}
         </div>
     );
 }
@@ -814,133 +819,6 @@ function RiskEvolutionChart({ telemetry, lang }: { telemetry: KernelTelemetry; l
     );
 }
 
-function KernelPolicySelector({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
-    const [selectedPolicy, setSelectedPolicy] = useState(telemetry.stats.policyVersion);
-    const [saving, setSaving] = useState(false);
-
-    const policies = [
-        { id: 'v1', name: 'v1 — Standard Safety', nameVi: 'v1 — An toàn tiêu chuẩn', desc: 'Default refusal + risk gates', descVi: 'Từ chối + cổng rủi ro mặc định' },
-        { id: 'v2-strict', name: 'v2 — Strict Mode', nameVi: 'v2 — Chế độ nghiêm ngặt', desc: 'Block R2+ and all creative', descVi: 'Chặn R2+ và tất cả sáng tạo' },
-        { id: 'v2-permissive', name: 'v2 — Permissive', nameVi: 'v2 — Cho phép mở rộng', desc: 'Allow R2, escalate R3+', descVi: 'Cho phép R2, escalate R3+' },
-    ];
-
-    const handleChange = async (policyId: string) => {
-        setSelectedPolicy(policyId);
-        setSaving(true);
-        // Simulate saving to kernel config
-        await new Promise(r => setTimeout(r, 500));
-        setSaving(false);
-    };
-
-    return (
-        <div>
-            <h2 className="text-xl font-bold mb-4">
-                📜 {lang === 'vi' ? 'Chọn Policy Version' : 'Kernel Policy Selector'}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {policies.map(p => (
-                    <button
-                        key={p.id}
-                        onClick={() => handleChange(p.id)}
-                        className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPolicy === p.id
-                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-md'
-                            : 'border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] hover:border-gray-300 dark:hover:border-gray-600'
-                            }`}
-                    >
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-3 h-3 rounded-full ${selectedPolicy === p.id ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
-                            <span className="font-semibold text-sm">{lang === 'vi' ? p.nameVi : p.name}</span>
-                        </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 ml-5">
-                            {lang === 'vi' ? p.descVi : p.desc}
-                        </p>
-                        {selectedPolicy === p.id && saving && (
-                            <span className="text-xs text-indigo-500 ml-5 mt-1 inline-block animate-pulse">
-                                {lang === 'vi' ? 'Đang lưu...' : 'Saving...'}
-                            </span>
-                        )}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function CreativeModeIndicator({ telemetry, lang }: { telemetry: KernelTelemetry; lang: 'vi' | 'en' }) {
-    const [creativeEnabled, setCreativeEnabled] = useState(false);
-
-    const riskOrder = ['R0', 'R1', 'R2', 'R3', 'R4'];
-    const currentRiskIdx = riskOrder.indexOf(telemetry.stats.currentRiskLevel);
-    const driftWarning = creativeEnabled && currentRiskIdx >= 2;
-
-    return (
-        <div>
-            <h2 className="text-xl font-bold mb-4">
-                🎨 {lang === 'vi' ? 'Creative Mode' : 'Creative Mode Indicator'}
-            </h2>
-            <div className={`p-5 rounded-xl border-2 transition-all ${driftWarning
-                ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
-                : creativeEnabled
-                    ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/20'
-                    : 'border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]'
-                }`}>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <span className="text-3xl">{creativeEnabled ? '🎨' : '🔒'}</span>
-                        <div>
-                            <div className="font-bold">
-                                {creativeEnabled
-                                    ? (lang === 'vi' ? 'Creative Mode: BẬT' : 'Creative Mode: ON')
-                                    : (lang === 'vi' ? 'Creative Mode: TẮT' : 'Creative Mode: OFF')}
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                                {creativeEnabled
-                                    ? (lang === 'vi' ? 'Domain scope mở rộng • Monitoring tăng cường' : 'Extended domain scope • Enhanced monitoring')
-                                    : (lang === 'vi' ? 'An toàn tuyệt đối • Domain scope khóa' : 'Safety absolute • Domain scope locked')}
-                            </div>
-                        </div>
-                    </div>
-                    <button
-                        onClick={() => setCreativeEnabled(!creativeEnabled)}
-                        className={`relative w-14 h-7 rounded-full transition-colors ${creativeEnabled ? 'bg-amber-500' : 'bg-gray-300 dark:bg-gray-600'
-                            }`}
-                    >
-                        <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${creativeEnabled ? 'translate-x-7' : 'translate-x-0.5'
-                            }`} />
-                    </button>
-                </div>
-
-                {driftWarning && (
-                    <div className="mt-3 p-3 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-300 dark:border-red-700 flex items-center gap-2">
-                        <span className="text-xl">⚠️</span>
-                        <div className="text-sm">
-                            <div className="font-bold text-red-700 dark:text-red-300">
-                                {lang === 'vi' ? 'Cảnh báo Domain Drift!' : 'Domain Drift Warning!'}
-                            </div>
-                            <div className="text-red-600 dark:text-red-400">
-                                {lang === 'vi'
-                                    ? `Risk level ${telemetry.stats.currentRiskLevel} — Creative mode có thể gây contamination. Kernel sẽ tự động revoke nếu drift tiếp tục.`
-                                    : `Risk level ${telemetry.stats.currentRiskLevel} — Creative mode may cause contamination. Kernel will auto-revoke if drift continues.`}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {creativeEnabled && !driftWarning && (
-                    <div className="mt-3 p-3 rounded-lg bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 flex items-center gap-2">
-                        <span className="text-lg">ℹ️</span>
-                        <span className="text-sm text-amber-700 dark:text-amber-300">
-                            {lang === 'vi'
-                                ? 'Creative provenance tag bật. Output giới hạn. Drift detector nghiêm ngặt.'
-                                : 'Creative provenance tagging active. Output restricted. Drift detector strict mode.'}
-                        </span>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
-
 function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
     const domains = [
         { id: 'content', label: 'Content', icon: '📝', x: 50, y: 30 },
@@ -966,7 +844,7 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🗺️ {lang === 'vi' ? 'Bản đồ Domain' : 'Domain Map Visualization'}
+                🗺️ {lang === 'vi' ? 'Sơ đồ minh họa luồng xử lý' : 'Illustrated processing flow'}
             </h2>
             <div className="p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e] overflow-x-auto">
                 <svg viewBox="0 0 750 200" className="w-full max-w-3xl mx-auto" style={{ minWidth: '320px' }}>
@@ -1007,8 +885,8 @@ function DomainMapVisualization({ lang }: { lang: 'vi' | 'en' }) {
                 </svg>
                 <div className="text-center text-xs text-gray-400 mt-2">
                     {lang === 'vi'
-                        ? 'Mọi domain đều phải đi qua Kernel trước khi output'
-                        : 'All domains must pass through Kernel before output'}
+                        ? 'Sơ đồ giải thích cách kiểm tra kết quả.'
+                        : 'This diagram explains where output checks fit in the process.'}
                 </div>
             </div>
         </div>
@@ -1021,18 +899,14 @@ function RuntimeAdaptersPanel({ lang }: { lang: 'vi' | 'en' }) {
     return (
         <div>
             <h2 className="text-xl font-bold mb-4">
-                🔌 {lang === 'vi' ? 'Runtime Adapters' : 'Runtime Adapters'}
+                🔌 {lang === 'vi' ? 'Danh mục bộ kết nối' : 'Adapter catalog'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {RUNTIME_ADAPTERS.map(adapter => {
-                    const status = STATUS_STYLES[adapter.status];
                     return (
                         <div key={adapter.name} className="p-4 rounded-xl border border-gray-200 dark:border-white/[0.07] bg-white dark:bg-[#1a1d2e]">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-2xl">{adapter.icon}</span>
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${status.color}`}>
-                                    {lang === 'vi' ? status.label.vi : status.label.en}
-                                </span>
                             </div>
                             <div className="font-bold text-sm mb-1">{adapter.displayName}</div>
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
@@ -1473,16 +1347,10 @@ export default function SafetyPage() {
             <ProposalsTable proposals={proposals} language={lang} />
 
             {/* Kernel Telemetry Section */}
-            {kernelTelemetry && (
-                <>
-                    <KernelHealthDashboard telemetry={kernelTelemetry} lang={lang} />
-                    <RequestTraceViewer telemetry={kernelTelemetry} lang={lang} />
-                    <RiskEvolutionChart telemetry={kernelTelemetry} lang={lang} />
-                    <KernelPolicySelector telemetry={kernelTelemetry} lang={lang} />
-                    <CreativeModeIndicator telemetry={kernelTelemetry} lang={lang} />
-                    <DomainMapVisualization lang={lang} />
-                </>
-            )}
+            <KernelHealthDashboard stats={kernelTelemetry?.stats ?? null} lang={lang} />
+            {kernelTelemetry && kernelTelemetry.traces.length > 0 && <RequestTraceViewer telemetry={kernelTelemetry} lang={lang} />}
+            {kernelTelemetry && kernelTelemetry.riskHistory.length > 0 && <RiskEvolutionChart telemetry={kernelTelemetry} lang={lang} />}
+            <DomainMapVisualization lang={lang} />
 
             {/* v1.7.3 Integration: Runtime Adapters */}
             <RuntimeAdaptersPanel lang={lang} />

@@ -2,7 +2,10 @@
 
 import { createContext, useCallback, useState, useSyncExternalStore } from 'react';
 
-export const HomeSpecAccountScope = createContext<{ accountScope: string | undefined } | null>(null);
+export const HomeSpecAccountScope = createContext<{
+    accountScope: string | undefined;
+    canUseSavedProviderKey?: boolean;
+} | null>(null);
 
 type HomeSpecDraft = {
     goal: string;

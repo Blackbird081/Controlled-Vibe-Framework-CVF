@@ -59,20 +59,12 @@ function makeKernelTelemetry(overrides: TelemetryInput = {}) {
     return {
         traces: overrides.traces ?? [],
         riskHistory: overrides.riskHistory ?? [],
-        stats: {
-            totalRequests: overrides.stats?.totalRequests ?? 0,
-            refusalCount: overrides.stats?.refusalCount ?? 0,
-            avgLatencyMs: overrides.stats?.avgLatencyMs ?? 0,
-            p95LatencyMs: overrides.stats?.p95LatencyMs ?? 0,
-            domainLockActive: overrides.stats?.domainLockActive ?? true,
-            currentRiskLevel: overrides.stats?.currentRiskLevel ?? 'R0',
-            policyVersion: overrides.stats?.policyVersion ?? 'cvf-1.7.1',
-        },
+        stats: overrides.stats ?? null,
     };
 }
 
 function setupFetchMock(fetchMock: ReturnType<typeof vi.fn>, options?: {
-    kernelTelemetry?: ReturnType<typeof makeKernelTelemetry>;
+    kernelTelemetry?: ReturnType<typeof makeKernelTelemetry> | { traces: []; riskHistory: []; stats: null };
     kernelOk?: boolean;
     proposals?: Array<Record<string, unknown>>;
     postResult?: Record<string, unknown>;
@@ -222,6 +214,19 @@ describe('SafetyPage OpenClaw integration UI', () => {
         expect(screen.getByText('Newest proposal')).toBeTruthy();
     });
 
+    it.each([
+        ['en', 'No monitoring data to show yet'],
+        ['vi', 'Chưa có dữ liệu giám sát để hiển thị'],
+    ] as const)('uses an empty monitoring state with no assumed values in %s', async (language, empty) => {
+        mockLanguage = language;
+        setupFetchMock(fetchMock, { kernelTelemetry: { traces: [], riskHistory: [], stats: null } });
+        render(<SafetyPage />);
+        await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/kernel-telemetry'));
+        expect(await screen.findByText(empty)).toBeTruthy();
+        expect(screen.queryByText(/75\.0%|0\.45ms|Domain Lock|Policy Version|Tổng yêu cầu|Total Requests/)).toBeNull();
+        expect(screen.queryByText(/v2 — Strict Mode|Domain Drift Warning/)).toBeNull();
+    });
+
     it('loads and renders live proposals when OpenClaw is enabled', async () => {
         setupFetchMock(fetchMock, {
             proposals: [
@@ -282,8 +287,8 @@ describe('SafetyPage OpenClaw integration UI', () => {
 
         expect(await screen.findByText(/Approved\. Execution ID: exec-100/i)).toBeTruthy();
         expect(screen.getAllByText('deploy_auth_system').length).toBeGreaterThan(0);
-        expect(screen.getByText('85%')).toBeTruthy();
-        expect(screen.getByText('🤖 AI')).toBeTruthy();
+        expect(screen.queryByText('85%')).toBeNull();
+        expect(screen.getByText('AI configured')).toBeTruthy();
     });
 
     it('changes OpenClaw mode when mode selector updates', async () => {
@@ -311,7 +316,7 @@ describe('SafetyPage OpenClaw integration UI', () => {
         });
     });
 
-    it('renders kernel telemetry widgets and interactive controls', async () => {
+    it('renders received telemetry, with its trace details and risk history', async () => {
         setupFetchMock(fetchMock, {
             kernelTelemetry: makeKernelTelemetry({
                 traces: [
@@ -335,7 +340,6 @@ describe('SafetyPage OpenClaw integration UI', () => {
                 stats: {
                     totalRequests: 20,
                     refusalCount: 4,
-                    avgLatencyMs: 120,
                     p95LatencyMs: 280,
                     domainLockActive: false,
                     currentRiskLevel: 'R3',
@@ -354,7 +358,7 @@ describe('SafetyPage OpenClaw integration UI', () => {
             ],
         });
 
-        const { container } = render(<SafetyPage />);
+        render(<SafetyPage />);
 
         await waitFor(() => {
             const hasKernelCall = fetchMock.mock.calls.some(([input]) => {
@@ -369,14 +373,9 @@ describe('SafetyPage OpenClaw integration UI', () => {
         fireEvent.click(screen.getByText('Deploy worker'));
         expect(await screen.findByText('trace-hash-001')).toBeTruthy();
 
-        fireEvent.click(screen.getByText(/v2 — Strict Mode/i));
-        expect(await screen.findByText(/Saving\.\.\./i)).toBeTruthy();
-
-        const creativeToggle = container.querySelector('button.relative.w-14.h-7') as HTMLButtonElement | null;
-        expect(creativeToggle).toBeTruthy();
-        fireEvent.click(creativeToggle!);
-
-        expect(await screen.findByText(/Domain Drift Warning!/i)).toBeTruthy();
+        expect(screen.queryByText(/v2 — Strict Mode|Domain Drift Warning/)).toBeNull();
+        expect(screen.queryByText('0ms')).toBeNull();
+        expect(screen.getByText('P95: 280ms')).toBeTruthy();
         expect(screen.getByText(/Samples: 3/i)).toBeTruthy();
     });
 
@@ -490,6 +489,7 @@ describe('SafetyPage OpenClaw integration UI', () => {
         expect(payload.provider).toBeUndefined();
         expect(payload.apiKey).toBeUndefined();
         expect(payload.model).toBeUndefined();
-        expect(await screen.findByText('📋 Mock')).toBeTruthy();
+        expect(await screen.findByText('Simulation')).toBeTruthy();
+        expect(screen.queryByText('70%')).toBeNull();
     });
 });

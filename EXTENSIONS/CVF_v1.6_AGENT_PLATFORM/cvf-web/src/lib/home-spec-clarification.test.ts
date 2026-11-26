@@ -1,7 +1,62 @@
 // Text Encoding Exception: the duplicate fixture preserves the two Vietnamese questions heard in Wave 7B.
-import { describe, expect, it } from 'vitest';
-import { parseHomeClarification } from './home-spec-clarification-provider';
+import { createHash } from 'node:crypto';
+import { describe, expect, it, vi } from 'vitest';
+import { HOME_CLARIFICATION_PROMPT, parseHomeClarification, requestHomeClarification } from './home-spec-clarification';
 import { wave7ClarificationFixtures } from './home-spec-clarification.wave7.fixtures';
+
+it.each([
+    ['vi','80f673b76225a76e7a6a9d966f1386e278af6aa5da63886bbc246aa9757cd412'],
+    ['en','c44c61c0cb7c078afa869b9123bc9a883664d47b7cb26587b8f346c373558f42'],
+] as const)('preserves the measured %s prompt byte for byte', (language, hash) => {
+    expect(createHash('sha256').update(HOME_CLARIFICATION_PROMPT[language]).digest('hex')).toBe(hash);
+});
+
+describe('Home clarification on browsers without AbortSignal.any', () => {
+    it.each(['cancel', 'timeout'] as const)('aborts one request on %s without retrying', async (reason) => {
+        const descriptor = Object.getOwnPropertyDescriptor(AbortSignal, 'any');
+        Object.defineProperty(AbortSignal, 'any', { configurable: true, value: undefined });
+        vi.useFakeTimers();
+        const fetch = vi.fn((_url: string, { signal }: RequestInit) => new Promise((_resolve, reject) => {
+            signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+        }));
+        vi.stubGlobal('fetch', fetch);
+        try {
+            const request = new AbortController();
+            const result = requestHomeClarification({ language: 'en', goal: 'Track handoffs in a paper log', extra: '', answers: [] }, 'fixture', request.signal)
+                .catch(error => error);
+            expect(fetch).toHaveBeenCalledTimes(1);
+            await vi.advanceTimersByTimeAsync(24_999);
+            expect(fetch.mock.calls[0][1].signal?.aborted).toBe(false);
+            if (reason === 'cancel') request.abort();
+            else await vi.advanceTimersByTimeAsync(1);
+            expect(await result).toEqual({ status: reason === 'timeout' ? 'timeout' : 'provider_error' });
+            expect(fetch.mock.calls[0][1].signal?.aborted).toBe(true);
+            expect(fetch).toHaveBeenCalledTimes(1);
+            expect(vi.getTimerCount()).toBe(0);
+        } finally {
+            vi.unstubAllGlobals();
+            vi.useRealTimers();
+            if (descriptor) Object.defineProperty(AbortSignal, 'any', descriptor);
+            else Reflect.deleteProperty(AbortSignal, 'any');
+        }
+    });
+});
+
+it.each([
+    ['The outlet is sparking and smells burnt.', ''],
+    ['Book me a room for tomorrow.', ''],
+    ['Check the equipment outside the office.', 'There is water dripping onto the power socket.'],
+])('blocks a restricted input before the browser fetch: %s', async (goal, extra) => {
+    const fetch = vi.fn();
+    vi.stubGlobal('fetch',fetch);
+    try {
+        expect(await requestHomeClarification({language:'en',goal,extra,answers:[]},'fixture',new AbortController().signal))
+            .toEqual({status:'outside_scope'});
+        expect(fetch).not.toHaveBeenCalled();
+    } finally {
+        vi.unstubAllGlobals();
+    }
+});
 
 describe('Home clarification reads the measured model replies', () => {
     it.each(wave7ClarificationFixtures)('preserves every complete question item in $id', ({ reply, questions }) => {

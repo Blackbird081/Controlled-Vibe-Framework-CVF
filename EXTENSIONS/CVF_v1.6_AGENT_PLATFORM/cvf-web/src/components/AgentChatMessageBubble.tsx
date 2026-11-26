@@ -75,6 +75,7 @@ interface AgentChatMessageBubbleProps {
     onAccept?: (id: string) => void;
     onReject?: (id: string) => void;
     onRetry?: (id: string) => void;
+    onFollowLink?: () => void;
     language?: 'vi' | 'en';
     pricing?: Record<string, { input: number; output: number }>;
 }
@@ -84,6 +85,7 @@ export function AgentChatMessageBubble({
     onAccept,
     onReject,
     onRetry,
+    onFollowLink,
     language = 'vi',
     pricing,
 }: AgentChatMessageBubbleProps) {
@@ -159,6 +161,16 @@ export function AgentChatMessageBubble({
                                 },
                                 a: ({ href, children }) => (
                                     <a href={href} target="_blank" rel="noopener noreferrer"
+                                        onClick={() => {
+                                            if (!href || href.startsWith('#')) return;
+                                            let destination: URL;
+                                            try {
+                                                destination = new URL(href, window.location.href);
+                                            } catch {
+                                                return;
+                                            }
+                                            if (destination.protocol === 'http:' || destination.protocol === 'https:') onFollowLink?.();
+                                        }}
                                         className="text-blue-500 hover:underline">
                                         {children}
                                     </a>

@@ -71,6 +71,7 @@ export function AgentChat({
     const chatKey = modelSelection ? selectedModelKey : canUseConfiguredKeys !== false ? providerSettings?.apiKey : undefined;
     const demoWithoutKey = process.env.NEXT_PUBLIC_CVF_MOCK_AI === '1' && canUseConfiguredKeys !== false;
     const missingChatKey = !chatKey?.trim() && !demoWithoutKey;
+    const revealLinkDestination = onMinimize ?? onClose;
 
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [showDecisionLog, setShowDecisionLog] = useState(false);
@@ -185,7 +186,7 @@ export function AgentChat({
                     />
                     {(missingChatKey || provider === 'alibaba') && <p role="status" className="px-4 py-2 text-sm">
                         {provider === 'alibaba' ? (language === 'vi' ? 'Trợ lý này chưa hỗ trợ nhà cung cấp đã chọn. Hãy chọn model khác.' : 'This assistant does not support the selected provider. Choose another model.') : (language === 'vi' ? 'Chưa có khóa AI dùng được cho model này.' : 'No usable AI key is configured for this model.')} {' '}
-                        <Link href="/help/setup" className="underline text-indigo-600 dark:text-indigo-300">{language === 'vi' ? 'Xem hướng dẫn cài đặt' : 'View setup instructions'}</Link>
+                        <Link href="/help/setup" onClick={revealLinkDestination} className="underline text-indigo-600 dark:text-indigo-300">{language === 'vi' ? 'Xem hướng dẫn cài đặt' : 'View setup instructions'}</Link>
                     </p>}
                     {onModelSelect && (
                         <div className="shrink-0 border-b border-gray-200 px-4 py-2 dark:border-white/[0.07]">
@@ -295,6 +296,7 @@ export function AgentChat({
                                 onAccept={handleAccept}
                                 onReject={handleReject}
                                 onRetry={handleRetry}
+                                onFollowLink={revealLinkDestination}
                                 language={language}
                                 pricing={pricing}
                             />

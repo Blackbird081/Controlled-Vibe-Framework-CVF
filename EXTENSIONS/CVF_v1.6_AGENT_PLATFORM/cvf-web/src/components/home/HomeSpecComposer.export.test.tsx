@@ -20,7 +20,7 @@ const goal = 'A bakery preorder site';
 const topic = '  Weekend customers  ';
 const appGoal = 'Tôi cần ứng dụng theo dõi đơn đặt bánh của khách.';
 const appDetail = 'Cần xem các đơn theo ngày trên điện thoại, chưa cần thanh toán.';
-const fromUserContext = "From the user's description in User Context (not entered separately)";
+const fromUserContext = "From the user's description in Task (not entered separately)";
 const guardStart = '## ⚠️ CVF GOVERNANCE RULES';
 const guardContext = '## 🛡️ CVF GOVERNANCE CONTEXT';
 

@@ -19,13 +19,14 @@ import { homeSpecExternalRequest } from './home-spec-external-request';
 import { isMessagingProject, isPersonalMessageRequest } from './home-spec-personal-message';
 import { PHYSICAL_SAFETY_GUIDANCE } from '@/lib/physical-safety';
 import { isNewHomeSpecTask } from './home-spec-task';
-import { HOME_TEXT_LIMIT, formatHomeCharacterCount, homeSpecPreviewCopy } from './home-spec-readable';
+import { HOME_TEXT_LIMIT, dedupeHomeReadableSections, formatHomeCharacterCount, homeSpecPreviewCopy } from './home-spec-readable';
+import { buildHomeClarifyGuidance } from './home-spec-clarify-questions';
 
 const action = 'cvf-control inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50';
 const primary = action + ' bg-indigo-600 text-white hover:bg-indigo-700';
 const secondary = action + ' border border-slate-300 bg-white text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-200';
 const input = 'w-full min-h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-slate-900 dark:border-white/15 dark:bg-[#111218] dark:text-white';
-const exportDescriptionCoverage = "From the user's description in User Context (not entered separately)";
+const exportDescriptionCoverage = "From the user's description in Task (not entered separately)";
 
 interface Props {
     language: HomeSpecLocale;
@@ -203,6 +204,7 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     const fields = templateFields.filter(field => !isHomeCommonQuestion(field.id) && (!missingFieldIds || missingFieldIds.has(field.id)));
     const legacyFields = generic ? [] : getLegacyHomeSpecFields(chosen, language)
         .filter(field => !isHomeCommonQuestion(field.id) && !templateFields.some(current => current.id === field.id));
+    const clarifyGuidance = buildHomeClarifyGuidance(language, goal);
     const answers = [...templateFields.filter(field => !isHomeCommonQuestion(field.id)), ...legacyFields].flatMap(field => {
         const value = values[field.id]?.trim();
         return value ? [{ id: field.id, label: field.label, value }] : [];
@@ -211,13 +213,13 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         const value = values[field.id]?.trim() || (missingFieldIds && !missingFieldIds.has(field.id) ? t.fromUserContext : '');
         return value ? [{ id: field.id, label: field.label, value }] : [];
     });
-    const previewSections = [
+    const previewSections = dedupeHomeReadableSections([
         { id: 'outcome', label: t.outcome, value: outcomeTitle },
         { id: 'request', label: t.description, value: goal.trim() },
         ...(extra.trim() ? [{ id: 'clarification', label: t.clarification, value: extra.trim() }] : []),
         ...answers.map(answer => ({ ...answer, id: `field-${answer.id}` })),
         ...commonAnswers.filter(answer => answer.id !== 'homeInputReferences'),
-    ];
+    ], [t.fromUserContext]);
     const referencesAnswer = commonAnswers.find(answer => answer.id === 'homeInputReferences')?.value;
     const exportTemplate = generic ? makeHomeGeneralTemplate('en', copy.en.genericTitle, copy.en.genericFields)
         : homeSpecTemplates.find(template => template.id === chosen);
@@ -631,7 +633,11 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                 </details>}
                 {stage === 'clarify' && <form onSubmit={submitGoal} className="space-y-3">
                     <label htmlFor="home-spec-clarify" className="block font-semibold">{t.clarify}</label>
-                    <textarea id="home-spec-clarify" className={input} rows={3} value={extra} onPaste={e => notePaste('home-spec-clarify', e)} onChange={e => { noteLength('home-spec-clarify', e.target.value.length); setInput('extra', e.target.value); }} maxLength={HOME_TEXT_LIMIT} aria-describedby="home-spec-clarify-count" disabled={busy} />
+                    <div id="home-spec-clarify-guidance" className="space-y-1 text-sm text-slate-700 dark:text-slate-200">
+                        <ul className="list-disc space-y-1 pl-5">{clarifyGuidance.questions.map(question => <li key={question}>{question}</li>)}</ul>
+                        <p className="text-slate-600 dark:text-slate-300">{clarifyGuidance.hint}</p>
+                    </div>
+                    <textarea id="home-spec-clarify" className={input} rows={3} value={extra} onPaste={e => notePaste('home-spec-clarify', e)} onChange={e => { noteLength('home-spec-clarify', e.target.value.length); setInput('extra', e.target.value); }} maxLength={HOME_TEXT_LIMIT} aria-describedby="home-spec-clarify-guidance home-spec-clarify-count" disabled={busy} />
                     {characterCount('home-spec-clarify', extra.length)}
                     <button className={primary} disabled={busy}>{busy ? t.wait : t.go}</button>
                 </form>}

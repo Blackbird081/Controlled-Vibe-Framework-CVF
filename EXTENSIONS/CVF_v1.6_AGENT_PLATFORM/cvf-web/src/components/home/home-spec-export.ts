@@ -32,11 +32,12 @@ export function prepareHomeSpec(
     }) ?? 'R3';
     const flagged = homeSpecExternalRequest(userText, Object.values(enteredValues).join(' ')) !== null;
     // The first-preview permission is narrower than the displayed level: generic path only (a matched template's
-    // R1 floor is not consent), and none of the outside-effect or sensitive-data cues may appear in any user text.
+    // R1 floor is not consent) and no external-action request. Safety rests on the limits written into the permission;
+    // an outside-effect cue only marks that part of the request as left out, it does not withhold the local part.
     const userTexts = [userText, context, ...Object.values(enteredValues), ...Object.values(coverageValues),
         ...(readable?.sections.map(section => section.value) ?? []), readable?.references ?? ''];
-    const firstPreview = (riskLevel === 'R0' || riskLevel === 'R1') && !flagged
-        && template.id === 'home-general' && !hasOutsideEffectCue(...userTexts);
+    const firstPreview = (riskLevel === 'R0' || riskLevel === 'R1') && !flagged && template.id === 'home-general';
+    const outsidePart = firstPreview && hasOutsideEffectCue(...userTexts);
     const certifiedBoundaries = authority ? [
         '### Certified Outcome Boundaries',
         ...authority.packs.map(({ id, risk, authorityScope, executionBoundary }) => [
@@ -68,9 +69,10 @@ export function prepareHomeSpec(
         suggestedAssfPackageId,
         openQuestions,
         firstPreview,
+        outsidePart,
     });
     const readableSections = readable?.sections ?? [{ label: homeSpecPreviewCopy[language].description, value: userText.trim() }];
-    const readableMarkdown = buildHomeReadableSection(language, readableSections, readable?.references, openQuestions);
+    const readableMarkdown = buildHomeReadableSection(language, readableSections, readable?.references, openQuestions, outsidePart);
     return { markdown: readableMarkdown + markdown, openQuestions };
 }
 

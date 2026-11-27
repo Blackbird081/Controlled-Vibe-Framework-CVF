@@ -8,7 +8,7 @@
  * found it misses most unseen hazardous phrasings. The control is the hard limits written into the
  * granted permission (local only, sample data, no network, sending, publishing, accounts, money,
  * devices or real personal data; excluded parts are not built). Do not extend this list probe by
- * probe; a false block only costs the ordinary intake route. Bare
+ * probe. A match no longer withholds the preview: it only adds the conditional outside-part note. Bare
  * ambiguous stems ("text", "live", "key", "post", "bank", "share", "host", "thu", "khoa", "dang")
  * are therefore matched only inside hazard phrases. It is not a risk classifier.
  */

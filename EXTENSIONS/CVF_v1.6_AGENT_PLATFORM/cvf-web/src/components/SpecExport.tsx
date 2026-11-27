@@ -17,7 +17,7 @@ import { renderTemplateIntent } from '@/lib/template-intent';
 import type { RiskLevel } from '@/lib/risk-check';
 import { getTemplateDescription, getTemplateFieldLabel, getTemplateIntentPattern, getTemplateName, getTemplateOutputTemplate } from '@/lib/template-i18n';
 import { buildPortableAgentHandoffReadiness } from '@/lib/spec-export-portable-handoff';
-import { homeFirstPreviewAuthoritySentence, homeFirstPreviewIntakeLine, homeFirstPreviewPhase, homeFirstPreviewPurposeLine, homeIntakeExecution, homeIntakeExecutionFirstPreview, homeIntakeRulesFirstPreview, homeIntakeRulesNoFirstPreview, homeIntakeValidation, homeNoInputsRecorded } from '@/lib/spec-export-home-intake';
+import { homeFirstPreviewAuthoritySentence, homeFirstPreviewIntakeLine, homeFirstPreviewPhase, homeFirstPreviewPurposeLine, homeIntakeExecution, homeIntakeExecutionFirstPreview, homeIntakeRulesFirstPreview, homeIntakeRulesNoFirstPreview, homeOutsidePartGuardrail, homeOutsidePartGuardrailAnchor, homeTalkingToUser, homeIntakeValidation, homeNoInputsRecorded } from '@/lib/spec-export-home-intake';
 import { getHomeCommonQuestions, isHomeCommonQuestion } from '@/lib/home-spec-common-questions';
 import { buildEnglishWorkingBrief, buildEnglishWorkingValues, buildIntakeWorkingBrief, buildVietnameseIdeaBrief } from '@/lib/spec-export-english-working-brief';
 import {
@@ -43,6 +43,8 @@ interface HomeIntakePacket {
     suggestedAssfPackageId?: string;
     openQuestions: string[];
     firstPreview?: boolean;
+    /** The request names an outside effect: the first preview covers only the local part. */
+    outsidePart?: boolean;
 }
 
 function renderHomeOutput(template: Template, output: string, values: Record<string, string>) {
@@ -52,6 +54,35 @@ function renderHomeOutput(template: Template, output: string, values: Record<str
         .filter(line => ![...line.matchAll(placeholder)].some(([, id]) => fieldIds.has(id) && !values[id]?.trim()))
         .map(line => line.replace(placeholder, (token, id: string) => fieldIds.has(id) ? values[id] : token))
         .join('\n');
+}
+
+/**
+ * Home only: a "Label: [field]" line of the intent pattern only echoes a value that User Input already lists
+ * (or that the request states), so it is left out of Task. Lines with other wording keep their values.
+ */
+function withoutEchoedFieldLines(template: Template, pattern: string, values: Record<string, string>) {
+    const fieldIds = new Set(template.fields.map(field => field.id));
+    const placeholder = /\[([A-Za-z0-9_]+)\]/g;
+    return pattern.split('\n').filter(line => {
+        const ids = [...line.matchAll(placeholder)].map(match => match[1]);
+        if (!ids.length || !ids.every(id => fieldIds.has(id) && !isHomeCommonQuestion(id) && values[id]?.trim())) return true;
+        return !/^[^\n]{0,60}:\s*$/.test(line.replace(placeholder, ''));
+    }).join('\n');
+}
+
+const collapseWhitespace = (text: string) => text.replace(/\s+/g, ' ').trim();
+/**
+ * Home exports state the request once, in Task. A value counts as a repeat only when it equals the whole request or
+ * one long line of it (the description or a clarification sentence) exactly, ignoring spacing. A value that is merely
+ * contained in the request may carry a separate decision, so it is always kept, and a short line such as "Không" or
+ * "chưa biết" never makes an identical short answer elsewhere read "see Task".
+ */
+const HOME_REPEAT_LINE_MIN_LENGTH = 30;
+
+function makeHomeRequestMatcher(request: string) {
+    const lines = request.split('\n').map(collapseWhitespace).filter(line => line.length >= HOME_REPEAT_LINE_MIN_LENGTH);
+    const keys = new Set([collapseWhitespace(request), ...lines].filter(Boolean));
+    return (value: string | undefined): boolean => keys.has(collapseWhitespace(value ?? ''));
 }
 
 const modeLabels = {
@@ -303,7 +334,14 @@ export function generateSpec(
         return field ? getTemplateFieldLabel(template.id, field.id, field.label, lang) : fallback;
     };
 
-    const userInputLines = Object.entries(workingValues)
+    const repeatsRequest = homeIntake ? makeHomeRequestMatcher(homeIntake.task) : () => false;
+    // Home only: a value that repeats the request points at Task instead of restating it.
+    const referenceValues = (reference: string) => homeIntake
+        ? Object.fromEntries(Object.entries(workingValues).map(([id, value]) => [id, repeatsRequest(value) ? reference : value]))
+        : workingValues;
+    const userContextRepeatsTask = Boolean(homeIntake && userContext && repeatsRequest(userContext));
+
+    const userInputLines = Object.entries(referenceValues('see Task'))
         .filter(([id, value]) => value && value.trim() && (!homeIntake || !isHomeCommonQuestion(id)))
         .map(([key, value]) => {
             const field = template.fields.find(f => f.id === key);
@@ -316,7 +354,7 @@ export function generateSpec(
         ?.map(item => `- ${item}`)
         .join('\n') || '- Comprehensive analysis\n- Actionable recommendations';
     const outputTemplate = localizedOutputTemplate
-        ? (homeIntake ? renderHomeOutput(template, localizedOutputTemplate, workingValues)
+        ? (homeIntake ? renderHomeOutput(template, localizedOutputTemplate, referenceValues('(see Task)'))
             : renderTemplateIntent(localizedOutputTemplate, workingValues))
         : (template.outputExpected?.length
         ? template.outputExpected.map(section => `## ${section}\n- ...`).join('\n\n')
@@ -389,7 +427,7 @@ export function generateSpec(
             `User-selected language: ${homeIntake.userLanguage === 'vi' ? 'Vietnamese (vi)' : 'English (en)'}`,
             `Requested outcome template: ${localizedTemplateName}`,
             homeIntake.task,
-            renderHomeOutput(template, template.intentPattern, workingValues).trim(),
+            renderHomeOutput(template, withoutEchoedFieldLines(template, template.intentPattern, workingValues), referenceValues('(the request above)')).trim(),
         ].filter(Boolean).join('\n\n')
         : renderTemplateIntent(localizedIntentPattern, workingValues);
     const userValueText = Object.values(workingValues).filter(Boolean).join(' ');
@@ -419,9 +457,11 @@ export function generateSpec(
     const commonQuestions = homeIntake ? getHomeCommonQuestions('en') : [];
     const homeIntakeCoverage = homeIntake ? [
         '### Provided',
-        'See Task and User Context for the original request and User Input for the full set of supplied answers.',
+        userContextRepeatsTask
+            ? 'See Task for the original request and User Input for the full set of supplied answers.'
+            : 'See Task and User Context for the original request and User Input for the full set of supplied answers.',
         ...requiredFields.filter(field => !isHomeCommonQuestion(field.id) && !missingRequired.includes(field))
-            .map(field => `- **${resolveFieldLabel(field, field.id)}:** ${values[field.id]}`),
+            .map(field => `- **${resolveFieldLabel(field, field.id)}:** ${repeatsRequest(values[field.id]) ? '(see Task)' : values[field.id]}`),
         ...commonQuestions.filter(field => field.id !== 'homeInputReferences' && values[field.id]?.trim())
             .map(field => `- **${field.exportLabel}:** ${values[field.id]}`),
         '### User Will Supply',
@@ -453,7 +493,9 @@ ${localizedTemplateDescription}
 ${homeIntake
         ? `${homeIntake.firstPreview ? homeFirstPreviewIntakeLine : "- Use this packet to begin intake for the user's requested outcome. Continue with permitted work using the available information."}
 - The receiving agent resolves ordinary implementation details within scope and routes material decisions to the appropriate owner.${homeIntake.firstPreview ? `
-${homeFirstPreviewPurposeLine}` : ''}`
+${homeFirstPreviewPurposeLine}` : ''}
+
+${homeTalkingToUser(homeIntake.userLanguage)}`
         : lang === 'vi'
         ? `- Packet này được viết cho AI/agent khác đọc và tiếp tục thực thi.
 - Người dùng cuối không cần hiểu framework, stack, hay implementation details ẩn phía sau.
@@ -467,7 +509,7 @@ ${homeFirstPreviewPurposeLine}` : ''}`
 ## 📝 ${labels.userInput}
 
 ${userInputLines || labels.noInput}
-${userContext ? `
+${userContext && !userContextRepeatsTask ? `
 ---
 
 ## 👤 User Context
@@ -559,7 +601,8 @@ ${lang === 'vi'
 `;
 
     if (mode === 'governance') {
-        spec += homeIntake ? (homeIntake.firstPreview ? homeIntakeRulesFirstPreview : homeIntakeRulesNoFirstPreview) : governanceRules[lang];
+        spec += homeIntake ? (homeIntake.firstPreview ? (homeIntake.outsidePart ? homeIntakeRulesFirstPreview.replace(homeOutsidePartGuardrailAnchor, `${homeOutsidePartGuardrail}
+${homeOutsidePartGuardrailAnchor}`) : homeIntakeRulesFirstPreview) : homeIntakeRulesNoFirstPreview) : governanceRules[lang];
     }
     if (mode === 'full') {
         spec += fullModeProtocol[lang];

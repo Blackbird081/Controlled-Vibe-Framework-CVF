@@ -128,36 +128,50 @@ describe('D. first local preview permission', () => {
     });
 });
 
-describe('D2. the permission fails closed', () => {
+describe('D2. an outside effect is left out, not the whole preview', () => {
     const meter = 'Tôi muốn một trang nhỏ để ghi lại chỉ số công tơ điện hằng tháng của nhà tôi và xem tháng nào dùng nhiều nhất.';
     const fridge = 'Làm cho tôi một trang danh sách việc nhà để in ra dán tủ lạnh.';
     const webPage = 'Làm cho tôi một trang web nhỏ để ghi chỉ số công tơ điện hằng tháng.';
     const englishPage = 'Make me a small website to track my reading list.';
-    const refused = [
+    const outsidePartLine = '**Outside part left out.**';
+    const localPartOnly = [
         'Sửa trang web bán hàng đang chạy của tôi cho nút thanh toán to hơn',
         'Làm công cụ tự động gửi tin nhắn Zalo nhắc học phí cho tất cả phụ huynh',
         'Trang lưu tên và số điện thoại 40 phụ huynh',
         'Đưa trang lên mạng cho cả nhóm',
         'Email all my customers each Monday',
         'Use my OpenAI key to summarise',
-        'xóa dữ liệu cũ',
         'xoá dữ liệu cũ',
         'xoá dữ liệu cũ'.normalize('NFD'),
         'xóa dữ liệu cũ'.normalize('NFD'),
         'gui tin nhan nhac hoc phi',
         'Chia sẻ trang này với cả lớp',
         'Mình cần đăng bài lên fanpage',
-        'Cập nhật khoá API của tôi',
         'Ghi nhớ mật khẩu wifi',
+        'Cô muốn một trang nhỏ đếm ngày tới buổi họp phụ huynh và tự gửi email mời tất cả phụ huynh.',
     ];
 
-    it.each(refused)('does not grant the permission for: %s', request => {
+    it.each(localPartOnly)('grants only the bounded local part for: %s', request => {
+        const packet = packetFor(request, 'vi');
+        expect(packet).toContain(firstPreviewMarker);
+        expect(packet).toContain(outsidePartLine);
+        expect(packet).toContain('do not build or imitate the outside part');
+        expect(packet).toContain('connects to no account, site, sheet or database, moves no money');
+        expect(packet.indexOf(outsidePartLine)).toBeLessThan(packet.indexOf("project's own rules are stricter"));
+        expect(packet).not.toContain(blanket);
+        expect(packet).not.toContain('First local preview is NOT granted');
+        const [readable] = packet.split('# CVF Agent Handoff Packet');
+        expect(readable).toContain('## Phần chưa làm trong bản đầu');
+        expect(readable).toContain('Bản đầu chỉ làm phần chạy trên máy của bạn');
+    });
+
+    // 'xóa dữ liệu' (precomposed) is a critical phrase in risk-check.ts; other spellings stay R1 there (pre-existing).
+    it.each(['Cập nhật khoá API của tôi', 'xóa dữ liệu cũ'])('still withholds the whole preview when the risk check raises the level: %s', request => {
         const packet = packetFor(request, 'vi');
         expect(packet).not.toContain(firstPreviewMarker);
-        expect(packet).toContain(blanket);
+        expect(packet).toContain('**First local preview is NOT granted by this packet.**');
         expect(packet).toContain('| Phase | INTAKE |');
         expect(packet).toContain('This packet cannot grant new rights.');
-        expect(packet).toContain('Treat this specification as one intake input.');
     });
 
     it('keeps R1 as the displayed level while refusing the permission', () => {
@@ -166,7 +180,10 @@ describe('D2. the permission fails closed', () => {
 
     it('checks the clarification and the optional answers too', () => {
         const packet = generateHomeSpec(generic('en'), { goal: 'A notes page', extra: 'Send it to everyone by SMS' }, { goal: 'A notes page' }, 'en', 'A notes page', 'A notes page');
-        expect(packet).not.toContain(firstPreviewMarker);
+        expect(packet).toContain(firstPreviewMarker);
+        expect(packet).toContain(outsidePartLine);
+        expect(packetFor('A notes page')).not.toContain(outsidePartLine);
+        expect(packetFor('A notes page')).not.toContain('## Left out of the first version');
     });
 
     it.each([meter, fridge, webPage, englishPage])('still grants the permission for a plain local request: %s', request => {
@@ -342,5 +359,26 @@ describe('E. character limits and counter', () => {
             expect(previewText).toContain(provided);
             expect(readable).toContain(provided);
         }
+    });
+});
+
+describe('E. talking to the user', () => {
+    it('tells the agent to write to the user in Vietnamese and plain words, granted or not', () => {
+        for (const request of ['Làm cho tôi một trang danh sách việc nhà để in ra dán tủ lạnh.', 'Help me deploy the page to production']) {
+            const packet = packetFor(request, 'vi');
+            expect(packet).toContain('### Talking to the user');
+            expect(packet).toContain('the user reads in Vietnamese, the language the user wrote in, using plain everyday words');
+            expect(packet).toContain('no risk levels (R0 to R3), phase names (INTAKE, BUILD), gate, tranche, work order, ACT or doctor');
+            expect(packet).toContain('Ask at most three questions at a time.');
+            expect(packet.indexOf('### Talking to the user')).toBeLessThan(packet.indexOf('## ⛔ Execution Constraints'));
+        }
+    });
+
+    it('names English for an English request', () => {
+        expect(packetFor('Make me a small website to track my reading list.')).toContain('the user reads in English, the language the user wrote in');
+    });
+
+    it('is absent from non-Home output', () => {
+        expect(generateSpec(getTemplateById('web_build_handoff')!, { audience: 'Family' }, 'en', 'governance', 'ctx')).not.toContain('### Talking to the user');
     });
 });

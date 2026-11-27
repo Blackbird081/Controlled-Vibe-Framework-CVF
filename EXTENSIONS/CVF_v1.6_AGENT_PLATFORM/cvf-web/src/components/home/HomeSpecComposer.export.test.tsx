@@ -81,7 +81,7 @@ function expectGuardrails(text: string) {
     for (const heading of ['Stop Conditions', 'Guardrails', 'Response Requirements', 'Receiving Agent Authority']) {
         expect(text).toContain(`### ${heading}`);
     }
-    expect(text).toContain('| Phase | INTAKE |');
+    expect(text).toMatch(/\| Phase \| INTAKE(?: \(first local preview permitted\))? \|/);
     expect(text).not.toMatch(/^\| Role \||^### Allowed Actions/m);
 }
 

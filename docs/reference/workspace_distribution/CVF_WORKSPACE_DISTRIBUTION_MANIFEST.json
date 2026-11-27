@@ -16,7 +16,8 @@
     "scripts/update_cvf_workspace_public_core.ps1",
     "scripts/get_cvf_workspace_status.ps1",
     "scripts/repair_cvf_workspace.ps1",
-    "scripts/manage_cvf_workspace.ps1"
+    "scripts/manage_cvf_workspace.ps1",
+    "governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md"
   ],
   "requiredWorkspaceRootFiles": [
     "WORKSPACE_RULES.md",
@@ -48,7 +49,6 @@
       "docs/guides/CVF_WORKSPACE_CLASSIFICATION_AND_USAGE_GUIDE.md",
       "docs/reference/CVF_WORKSPACE_RULES.md",
       "docs/reference/CVF_WORKSPACE_PROFILE_TIERS.md",
-      "governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
       "workspace_templates/CVF_WORKSPACE_MEMORY_TEMPLATE.md",
       "workspace_templates/AGENT_HANDOFF_TEMPLATE.md",
       "docs/reference/CVF_TEXT_ENCODING_AND_SYMBOL_DISCIPLINE_STANDARD_2026-06-07.md",
@@ -60,7 +60,6 @@
       "docs/reference/CVF_WORKSPACE_PROFILE_TIERS.md",
       "docs/reference/CVF_WORKSPACE_PAID_USER_AUTHORING_GUIDE.md",
       "docs/reference/CVF_WORKSPACE_PAID_USER_SAFE_ONBOARDING_FLOW.md",
-      "governance/toolkit/05_OPERATION/CVF_DOWNSTREAM_AGENTS_TEMPLATE.md",
       "workspace_templates/CVF_WORKSPACE_MEMORY_TEMPLATE.md",
       "workspace_templates/AGENT_HANDOFF_TEMPLATE.md",
       "docs/reference/CVF_TEXT_ENCODING_AND_SYMBOL_DISCIPLINE_STANDARD_2026-06-07.md",

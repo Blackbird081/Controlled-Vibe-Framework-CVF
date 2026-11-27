@@ -1,7 +1,7 @@
 'use client';
 // Text Encoding Exception: this component presents the Vietnamese and English Home specification workflow.
 
-import { useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useContext, useEffect, useRef, useState, type ClipboardEvent, type FormEvent, type ReactNode } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Download, FolderOpen, Plus } from 'lucide-react';
 import { TechnicalDetails } from '@/components/TechnicalDetails';
@@ -19,6 +19,7 @@ import { homeSpecExternalRequest } from './home-spec-external-request';
 import { isMessagingProject, isPersonalMessageRequest } from './home-spec-personal-message';
 import { PHYSICAL_SAFETY_GUIDANCE } from '@/lib/physical-safety';
 import { isNewHomeSpecTask } from './home-spec-task';
+import { HOME_TEXT_LIMIT, formatHomeCharacterCount, homeSpecPreviewCopy } from './home-spec-readable';
 
 const action = 'cvf-control inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50';
 const primary = action + ' bg-indigo-600 text-white hover:bg-indigo-700';
@@ -61,8 +62,7 @@ const copy = {
         confirm: 'Dùng loại kết quả này', missing: 'Bổ sung thông tin còn thiếu', allSet: 'Bạn có thể xem lại bản đặc tả.',
         review: 'Xem lại đặc tả', edit: 'Sửa thông tin đã nhập',
         technical: 'Chi tiết kỹ thuật',
-        draft: 'Bản nháp đặc tả', specification: 'Bản đặc tả', outcome: 'Loại kết quả',
-        description: 'Mô tả công việc', clarification: 'Thông tin làm rõ',
+        draft: 'Bản nháp đặc tả', specification: 'Bản đặc tả',
         download: 'Tải bản đặc tả',
         startNew: 'Bắt đầu việc mới', discardDraft: 'Bạn muốn bỏ bản nháp chưa tải xuống và bắt đầu việc mới?',
         newTaskQuestion: 'Đây là việc mới phải không?',
@@ -70,7 +70,7 @@ const copy = {
         continueSameTask: 'Vẫn là việc này, giữ câu trả lời',
         continueNewTask: 'Tiếp tục với việc mới', keepCurrentTask: 'Quay lại việc trước', unfinishedDrafts: 'Bản nháp chưa tải',
         downloadPurpose: 'Dùng tệp này để giao việc cho trợ lý của bạn.',
-        copy: 'Sao chép', copied: 'Đã sao chép bản đặc tả.', copyFailed: 'Không sao chép được. Hãy tải tệp xuống.', howTo: 'Cách dùng tệp này', howToText: 'Dán nội dung hoặc gửi tệp cho trợ lý AI bạn tin dùng. Trước khi giao, kiểm tra mục tiêu, thông tin đã nhập, giới hạn và các chỗ còn thiếu.',
+        copy: 'Sao chép', copied: 'Đã sao chép bản đặc tả.', copyFailed: 'Không sao chép được. Hãy tải tệp xuống.', howToText: 'Dán nội dung hoặc gửi tệp cho trợ lý AI bạn tin dùng. Trước khi giao, kiểm tra mục tiêu, thông tin đã nhập, giới hạn và các chỗ còn thiếu.',
         downloaded: 'Đã chuẩn bị tệp tải xuống.', downloadFailed: 'Chưa tải được bản đặc tả. Hãy thử lại.',
         pick: 'Chọn loại kết quả', choose: 'Chọn một loại kết quả', under: 'Nhập ít nhất 8 ký tự.',
         disabled: 'Gợi ý tự động đang tắt. CVF dùng từ khóa để gợi ý.',
@@ -79,12 +79,9 @@ const copy = {
         rate: 'Có quá nhiều yêu cầu gợi ý trong một phút. CVF dùng từ khóa để gợi ý.',
         fieldsFallback: 'CVF dùng danh sách thông tin của mẫu. Bỏ qua phần bạn đã nêu trong mô tả.',
         newFieldPlaceholder: 'Điền nếu thông tin này chưa có trong mô tả.',
-        fromUserContext: 'Lấy từ phần bạn mô tả (chưa nhập riêng)',
         optionalQuestions: 'Thông tin bổ sung (không bắt buộc)',
-        provided: 'Đã có', userWillSupply: 'Người dùng sẽ bổ sung', openQuestions: 'Câu hỏi mở',
-        noMaterials: 'Chưa ghi tệp, mẫu hay đường dẫn sẽ gửi thêm.',
-        nothingOpen: 'Chưa thấy chi tiết nào cần hỏi thêm theo mẫu này.',
-        checkOpen: 'Trợ lý sẽ xác định chi tiết nào còn cần làm rõ trước khi làm phần phụ thuộc.',
+        pasteCut: `Văn bản bạn vừa dán dài hơn giới hạn nên đã được rút gọn còn ${formatHomeCharacterCount(HOME_TEXT_LIMIT).split(' / ')[1]} ký tự. Hãy kiểm tra lại phần cuối.`,
+        ...homeSpecPreviewCopy.vi,
     },
     en: {
         title: 'Create a specification', lead: 'Describe what you need, then review and download the specification for your assistant.',
@@ -107,8 +104,7 @@ const copy = {
         confirm: 'Use this outcome', missing: 'Add missing information', allSet: 'You can review the specification.',
         review: 'Review specification', edit: 'Edit entered information',
         technical: 'Technical details',
-        draft: 'Specification draft', specification: 'Specification', outcome: 'Outcome',
-        description: 'Work description', clarification: 'Clarification',
+        draft: 'Specification draft', specification: 'Specification',
         download: 'Download specification',
         startNew: 'Start new work', discardDraft: 'Discard this draft with changes you have not downloaded and start new work?',
         newTaskQuestion: 'Is this a new task?',
@@ -116,7 +112,7 @@ const copy = {
         continueSameTask: 'Same task, keep my answers',
         continueNewTask: 'Continue with the new task', keepCurrentTask: 'Go back to the previous task', unfinishedDrafts: 'Unfinished drafts',
         downloadPurpose: 'Use this file to hand the work over to your assistant.',
-        copy: 'Copy', copied: 'Specification copied.', copyFailed: 'Could not copy. Download the file instead.', howTo: 'How to use this file', howToText: 'Paste the content or attach the file to your chosen AI assistant. Before handing it over, check the goal, entered details, limits, and missing information.',
+        copy: 'Copy', copied: 'Specification copied.', copyFailed: 'Could not copy. Download the file instead.', howToText: 'Paste the content or attach the file to your chosen AI assistant. Before handing it over, check the goal, entered details, limits, and missing information.',
         downloaded: 'Your download is ready.', downloadFailed: 'The specification could not be downloaded. Try again.',
         pick: 'Choose an outcome', choose: 'Select an outcome', under: 'Enter at least 8 characters.',
         disabled: 'Automatic suggestions are off. CVF is using keywords to suggest an outcome.',
@@ -125,12 +121,9 @@ const copy = {
         rate: 'There were too many requests for suggestions in one minute. CVF is using keywords to suggest an outcome.',
         fieldsFallback: 'CVF is using the template’s input list. Skip any details already included in your description.',
         newFieldPlaceholder: 'Fill this in if it is missing from your description.',
-        fromUserContext: 'Taken from the description you entered',
         optionalQuestions: 'Optional details',
-        provided: 'Provided', userWillSupply: 'User will supply', openQuestions: 'Open questions',
-        noMaterials: 'No files, examples or links listed for later.',
-        nothingOpen: 'This template has no unanswered details flagged.',
-        checkOpen: 'These details will be clarified before any work that depends on them.',
+        pasteCut: `The text you pasted was longer than the limit, so it was shortened to ${formatHomeCharacterCount(HOME_TEXT_LIMIT).split(' / ')[1]} characters. Please check the end.`,
+        ...homeSpecPreviewCopy.en,
     },
 } as const;
 
@@ -164,6 +157,8 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     const { input: savedInput, setInput, resetInput, startSeparateTask, restoreDraft } = useHomeSpecInput(accountScope);
     const { goal, extra, values } = savedInput;
     const [stage, setStage] = useState<Stage>('describe');
+    // The field whose last paste was cut at the character limit; its notice stays until the text is shorter again.
+    const [cutField, setCutField] = useState<string | null>(null);
     const [chosen, setChosen] = useState(initialTemplate ? resolveHomeOutcomeId(initialTemplate) ?? '' : '');
     const [keywordSuggestion, setKeywordSuggestion] = useState('');
     const [jevChoice, setJevChoice] = useState(false);
@@ -235,7 +230,8 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
     )) };
     const packet = stage === 'draft' && exportTemplate
         ? prepareHomeSpec(exportTemplate, enteredValues, coverageValues, language, originalUserText, originalUserText,
-            suggestedAssfPackageId, generic ? t.genericFields : undefined) : undefined;
+            suggestedAssfPackageId, generic ? t.genericFields : undefined,
+            { sections: previewSections.map(({ label, value }) => ({ label, value })), references: referencesAnswer }) : undefined;
     const agentMarkdown = packet?.markdown ?? '';
     const clarificationAnswers = Object.values(enteredValues);
     const canClarify = stage === 'draft' && !homeSpecExternalRequest(goal, [extra, ...clarificationAnswers].join('\n'));
@@ -485,15 +481,37 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
         catch { setError(t.copyFailed); }
     }
 
+    function notePaste(key: string, event: ClipboardEvent<HTMLTextAreaElement>) {
+        const box = event.currentTarget;
+        const kept = box.value.length - Math.abs(box.selectionEnd - box.selectionStart);
+        const cut = kept + event.clipboardData.getData('text').length > HOME_TEXT_LIMIT;
+        setCutField(current => cut ? key : current === key ? null : current);
+    }
+
+    function noteLength(key: string, length: number) {
+        if (length < HOME_TEXT_LIMIT) setCutField(current => current === key ? null : current);
+    }
+
+    function characterCount(key: string, length: number) {
+        return (<div className="text-right text-sm text-slate-600 dark:text-slate-300">
+            <p id={`${key}-count`} data-testid={`${key}-count`}>{formatHomeCharacterCount(length)}</p>
+            {cutField === key && <p role="status" data-testid={`${key}-cut`} className="font-medium">{t.pasteCut}</p>}
+        </div>);
+    }
+
     function renderField(field: { id: string; label: string; help?: string }) {
         const id = `home-spec-field-${field.id}`;
         const helpId = field.help ? `${id}-help` : undefined;
         return (<div className="space-y-1" key={field.id}>
             <label htmlFor={id} className="block font-medium">{field.label}</label>
-            <textarea id={id} className={input} rows={2} maxLength={1000} aria-describedby={helpId} placeholder={t.newFieldPlaceholder} value={values[field.id] ?? ''} onChange={e => {
-                const value = e.target.value;
-                setInput('values', previous => ({ ...previous, [field.id]: value }));
-            }} />
+            <textarea id={id} className={input} rows={2} maxLength={field.id === 'goal' ? HOME_TEXT_LIMIT : 1000} aria-describedby={[helpId, field.id === 'goal' ? `${id}-count` : undefined].filter(Boolean).join(' ') || undefined} placeholder={t.newFieldPlaceholder} value={values[field.id] ?? ''}
+                onPaste={field.id === 'goal' ? e => notePaste(id, e) : undefined}
+                onChange={e => {
+                    const value = e.target.value;
+                    if (field.id === 'goal') noteLength(id, value.length);
+                    setInput('values', previous => ({ ...previous, [field.id]: value }));
+                }} />
+            {field.id === 'goal' && characterCount(id, (values[field.id] ?? '').length)}
             {field.help && <p id={helpId} className="text-sm text-slate-600 dark:text-slate-300">{field.help}</p>}
         </div>);
     }
@@ -583,7 +601,8 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
             <section className="cvf-surface space-y-4 rounded-2xl border border-slate-200 p-4 dark:border-white/10 sm:p-5" aria-busy={busy}>
                 {stage === 'describe' && <form onSubmit={submitGoal} className="space-y-3">
                     <label htmlFor="home-spec-goal" className="block font-semibold">{t.goal}</label>
-                    <textarea ref={inputRef} id="home-spec-goal" className={input} rows={4} value={description} onChange={e => changeDescription(e.target.value)} maxLength={1000} placeholder={t.placeholder} disabled={busy} />
+                    <textarea ref={inputRef} id="home-spec-goal" className={input} rows={4} value={description} onPaste={e => notePaste('home-spec-goal', e)} onChange={e => { noteLength('home-spec-goal', e.target.value.length); changeDescription(e.target.value); }} maxLength={HOME_TEXT_LIMIT} aria-describedby="home-spec-goal-count" placeholder={t.placeholder} disabled={busy} />
+                    {characterCount('home-spec-goal', description.length)}
                     {chosen && <p className="text-sm">{t.selection} <strong>{homeSpecOutcomeTitle(chosen, language)}</strong></p>}
                     <p className="text-sm text-slate-600 dark:text-slate-300">{t.direct}</p>
                     {confirmNewTask ? <div className="space-y-2" role="group" aria-labelledby="home-spec-new-task-question">
@@ -612,7 +631,8 @@ function HomeSpecWork({ language, initialTemplate, selectionRequest, starterGoal
                 </details>}
                 {stage === 'clarify' && <form onSubmit={submitGoal} className="space-y-3">
                     <label htmlFor="home-spec-clarify" className="block font-semibold">{t.clarify}</label>
-                    <textarea id="home-spec-clarify" className={input} rows={3} value={extra} onChange={e => setInput('extra', e.target.value)} maxLength={1000} disabled={busy} />
+                    <textarea id="home-spec-clarify" className={input} rows={3} value={extra} onPaste={e => notePaste('home-spec-clarify', e)} onChange={e => { noteLength('home-spec-clarify', e.target.value.length); setInput('extra', e.target.value); }} maxLength={HOME_TEXT_LIMIT} aria-describedby="home-spec-clarify-count" disabled={busy} />
+                    {characterCount('home-spec-clarify', extra.length)}
                     <button className={primary} disabled={busy}>{busy ? t.wait : t.go}</button>
                 </form>}
                 {stage === 'review' && <div className="space-y-3">

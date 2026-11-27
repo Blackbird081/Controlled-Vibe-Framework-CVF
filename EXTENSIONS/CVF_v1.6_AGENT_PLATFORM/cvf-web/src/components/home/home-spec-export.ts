@@ -5,6 +5,11 @@ import { getHomeCommonQuestions, isHomeCommonQuestion } from '@/lib/home-spec-co
 import { inferRiskLevelFromText } from '@/lib/risk-check';
 import type { Template } from '@/types';
 import { collectHomeOpenQuestions, dedupeHomeOpenQuestions } from './home-spec-open-questions';
+import { hasOutsideEffectCue } from '@/lib/home-spec-outside-effect-cues';
+import { homeSpecExternalRequest } from './home-spec-external-request';
+import { buildHomeReadableSection, homeSpecPreviewCopy, type HomeReadableSection } from './home-spec-readable';
+
+export const HOME_OPEN_QUESTION_LIMIT = 10;
 
 export function prepareHomeSpec(
     template: Template,
@@ -15,11 +20,23 @@ export function prepareHomeSpec(
     userText: string,
     suggestedAssfPackageId?: string,
     genericFieldLabels?: Record<string, string>,
+    readable?: { sections: readonly HomeReadableSection[]; references?: string },
 ): { markdown: string; openQuestions: string[] } {
     const localized = getHomeExportTemplate(template.id, 'en') ?? template;
     const authority = getHomeOutcomeAuthority(template.id);
     const riskInputs = [userText, ...Object.values(enteredValues)].join('\n');
-    const riskLevel = inferRiskLevelFromText(riskInputs, { floor: authority?.riskLevel, fallback: 'R3' }) ?? 'R3';
+    // Only the generic Home path falls back to R1. A keyword or an authority floor still raises the level.
+    const riskLevel = inferRiskLevelFromText(riskInputs, {
+        floor: authority?.riskLevel,
+        fallback: template.id === 'home-general' ? 'R1' : 'R3',
+    }) ?? 'R3';
+    const flagged = homeSpecExternalRequest(userText, Object.values(enteredValues).join(' ')) !== null;
+    // The first-preview permission is narrower than the displayed level: generic path only (a matched template's
+    // R1 floor is not consent), and none of the outside-effect or sensitive-data cues may appear in any user text.
+    const userTexts = [userText, context, ...Object.values(enteredValues), ...Object.values(coverageValues),
+        ...(readable?.sections.map(section => section.value) ?? []), readable?.references ?? ''];
+    const firstPreview = (riskLevel === 'R0' || riskLevel === 'R1') && !flagged
+        && template.id === 'home-general' && !hasOutsideEffectCue(...userTexts);
     const certifiedBoundaries = authority ? [
         '### Certified Outcome Boundaries',
         ...authority.packs.map(({ id, risk, authorityScope, executionBoundary }) => [
@@ -42,7 +59,7 @@ export function prepareHomeSpec(
     const openQuestions = dedupeHomeOpenQuestions([
         ...collectHomeOpenQuestions(userText, enteredValues, questionLabels, requiredIds, unknownAnswerLabel),
         ...requiredFields.filter(field => !coverageValues[field.id]?.trim()).map(field => questionLabels.get(field.id) ?? field.label),
-    ]).slice(0, 5);
+    ]).slice(0, HOME_OPEN_QUESTION_LIMIT);
     const markdown = generateSpec(localized, coverageValues, 'en', 'governance', context, undefined, {
         task: userText,
         userLanguage: language,
@@ -50,8 +67,11 @@ export function prepareHomeSpec(
         certifiedBoundaries,
         suggestedAssfPackageId,
         openQuestions,
+        firstPreview,
     });
-    return { markdown, openQuestions };
+    const readableSections = readable?.sections ?? [{ label: homeSpecPreviewCopy[language].description, value: userText.trim() }];
+    const readableMarkdown = buildHomeReadableSection(language, readableSections, readable?.references, openQuestions);
+    return { markdown: readableMarkdown + markdown, openQuestions };
 }
 
 export function generateHomeSpec(...args: Parameters<typeof prepareHomeSpec>): string {

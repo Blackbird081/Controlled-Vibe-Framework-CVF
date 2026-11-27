@@ -74,10 +74,10 @@ describe('Home specification open questions', () => {
         ]);
     });
 
-    it('skips conversational negatives and caps the list at five in input order', () => {
+    it('skips conversational negatives and caps the list at ten in input order', () => {
         expect(openQuestions('Không có gì khó. Không có vấn đề. No problem.', { goal: 'Viết báo cáo' })).toEqual([]);
-        const six = ['one', 'two', 'three', 'four', 'five', 'six'].map(item => `I don't know ${item}.`);
-        expect(openQuestions(six.join(' '))).toEqual(six.slice(0, 5));
+        const twelve = Array.from({ length: 12 }, (_, index) => `I don't know item${index + 1}.`);
+        expect(openQuestions(twelve.join(' '))).toEqual(twelve.slice(0, 10));
     });
 
     it('drops the topicless replies from H11.5 and H12.1 but keeps a specific unknown', () => {

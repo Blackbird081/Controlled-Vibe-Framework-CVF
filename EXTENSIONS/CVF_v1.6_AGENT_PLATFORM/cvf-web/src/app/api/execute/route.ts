@@ -30,6 +30,7 @@ import { blockInlineKnowledgeContextBypass } from './route-knowledge-context';
 import { resolveMemoryContext, selectKnowledgeContext, sot3RejectionResponse } from './route-context-selection';
 import { buildEvidenceReceipt, buildGovernanceEnvelope } from '@/lib/web-governance-envelope';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
+import { resolveDurableMemoryPrincipal } from '@/lib/durable-memory-route';
 import { hasValidationRetryBudget, resolveExecutionMaxTokens } from '@/lib/execute-route-budget';
 import { recordReportableDecisionObserved } from '@/lib/false-positive-report';
 import { resolveWorkflowBindingForExecution } from '@/lib/workflows/workflow-resolver';
@@ -575,7 +576,8 @@ export async function POST(request: NextRequest) {
         if (sot3Rejection) return sot3Rejection;
 
         const memoryContext = await resolveMemoryContext({ body, session, knowledge: knowledgeContext,
-            actor: { id: executionActorId, executionRole: resolvedExecutionRole.role, targetResource: executionTargetResource },
+            actor: { id: executionActorId, executionRole: resolvedExecutionRole.role, targetResource: executionTargetResource,
+                memoryPrincipalId: resolveDurableMemoryPrincipal({ isServiceAllowed, serviceIdentity, sessionUserId: session?.userId }) },
             envelope: govEnvelope, enforcement, guardResult, routedProvider, routingResult, htmlPilotPrepared: false });
         if (memoryContext.response) return memoryContext.response;
         const { durableMemoryRoute, aifMemoryReinjection, enrichedSystemPrompt } = memoryContext;

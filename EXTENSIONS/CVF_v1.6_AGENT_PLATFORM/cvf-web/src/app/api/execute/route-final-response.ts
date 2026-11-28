@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { InvalidRequestBodyEncodingError } from '@/lib/bounded-request-body';
 import { NextResponse } from 'next/server';
 import { appendAuditEvent } from '@/lib/control-plane-events';
-import { evaluateDurableMemoryWrite, resolveDurableMemoryActorRole } from '@/lib/durable-memory-route';
+import { evaluateDurableMemoryWrite, resolveDurableMemoryActorRole, resolveDurableMemoryPrincipal } from '@/lib/durable-memory-route';
 import { emitExecutionTelemetry, resolveTokenUsage } from '@/lib/execute-telemetry';
 import { attachReceiptToDiagnostic, buildExecutionDiagnostic } from '@/lib/execution-diagnostics';
 import { buildPhase2CProductBriefSliceForRoute } from '@/lib/phase2c-product-brief-slice';
@@ -277,7 +277,7 @@ export async function buildExecuteFinalResponse(params: BuildExecuteFinalRespons
     const resolvedUsage = aiResult.success && aiResult.output ? resolveTokenUsage(filteredPrompt, aiResult.output, aiResult) : undefined;
     const usage = aiResult.canonicalGateway ? aiResult.usage : resolvedUsage ?? aiResult.usage;
     const durableMemoryWriteReceipt = aiResult.success && aiResult.output
-        ? evaluateDurableMemoryWrite({ request, actorId, actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), output: aiResult.output })
+        ? evaluateDurableMemoryWrite({ request, actorId, originPrincipalId: resolveDurableMemoryPrincipal({ isServiceAllowed, serviceIdentity, sessionUserId: session?.userId }), actorRole: resolveDurableMemoryActorRole(resolvedExecutionRole.role), output: aiResult.output })
         : undefined;
     const routeElapsedMs = Math.max(0, Date.now() - routeStartedAtMs);
     const runtimeTelemetry = resolvedUsage

@@ -202,6 +202,29 @@ describe('/api/memory/write', () => {
     expect(json.durableMemoryWriteReceipt.decision).toBe('allowed');
   });
 
+  it('binds the stored record to the server-resolved origin principal (ESC-002)', async () => {
+    const res = await POST(makeReq(baseBody) as never);
+    expect(res.status).toBe(200);
+    const records = JSON.parse(await readFile(storePath, 'utf8')) as Array<{ id: string; originPrincipalId?: string }>;
+    expect(records.find((record) => record.id === baseBody.id)?.originPrincipalId).toBe(SESSION_ACTOR_ID);
+  });
+
+  it('denies overwriting a record id owned by another principal (ESC-002)', async () => {
+    const first = await POST(makeReq(baseBody) as never);
+    expect((await first.json()).durableMemoryWriteReceipt.decision).toBe('allowed');
+    verifySessionCookieMock.mockResolvedValue({
+      userId: 'user-2', user: 'user2', role: 'admin', orgId: 'org', teamId: 'team',
+      expiresAt: Date.now() + 3600_000, authMode: 'session',
+    });
+    const hijack = await POST(makeReq({ ...baseBody, actorId: 'user-2', summary: 'overwrite attempt by another user' }) as never);
+    const json = await hijack.json();
+    expect(json.durableMemoryWriteReceipt).toMatchObject({ decision: 'denied', reason: 'durable_memory_id_owned_by_other_principal' });
+    const records = JSON.parse(await readFile(storePath, 'utf8')) as Array<{ id: string; summary: string; originPrincipalId?: string }>;
+    const stored = records.find((record) => record.id === baseBody.id);
+    expect(stored?.summary).toBe(baseBody.summary);
+    expect(stored?.originPrincipalId).toBe(SESSION_ACTOR_ID);
+  });
+
   it.each(['id', 'scope', 'summary', 'actorId'])('rejects blank required string %s', async (field) => {
     const res = await POST(makeReq({ ...baseBody, [field]: '   ' }) as never);
     expect(res.status).toBe(400);

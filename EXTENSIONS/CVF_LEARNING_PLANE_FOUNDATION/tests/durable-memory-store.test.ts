@@ -151,6 +151,103 @@ describe("durable memory store m1", () => {
     expect(samePrincipal.records.map((record) => record.id)).toEqual(["principal-a-memory"]);
   });
 
+  it("fails closed on origin-less records and a missing caller origin when origin is required", () => {
+    const store = createInProcessDurableMemoryStore({});
+    store.write({
+      id: "legacy-no-origin",
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-a",
+      actorRole: "OPERATOR",
+      summary: "Legacy record written without an origin principal.",
+      policyDecision: "allow",
+      actorAuthorized: true,
+    });
+    store.write({
+      id: "principal-a-bound",
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-a",
+      originPrincipalId: "principal-a",
+      actorRole: "OPERATOR",
+      summary: "Principal A bound record.",
+      policyDecision: "allow",
+      actorAuthorized: true,
+    });
+
+    const spoofedScope = store.read({
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-b",
+      originPrincipalId: "principal-b",
+      requireOriginPrincipal: true,
+      actorRole: "OPERATOR",
+      actorAuthorized: true,
+    });
+    expect(spoofedScope.records).toEqual([]);
+    expect(spoofedScope.receipt.excluded.map((entry) => entry.id)).not.toContain("legacy-no-origin");
+    expect(spoofedScope.receipt.excluded.map((entry) => entry.id)).not.toContain("principal-a-bound");
+
+    const owner = store.read({
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-a",
+      originPrincipalId: "principal-a",
+      requireOriginPrincipal: true,
+      actorRole: "OPERATOR",
+      actorAuthorized: true,
+    });
+    expect(owner.records.map((record) => record.id)).toEqual(["principal-a-bound"]);
+
+    const missingCallerOrigin = store.read({
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-a",
+      requireOriginPrincipal: true,
+      actorRole: "OPERATOR",
+      actorAuthorized: true,
+    });
+    expect(missingCallerOrigin.records).toEqual([]);
+    expect(missingCallerOrigin.receipt.decision).toBe("denied");
+    expect(missingCallerOrigin.receipt.reason).toBe("durable_memory_origin_principal_required");
+
+    const optionalOriginCaller = store.read({
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorId: "principal-a",
+      originPrincipalId: "principal-a",
+      actorRole: "OPERATOR",
+      actorAuthorized: true,
+    });
+    expect(optionalOriginCaller.records.map((record) => record.id).sort()).toEqual(["legacy-no-origin", "principal-a-bound"]);
+  });
+
+  it("denies overwriting a record id owned by another principal", () => {
+    const store = createInProcessDurableMemoryStore({});
+    const base = {
+      tier: "long-term",
+      scope: "user:principal-a",
+      actorRole: "OPERATOR" as const,
+      policyDecision: "allow" as const,
+      actorAuthorized: true,
+    };
+    store.write({ ...base, id: "shared-id", actorId: "principal-a", originPrincipalId: "principal-a", summary: "Principal A original." });
+    store.write({ ...base, id: "legacy-id", actorId: "principal-a", summary: "Principal A legacy without origin." });
+
+    const hijack = store.write({ ...base, id: "shared-id", actorId: "principal-b", originPrincipalId: "principal-b", summary: "Principal B overwrite." });
+    const legacyHijack = store.write({ ...base, id: "legacy-id", actorId: "principal-b", originPrincipalId: "principal-b", summary: "Principal B overwrite." });
+    const ownerUpdate = store.write({ ...base, id: "shared-id", actorId: "principal-a", originPrincipalId: " principal-a ", summary: "Principal A update." });
+
+    expect(hijack.receipt.decision).toBe("denied");
+    expect(hijack.receipt.reason).toBe("durable_memory_id_owned_by_other_principal");
+    expect(legacyHijack.receipt.decision).toBe("denied");
+    expect(ownerUpdate.receipt.decision).toBe("allowed");
+    const byId = new Map(store.list().map((record) => [record.id, record]));
+    expect(byId.get("shared-id")?.summary).toBe("Principal A update.");
+    expect(byId.get("shared-id")?.originPrincipalId).toBe("principal-a");
+    expect(byId.get("legacy-id")?.summary).toBe("Principal A legacy without origin.");
+  });
+
   it("handles corrupt file-backed JSON without throwing", () => {
     tempDir = mkdtempSync(join(tmpdir(), "cvf-m1-memory-corrupt-"));
     const filePath = join(tempDir, "durable-memory.json");

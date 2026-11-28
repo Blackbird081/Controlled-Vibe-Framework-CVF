@@ -77,6 +77,22 @@ export function resolveDurableMemoryActorRole(role: string | null | undefined): 
     return 'unknown';
 }
 
+/**
+ * ESC-002: the one origin principal for Web durable memory. Both
+ * /api/execute and /api/memory/write must use it so a service caller's
+ * records are readable by the same caller, and so a client-chosen scope can
+ * never select another principal's records. A valid service token takes
+ * precedence, matching /api/memory/write.
+ */
+export function resolveDurableMemoryPrincipal(input: {
+    isServiceAllowed: boolean;
+    serviceIdentity: string | null | undefined;
+    sessionUserId: string | null | undefined;
+}): string | undefined {
+    if (input.isServiceAllowed && input.serviceIdentity?.trim()) return input.serviceIdentity.trim();
+    return input.sessionUserId?.trim() || undefined;
+}
+
 export function buildDurableMemorySystemPrompt(basePrompt: string, promptBlock: string): string {
     return [basePrompt.trimEnd(), '', '---', '', '## GOVERNED DURABLE MEMORY CONTEXT', '', promptBlock, '', '---', ''].join('\n');
 }
@@ -84,6 +100,7 @@ export function buildDurableMemorySystemPrompt(basePrompt: string, promptBlock: 
 export function evaluateDurableMemoryRoute(input: {
     request: Partial<ExecutionRequest>;
     actorId: string;
+    originPrincipalId: string | undefined;
     actorRole: RuntimeMemoryActorRole;
     defaultQuery: string;
     storePath?: string;
@@ -128,6 +145,10 @@ export function evaluateDurableMemoryRoute(input: {
         tier,
         scope,
         actorId: input.actorId,
+        // ESC-002: bind reads to the server-resolved principal so a
+        // client-chosen scope cannot surface another principal's records.
+        originPrincipalId: input.originPrincipalId,
+        requireOriginPrincipal: true,
         actorRole: input.actorRole,
         actorAuthorized: true,
         query: durableRequest.query ?? input.defaultQuery,
@@ -166,6 +187,7 @@ export function evaluateDurableMemoryRoute(input: {
 export function evaluateDurableMemoryWrite(input: {
     request: Partial<ExecutionRequest>;
     actorId: string;
+    originPrincipalId: string | undefined;
     actorRole: RuntimeMemoryActorRole;
     output: string;
     storePath?: string;
@@ -197,6 +219,16 @@ export function evaluateDurableMemoryWrite(input: {
         });
     }
 
+    if (!input.originPrincipalId?.trim()) {
+        return emptyReceipt({
+            reason: 'durable_memory_origin_principal_required',
+            scope,
+            tier,
+            decision: 'denied',
+            operation: 'write',
+        });
+    }
+
     const maxSummaryLength = clampSummaryLength(writeRequest.maxSummaryLength);
     const summary = summarizeExecutionOutput(input.output, maxSummaryLength);
     const store = createFileBackedDurableMemoryStore(storePath);
@@ -205,6 +237,7 @@ export function evaluateDurableMemoryWrite(input: {
         tier,
         scope,
         actorId: input.actorId,
+        originPrincipalId: input.originPrincipalId,
         actorRole: input.actorRole,
         summary,
         lifecycleState: 'semantic',

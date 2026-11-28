@@ -108,12 +108,25 @@ describe('/api/execute durable memory route wiring', () => {
         id: 'r2-skill-safe',
         tier: 'skill',
         scope: 'project:r2-route',
-        actorId: 'operator-1',
+        actorId: 'usr_r2',
+        originPrincipalId: 'usr_r2',
         summary: 'durable-route-memory: Prefer strategy_analysis for the first governed receipt path.',
         lifecycleState: 'semantic',
         provenanceScore: 0.96,
         createdAt: 1770000000000,
         updatedAt: 1770000000000,
+      },
+      {
+        id: 'r2-other-principal',
+        tier: 'skill',
+        scope: 'project:r2-route',
+        actorId: 'operator-1',
+        originPrincipalId: 'operator-1',
+        summary: 'durable-route-memory: another principal private note.',
+        lifecycleState: 'semantic',
+        provenanceScore: 0.96,
+        createdAt: 1770000000001,
+        updatedAt: 1770000000001,
       },
     ], null, 2)}\n`, 'utf8');
   }
@@ -153,6 +166,8 @@ describe('/api/execute durable memory route wiring', () => {
     expect(options.systemPrompt).toContain('## GOVERNED DURABLE MEMORY CONTEXT');
     expect(options.systemPrompt).toContain('r2-skill-safe: durable-route-memory');
     expect(options.systemPrompt).toContain('canReinject=false');
+    expect(options.systemPrompt).not.toContain('another principal private note');
+    expect(JSON.stringify(data.durableMemoryRead)).not.toContain('r2-other-principal');
     expect(data.durableMemoryRead).toMatchObject({
       decision: 'allowed',
       memoryIds: ['r2-skill-safe'],

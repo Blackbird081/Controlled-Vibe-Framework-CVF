@@ -12,6 +12,7 @@ import {
 
 import { verifySessionCookie } from '@/lib/middleware-auth';
 import { deriveServiceTokenIdentity, verifyServiceTokenRequest } from '@/lib/service-token-auth';
+import { resolveDurableMemoryPrincipal } from '@/lib/durable-memory-route';
 import { resolveExecutionCVFRole } from '@/lib/execute-role-resolver';
 import { MEMORY_DURABLE_WRITE_ROUTE_VERSION } from './route-constants';
 
@@ -212,9 +213,11 @@ export async function POST(request: NextRequest) {
     }));
   }
 
-  const boundActorId = isServiceAllowed
-    ? deriveServiceTokenIdentity(serviceToken ?? '')
-    : session?.userId;
+  const boundActorId = resolveDurableMemoryPrincipal({
+    isServiceAllowed,
+    serviceIdentity: isServiceAllowed ? deriveServiceTokenIdentity(serviceToken ?? '') : null,
+    sessionUserId: session?.userId,
+  });
 
   if (!boundActorId || body.actorId !== boundActorId || body.actorRole !== resolvedRole.role) {
     return writeResponse(emptyReceipt({
@@ -252,6 +255,7 @@ export async function POST(request: NextRequest) {
     tier: body.tier,
     scope: body.scope,
     actorId: boundActorId,
+    originPrincipalId: boundActorId,
     actorRole: resolvedRole.role,
     summary: body.summary,
     lifecycleState: body.lifecycleState ?? 'semantic',

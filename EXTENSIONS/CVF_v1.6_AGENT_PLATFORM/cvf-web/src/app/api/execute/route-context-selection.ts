@@ -87,7 +87,7 @@ export async function resolveMemoryContext(input: {
     body: Partial<ExecutionRequest>;
     session: SessionCookie | null | undefined;
     knowledge: KnowledgeContextResult;
-    actor: { id: string; executionRole: string | null | undefined; targetResource: string };
+    actor: { id: string; executionRole: string | null | undefined; targetResource: string; memoryPrincipalId?: string };
     envelope: WebGovernanceEnvelope;
     enforcement: EnforcementResult;
     guardResult: GuardPipelineResult;
@@ -97,7 +97,7 @@ export async function resolveMemoryContext(input: {
 }): Promise<MemoryContextOutcome> {
     const { body, session, knowledge, actor, routedProvider } = input;
     const { knowledgeInjected, finalKnowledgeContext, knowledgeSystemPrompt } = knowledge;
-    const durableMemoryRoute = evaluateDurableMemoryRoute({ request: body, actorId: actor.id, actorRole: resolveDurableMemoryActorRole(actor.executionRole), defaultQuery: body.intent! });
+    const durableMemoryRoute = evaluateDurableMemoryRoute({ request: body, actorId: actor.id, originPrincipalId: actor.memoryPrincipalId, actorRole: resolveDurableMemoryActorRole(actor.executionRole), defaultQuery: body.intent! });
     const durableMemorySystemPrompt = durableMemoryRoute.promptBlock ? buildDurableMemorySystemPrompt(knowledgeSystemPrompt, durableMemoryRoute.promptBlock) : knowledgeSystemPrompt;
     const aifMemoryReinjection = evaluateAifMemoryReinjection(body.aifMemoryReinjection);
     await appendAifMemoryReinjectionAudit({ decision: aifMemoryReinjection, request: body, session });

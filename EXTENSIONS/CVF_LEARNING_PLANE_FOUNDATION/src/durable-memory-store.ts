@@ -71,6 +71,13 @@ export interface DurableMemoryReadInput {
   scope: string;
   actorId: string;
   originPrincipalId?: string;
+  /**
+   * When true, only records whose originPrincipalId equals the caller's
+   * originPrincipalId are returned. Records without an origin are excluded
+   * (fail closed), so a caller-chosen scope cannot surface another
+   * principal's records.
+   */
+  requireOriginPrincipal?: boolean;
   actorRole: RuntimeMemoryActorRole;
   tier?: string;
   query?: string;
@@ -99,6 +106,10 @@ export interface DurableMemoryStore {
 const BLOCKED_LIFECYCLE_STATES = new Set(["expired", "disputed", "forgotten"]);
 const ALLOWED_LIFECYCLE_STATES = new Set(["semantic", "procedural"]);
 const MIN_PROVENANCE_SCORE = 0.7;
+
+function recordOwner(record: DurableMemoryRecord): string {
+  return record.originPrincipalId ?? record.actorId;
+}
 
 export function createInProcessDurableMemoryStore(options: {
   now?: () => number;
@@ -280,13 +291,29 @@ abstract class BaseDurableMemoryStore implements DurableMemoryStore {
       };
     }
 
+    const originPrincipalId = input.originPrincipalId?.trim() || undefined;
+    const existing = this.list().find((candidate) => candidate.id === id);
+    if (existing && recordOwner(existing) !== (originPrincipalId ?? input.actorId)) {
+      const reason = "durable_memory_id_owned_by_other_principal";
+      return {
+        receipt: makeReceipt({
+          operation: "write",
+          decision: "denied",
+          reason,
+          scope,
+          tier,
+          excluded: [{ id, reason }],
+        }),
+      };
+    }
+
     const timestamp = input.now ?? this.now();
     const record: DurableMemoryRecord = {
       id,
       tier,
       scope,
       actorId: input.actorId,
-      originPrincipalId: input.originPrincipalId,
+      originPrincipalId,
       summary,
       lifecycleState,
       provenanceScore,
@@ -320,6 +347,20 @@ abstract class BaseDurableMemoryStore implements DurableMemoryStore {
           operation: "read",
           decision: "denied",
           reason: "durable_memory_policy_denied",
+          scope,
+          tier,
+        }),
+        records: [],
+      };
+    }
+
+    const callerOrigin = input.originPrincipalId?.trim() || undefined;
+    if (input.requireOriginPrincipal && !callerOrigin) {
+      return {
+        receipt: makeReceipt({
+          operation: "read",
+          decision: "denied",
+          reason: "durable_memory_origin_principal_required",
           scope,
           tier,
         }),
@@ -366,7 +407,14 @@ abstract class BaseDurableMemoryStore implements DurableMemoryStore {
     const selected = this.list()
       .filter((record) => {
         if (record.tier !== tier) return false;
-        if (record.originPrincipalId !== undefined && record.originPrincipalId !== input.originPrincipalId) {
+        if (input.requireOriginPrincipal) {
+          // Strict mode: another principal's records (or origin-less legacy
+          // records) are dropped without listing their ids, so the receipt
+          // returned to the caller does not disclose foreign record ids.
+          if (record.originPrincipalId === undefined || record.originPrincipalId !== callerOrigin) {
+            return false;
+          }
+        } else if (record.originPrincipalId !== undefined && record.originPrincipalId !== callerOrigin) {
           excluded.push({ id: record.id, reason: "origin_principal_mismatch" });
           return false;
         }

@@ -15,6 +15,7 @@ vi.mock('@/lib/control-plane-events', () => ({
 vi.mock('@/lib/durable-memory-route', () => ({
   evaluateDurableMemoryWrite: vi.fn().mockReturnValue({ receiptId: 'durable-write' }),
   resolveDurableMemoryActorRole: vi.fn().mockReturnValue('SERVICE_AGENT'),
+  resolveDurableMemoryPrincipal: vi.fn().mockReturnValue('service:test'),
 }));
 
 vi.mock('@/lib/execute-telemetry', () => ({
